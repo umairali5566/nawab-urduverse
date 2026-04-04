@@ -1,0 +1,66 @@
+# Nawab UrduVerse - Python Dependencies
+# Developed for Nawab
+
+# Django Framework
+django>=4.2.0,<5.0
+
+# Database (PostgreSQL for production)
+psycopg2-binary>=2.9.0
+
+# CKEditor for rich text editing
+django-ckeditor>=6.5.0
+django-ckeditor-5>=0.2.0
+
+# Image handling
+Pillow>=10.0.0
+
+# Form styling
+django-crispy-forms>=2.0
+crispy-bootstrap5>=0.7
+
+# File cleanup
+django-cleanup>=8.0.0
+
+# Humanize
+django-humanize>=0.1
+
+# SEO
+django-meta>=2.0.0
+
+# Caching
+django-redis>=5.3.0
+
+# Security
+django-cors-headers>=4.0.0
+django-ratelimit>=4.0.0
+
+# Performance
+django-compressor>=4.3.0
+
+# Development (optional)
+django-debug-toolbar>=4.0.0
+django-extensions>=3.2.0
+django-sslserver>=0.22
+
+# Testing
+pytest>=7.4.0
+pytest-django>=4.5.0
+coverage>=7.2.0
+
+# Production
+whitenoise>=6.5.0
+gunicorn>=21.2.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Async support
+channels>=4.0.0
+channels-redis>=4.1.0
+
+# Urdu text-to-speech
+edge-tts>=6.1.13
+gTTS>=2.5.4
+
+# OpenAI
+openai>=1.99.0

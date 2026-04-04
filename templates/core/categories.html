@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}All Categories - {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <h1 class="mb-1">All Categories</h1>
+        <p class="text-muted mb-0">Browse active categories across the platform without changing the existing site layout.</p>
+    </div>
+</section>
+
+<section class="py-4">
+    <div class="main-container">
+        {% if grouped_categories %}
+            <div class="row g-4">
+                {% for group in grouped_categories %}
+                <div class="col-12">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                                <h2 class="h4 mb-0">{{ group.label }}</h2>
+                                <span class="text-muted small">{{ group.items|length }} categor{{ group.items|length|pluralize:'y,ies' }}</span>
+                            </div>
+
+                            <div class="row g-3">
+                                {% for category in group.items %}
+                                <div class="col-lg-3 col-md-4 col-sm-6">
+                                    <a href="{{ category.get_absolute_url }}" class="card h-100 text-decoration-none">
+                                        <div class="card-body">
+                                            <h3 class="h6 text-dark mb-2">{{ category.name }}</h3>
+                                            <p class="text-muted small mb-0">{{ category.description|default:'Browse this category.'|truncatechars:100 }}</p>
+                                        </div>
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="card">
+                <div class="card-body text-center py-5">
+                    <p class="text-muted mb-0">No active categories are available right now.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

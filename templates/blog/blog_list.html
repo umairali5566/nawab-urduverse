@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Blogs - {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Read Urdu literary blogs, essays, and articles published on Nawab UrduVerse.{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Blogs</li>
+            </ol>
+        </nav>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
+            <div>
+                <h1 class="section-title-urdu mb-1">ادبی بلاگز</h1>
+                <p class="section-subtitle mb-0">Dynamic blog archive with search, category filters, and latest published articles.</p>
+            </div>
+            <div class="hero-chip-row">
+                <span class="hero-chip"><i class="bi bi-journal-richtext"></i> {{ page_obj.paginator.count }} posts</span>
+                <span class="hero-chip"><i class="bi bi-lightning-charge"></i> Admin published</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="main-container">
+        <div class="card glass-card literary-card">
+            <div class="card-body">
+                <form method="get" class="row g-3 align-items-end">
+                    <div class="col-lg-5">
+                        <label class="form-label">Search</label>
+                        <input type="search" name="search" class="form-control" value="{{ request.GET.search }}" placeholder="Search title, author, or content">
+                    </div>
+                    <div class="col-md-4 col-lg-3">
+                        <label class="form-label">Category</label>
+                        <select name="category" class="form-select">
+                            <option value="">All Categories</option>
+                            {% for category in categories %}
+                            <option value="{{ category.slug }}" {% if request.GET.category == category.slug %}selected{% endif %}>{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <label class="form-label">Sort</label>
+                        <select name="sort" class="form-select">
+                            <option value="latest" {% if request.GET.sort == 'latest' or not request.GET.sort %}selected{% endif %}>Latest</option>
+                            <option value="popular" {% if request.GET.sort == 'popular' %}selected{% endif %}>Popular</option>
+                            <option value="alphabetical" {% if request.GET.sort == 'alphabetical' %}selected{% endif %}>A-Z</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 col-lg-2 d-grid">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-search me-1"></i> Apply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-section pt-0">
+    <div class="main-container">
+        <div class="row g-4">
+            {% for post in posts %}
+            <div class="col-lg-4 col-md-6">
+                <article class="card glass-card literary-card h-100">
+                    {% if post.featured_image %}
+                    <img src="{{ post.featured_image.url }}" class="card-img-top" alt="{{ post.title }}" style="height:220px;object-fit:cover;" loading="lazy">
+                    {% else %}
+                    <img src="{% static 'images/placeholder-cover.svg' %}" class="card-img-top" alt="{{ post.title }}" style="height:220px;object-fit:cover;" loading="lazy">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                            <span class="badge bg-primary-subtle text-primary">{{ post.reading_time }} min read</span>
+                            <small class="text-muted"><i class="bi bi-eye me-1"></i>{{ post.views_count }}</small>
+                        </div>
+                        <h3 class="h5 mb-1"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+                        <p class="text-muted mb-3">{{ post.author.name }} • {{ post.published_at|default:post.created_at|date:"d M Y" }}</p>
+                        <p class="card-snippet mb-4">{{ post.excerpt|default:post.content|striptags|truncatechars:160 }}</p>
+                        <a href="{{ post.get_absolute_url }}" class="btn btn-outline-primary btn-sm mt-auto">Read More</a>
+                    </div>
+                </article>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="card glass-card literary-card">
+                    <div class="card-body text-center py-5">
+                        <i class="bi bi-inbox display-4 text-muted"></i>
+                        <h3 class="mt-3">No blog posts found</h3>
+                        <p class="text-muted mb-0">Publish a blog from admin and it will appear here automatically.</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+        <nav class="mt-4" aria-label="Blog pagination">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ request.GET.search }}&category={{ request.GET.category }}&sort={{ request.GET.sort }}">Previous</a></li>
+                {% endif %}
+                {% for num in paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}&search={{ request.GET.search }}&category={{ request.GET.category }}&sort={{ request.GET.sort }}">{{ num }}</a></li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ request.GET.search }}&category={{ request.GET.category }}&sort={{ request.GET.sort }}">Next</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

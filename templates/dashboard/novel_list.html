@@ -1,0 +1,56 @@
+﻿{% extends 'dashboard/dashboard_base.html' %}
+{% block title %}Manage Novels - Dashboard{% endblock %}
+
+{% block content %}
+<div class="section-spacing">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <h2 class="section-title mb-0">Manage Novels</h2>
+        <div class="dashboard-toolbar">
+            {% if request.user.is_superuser %}
+            <a href="{% url 'dashboard_add_novel' %}" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i>Add Novel</a>
+            {% endif %}
+            <a href="/admin/novels/novel/" class="btn btn-outline-primary" target="_blank" rel="noopener">Open in Django Admin</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Status</th>
+                            <th>Views</th>
+                            <th>Created</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for novel in novels %}
+                        <tr>
+                            <td>{{ novel.title|truncatechars:46 }}</td>
+                            <td>{{ novel.author.name }}</td>
+                            <td><span class="badge bg-secondary">{{ novel.get_status_display }}</span></td>
+                            <td>{{ novel.views_count }}</td>
+                            <td>{{ novel.created_at|date:'d M Y' }}</td>
+                            <td class="text-end">
+                                <span class="table-actions">
+                                    <a href="{{ novel.get_absolute_url }}" class="btn btn-outline-primary" target="_blank" rel="noopener">View</a>
+                                    <a href="/admin/novels/novel/{{ novel.id }}/change/" class="btn btn-outline-secondary" target="_blank" rel="noopener">Edit</a>
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">No novels available.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,373 @@
+{% load static %}
+<!-- =====================================================
+     POETRY LIST COMPONENT - Medium Style Minimal
+     ===================================================== -->
+<section class="section poetry-section" id="poetrySection">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Latest Poetry</h2>
+                <p class="section-subtitle">Fresh verses from emerging and established poets</p>
+            </div>
+            <a href="{% url 'poetry_list' %}" class="btn btn-ghost">
+                <span>View All</span>
+                <i class="bi bi-arrow-left"></i>
+            </a>
+        </div>
+
+        <!-- Poetry List -->
+        <div class="poetry-list stagger">
+            {% for poetry in latest_poetry %}
+            <article class="poetry-item">
+                <!-- Content -->
+                <div class="poetry-item-content">
+                    <!-- Author Row -->
+                    <div class="poetry-item-author">
+                        {% if poetry.display_author_avatar_url %}
+                            <img src="{{ poetry.display_author_avatar_url }}" alt="{{ poetry.display_author_name }}">
+                        {% else %}
+                            <div class="poetry-item-avatar-placeholder">
+                                <i class="bi bi-person"></i>
+                            </div>
+                        {% endif %}
+                        <div class="poetry-item-author-info">
+                            <a href="{{ poetry.author.get_absolute_url }}" class="poetry-item-author-name">
+                                {{ poetry.display_author_name }}
+                            </a>
+                            <span class="poetry-item-author-date">
+                                {{ poetry.created_at|timesince }} ago
+                                {% if poetry.display_category_name %}
+                                    • {{ poetry.display_category_name }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Poetry Title -->
+                    <h3 class="poetry-item-title">
+                        <a href="{{ poetry.get_absolute_url }}">{{ poetry.title }}</a>
+                    </h3>
+
+                    <!-- Poetry Text (Urdu) -->
+                    <div class="poetry-item-text urdu-text">
+                        {{ poetry.content|truncatechars:180 }}
+                    </div>
+
+                    <!-- Excerpt -->
+                    {% if poetry.excerpt %}
+                    <p class="poetry-item-excerpt">
+                        {{ poetry.excerpt|truncatechars:150 }}
+                    </p>
+                    {% endif %}
+
+                    <!-- Meta Row -->
+                    <div class="poetry-item-meta">
+                        <span class="poetry-meta-stat">
+                            <i class="bi bi-heart"></i>
+                            {{ poetry.likes_count|default:0 }}
+                        </span>
+                        <span class="poetry-meta-stat">
+                            <i class="bi bi-chat"></i>
+                            {{ poetry.comments_count|default:0 }}
+                        </span>
+                        <span class="poetry-meta-stat">
+                            <i class="bi bi-eye"></i>
+                            {{ poetry.views_count|default:0 }}
+                        </span>
+                        <span class="poetry-meta-stat">
+                            <i class="bi bi-share"></i>
+                            {{ poetry.shares_count|default:0 }}
+                        </span>
+                        
+                        <!-- Tags -->
+                        <div class="poetry-item-tags">
+                            {% if poetry.category %}
+                                {% with category=poetry.category %}
+                                <a href="{% url 'category_detail' category.slug %}" class="tag tag-sm">
+                                    #{{ category.name }}
+                                </a>
+                                {% endwith %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thumbnail -->
+                {% if poetry.background_image %}
+                <div class="poetry-item-image-wrap">
+                    <a href="{{ poetry.get_absolute_url }}">
+                        <img src="{{ poetry.background_image.url }}" alt="{{ poetry.title }}" class="poetry-item-image" loading="lazy">
+                    </a>
+                </div>
+                {% endif %}
+            </article>
+            {% empty %}
+            <!-- Empty State -->
+            <div class="poetry-empty">
+                <div class="poetry-empty-icon">
+                    <i class="bi bi-feather"></i>
+                </div>
+                <h3>No poetry yet</h3>
+                <p>Be the first to share your poetry with the world.</p>
+                <a href="{% if user.is_authenticated %}{% url 'my_content' %}{% else %}{% url 'login' %}?next={{ request.path|urlencode }}{% endif %}" class="btn btn-primary">
+                    <i class="bi bi-pen"></i>
+                    <span>Write Poetry</span>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+
+<style>
+/* =====================================================
+   POETRY LIST STYLES - MEDIUM STYLE
+   ===================================================== */
+.poetry-section {
+    padding: var(--space-8) 0;
+}
+
+.poetry-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.poetry-item {
+    display: flex;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.poetry-item:hover {
+    background: var(--glass);
+    border-color: var(--border-gold);
+}
+
+.poetry-item-content {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Author */
+.poetry-item-author {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+}
+
+.poetry-item-author img {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    border: 2px solid var(--border);
+}
+
+.poetry-item-avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    background: var(--glass);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 1.25rem;
+    border: 2px solid var(--border);
+}
+
+.poetry-item-author-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.poetry-item-author-name {
+    font-size: var(--text-small);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.poetry-item-author-name:hover {
+    color: var(--gold);
+}
+
+.poetry-item-author-date {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* Title */
+.poetry-item-title {
+    font-size: var(--text-card-title);
+    font-weight: var(--weight-semibold);
+    margin-bottom: var(--space-2);
+    line-height: 1.4;
+}
+
+.poetry-item-title a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.poetry-item-title a:hover {
+    color: var(--gold);
+}
+
+/* Urdu Text */
+.poetry-item-text {
+    font-size: clamp(1.125rem, 2vw, 1.375rem);
+    line-height: 2.2;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Excerpt */
+.poetry-item-excerpt {
+    font-size: var(--text-small);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-2);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Meta */
+.poetry-item-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.poetry-meta-stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.poetry-meta-stat i {
+    font-size: 0.875rem;
+}
+
+.poetry-item-tags {
+    display: flex;
+    gap: var(--space-1);
+    margin-right: auto;
+}
+
+.tag-sm {
+    padding: 2px 8px;
+    font-size: 11px;
+}
+
+/* Image */
+.poetry-item-image-wrap {
+    flex-shrink: 0;
+}
+
+.poetry-item-image {
+    width: 160px;
+    height: 160px;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+    transition: transform var(--transition-fast);
+}
+
+.poetry-item:hover .poetry-item-image {
+    transform: scale(1.02);
+}
+
+/* Empty State */
+.poetry-empty {
+    text-align: center;
+    padding: var(--space-8);
+    background: var(--card-bg);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+}
+
+.poetry-empty-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--space-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(212, 175, 55, 0.1);
+    border-radius: var(--radius-full);
+    font-size: 2.5rem;
+    color: var(--gold);
+}
+
+.poetry-empty h3 {
+    font-size: var(--text-card-title);
+    margin-bottom: var(--space-1);
+}
+
+.poetry-empty p {
+    color: var(--text-muted);
+    margin-bottom: var(--space-3);
+}
+
+/* Load More */
+.section-load-more {
+    text-align: center;
+    margin-top: var(--space-6);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .poetry-item {
+        flex-direction: column;
+        gap: var(--space-3);
+    }
+    
+    .poetry-item-image-wrap {
+        order: -1;
+    }
+    
+    .poetry-item-image {
+        width: 100%;
+        height: 200px;
+    }
+    
+    .poetry-item-tags {
+        margin-right: 0;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .poetry-item {
+        padding: var(--space-3);
+    }
+    
+    .poetry-item-image {
+        height: 160px;
+    }
+    
+    .poetry-item-meta {
+        gap: var(--space-2);
+    }
+}
+</style>

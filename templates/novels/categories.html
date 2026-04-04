@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Novel Categories - {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Browse Urdu novel categories.{% endblock %}
+{% block content %}
+<section class="page-header py-4 bg-light">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Novel Categories</li>
+            </ol>
+        </nav>
+        <h1 class="display-6 mt-2 mb-0">Novel Categories</h1>
+        <p class="lead text-muted">Browse Urdu novel categories.</p>
+    </div>
+</section>
+<section class="py-4">
+    <div class="container">
+        <div class="row g-4">
+            {% for category in categories %}
+            <div class="col-lg-3 col-md-4 col-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-2">
+                            <a href="{% url 'category_detail' category.slug %}" class="text-decoration-none text-dark">{{ category.name }}</a>
+                        </h5>
+                        <p class="card-text small text-muted">{{ category.description|truncatechars:80 }}</p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No categories found.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

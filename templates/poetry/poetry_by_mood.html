@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Poetry by Mood - {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Browse Urdu poetry by mood (love, sadness, joy, etc.) on {{ SITE_NAME }}.{% endblock %}
+{% block meta_title %}Poetry by Mood - {{ SITE_NAME }}{% endblock %}
+{% block meta_keywords %}poetry, mood, love, urdu, {{ SITE_NAME }}{% endblock %}
+{% block og_title %}Poetry by Mood - {{ SITE_NAME }}{% endblock %}
+{% block og_description %}Browse Urdu poetry by mood (love, sadness, joy, etc.) on {{ SITE_NAME }}.{% endblock %}
+{% block og_image %}{% endblock %}
+{% block twitter_title %}Poetry by Mood - {{ SITE_NAME }}{% endblock %}
+{% block twitter_description %}Browse Urdu poetry by mood (love, sadness, joy, etc.) on {{ SITE_NAME }}.{% endblock %}
+{% block twitter_image %}{% endblock %}
+
+{% block content %}
+<section class="page-header py-4 bg-light">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'poetry_list' %}">Poetry</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Poetry by Mood</li>
+            </ol>
+        </nav>
+        <h1 class="display-6 mt-2 mb-0">Poetry by Mood</h1>
+        <p class="lead text-muted">Explore Urdu poetry by mood.</p>
+    </div>
+</section>
+<section class="py-4">
+    <div class="container">
+        <div class="row g-4">
+            {% for poem in poetry_list %}
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-2">
+                            <a href="{{ poem.get_absolute_url }}" class="text-decoration-none text-dark">{{ poem.title }}</a>
+                        </h5>
+                        <p class="card-text small text-muted">{{ poem.excerpt|truncatechars:100 }}</p>
+                        <p class="card-text small text-muted mb-0">
+                            <i class="bi bi-person"></i> {{ poem.author.name }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No poetry found for this mood.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

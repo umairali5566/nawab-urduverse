@@ -1,0 +1,274 @@
+{% load static %}
+<!-- =====================================================
+     CTA SECTION COMPONENT
+     ===================================================== -->
+<section class="cta-section" id="ctaSection">
+    <div class="container">
+        <div class="cta-card">
+            <!-- Decorative Elements -->
+            <div class="cta-decoration cta-decoration-1"></div>
+            <div class="cta-decoration cta-decoration-2"></div>
+            <div class="cta-decoration cta-decoration-3"></div>
+
+            <div class="cta-content">
+                <!-- Icon -->
+                <div class="cta-icon">
+                    <i class="bi bi-gem"></i>
+                </div>
+
+                <!-- Title -->
+                <h2 class="cta-title urdu-text">شاعری کی دنیا میں آپ کا استقبال ہے</h2>
+                <h3 class="cta-heading">Start Your Literary Journey Today</h3>
+
+                <!-- Description -->
+                <p class="cta-description">
+                    Join thousands of poetry lovers and writers. Share your verses, discover new poets, 
+                    and become part of a thriving community celebrating Urdu literature.
+                </p>
+
+                <!-- Features -->
+                <div class="cta-features">
+                    <div class="cta-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Access thousands of poems</span>
+                    </div>
+                    <div class="cta-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Connect with talented authors</span>
+                    </div>
+                    <div class="cta-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Share your own creations</span>
+                    </div>
+                    <div class="cta-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>AI-powered writing assistant</span>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="cta-actions">
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'register' %}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-rocket-takeoff"></i>
+                            <span>Get Started Free</span>
+                        </a>
+                        <a href="{% url 'login' %}" class="btn btn-secondary btn-lg">
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            <span>Sign In</span>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'my_content' %}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-pen"></i>
+                            <span>Start Writing</span>
+                        </a>
+                        <a href="{% url 'search' %}" class="btn btn-secondary btn-lg">
+                            <i class="bi bi-compass"></i>
+                            <span>Explore Content</span>
+                        </a>
+                    {% endif %}
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="cta-trust">
+                    <div class="cta-trust-item">
+                        <i class="bi bi-shield-check"></i>
+                        <span>Secure Platform</span>
+                    </div>
+                    <div class="cta-trust-item">
+                        <i class="bi bi-people-fill"></i>
+                        <span>50K+ Members</span>
+                    </div>
+                    <div class="cta-trust-item">
+                        <i class="bi bi-star-fill"></i>
+                        <span>4.9 Rating</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* =====================================================
+   CTA SECTION STYLES
+   ===================================================== */
+.cta-section {
+    padding: var(--space-8) 0;
+}
+
+.cta-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-8);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid var(--border-gold);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+/* Decorative Elements */
+.cta-decoration {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.cta-decoration-1 {
+    width: 300px;
+    height: 300px;
+    top: -150px;
+    right: -100px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+    animation: float 20s ease-in-out infinite;
+}
+
+.cta-decoration-2 {
+    width: 250px;
+    height: 250px;
+    bottom: -100px;
+    left: -80px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
+    animation: float 25s ease-in-out infinite reverse;
+}
+
+.cta-decoration-3 {
+    width: 150px;
+    height: 150px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(20px, -20px) scale(1.05); }
+    50% { transform: translate(-10px, 10px) scale(0.95); }
+    75% { transform: translate(15px, 5px) scale(1.02); }
+}
+
+/* Content */
+.cta-content {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+}
+
+.cta-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+    border-radius: var(--radius-xl);
+    font-size: 2.5rem;
+    color: var(--bg-main);
+    box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3);
+}
+
+.cta-title {
+    font-family: var(--font-urdu);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--gold);
+    margin-bottom: var(--space-2);
+}
+
+.cta-heading {
+    font-size: var(--text-section);
+    font-weight: var(--weight-bold);
+    margin-bottom: var(--space-3);
+}
+
+.cta-description {
+    font-size: var(--text-body);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+}
+
+/* Features */
+.cta-features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+}
+
+.cta-feature {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-small);
+    color: var(--text-secondary);
+}
+
+.cta-feature i {
+    color: var(--accent-emerald);
+    font-size: 1rem;
+}
+
+/* Actions */
+.cta-actions {
+    display: flex;
+    gap: var(--space-2);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-4);
+}
+
+/* Trust Badges */
+.cta-trust {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border);
+}
+
+.cta-trust-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.cta-trust-item i {
+    color: var(--gold);
+    font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cta-card {
+        padding: var(--space-6);
+    }
+    
+    .cta-features {
+        grid-template-columns: 1fr;
+    }
+    
+    .cta-trust {
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+}
+
+@media (max-width: 480px) {
+    .cta-card {
+        padding: var(--space-4);
+    }
+    
+    .cta-icon {
+        width: 64px;
+        height: 64px;
+        font-size: 2rem;
+    }
+}
+</style>

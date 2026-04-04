@@ -1,0 +1,108 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}{{ quote.text|truncatechars:70 }} - {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'quote_list' %}">Quotes</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Quote</li>
+            </ol>
+        </nav>
+        <h1 class="mt-3 mb-1 section-title-urdu">مقبول اقتباسات</h1>
+        <p class="section-subtitle">Highlight quote card with elegant typography</p>
+    </div>
+</section>
+
+<section class="py-3">
+    <div class="main-container">
+        <div class="reading-area">
+            <div
+                class="reader-shell content-protected-shell"
+                data-protected-content
+                data-content-type="quote"
+                data-content-title="{{ quote.author.name|escape }} - Quote"
+                data-content-url="{{ request.build_absolute_uri|escape }}"
+                data-content-id="quote-{{ quote.id }}"
+            >
+                <div class="reader-toolbar">
+                    <div class="reader-toolset">
+                        {% include 'includes/bookmark_button.html' with content_type='quote' object_id=quote.id is_bookmarked=is_bookmarked btn_class='reader-tool-btn' %}
+                        <button
+                            type="button"
+                            class="reader-tool-btn like-btn {% if is_liked %}active{% endif %}"
+                            data-url="{% url 'toggle_like' content_type='quote' object_id=quote.id %}"
+                            aria-label="Like quote"
+                        >
+                            <i class="bi bi-heart"></i>
+                            <span class="like-count">{{ quote.likes_count }}</span>
+                        </button>
+                        <button
+                            type="button"
+                            class="reader-tool-btn"
+                            data-reader-share
+                            data-share-title="{{ quote.author.name }} - Quote"
+                            data-share-url="{{ request.build_absolute_uri }}"
+                            data-share-track-url="{% url 'track_share' content_type='quote' object_id=quote.id %}"
+                            aria-label="Share quote"
+                        >
+                            <i class="bi bi-share"></i> Share
+                        </button>
+                        <button
+                            type="button"
+                            class="reader-tool-btn"
+                            data-copy-target="#quoteReaderText"
+                            aria-label="Copy quote"
+                        >
+                            <i class="bi bi-clipboard"></i> Copy
+                        </button>
+                    </div>
+
+                    <div class="reader-toolset">
+                        <div class="font-control">
+                            <span class="font-control-label">Font</span>
+                            <button type="button" class="font-control-btn" data-font-action="decrease" data-reader-target="#quoteReaderText">A-</button>
+                            <button type="button" class="font-control-btn" data-font-action="increase" data-reader-target="#quoteReaderText">A+</button>
+                        </div>
+                        <button type="button" class="reader-tool-btn" data-reader-dark-target="#quoteReaderCard" aria-pressed="false">
+                            <i class="bi bi-moon-stars"></i> Night
+                        </button>
+                    </div>
+                </div>
+
+                <article class="reader-card quote-reader-card" id="quoteReaderCard">
+                    <p class="quote-reader-text" id="quoteReaderText">{{ quote.text }}</p>
+                    <p class="quote-reader-meta">{{ quote.author.name }} • {{ quote.get_quote_type_display }}</p>
+                    <p class="quote-reader-meta"><i class="bi bi-eye"></i> {{ quote.views_count }} • <i class="bi bi-heart"></i> {{ quote.likes_count }} • <i class="bi bi-share"></i> {{ quote.shares_count }}</p>
+                </article>
+            </div>
+        </div>
+
+        {% if related_quotes %}
+        <div class="reading-area mt-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title section-title-urdu">Related Quotes</h5>
+                    <div class="row g-3">
+                        {% for item in related_quotes %}
+                        <div class="col-md-6">
+                            <article class="card h-100">
+                                <div class="card-body">
+                                    <blockquote class="mb-2">{{ item.text|truncatechars:130 }}</blockquote>
+                                    <p class="card-meta mb-0"><i class="bi bi-person"></i>{{ item.author.name }}</p>
+                                    <a href="{{ item.get_absolute_url }}" class="stretched-link" aria-label="{{ item.author.name }} quote"></a>
+                                </div>
+                            </article>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

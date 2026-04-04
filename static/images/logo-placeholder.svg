@@ -1,0 +1,33 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradient" x1="72" y1="80" x2="432" y2="432" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6C4AB6"/>
+      <stop offset="0.56" stop-color="#8D72E1"/>
+      <stop offset="1" stop-color="#00ADB5"/>
+    </linearGradient>
+    <linearGradient id="logoHighlight" x1="178" y1="136" x2="330" y2="358" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#DDEFFF"/>
+    </linearGradient>
+    <filter id="logoShadow" x="36" y="40" width="440" height="440" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="18"/>
+      <feGaussianBlur stdDeviation="18"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0588235 0 0 0 0 0.0901961 0 0 0 0 0.164706 0 0 0 0.25 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_1" result="shape"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#logoShadow)">
+    <rect x="72" y="72" width="368" height="368" rx="112" fill="url(#logoGradient)"/>
+    <rect x="90" y="90" width="332" height="332" rx="94" stroke="white" stroke-opacity="0.22" stroke-width="2"/>
+    <circle cx="372" cy="156" r="17" fill="white" fill-opacity="0.55"/>
+    <rect x="144" y="132" width="54" height="248" rx="27" fill="white"/>
+    <rect x="314" y="132" width="54" height="248" rx="27" fill="white"/>
+    <path d="M196 153C196 141.402 205.402 132 217 132H233C240.202 132 246.904 135.685 250.752 141.772L322 254.5L270.5 287L202.566 179.13C198.347 172.428 196 164.669 196 156.751V153Z" fill="url(#logoHighlight)"/>
+    <path d="M229 233L287.5 196L316.54 241.932C319.515 246.637 321.092 252.089 321.092 257.655V359C321.092 370.598 311.69 380 300.092 380H286.55C279.44 380 272.807 376.408 268.935 370.451L229 309.027V233Z" fill="url(#logoHighlight)"/>
+    <rect x="140" y="400" width="232" height="16" rx="8" fill="white" fill-opacity="0.18"/>
+  </g>
+</svg>

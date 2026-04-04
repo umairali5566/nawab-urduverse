@@ -1,0 +1,14 @@
+{# Reusable Bookmark Button Include #}
+{# Required context: content_type, object_id, is_bookmarked (bool) #}
+
+<button
+    type="button"
+    class="btn btn-sm bookmark-toggle {{ btn_class|default:'' }} {% if is_bookmarked %}active{% endif %}"
+    data-content-type="{{ content_type }}"
+    data-object-id="{{ object_id }}"
+    data-auth-action="bookmark"
+    aria-pressed="{% if is_bookmarked %}true{% else %}false{% endif %}"
+>
+    <i class="bi {% if is_bookmarked %}bi-bookmark-fill{% else %}bi-bookmark{% endif %}"></i>
+    <span class="bookmark-label">{% if is_bookmarked %}محفوظ{% else %}محفوظ کریں{% endif %}</span>
+</button>

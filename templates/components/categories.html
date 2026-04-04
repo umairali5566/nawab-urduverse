@@ -1,0 +1,304 @@
+{% load static %}
+<!-- =====================================================
+     CATEGORIES SECTION COMPONENT
+     ===================================================== -->
+<section class="section categories-section" id="categoriesSection">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Browse Categories</h2>
+                <p class="section-subtitle">Explore Urdu literature by genre and type</p>
+            </div>
+            <a href="{% url 'all_categories' %}" class="btn btn-ghost">
+                <span>View All</span>
+                <i class="bi bi-arrow-left"></i>
+            </a>
+        </div>
+
+        <!-- Categories Grid -->
+        <div class="categories-grid stagger">
+            <!-- Poetry Category -->
+            <a href="{% url 'poetry_list' %}" class="category-card">
+                <div class="category-icon">
+                    <i class="bi bi-feather"></i>
+                </div>
+                <h3 class="category-title">Poetry</h3>
+                <span class="category-count">{{ poetry_count|default:"5,000+" }} poems</span>
+                <p class="category-description">Ghazals, nazms, rubaiyat and more</p>
+            </a>
+
+            <!-- Novels Category -->
+            <a href="{% url 'novel_list' %}" class="category-card">
+                <div class="category-icon">
+                    <i class="bi bi-book"></i>
+                </div>
+                <h3 class="category-title">Novels</h3>
+                <span class="category-count">{{ novels_count|default:"1,200+" }} novels</span>
+                <p class="category-description">Classic and contemporary fiction</p>
+            </a>
+
+            <!-- Stories Category -->
+            <a href="{% url 'story_list' %}" class="category-card">
+                <div class="category-icon">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+                <h3 class="category-title">Stories</h3>
+                <span class="category-count">{{ stories_count|default:"800+" }} stories</span>
+                <p class="category-description">Short stories and afsaane</p>
+            </a>
+
+            <!-- Quotes Category -->
+            <a href="{% url 'quote_list' %}" class="category-card">
+                <div class="category-icon">
+                    <i class="bi bi-chat-quote"></i>
+                </div>
+                <h3 class="category-title">Quotes</h3>
+                <span class="category-count">{{ quotes_count|default:"2,500+" }} quotes</span>
+                <p class="category-description">Wisdom from legendary poets</p>
+            </a>
+        </div>
+
+        <!-- Additional Categories Row -->
+        <div class="categories-extra mt-4">
+            <div class="categories-mini-grid">
+                <!-- Blog -->
+                <a href="{% url 'blog_list' %}" class="category-mini-card">
+                    <div class="category-mini-icon">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
+                    <div class="category-mini-content">
+                        <h4>Blog</h4>
+                        <span>{{ blogs_count|default:"300+" }} articles</span>
+                    </div>
+                </a>
+
+                <!-- Videos -->
+                <a href="{% url 'video_list' %}" class="category-mini-card">
+                    <div class="category-mini-icon">
+                        <i class="bi bi-play-circle"></i>
+                    </div>
+                    <div class="category-mini-content">
+                        <h4>Videos</h4>
+                        <span>{{ videos_count|default:"150+" }} videos</span>
+                    </div>
+                </a>
+
+                <!-- Audio -->
+                <a href="{% url 'poetry_list' %}" class="category-mini-card">
+                    <div class="category-mini-icon">
+                        <i class="bi bi-mic"></i>
+                    </div>
+                    <div class="category-mini-content">
+                        <h4>Audio</h4>
+                        <span>{{ audio_count|default:"400+" }} recordings</span>
+                    </div>
+                </a>
+
+                <!-- Collections -->
+                <a href="{% url 'collection_list' %}" class="category-mini-card">
+                    <div class="category-mini-icon">
+                        <i class="bi bi-collection"></i>
+                    </div>
+                    <div class="category-mini-content">
+                        <h4>Collections</h4>
+                        <span>{{ collections_count|default:"100+" }} curated</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* =====================================================
+   CATEGORIES SECTION STYLES
+   ===================================================== */
+.categories-section {
+    padding: var(--space-8) 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(212, 175, 55, 0.02) 50%, transparent 100%);
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+}
+
+.category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition: all var(--transition-base);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    transform: scaleX(0);
+    transition: transform var(--transition-base);
+}
+
+.category-card:hover {
+    background: var(--glass);
+    border-color: var(--gold);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.category-card:hover::before {
+    transform: scaleX(1);
+}
+
+.category-icon {
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.05) 100%);
+    border-radius: var(--radius-lg);
+    font-size: 2rem;
+    color: var(--gold);
+    transition: all var(--transition-base);
+}
+
+.category-card:hover .category-icon {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+    color: var(--bg-main);
+    transform: scale(1.1);
+}
+
+.category-title {
+    font-size: var(--text-card-title);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.category-count {
+    font-size: var(--text-xs);
+    color: var(--gold);
+    font-weight: var(--weight-medium);
+}
+
+.category-description {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin: 0;
+    display: none;
+}
+
+/* Mini Categories Grid */
+.categories-extra {
+    margin-top: var(--space-4);
+}
+
+.categories-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+}
+
+.category-mini-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.category-mini-card:hover {
+    background: var(--glass);
+    border-color: var(--gold);
+}
+
+.category-mini-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(212, 175, 55, 0.1);
+    border-radius: var(--radius-md);
+    font-size: 1.25rem;
+    color: var(--gold);
+}
+
+.category-mini-content h4 {
+    font-size: var(--text-small);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.category-mini-content span {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .categories-mini-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .category-description {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .categories-mini-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .category-card {
+        flex-direction: row;
+        text-align: right;
+        gap: var(--space-3);
+    }
+    
+    .category-icon {
+        width: 56px;
+        height: 56px;
+        flex-shrink: 0;
+    }
+    
+    .category-card-content {
+        flex: 1;
+    }
+    
+    .category-title {
+        font-size: var(--text-body);
+    }
+}
+</style>

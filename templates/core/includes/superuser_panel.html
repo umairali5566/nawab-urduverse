@@ -1,0 +1,100 @@
+{% if show_superuser_panel %}
+<section class="superuser-panel page-section section-spacing" dir="rtl">
+    <div class="main-container">
+        <div class="superuser-shell premium-grid-2">
+            <div class="superuser-box superuser-overview">
+                <span class="eyebrow-soft d-inline-flex align-items-center gap-2 mb-3">
+                    <i class="bi bi-shield-lock"></i>
+                    Superuser Access
+                </span>
+                <h2 class="superuser-title">Control the platform from one polished workspace</h2>
+                <p class="superuser-description">Publish new Urdu literature, jump into moderation, and keep every content stream moving without hunting through disconnected screens.</p>
+
+                <div class="superuser-stat-grid">
+                    <div class="superuser-stat">
+                        <strong>8</strong>
+                        <span>fast actions</span>
+                    </div>
+                    <div class="superuser-stat">
+                        <strong>1</strong>
+                        <span>central dashboard</span>
+                    </div>
+                </div>
+
+                <div class="superuser-overview-note">
+                    <i class="bi bi-stars"></i>
+                    <span>Only visible to superusers and tuned for quick daily publishing.</span>
+                </div>
+            </div>
+
+            <div class="superuser-box superuser-actions-panel">
+                <div class="superuser-head">
+                    <div>
+                        <h3><i class="bi bi-lightning-charge me-2"></i>Quick publishing and management</h3>
+                        <p>Balanced shortcuts for creation, review, and platform oversight.</p>
+                    </div>
+                </div>
+
+                <div class="superuser-grid">
+                    <a href="{% url 'dashboard_add_novel' %}" class="super-btn super-btn-purple" data-premium-tilt>
+                        <span class="super-btn-icon"><i class="bi bi-book"></i></span>
+                        <span class="super-btn-copy">
+                            <strong>Upload Novel</strong>
+                            <small>Add a new long-form reading experience.</small>
+                        </span>
+                    </a>
+                    <a href="{% url 'dashboard_add_story' %}" class="super-btn super-btn-green" data-premium-tilt>
+                        <span class="super-btn-icon"><i class="bi bi-journal-text"></i></span>
+                        <span class="super-btn-copy">
+                            <strong>Upload Story</strong>
+                            <small>Publish short narrative content quickly.</small>
+                        </span>
+                    </a>
+                    <a href="{% url 'dashboard_add_poetry' %}" class="super-btn super-btn-cyan" data-premium-tilt>
+                        <span class="super-btn-icon"><i class="bi bi-feather"></i></span>
+                        <span class="super-btn-copy">
+                            <strong>Upload Poetry</strong>
+                            <small>Add ghazal, nazm, and sher collections.</small>
+                        </span>
+                    </a>
+                    <a href="{% url 'dashboard_add_blog' %}" class="super-btn super-btn-yellow" data-premium-tilt>
+                        <span class="super-btn-icon"><i class="bi bi-pencil-square"></i></span>
+                        <span class="super-btn-copy">
+                            <strong>Upload Blog</strong>
+                            <small>Share essays, reviews, and editorial writing.</small>
+                        </span>
+                    </a>
+                    <a href="{% url 'dashboard_add_quote' %}" class="super-btn super-btn-dark" data-premium-tilt>
+                        <span class="super-btn-icon"><i class="bi bi-chat-quote"></i></span>
+                        <span class="super-btn-copy">
+                            <strong>Upload Quote</strong>
+                            <small>Post memorable lines and short reflections.</small>
+                        </span>
+                    </a>
+                    <a href="{% url 'dashboard_add_video' %}" class="super-btn super-btn-dark" data-premium-tilt>
+                        <span class="super-btn-icon"><i class="bi bi-camera-video"></i></span>
+                        <span class="super-btn-copy">
+                            <strong>Upload Video</strong>
+                            <small>Add performances, interviews, and media.</small>
+                        </span>
+                    </a>
+                    <a href="{% url 'dashboard_home' %}" class="super-btn super-btn-outline" data-premium-tilt>
+                        <span class="super-btn-icon"><i class="bi bi-speedometer2"></i></span>
+                        <span class="super-btn-copy">
+                            <strong>Manage Content</strong>
+                            <small>Review, edit, and organize live material.</small>
+                        </span>
+                    </a>
+                    <a href="{% url 'dashboard_user_list' %}" class="super-btn super-btn-outline" data-premium-tilt>
+                        <span class="super-btn-icon"><i class="bi bi-people"></i></span>
+                        <span class="super-btn-copy">
+                            <strong>Manage Users</strong>
+                            <small>Oversee members, permissions, and activity.</small>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}

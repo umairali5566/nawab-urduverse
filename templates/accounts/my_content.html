@@ -1,0 +1,326 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "میرا مواد" %} | {{ site_name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">{% trans "میرا مواد" %}</h1>
+            
+            <!-- Statistics Cards -->
+            <div class="row g-3 mb-5">
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="stat-card stat-card-poetry">
+                        <i class="bi bi-book"></i>
+                        <span class="stat-count">{{ total_poetry }}</span>
+                        <span class="stat-label">{% trans "شاعری" %}</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="stat-card stat-card-blogs">
+                        <i class="bi bi-file-text"></i>
+                        <span class="stat-count">{{ total_blogs }}</span>
+                        <span class="stat-label">{% trans "بلاگز" %}</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="stat-card stat-card-stories">
+                        <i class="bi bi-journal-richtext"></i>
+                        <span class="stat-count">{{ total_stories }}</span>
+                        <span class="stat-label">{% trans "کہانیاں" %}</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="stat-card stat-card-novels">
+                        <i class="bi bi-collection"></i>
+                        <span class="stat-count">{{ total_novels }}</span>
+                        <span class="stat-label">{% trans "ناولز" %}</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="stat-card stat-card-quotes">
+                        <i class="bi bi-chat-quote"></i>
+                        <span class="stat-count">{{ total_quotes }}</span>
+                        <span class="stat-label">{% trans "اقتباسات" %}</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="stat-card stat-card-videos">
+                        <i class="bi bi-camera-video"></i>
+                        <span class="stat-count">{{ total_videos }}</span>
+                        <span class="stat-label">{% trans "ویڈیوز" %}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Poetry Section -->
+            {% if poetry %}
+            <section class="content-section mb-5">
+                <h2 class="section-title">
+                    <i class="bi bi-book"></i> {% trans "شاعری" %}
+                </h2>
+                <div class="row g-3">
+                    {% for item in poetry %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="content-card">
+                            <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
+                            <p class="text-muted small">{{ item.created_at|date:"d M Y" }}</p>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'poetry:poetry_edit' item.id %}" class="btn btn-sm btn-outline-primary">{% trans "ترمیم" %}</a>
+                                <a href="{{ item.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">{% trans "دیکھیں" %}</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- Blogs Section -->
+            {% if blogs %}
+            <section class="content-section mb-5">
+                <h2 class="section-title">
+                    <i class="bi bi-file-text"></i> {% trans "بلاگز" %}
+                </h2>
+                <div class="row g-3">
+                    {% for item in blogs %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="content-card">
+                            <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
+                            <p class="text-muted small">{{ item.created_at|date:"d M Y" }}</p>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'blog:blog_edit' item.id %}" class="btn btn-sm btn-outline-primary">{% trans "ترمیم" %}</a>
+                                <a href="{{ item.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">{% trans "دیکھیں" %}</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- Stories Section -->
+            {% if stories %}
+            <section class="content-section mb-5">
+                <h2 class="section-title">
+                    <i class="bi bi-journal-richtext"></i> {% trans "کہانیاں" %}
+                </h2>
+                <div class="row g-3">
+                    {% for item in stories %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="content-card">
+                            <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
+                            <p class="text-muted small">{{ item.created_at|date:"d M Y" }}</p>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'stories:story_edit' item.id %}" class="btn btn-sm btn-outline-primary">{% trans "ترمیم" %}</a>
+                                <a href="{{ item.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">{% trans "دیکھیں" %}</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- Novels Section -->
+            {% if novels %}
+            <section class="content-section mb-5">
+                <h2 class="section-title">
+                    <i class="bi bi-collection"></i> {% trans "ناولز" %}
+                </h2>
+                <div class="row g-3">
+                    {% for item in novels %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="content-card">
+                            <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
+                            <p class="text-muted small">{{ item.created_at|date:"d M Y" }}</p>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'novels:novel_edit' item.id %}" class="btn btn-sm btn-outline-primary">{% trans "ترمیم" %}</a>
+                                <a href="{{ item.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">{% trans "دیکھیں" %}</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- Quotes Section -->
+            {% if quotes %}
+            <section class="content-section mb-5">
+                <h2 class="section-title">
+                    <i class="bi bi-chat-quote"></i> {% trans "اقتباسات" %}
+                </h2>
+                <div class="row g-3">
+                    {% for item in quotes %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="content-card">
+                            <p class="quote-text">{{ item.text|truncatechars:100 }}</p>
+                            <p class="text-muted small">{{ item.created_at|date:"d M Y" }}</p>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'quotes:quote_edit' item.id %}" class="btn btn-sm btn-outline-primary">{% trans "ترمیم" %}</a>
+                                <a href="{{ item.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">{% trans "دیکھیں" %}</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- Videos Section -->
+            {% if videos %}
+            <section class="content-section mb-5">
+                <h2 class="section-title">
+                    <i class="bi bi-camera-video"></i> {% trans "ویڈیوز" %}
+                </h2>
+                <div class="row g-3">
+                    {% for item in videos %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="content-card">
+                            <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
+                            <p class="text-muted small">{{ item.created_at|date:"d M Y" }}</p>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'videos:video_edit' item.id %}" class="btn btn-sm btn-outline-primary">{% trans "ترمیم" %}</a>
+                                <a href="{{ item.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">{% trans "دیکھیں" %}</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- Empty State -->
+            {% if not poetry and not blogs and not stories and not novels and not quotes and not videos %}
+            <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <h3>{% trans "آپ نے ابھی تک کوئی مواد نہیں بنایا" %}</h3>
+                <p>{% trans "اپنا پہلا مواد بنانے کے لیے نیچے دیے گئے لنکس استعمال کریں:" %}</p>
+                <div class="d-flex flex-wrap gap-2 justify-content-center">
+                    <a href="{% url 'ai_studio' %}" class="btn btn-primary">{% trans "شاعری لکھیں" %}</a>
+                    <a href="{% url 'ai_studio' %}" class="btn btn-primary">{% trans "بلاگ لکھیں" %}</a>
+                    <a href="{% url 'ai_studio' %}" class="btn btn-primary">{% trans "کہانی لکھیں" %}</a>
+                    <a href="{% url 'ai_studio' %}" class="btn btn-primary">{% trans "ناول لکھیں" %}</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<style>
+    .stat-card {
+        background: var(--card-bg);
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 16px;
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(212,175,55,0.2);
+    }
+    
+    .stat-card i {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-card-poetry i { color: #8b5cf6; }
+    .stat-card-blogs i { color: #3b82f6; }
+    .stat-card-stories i { color: #f59e0b; }
+    .stat-card-novels i { color: #10b981; }
+    .stat-card-quotes i { color: #ec4899; }
+    .stat-card-videos i { color: #ef4444; }
+    
+    .stat-count {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-color);
+    }
+    
+    .stat-label {
+        display: block;
+        font-size: 0.875rem;
+        color: var(--text-muted);
+    }
+    
+    .section-title {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+    
+    .section-title i {
+        margin-left: 0.5rem;
+    }
+    
+    .content-card {
+        background: var(--card-bg);
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 16px;
+        padding: 20px;
+        height: 100%;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    
+    .content-card h3 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .content-card h3 a {
+        color: var(--text-color);
+        text-decoration: none;
+    }
+    
+    .content-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(212,175,55,0.2);
+    }
+
+    .content-card h3 a:hover {
+        color: var(--primary-color);
+    }
+    
+    .quote-text {
+        font-style: italic;
+        color: #E5E7EB;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+    }
+    
+    .empty-state h3 {
+        margin-bottom: 0.5rem;
+    }
+    
+    .empty-state p {
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+    }
+</style>
+{% endblock %}

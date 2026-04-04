@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Premium Membership - {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Unlock premium Urdu literature, exclusive reader tools, and member-only access.{% endblock %}
+
+{% block content %}
+<section class="hero-section page-section hero-section-premium">
+    <div class="main-container hero-content">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <span class="eyebrow">Premium Membership</span>
+                <h1 class="hero-title">A reader experience built for people who live inside Urdu literature.</h1>
+                <p class="hero-description">Unlock premium novels, future paywalled releases, AI-powered writing tools, focused reading modes, and members-first discovery.</p>
+                <div class="hero-actions">
+                    <a href="#plans" class="btn btn-primary btn-lg"><i class="bi bi-stars me-2"></i>See Plans</a>
+                    <a href="{% url 'ai_studio' %}" class="btn btn-light btn-lg"><i class="bi bi-magic me-2"></i>Try AI Studio</a>
+                </div>
+                {% if membership and membership.is_active_membership %}
+                <div class="premium-inline-note mt-3">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Your membership is active{% if membership.ends_at %} until {{ membership.ends_at|date:'d M Y' }}{% endif %}.</span>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-5">
+                <div class="glass-showcase">
+                    <div class="showcase-panel">
+                        <span class="showcase-label">Included</span>
+                        <ul class="showcase-list">
+                            <li>Premium chapter access</li>
+                            <li>AI poetry generation studio</li>
+                            <li>Priority discovery and featured placements</li>
+                            <li>Cleaner reading experience and future member releases</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-section" id="plans">
+    <div class="main-container">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Plans</h2>
+                <p class="section-subtitle">Monetization-ready plan cards with demo activation flow.</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            {% for plan in plans %}
+            <div class="col-lg-4">
+                <article class="card premium-plan-card h-100 {% if plan.highlight_text %}premium-plan-card-highlight{% endif %}">
+                    <div class="card-body">
+                        {% if plan.highlight_text %}
+                        <span class="premium-badge">{{ plan.highlight_text }}</span>
+                        {% endif %}
+                        <h3 class="mb-2">{{ plan.name }}</h3>
+                        <p class="text-muted">{{ plan.description|default:"Unlock elevated reading and creator tools." }}</p>
+                        <div class="plan-price">PKR {{ plan.price }}</div>
+                        <p class="small text-muted mb-3">Every {{ plan.billing_cycle_days }} days</p>
+                        <ul class="plan-feature-list">
+                            {% for feature in plan.feature_list %}
+                            <li>{{ feature }}</li>
+                            {% empty %}
+                            <li>Premium content access</li>
+                            <li>AI writing tools</li>
+                            <li>Priority support</li>
+                            {% endfor %}
+                        </ul>
+                        <form method="post" action="{% url 'activate_membership' slug=plan.slug %}">
+                            {% csrf_token %}
+                            <button class="btn btn-primary w-100" type="submit">
+                                <i class="bi bi-lightning-charge me-1"></i> Activate Demo Access
+                            </button>
+                        </form>
+                    </div>
+                </article>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="card glass-card">
+                    <div class="card-body">
+                        <p class="mb-0">No active plans yet. Add premium plans from the admin panel to turn on memberships.</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="page-section page-section-soft">
+    <div class="main-container">
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <div class="card glass-card h-100">
+                    <div class="card-body">
+                        <h3 class="mb-3">Premium Novels</h3>
+                        <div class="row g-3">
+                            {% for novel in premium_novels %}
+                            <div class="col-md-6">
+                                <a href="{{ novel.get_absolute_url }}" class="premium-novel-link">
+                                    <div class="card premium-mini-card h-100">
+                                        {% if novel.cover_image %}
+                                        <img src="{{ novel.cover_image.url }}" alt="{{ novel.title }}" class="card-img-top">
+                                        {% endif %}
+                                        <div class="card-body">
+                                            <h5 class="mb-1">{{ novel.title }}</h5>
+                                            <p class="text-muted mb-0">{{ novel.author.name }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            {% empty %}
+                            <div class="col-12">
+                                <p class="text-muted mb-0">No premium novels have been marked yet.</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="card glass-card h-100">
+                    <div class="card-body">
+                        <h3 class="mb-3">Trending Member Picks</h3>
+                        <div class="list-group list-group-flush">
+                            {% for item in related_picks %}
+                            <a href="{{ item.get_absolute_url }}" class="list-group-item list-group-item-action px-0">
+                                {% firstof item.title item.name item.text as item_label %}
+                                <div class="fw-semibold">{{ item_label|truncatechars:70 }}</div>
+                                <small class="text-muted">{{ item.author.name }}</small>
+                            </a>
+                            {% empty %}
+                            <p class="text-muted mb-0">Trending picks will appear here as your library grows.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

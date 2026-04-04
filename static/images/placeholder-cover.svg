@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" role="img" aria-label="Placeholder cover image">
+  <defs>
+    <linearGradient id="c" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d7ecf2"/>
+      <stop offset="100%" stop-color="#edf6f9"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="420" fill="url(#c)"/>
+  <rect x="140" y="80" width="320" height="260" rx="16" fill="#fff" stroke="#c3dbe4" stroke-width="3"/>
+  <path d="M200 140h200" stroke="#7ca5b4" stroke-width="8" stroke-linecap="round"/>
+  <path d="M200 180h170" stroke="#9abac7" stroke-width="8" stroke-linecap="round"/>
+  <path d="M200 220h200" stroke="#b0cbd6" stroke-width="8" stroke-linecap="round"/>
+  <text x="300" y="305" text-anchor="middle" fill="#648594" font-family="Segoe UI, Arial" font-size="21" font-weight="600">Nawab Urdu acadmey</text>
+</svg>

@@ -1,0 +1,144 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ chapter.novel.title }} - باب {{ chapter.chapter_number }}: {{ chapter.title }} | {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}{{ chapter.meta_description|default:chapter.novel.description|striptags|truncatechars:160 }}{% endblock %}
+{% block og_title %}{{ chapter.meta_title|default:chapter.title }}{% endblock %}
+{% block og_description %}{{ chapter.meta_description|default:chapter.novel.description|striptags|truncatechars:160 }}{% endblock %}
+{% block og_image %}{% if chapter.novel.cover_image %}{{ chapter.novel.cover_image.url }}{% endif %}{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">صفحہ اول</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'novel_list' %}">ناولز</a></li>
+                <li class="breadcrumb-item"><a href="{{ chapter.novel.get_absolute_url }}">{{ chapter.novel.title }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">باب {{ chapter.chapter_number }}</li>
+            </ol>
+        </nav>
+        <h1 class="mt-3 mb-1 section-title-urdu">باب {{ chapter.chapter_number }}: {{ chapter.title }}</h1>
+        <p class="section-subtitle">Book-style chapter reading experience</p>
+    </div>
+</section>
+
+<section class="py-3">
+    <div class="main-container">
+        <div class="reading-progress" aria-hidden="true">
+            <div class="reading-progress-bar"></div>
+        </div>
+
+        <div class="reading-area">
+            <div
+                class="reader-shell content-protected-shell"
+                data-protected-content
+                data-content-type="chapter"
+                data-content-title="{{ chapter.novel.title|escape }} - {{ chapter.title|escape }}"
+                data-content-url="{{ request.build_absolute_uri|escape }}"
+                data-content-id="novel-{{ chapter.novel.id }}"
+                data-continue-url="{{ chapter.get_absolute_url }}"
+            >
+                <div class="reader-toolbar">
+                    <div class="reader-toolset">
+                        {% include 'includes/bookmark_button.html' with content_type='novel' object_id=chapter.novel.id is_bookmarked=is_bookmarked btn_class='reader-tool-btn' %}
+                        <button
+                            type="button"
+                            class="reader-tool-btn"
+                            data-reader-share
+                            data-share-title="{{ chapter.novel.title }} - {{ chapter.title }}"
+                            data-share-url="{{ request.build_absolute_uri }}"
+                            aria-label="Share chapter"
+                        >
+                            <i class="bi bi-share"></i> Share
+                        </button>
+                        <button
+                            type="button"
+                            class="reader-tool-btn"
+                            data-copy-target="#chapterReaderContent"
+                            aria-label="Copy chapter text"
+                        >
+                            <i class="bi bi-clipboard"></i> Copy
+                        </button>
+                    </div>
+
+                    <div class="reader-toolset">
+                        <div class="font-control">
+                            <span class="font-control-label">Font</span>
+                            <button type="button" class="font-control-btn" data-font-action="decrease" data-reader-target="#chapterReaderContent">A-</button>
+                            <button type="button" class="font-control-btn" data-font-action="increase" data-reader-target="#chapterReaderContent">A+</button>
+                        </div>
+                        <button type="button" class="reader-tool-btn" data-reader-dark-target="#chapterReaderCard" aria-pressed="false">
+                            <i class="bi bi-moon-stars"></i> Night
+                        </button>
+                    </div>
+                </div>
+
+                <article class="reader-card novel-reader" id="chapterReaderCard">
+                    <h2 class="reader-title">{{ chapter.title }}</h2>
+                    <div class="reader-meta">
+                        <span><i class="bi bi-book"></i> {{ chapter.novel.title }}</span>
+                        <span><i class="bi bi-list-ol"></i> باب {{ chapter.chapter_number }} از {{ chapter_count }}</span>
+                        <span><i class="bi bi-clock"></i> {{ chapter.reading_time }} min</span>
+                        <span><i class="bi bi-eye"></i> {{ chapter.views_count }}</span>
+                        <span><i class="bi bi-calendar"></i> {{ chapter.created_at|date:'d M, Y' }}</span>
+                    </div>
+
+                    <div class="reader-content" id="chapterReaderContent">
+                        {% if requires_membership %}
+                        <div class="premium-alert mb-4">
+                            <i class="bi bi-lock"></i>
+                            <div>
+                                <strong>Premium chapter</strong>
+                                <p class="mb-0">Upgrade your membership to unlock the full chapter. A preview is shown below.</p>
+                            </div>
+                            <a href="{% url 'membership' %}" class="btn btn-primary btn-sm">Unlock Access</a>
+                        </div>
+                        {{ chapter.content|truncatewords_html:120|safe }}
+                        {% else %}
+                        {{ chapter.content|safe }}
+                        {% endif %}
+                    </div>
+                </article>
+
+                <div class="reader-toolbar mt-3">
+                    <div class="reader-toolset">
+                        {% if previous_chapter %}
+                        <a class="reader-tool-btn" href="{{ previous_chapter.get_absolute_url }}"><i class="bi bi-chevron-right"></i> پچھلا باب</a>
+                        {% endif %}
+                    </div>
+                    <div class="reader-toolset">
+                        <a class="reader-tool-btn" href="{{ chapter.novel.get_absolute_url }}"><i class="bi bi-journal-bookmark"></i> فہرست ابواب</a>
+                    </div>
+                    <div class="reader-toolset">
+                        {% if next_chapter %}
+                        <a class="reader-tool-btn" href="{{ next_chapter.get_absolute_url }}">اگلا باب <i class="bi bi-chevron-left"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3 mt-3">
+            <div class="col-lg-8">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title section-title-urdu">تمام ابواب</h5>
+                        <div class="list-group">
+                            {% for ch in all_chapters %}
+                            <a href="{{ ch.get_absolute_url }}" class="list-group-item list-group-item-action {% if ch.id == chapter.id %}active{% endif %}">
+                                <span class="badge bg-light text-dark ms-2">{{ ch.chapter_number }}</span>
+                                {{ ch.title|truncatechars:70 }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                {% include 'includes/trending_sidebar.html' %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

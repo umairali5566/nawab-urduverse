@@ -1,0 +1,233 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ poem.title }} - {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}{{ poem.meta_description|default:poem.plain_text_content|truncatechars:160 }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ poem.title|escapejs }}",
+  "description": "{{ meta_description|default:poem.meta_description|default:poem.plain_text_content|truncatechars:160|escapejs }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ poem.author.name|escapejs }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ SITE_NAME|escapejs }}"
+  },
+  "inLanguage": "ur",
+  "articleSection": "Poetry",
+  "datePublished": "{{ poem.published_at|default:poem.created_at|date:'c' }}",
+  "dateModified": "{{ poem.updated_at|date:'c' }}",
+  "mainEntityOfPage": "{{ canonical_url|default:request.build_absolute_uri|escapejs }}",
+  "url": "{{ canonical_url|default:request.build_absolute_uri|escapejs }}",
+  "keywords": "{{ meta_keywords|default:poem.meta_keywords|default:SITE_KEYWORDS|escapejs }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">صفحہ اول</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'poetry_list' %}">شاعری</a></li>
+                <li class="breadcrumb-item"><a href="{{ poem.author.get_absolute_url }}">{{ poem.author.name }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ poem.title }}</li>
+            </ol>
+        </nav>
+        <h1 class="mt-3 mb-1 section-title-urdu"><i class="bi bi-feather text-primary me-1"></i> {{ poem.title }}</h1>
+        <p class="section-subtitle">Auto-formatted traditional sher layout with intelligent reader controls</p>
+    </div>
+</section>
+
+<section class="py-3">
+    <div class="main-container">
+        <div class="reading-progress" aria-hidden="true">
+            <div class="reading-progress-bar"></div>
+        </div>
+
+        <div class="reading-area">
+            <div
+                class="reader-shell immersive-reader-shell content-protected-shell"
+                data-protected-content
+                data-content-type="poetry"
+                data-content-title="{{ poem.title|escape }}"
+                data-content-url="{{ request.build_absolute_uri|escape }}"
+                data-content-id="poetry-{{ poem.id }}"
+            >
+                <div class="reader-toolbar">
+                    <div class="reader-toolset">
+                        {% include 'includes/bookmark_button.html' with content_type='poetry' object_id=poem.id is_bookmarked=is_bookmarked btn_class='reader-tool-btn' %}
+                        <button
+                            type="button"
+                            class="reader-tool-btn like-btn {% if is_liked %}active{% endif %}"
+                            data-url="{% url 'toggle_like' content_type='poetry' object_id=poem.id %}"
+                            aria-label="Like poetry"
+                        >
+                            <i class="bi bi-heart"></i>
+                            <span class="like-count">{{ poem.likes_count }}</span>
+                        </button>
+                        <button
+                            type="button"
+                            class="reader-tool-btn"
+                            data-reader-share
+                            data-share-title="{{ poem.title }}"
+                            data-share-url="{{ request.build_absolute_uri }}"
+                            data-share-track-url="{% url 'share_poetry' author_slug=poem.author.slug slug=poem.slug %}"
+                            aria-label="Share poetry"
+                        >
+                            <i class="bi bi-share"></i>
+                            <span id="poetryShareCount">{{ poem.shares_count|default:0 }}</span>
+                        </button>
+                        <button
+                            type="button"
+                            class="reader-tool-btn"
+                            data-copy-target="#poetryReaderContent"
+                            aria-label="Copy poetry text"
+                        >
+                            <i class="bi bi-clipboard"></i> Copy
+                        </button>
+                    </div>
+
+                    <div class="reader-toolset">
+                        <div class="font-control">
+                            <span class="font-control-label">Font</span>
+                            <button type="button" class="font-control-btn" data-font-action="decrease" data-reader-target="#poetryReaderContent">A-</button>
+                            <button type="button" class="font-control-btn" data-font-action="increase" data-reader-target="#poetryReaderContent">A+</button>
+                        </div>
+                        <button type="button" class="reader-tool-btn" data-reader-dark-target="#poetryReaderCard" aria-pressed="false">
+                            <i class="bi bi-moon-stars"></i> Night
+                        </button>
+                    </div>
+                </div>
+
+                <div class="poetry-tts-panel" data-poetry-tts>
+                    <div class="poetry-tts-controls">
+                        <button type="button" class="reader-tool-btn" id="poetryTtsPlay" data-tts-url="{% url 'poetry_tts' author_slug=poem.author.slug slug=poem.slug %}">
+                            <i class="bi bi-play-fill"></i> Listen
+                        </button>
+                        <button type="button" class="reader-tool-btn" id="poetryTtsPause" disabled>
+                            <i class="bi bi-pause-fill"></i> Pause
+                        </button>
+                        <button type="button" class="reader-tool-btn" id="poetryTtsStop" disabled>
+                            <i class="bi bi-stop-fill"></i> Stop
+                        </button>
+                    </div>
+                    <small id="poetryTtsStatus" class="text-muted">Urdu AI voice is ready.</small>
+                    <audio id="poetryTtsAudio" preload="none" class="d-none"></audio>
+                </div>
+
+                <article class="reader-card poetry-reader immersive-poetry-card" id="poetryReaderCard">
+                    <h2 class="reader-title text-center">{{ poem.title }}</h2>
+                    <div class="reader-meta justify-content-center">
+                        <span><i class="bi bi-person"></i> {{ poem.author.name }}</span>
+                        <span><i class="bi bi-bookmark-star"></i> {{ poem.get_poetry_type_display }}</span>
+                        {% if poem.mood %}<span><i class="bi bi-emoji-smile"></i> {{ poem.get_mood_display }}</span>{% endif %}
+                        <span><i class="bi bi-eye"></i> {{ poem.views_count }}</span>
+                        <span><i class="bi bi-heart"></i> {{ poem.likes_count }}</span>
+                        <span><i class="bi bi-share"></i> {{ poem.shares_count|default:0 }}</span>
+                    </div>
+
+                    <div class="reader-content poetry-render urdu-text" id="poetryReaderContent">
+                        {{ poem.formatted_poetry_html|safe }}
+                    </div>
+
+                    {% if poem.category %}
+                    <div class="reader-meta justify-content-center mt-3">
+                        <span><i class="bi bi-tags"></i> {{ poem.category.name }}</span>
+                    </div>
+                    {% endif %}
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-2">
+    <div class="main-container">
+        <div class="reading-area">
+            {% include 'includes/ad_slot.html' with ad_slot=ADSENSE_SLOT_INLINE ad_label='Sponsored Reading' %}
+        </div>
+    </div>
+</section>
+
+<section class="py-3 reader-related">
+    <div class="main-container">
+        <div class="reading-area">
+            <div class="card glass-card literary-card related-poetry">
+                <div class="card-body">
+                    <h5 class="card-title section-title-urdu">متعلقہ شاعری</h5>
+                    <div class="row g-3">
+                        {% for related in related_poems %}
+                        <div class="col-md-6">
+                            <article class="card glass-card literary-card h-100">
+                                <div class="card-body">
+                                    <h6 class="mb-1"><a href="{{ related.get_absolute_url }}">{{ related.title }}</a></h6>
+                                    <p class="card-meta mb-0"><i class="bi bi-person"></i>{{ related.author.name }}</p>
+                                </div>
+                            </article>
+                        </div>
+                        {% empty %}
+                        <div class="col-12">
+                            <div class="empty-state">
+                                <i class="bi bi-book-x" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                                <p>No related poetry found yet</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card glass-card literary-card mt-3 comment-section">
+                <div class="card-body">
+                    <h5 class="card-title section-title-urdu">Reader Conversation</h5>
+                    {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'add_comment' content_type='poetry' object_id=poem.id %}" class="comment-form mb-4" data-comment-form>
+                        {% csrf_token %}
+                        <textarea class="form-control mb-3" name="text" rows="4" placeholder="Write your response to this poem"></textarea>
+                        <button class="btn btn-primary" type="submit"><i class="bi bi-send me-1"></i> Post Comment</button>
+                    </form>
+                    {% else %}
+                    <button type="button" class="btn btn-outline-primary" data-auth-required data-auth-action="comment">Log in to comment</button>
+                    {% endif %}
+
+                    {% for comment in comments %}
+                    <div class="comment-block">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong>{{ comment.user.get_full_name|default:comment.user.username }}</strong>
+                            <small class="text-muted">{{ comment.created_at|date:'d M Y' }}</small>
+                        </div>
+                        <p class="mb-0 mt-2">{{ comment.text }}</p>
+                    </div>
+                    {% empty %}
+                    <div class="empty-state">
+                        <i class="bi bi-chat-dots" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <p>No comments yet</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if suggested_content %}
+            <div class="card glass-card literary-card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title section-title-urdu">You may also like</h5>
+                    {% for item in suggested_content %}
+                    {% firstof item.title item.name item.text as item_label %}
+                    <p class="mb-1"><a href="{{ item.get_absolute_url }}">{{ item_label|truncatechars:70 }}</a></p>
+                    <p class="small text-muted mb-2">{{ item.content_type_name|default:"Content" }} · {{ item.recommendation_reason|default:"matching theme" }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

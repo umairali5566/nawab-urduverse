@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Content by {{ author.name }} - {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'author_list' %}">Authors</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ author.name }}</li>
+            </ol>
+        </nav>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
+            <div>
+                <span class="eyebrow-soft d-inline-flex align-items-center gap-2 mb-2"><i class="bi bi-collection"></i> Author Content</span>
+                <h1 class="mb-1">Content by {{ author.name }}</h1>
+                <p class="section-subtitle mb-0">{{ published_total }} published works by this author.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-section section-spacing">
+    <div class="main-container">
+        {% if all_content %}
+            <div class="content-grid">
+                {% for item in all_content %}
+                    <div class="content-card">
+                        <div class="content-card-header">
+                            <span class="content-type-badge">{{ item.type|title }}</span>
+                            <time class="content-date">{{ item.date|date:"M j, Y" }}</time>
+                        </div>
+                        <h3 class="content-card-title">
+                            <a href="{{ item.item.get_absolute_url }}">{{ item.item.title }}</a>
+                        </h3>
+                        <p class="content-card-excerpt">
+                            {% if item.item.content %}
+                                {{ item.item.content|striptags|truncatechars:150 }}
+                            {% else %}
+                                {{ item.item.description|default:""|striptags|truncatechars:150 }}
+                            {% endif %}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-collection display-1 text-muted mb-3"></i>
+                <h3>No content available</h3>
+                <p class="text-muted">This author hasn't published any content yet.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.content-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid #f0f0f0;
+    transition: all 0.2s ease;
+}
+
+.content-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.content-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.content-type-badge {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.content-date {
+    color: #666;
+    font-size: 0.875rem;
+}
+
+.content-card-title {
+    margin-bottom: 0.75rem;
+}
+
+.content-card-title a {
+    color: #333;
+    text-decoration: none;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.content-card-title a:hover {
+    color: #1976d2;
+}
+
+.content-card-excerpt {
+    color: #666;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0;
+}
+</style>
+{% endblock %}

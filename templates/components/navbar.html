@@ -1,0 +1,588 @@
+{% load static %}
+<!-- =====================================================
+     NAVBAR COMPONENT - Premium Urdu Literature Platform
+     ===================================================== -->
+<nav class="navbar" id="mainNavbar">
+    <div class="navbar-container">
+        <!-- Brand Logo -->
+        <a href="{% url 'home' %}" class="navbar-brand">
+            <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }}">
+            <span class="navbar-brand-text">{{ SITE_NAME }}</span>
+        </a>
+
+        <!-- Center Navigation Menu -->
+        <ul class="navbar-menu">
+            <li>
+                <a href="{% url 'home' %}" class="navbar-link {% if request.path == '/' %}active{% endif %}">
+                    <i class="bi bi-house-door"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'poetry_list' %}" class="navbar-link {% if '/poetry/' in request.path %}active{% endif %}">
+                    <i class="bi bi-feather"></i>
+                    <span>Poetry</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'novel_list' %}" class="navbar-link {% if '/novels/' in request.path %}active{% endif %}">
+                    <i class="bi bi-book"></i>
+                    <span>Novels</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'blog_list' %}" class="navbar-link {% if '/blog/' in request.path %}active{% endif %}">
+                    <i class="bi bi-pencil-square"></i>
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'video_list' %}" class="navbar-link {% if '/videos/' in request.path %}active{% endif %}">
+                    <i class="bi bi-play-circle"></i>
+                    <span>Videos</span>
+                </a>
+            </li>
+            {% if AI_STUDIO_ENABLED %}
+            <li>
+                <a href="{% url 'ai_studio' %}" class="navbar-link {% if '/ai-studio/' in request.path %}active{% endif %}">
+                    <i class="bi bi-stars"></i>
+                    <span>AI Studio</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+
+        <!-- Right Actions -->
+        <div class="navbar-actions">
+            <!-- Search Button -->
+            <a href="{% url 'search' %}" class="btn btn-ghost btn-icon" aria-label="Search">
+                <i class="bi bi-search"></i>
+            </a>
+
+            {% if user.is_authenticated %}
+                <!-- Notifications -->
+                <a href="{% url 'notifications' %}" class="btn btn-ghost btn-icon" aria-label="Notifications">
+                    <i class="bi bi-bell"></i>
+                </a>
+                
+                <!-- User Avatar -->
+                <div class="navbar-user">
+                    <button class="navbar-user-toggle" id="userMenuToggle" aria-label="User menu">
+                        {% if user.avatar %}
+                            <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="navbar-user-avatar">
+                        {% else %}
+                            <div class="navbar-user-avatar navbar-user-avatar-default">
+                                <i class="bi bi-person"></i>
+                            </div>
+                        {% endif %}
+                    </button>
+                    
+                    <!-- Dropdown Menu -->
+                    <div class="navbar-dropdown" id="userDropdown">
+                        <div class="navbar-dropdown-header">
+                            <span class="navbar-dropdown-name">{{ user.get_full_name|default:user.username }}</span>
+                            <span class="navbar-dropdown-email">{{ user.email }}</span>
+                        </div>
+                        <div class="navbar-dropdown-divider"></div>
+                        <a href="{% url 'dashboard' %}" class="navbar-dropdown-item">
+                            <i class="bi bi-person"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="{% url 'bookmarks_dashboard' %}" class="navbar-dropdown-item">
+                            <i class="bi bi-bookmarks"></i>
+                            <span>Bookmarks</span>
+                        </a>
+                        <a href="{% url 'my_content' %}" class="navbar-dropdown-item">
+                            <i class="bi bi-pen"></i>
+                            <span>My Content</span>
+                        </a>
+                        {% if user.is_staff %}
+                        <div class="navbar-dropdown-divider"></div>
+                        <a href="{% url 'admin:index' %}" class="navbar-dropdown-item">
+                            <i class="bi bi-gear"></i>
+                            <span>Admin Panel</span>
+                        </a>
+                        {% endif %}
+                        <div class="navbar-dropdown-divider"></div>
+                        <a href="{% url 'logout' %}" class="navbar-dropdown-item navbar-dropdown-item-danger">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            {% else %}
+                <!-- Auth Buttons -->
+                <a href="{% url 'login' %}" class="btn btn-ghost">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+            {% endif %}
+
+            <!-- Mobile Menu Toggle -->
+            <button class="navbar-mobile-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                <i class="bi bi-list"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-nav">
+    <ul class="mobile-nav-list">
+        <li>
+            <a href="{% url 'home' %}" class="mobile-nav-item {% if request.path == '/' %}active{% endif %}">
+                <i class="bi bi-house-door"></i>
+                <span>Home</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'search' %}" class="mobile-nav-item {% if '/search/' in request.path %}active{% endif %}">
+                <i class="bi bi-search"></i>
+                <span>Search</span>
+            </a>
+        </li>
+        {% if user.is_authenticated %}
+        <li>
+            <a href="{% url 'my_content' %}" class="mobile-nav-item">
+                <i class="bi bi-plus-circle"></i>
+                <span>Write</span>
+            </a>
+        </li>
+        {% else %}
+        <li>
+            <a href="{% url 'login' %}" class="mobile-nav-item">
+                <i class="bi bi-plus-circle"></i>
+                <span>Write</span>
+            </a>
+        </li>
+        {% endif %}
+        <li>
+            <a href="{% url 'notifications' %}" class="mobile-nav-item {% if '/notifications/' in request.path %}active{% endif %}">
+                <i class="bi bi-bell"></i>
+                <span>Alerts</span>
+            </a>
+        </li>
+        <li>
+            {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="mobile-nav-item {% if '/dashboard/' in request.path %}active{% endif %}">
+                <i class="bi bi-person"></i>
+                <span>Profile</span>
+            </a>
+            {% else %}
+            <a href="{% url 'login' %}" class="mobile-nav-item">
+                <i class="bi bi-person"></i>
+                <span>Profile</span>
+            </a>
+            {% endif %}
+        </li>
+    </ul>
+</nav>
+
+<!-- Mobile Drawer Overlay -->
+<div class="mobile-overlay" id="mobileOverlay"></div>
+
+<!-- Mobile Drawer -->
+<aside class="mobile-drawer" id="mobileDrawer">
+    <div class="mobile-drawer-header">
+        <a href="{% url 'home' %}" class="mobile-drawer-brand">
+            <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }}">
+            <span>{{ SITE_NAME }}</span>
+        </a>
+        <button class="mobile-drawer-close" id="mobileDrawerClose" aria-label="Close menu">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+    
+    <div class="mobile-drawer-search">
+        <form action="{% url 'search' %}" method="GET" class="mobile-search-form">
+            <input type="text" name="q" placeholder="Search poetry, authors..." class="mobile-search-input">
+            <button type="submit" class="mobile-search-btn">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
+    </div>
+    
+    <nav class="mobile-drawer-nav">
+        <a href="{% url 'home' %}" class="mobile-drawer-link {% if request.path == '/' %}active{% endif %}">
+            <i class="bi bi-house-door"></i>
+            <span>Home</span>
+        </a>
+        <a href="{% url 'poetry_list' %}" class="mobile-drawer-link {% if '/poetry/' in request.path %}active{% endif %}">
+            <i class="bi bi-feather"></i>
+            <span>Poetry</span>
+        </a>
+        <a href="{% url 'novel_list' %}" class="mobile-drawer-link {% if '/novels/' in request.path %}active{% endif %}">
+            <i class="bi bi-book"></i>
+            <span>Novels</span>
+        </a>
+        <a href="{% url 'story_list' %}" class="mobile-drawer-link {% if '/stories/' in request.path %}active{% endif %}">
+            <i class="bi bi-journal-text"></i>
+            <span>Stories</span>
+        </a>
+        <a href="{% url 'blog_list' %}" class="mobile-drawer-link {% if '/blog/' in request.path %}active{% endif %}">
+            <i class="bi bi-pencil-square"></i>
+            <span>Blog</span>
+        </a>
+        <a href="{% url 'quote_list' %}" class="mobile-drawer-link {% if '/quotes/' in request.path %}active{% endif %}">
+            <i class="bi bi-chat-quote"></i>
+            <span>Quotes</span>
+        </a>
+        <a href="{% url 'video_list' %}" class="mobile-drawer-link {% if '/videos/' in request.path %}active{% endif %}">
+            <i class="bi bi-play-circle"></i>
+            <span>Videos</span>
+        </a>
+        {% if AI_STUDIO_ENABLED %}
+        <a href="{% url 'ai_studio' %}" class="mobile-drawer-link {% if '/ai-studio/' in request.path %}active{% endif %}">
+            <i class="bi bi-stars"></i>
+            <span>AI Studio</span>
+        </a>
+        {% endif %}
+    </nav>
+    
+    <div class="mobile-drawer-footer">
+        {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-lg" style="width: 100%;">
+                <i class="bi bi-person"></i>
+                <span>Dashboard</span>
+            </a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-secondary btn-lg" style="width: 100%; margin-bottom: 8px;">
+                <i class="bi bi-box-arrow-in-right"></i>
+                <span>Login</span>
+            </a>
+            <a href="{% url 'register' %}" class="btn btn-primary btn-lg" style="width: 100%;">
+                <i class="bi bi-person-plus"></i>
+                <span>Register</span>
+            </a>
+        {% endif %}
+    </div>
+</aside>
+
+<style>
+/* =====================================================
+   NAVBAR STYLES
+   ===================================================== */
+
+/* User Dropdown */
+.navbar-user {
+    position: relative;
+}
+
+.navbar-user-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.navbar-user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    border: 2px solid var(--border);
+    transition: border-color var(--transition-fast);
+}
+
+.navbar-user-avatar:hover {
+    border-color: var(--gold);
+}
+
+.navbar-user-avatar-default {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--glass);
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+}
+
+.navbar-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 220px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all var(--transition-fast);
+    z-index: var(--z-dropdown);
+}
+
+.navbar-user:hover .navbar-dropdown,
+.navbar-dropdown:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.navbar-dropdown-header {
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--border);
+}
+
+.navbar-dropdown-name {
+    display: block;
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+}
+
+.navbar-dropdown-email {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.navbar-dropdown-divider {
+    height: 1px;
+    background: var(--border);
+    margin: var(--space-1) 0;
+}
+
+.navbar-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    color: var(--text-secondary);
+    font-size: var(--text-small);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.navbar-dropdown-item:hover {
+    background: var(--glass);
+    color: var(--text-primary);
+}
+
+.navbar-dropdown-item-danger:hover {
+    background: rgba(244, 63, 94, 0.1);
+    color: var(--accent-rose);
+}
+
+/* Mobile Drawer */
+.mobile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+    z-index: calc(var(--z-modal) - 1);
+}
+
+.mobile-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.mobile-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(320px, 85vw);
+    background: var(--bg-secondary);
+    border-left: 1px solid var(--border);
+    transform: translateX(100%);
+    transition: transform var(--transition-base);
+    z-index: var(--z-modal);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.mobile-drawer.active {
+    transform: translateX(0);
+}
+
+.mobile-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--border);
+}
+
+.mobile-drawer-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 1.125rem;
+    font-weight: var(--weight-bold);
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.mobile-drawer-brand img {
+    height: 36px;
+}
+
+.mobile-drawer-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: var(--space-1);
+}
+
+.mobile-drawer-close:hover {
+    color: var(--text-primary);
+}
+
+.mobile-drawer-search {
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--border);
+}
+
+.mobile-search-form {
+    display: flex;
+    gap: var(--space-1);
+}
+
+.mobile-search-input {
+    flex: 1;
+    padding: var(--space-2);
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: var(--text-small);
+}
+
+.mobile-search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.mobile-search-btn {
+    padding: var(--space-2);
+    background: var(--gold);
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--bg-main);
+    cursor: pointer;
+}
+
+.mobile-drawer-nav {
+    flex: 1;
+    padding: var(--space-3);
+}
+
+.mobile-drawer-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    color: var(--text-secondary);
+    font-size: var(--text-body);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.mobile-drawer-link:hover,
+.mobile-drawer-link.active {
+    background: var(--glass);
+    color: var(--gold);
+}
+
+.mobile-drawer-link i {
+    font-size: 1.25rem;
+    width: 24px;
+}
+
+.mobile-drawer-footer {
+    padding: var(--space-3);
+    border-top: 1px solid var(--border);
+}
+
+/* Mobile Nav Item Badge */
+.mobile-nav-item .badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 8px;
+    height: 8px;
+    background: var(--accent-rose);
+    border-radius: var(--radius-full);
+}
+</style>
+
+<script>
+// Mobile Drawer Toggle
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileToggle = document.getElementById('mobileMenuToggle');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const mobileDrawerClose = document.getElementById('mobileDrawerClose');
+
+    function openDrawer() {
+        mobileDrawer.classList.add('active');
+        mobileOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+        mobileDrawer.classList.remove('active');
+        mobileOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', openDrawer);
+    }
+
+    if (mobileDrawerClose) {
+        mobileDrawerClose.addEventListener('click', closeDrawer);
+    }
+
+    if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', closeDrawer);
+    }
+
+    // Close drawer on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeDrawer();
+        }
+    });
+
+    // User dropdown toggle for desktop
+    const userMenuToggle = document.getElementById('userMenuToggle');
+    const userDropdown = document.getElementById('userDropdown');
+
+    if (userMenuToggle && userDropdown) {
+        userMenuToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            userDropdown.classList.toggle('show');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!userDropdown.contains(e.target)) {
+                userDropdown.classList.remove('show');
+            }
+        });
+    }
+
+    // Navbar scroll effect
+    const navbar = document.getElementById('mainNavbar');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', function() {
+        const currentScroll = window.pageYOffset;
+
+        if (currentScroll > 50) {
+            navbar.classList.add('navbar-scrolled');
+        } else {
+            navbar.classList.remove('navbar-scrolled');
+        }
+
+        lastScroll = currentScroll;
+    });
+});
+</script>

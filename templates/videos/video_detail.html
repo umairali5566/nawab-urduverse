@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ video.title }} - {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'video_list' %}">Videos</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ video.title|truncatechars:48 }}</li>
+            </ol>
+        </nav>
+        <h1 class="mt-3 mb-1 section-title-urdu">{{ video.title }}</h1>
+        <p class="section-subtitle mb-0">Dynamic video detail page with support for uploaded files and external embeds.</p>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="main-container">
+        <div class="reading-area">
+            <div
+                class="reader-shell content-protected-shell"
+                data-protected-content
+                data-content-type="video"
+                data-content-title="{{ video.title|escape }}"
+                data-content-url="{{ request.build_absolute_uri|escape }}"
+                data-content-id="video-{{ video.id }}"
+            >
+                <div class="reader-toolbar">
+                    <div class="reader-toolset">
+                        {% include 'includes/bookmark_button.html' with content_type='video' object_id=video.id is_bookmarked=is_bookmarked btn_class='reader-tool-btn' %}
+                        <button type="button" class="reader-tool-btn like-btn {% if is_liked %}active{% endif %}" data-url="{% url 'toggle_like' content_type='video' object_id=video.id %}">
+                            <i class="bi bi-heart"></i>
+                            <span class="like-count">{{ video.likes_count }}</span>
+                        </button>
+                        <button
+                            type="button"
+                            class="reader-tool-btn"
+                            data-reader-share
+                            data-share-title="{{ video.title }}"
+                            data-share-url="{{ request.build_absolute_uri }}"
+                            data-share-track-url="{% url 'track_share' content_type='video' object_id=video.id %}"
+                        >
+                            <i class="bi bi-share"></i> Share
+                        </button>
+                    </div>
+                    <div class="reader-toolset">
+                        <button type="button" class="reader-tool-btn" data-copy-target="#videoDescription"><i class="bi bi-clipboard"></i> Copy</button>
+                        <button type="button" class="reader-tool-btn" data-reader-dark-target="#videoReaderCard" aria-pressed="false"><i class="bi bi-moon-stars"></i> Night</button>
+                    </div>
+                </div>
+
+                <article class="card video-media-card" id="videoReaderCard">
+                    {% if video.video_file %}
+                    <video controls class="w-100" poster="{% if video.get_thumbnail_url %}{{ video.get_thumbnail_url }}{% endif %}">
+                        <source src="{{ video.video_file.url }}">
+                        Your browser does not support the video tag.
+                    </video>
+                    {% else %}
+                    <div class="ratio ratio-16x9">
+                        <iframe src="{{ video.get_embed_url }}" title="{{ video.title }}" allowfullscreen class="w-100"></iframe>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h2 class="h4 mb-2">{{ video.title }}</h2>
+                        <p id="videoDescription" class="mb-3">{{ video.description }}</p>
+                        <div class="video-info-line">
+                            {% if video.author %}<span><i class="bi bi-person"></i> {{ video.author.name }}</span>{% endif %}
+                            <span><i class="bi bi-play-circle"></i> {{ video.get_video_type_display }}</span>
+                            <span><i class="bi bi-eye"></i> {{ video.views_count }}</span>
+                            <span><i class="bi bi-heart"></i> {{ video.likes_count }}</span>
+                            <span><i class="bi bi-share"></i> {{ video.shares_count|default:0 }}</span>
+                            <span><i class="bi bi-calendar"></i> {{ video.published_at|default:video.created_at|date:"d M Y" }}</span>
+                            {% if video.duration %}<span><i class="bi bi-clock"></i> {{ video.duration }}</span>{% endif %}
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <div class="row g-3 mt-3">
+            <div class="col-lg-8">
+                {% if related_videos %}
+                <div class="card glass-card literary-card">
+                    <div class="card-body">
+                        <h5 class="card-title section-title-urdu">Related Videos</h5>
+                        <div class="row g-3">
+                            {% for item in related_videos %}
+                            <div class="col-md-6">
+                                <article class="card video-media-card h-100">
+                                    <a href="{{ item.get_absolute_url }}" class="video-thumb-wrap">
+                                        {% with thumb=item.get_thumbnail_url %}
+                                        {% if thumb %}
+                                        <img src="{{ thumb }}" alt="{{ item.title }}" loading="lazy">
+                                        {% else %}
+                                        <img src="{% static 'images/placeholder-cover.svg' %}" alt="{{ item.title }}" loading="lazy">
+                                        {% endif %}
+                                        {% endwith %}
+                                        <span class="video-thumb-play"><i class="bi bi-play-fill"></i></span>
+                                    </a>
+                                    <div class="card-body">
+                                        <h6 class="mb-2"><a href="{{ item.get_absolute_url }}">{{ item.title|truncatechars:64 }}</a></h6>
+                                        <div class="video-info-line">
+                                            <span><i class="bi bi-eye"></i> {{ item.views_count }}</span>
+                                            <span><i class="bi bi-calendar"></i> {{ item.created_at|date:"d M Y" }}</span>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-4">
+                {% include 'includes/trending_sidebar.html' %}
+                {% if suggested_content %}
+                <div class="card glass-card literary-card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title section-title-urdu">You may also like</h5>
+                        {% for item in suggested_content %}
+                        {% firstof item.title item.name item.text as item_label %}
+                        <p class="mb-1"><a href="{{ item.get_absolute_url }}">{{ item_label|truncatechars:70 }}</a></p>
+                        <p class="small text-muted mb-2">{{ item.content_type_name|default:"Content" }} · {{ item.recommendation_reason|default:"matching theme" }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

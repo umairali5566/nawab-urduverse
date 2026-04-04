@@ -1,0 +1,341 @@
+{% load static %}
+<!-- =====================================================
+     FEATURED CONTENT SECTION COMPONENT
+     ===================================================== -->
+<section class="section featured-section" id="featuredSection">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="section-header">
+            <div>
+                <span class="section-badge">
+                    <i class="bi bi-star-fill"></i>
+                    <span>Featured</span>
+                </span>
+                <h2 class="section-title mt-2">Editor's Picks</h2>
+                <p class="section-subtitle">Handpicked content by our editorial team</p>
+            </div>
+            <a href="#featuredSection" class="btn btn-ghost">
+                <span>View All</span>
+                <i class="bi bi-arrow-left"></i>
+            </a>
+        </div>
+
+        <!-- Featured Grid (Mixed Layout) -->
+        <div class="featured-grid">
+            <!-- Main Featured Item -->
+            {% if featured_main %}
+            <article class="featured-card featured-main animate-fade-in">
+                <a href="{{ featured_main.get_absolute_url }}" class="featured-card-link">
+                    {% if featured_main.display_image_url %}
+                        <img src="{{ featured_main.display_image_url }}" alt="{{ featured_main.title }}" class="featured-card-image" loading="lazy">
+                    {% else %}
+                        <div class="featured-card-image-placeholder">
+                            <i class="bi bi-image"></i>
+                        </div>
+                    {% endif %}
+                    <div class="featured-card-body">
+                        <span class="featured-card-category">{{ featured_main.display_category_name|default:"Featured" }}</span>
+                        <h3 class="featured-card-title">{{ featured_main.title }}</h3>
+                        <p class="featured-card-excerpt">{{ featured_main.display_excerpt|truncatechars:120 }}</p>
+                        <div class="featured-card-author">
+                            {% if featured_main.display_author_avatar_url %}
+                                <img src="{{ featured_main.display_author_avatar_url }}" alt="{{ featured_main.display_author_name }}">
+                            {% else %}
+                                <div class="featured-author-placeholder">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                            {% endif %}
+                            <span>{{ featured_main.display_author_name }}</span>
+                        </div>
+                    </div>
+                </a>
+            </article>
+            {% endif %}
+
+            <!-- Side Featured Items -->
+            <div class="featured-side stagger">
+                {% for item in featured_items %}
+                <article class="featured-card featured-card-sm">
+                    <a href="{{ item.get_absolute_url }}" class="featured-card-sm-link">
+                        {% if item.display_image_url %}
+                            <img src="{{ item.display_image_url }}" alt="{{ item.title }}" class="featured-card-image" loading="lazy">
+                        {% else %}
+                            <div class="featured-card-image-placeholder featured-card-image-placeholder-sm">
+                                <i class="bi bi-image"></i>
+                            </div>
+                        {% endif %}
+                        <div class="featured-card-body">
+                            <span class="featured-card-category">{{ item.display_category_name|default:"Featured" }}</span>
+                            <h4 class="featured-card-title featured-card-title-sm">{{ item.title }}</h4>
+                            <p class="featured-card-meta">
+                                {{ item.display_author_name }}
+                                • {{ item.created_at|timesince }} ago
+                            </p>
+                        </div>
+                    </a>
+                </article>
+                {% empty %}
+                <!-- Default Featured Items if none provided -->
+                <article class="featured-card featured-card-sm">
+                    <a href="#" class="featured-card-sm-link">
+                        <div class="featured-card-image-placeholder featured-card-image-placeholder-sm">
+                            <i class="bi bi-book"></i>
+                        </div>
+                        <div class="featured-card-body">
+                            <span class="featured-card-category">Poetry</span>
+                            <h4 class="featured-card-title featured-card-title-sm">Classic Ghazals Collection</h4>
+                            <p class="featured-card-meta">Mirza Ghalib • 2 days ago</p>
+                        </div>
+                    </a>
+                </article>
+                <article class="featured-card featured-card-sm">
+                    <a href="#" class="featured-card-sm-link">
+                        <div class="featured-card-image-placeholder featured-card-image-placeholder-sm">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                        <div class="featured-card-body">
+                            <span class="featured-card-category">Blog</span>
+                            <h4 class="featured-card-title featured-card-title-sm">The Golden Age of Urdu Literature</h4>
+                            <p class="featured-card-meta">Ahmed Ali • 1 week ago</p>
+                        </div>
+                    </a>
+                </article>
+                <article class="featured-card featured-card-sm">
+                    <a href="#" class="featured-card-sm-link">
+                        <div class="featured-card-image-placeholder featured-card-image-placeholder-sm">
+                            <i class="bi bi-play-circle"></i>
+                        </div>
+                        <div class="featured-card-body">
+                            <span class="featured-card-category">Video</span>
+                            <h4 class="featured-card-title featured-card-title-sm">Understanding Urdu Meter</h4>
+                            <p class="featured-card-meta">Dr. Hassan • 3 days ago</p>
+                        </div>
+                    </a>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* =====================================================
+   FEATURED SECTION STYLES
+   ===================================================== */
+.featured-section {
+    padding: var(--space-8) 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(139, 92, 246, 0.03) 50%, transparent 100%);
+}
+
+/* Grid */
+.featured-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--space-4);
+}
+
+/* Main Featured Card */
+.featured-card {
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    transition: all var(--transition-base);
+}
+
+.featured-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.featured-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+}
+
+.featured-card-image {
+    width: 100%;
+    height: 100%;
+    min-height: 350px;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.featured-card:hover .featured-card-image {
+    transform: scale(1.05);
+}
+
+.featured-card-image-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    font-size: 4rem;
+    color: var(--gold);
+}
+
+.featured-card-image-placeholder-sm {
+    min-height: auto;
+    height: 120px;
+    width: 120px;
+    flex-shrink: 0;
+    border-radius: var(--radius-md);
+}
+
+.featured-card-body {
+    padding: var(--space-4);
+}
+
+.featured-card-category {
+    display: inline-block;
+    padding: 4px 12px;
+    background: var(--gold);
+    color: var(--bg-main);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    margin-bottom: var(--space-2);
+}
+
+.featured-card-title {
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    font-weight: var(--weight-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+    line-height: 1.4;
+}
+
+.featured-card-title-sm {
+    font-size: var(--text-body);
+}
+
+.featured-card-excerpt {
+    font-size: var(--text-small);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-3);
+}
+
+.featured-card-author {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-small);
+    color: var(--text-secondary);
+}
+
+.featured-card-author img {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    border: 2px solid var(--border);
+}
+
+.featured-author-placeholder {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background: var(--glass);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 1rem;
+    border: 2px solid var(--border);
+}
+
+.featured-card-meta {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: var(--space-1);
+}
+
+/* Side Featured Cards */
+.featured-side {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.featured-card-sm {
+    display: flex;
+}
+
+.featured-card-sm .featured-card-sm-link {
+    display: flex;
+    gap: var(--space-3);
+    width: 100%;
+}
+
+.featured-card-sm .featured-card-image {
+    min-height: auto;
+    width: 140px;
+    height: 120px;
+    flex-shrink: 0;
+}
+
+.featured-card-sm:hover .featured-card-image {
+    transform: none;
+}
+
+.featured-card-sm .featured-card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-3);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .featured-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .featured-main {
+        grid-column: span 1;
+    }
+    
+    .featured-side {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .featured-card-image {
+        min-height: 250px;
+    }
+    
+    .featured-card-image-placeholder {
+        min-height: 250px;
+    }
+}
+
+@media (max-width: 640px) {
+    .featured-side {
+        grid-template-columns: 1fr;
+    }
+    
+    .featured-card-sm .featured-card-image {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .featured-card-image {
+        min-height: 200px;
+    }
+    
+    .featured-card-image-placeholder {
+        min-height: 200px;
+    }
+}
+</style>

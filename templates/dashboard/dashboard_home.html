@@ -1,0 +1,660 @@
+﻿{% extends 'dashboard/dashboard_base.html' %}
+{% block title %}Dashboard Overview - {{ SITE_NAME }}{% endblock %}
+
+{% block extra_head %}
+<style>
+    .dashboard-overview {
+        --overview-paper: #fffaf2;
+        --overview-surface: #fffdfa;
+        --overview-border: rgba(120, 95, 58, 0.14);
+        --overview-ink: #18212f;
+        --overview-muted: #6b7280;
+        --overview-shadow: 0 18px 42px rgba(24, 33, 47, 0.08);
+        --overview-gold: #b78633;
+        --overview-navy: #23415f;
+        --overview-teal: #16727a;
+        --overview-blue: #2e5b9a;
+        --overview-violet: #6a4aa6;
+        --overview-emerald: #24805f;
+        --overview-rose: #b45768;
+        --overview-amber: #cb8a2e;
+        color: var(--overview-ink);
+    }
+
+    .dashboard-overview__hero {
+        position: relative;
+        padding: 1.6rem 1.75rem;
+        border: 1px solid rgba(183, 134, 51, 0.18);
+        border-radius: 28px;
+        background:
+            radial-gradient(circle at top left, rgba(183, 134, 51, 0.18), transparent 30%),
+            radial-gradient(circle at right center, rgba(35, 65, 95, 0.16), transparent 34%),
+            linear-gradient(135deg, #fff9ef 0%, #ffffff 52%, #f7f4ff 100%);
+        box-shadow: var(--overview-shadow);
+        overflow: hidden;
+    }
+
+    .dashboard-overview__eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin-bottom: 0.55rem;
+        padding: 0.38rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(183, 134, 51, 0.12);
+        color: var(--overview-gold);
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .dashboard-overview__hero .section-title {
+        color: var(--overview-ink);
+        font-size: clamp(1.65rem, 2vw, 2.2rem);
+    }
+
+    .dashboard-overview__hero .text-muted,
+    .dashboard-overview .text-muted {
+        color: var(--overview-muted) !important;
+    }
+
+    .dashboard-overview__snapshot {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        margin-top: 1rem;
+    }
+
+    .dashboard-overview__snapshot span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.58rem 0.9rem;
+        border: 1px solid rgba(35, 65, 95, 0.08);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.82);
+        color: #465063;
+        font-size: 0.92rem;
+        box-shadow: 0 12px 24px rgba(24, 33, 47, 0.05);
+    }
+
+    .dashboard-overview__snapshot strong {
+        color: var(--overview-ink);
+        font-size: 1rem;
+    }
+
+    .dashboard-overview .btn-outline-primary {
+        border-color: rgba(35, 65, 95, 0.18);
+        color: var(--overview-navy);
+        background: rgba(255, 255, 255, 0.72);
+    }
+
+    .dashboard-overview .btn-outline-primary:hover {
+        border-color: var(--overview-navy);
+        background: var(--overview-navy);
+        color: #fff;
+    }
+
+    .dashboard-overview .dashboard-stats {
+        gap: 1rem;
+    }
+
+    .dashboard-overview .dashboard-stat {
+        position: relative;
+        min-height: 138px;
+        padding: 1.2rem 1.15rem;
+        border: 1px solid var(--overview-border);
+        border-radius: 22px;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 250, 243, 0.94)),
+            var(--overview-surface);
+        box-shadow: var(--overview-shadow);
+        overflow: hidden;
+    }
+
+    .dashboard-overview .dashboard-stat::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto auto 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, rgba(183, 134, 51, 0.9), rgba(35, 65, 95, 0.7));
+    }
+
+    .dashboard-overview .dashboard-stat .label {
+        margin-bottom: 0.45rem;
+        color: var(--overview-muted);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .dashboard-overview .dashboard-stat .value {
+        color: var(--overview-ink);
+        font-size: 2.15rem;
+        font-weight: 700;
+    }
+
+    .dashboard-overview .dashboard-stat-featured {
+        background:
+            radial-gradient(circle at top right, rgba(255, 255, 255, 0.22), transparent 28%),
+            linear-gradient(135deg, #1d3955 0%, #355c80 52%, #b78633 100%);
+        border-color: rgba(29, 57, 85, 0.22);
+    }
+
+    .dashboard-overview .dashboard-stat-featured::before {
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.92), rgba(255, 230, 178, 0.88));
+    }
+
+    .dashboard-overview .dashboard-stat-featured .label,
+    .dashboard-overview .dashboard-stat-featured .value {
+        color: #fff;
+    }
+
+    .dashboard-overview .tone-authors::before { background: linear-gradient(90deg, #cb8a2e, #f4c977); }
+    .dashboard-overview .tone-novels::before { background: linear-gradient(90deg, #23415f, #5f89b5); }
+    .dashboard-overview .tone-stories::before { background: linear-gradient(90deg, #16727a, #53b4b4); }
+    .dashboard-overview .tone-poetry::before { background: linear-gradient(90deg, #6a4aa6, #a689de); }
+    .dashboard-overview .tone-blog::before { background: linear-gradient(90deg, #b45768, #e9a0ad); }
+    .dashboard-overview .tone-quotes::before { background: linear-gradient(90deg, #24805f, #79c6a7); }
+    .dashboard-overview .tone-videos::before { background: linear-gradient(90deg, #2e5b9a, #8aaee6); }
+    .dashboard-overview .tone-memberships::before { background: linear-gradient(90deg, #996515, #f0c46a); }
+    .dashboard-overview .tone-plans::before { background: linear-gradient(90deg, #7250aa, #ccb4ff); }
+    .dashboard-overview .tone-messages::before { background: linear-gradient(90deg, #b86124, #f2b075); }
+
+    .dashboard-overview .dashboard-panel {
+        border: 1px solid rgba(24, 33, 47, 0.08);
+        border-radius: 24px;
+        background:
+            radial-gradient(circle at top right, rgba(183, 134, 51, 0.08), transparent 30%),
+            linear-gradient(180deg, #fffdf9, #ffffff);
+        box-shadow: var(--overview-shadow);
+        overflow: hidden;
+    }
+
+    .dashboard-overview .dashboard-panel .card-body {
+        padding: 1.35rem;
+    }
+
+    .dashboard-overview .dashboard-panel .card-title {
+        color: var(--overview-ink);
+        font-size: 1.08rem;
+        font-weight: 700;
+    }
+
+    .dashboard-overview .dashboard-panel .list-group-item {
+        border-color: rgba(24, 33, 47, 0.06);
+        background: transparent;
+        color: var(--overview-ink);
+    }
+
+    .dashboard-overview a {
+        color: var(--overview-navy);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .dashboard-overview a:hover {
+        color: var(--overview-gold);
+    }
+
+    .dashboard-overview .activity-bar-track {
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(35, 65, 95, 0.08);
+        overflow: hidden;
+    }
+
+    .dashboard-overview .activity-bar-fill {
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--overview-gold), var(--overview-teal));
+    }
+
+    .dashboard-overview .panel-gold {
+        background:
+            radial-gradient(circle at top right, rgba(183, 134, 51, 0.15), transparent 32%),
+            linear-gradient(180deg, #fffaf0, #ffffff);
+    }
+
+    .dashboard-overview .panel-navy {
+        background:
+            radial-gradient(circle at top right, rgba(35, 65, 95, 0.13), transparent 32%),
+            linear-gradient(180deg, #f8fbff, #ffffff);
+    }
+
+    .dashboard-overview .panel-teal {
+        background:
+            radial-gradient(circle at top right, rgba(22, 114, 122, 0.13), transparent 32%),
+            linear-gradient(180deg, #f5fffd, #ffffff);
+    }
+
+    .dashboard-overview .panel-violet {
+        background:
+            radial-gradient(circle at top right, rgba(106, 74, 166, 0.12), transparent 32%),
+            linear-gradient(180deg, #faf7ff, #ffffff);
+    }
+
+    .dashboard-overview .panel-blue {
+        background:
+            radial-gradient(circle at top right, rgba(46, 91, 154, 0.14), transparent 32%),
+            linear-gradient(180deg, #f7faff, #ffffff);
+    }
+
+    .dashboard-overview .panel-emerald {
+        background:
+            radial-gradient(circle at top right, rgba(36, 128, 95, 0.13), transparent 32%),
+            linear-gradient(180deg, #f7fffb, #ffffff);
+    }
+
+    .dashboard-overview .panel-rose {
+        background:
+            radial-gradient(circle at top right, rgba(180, 87, 104, 0.13), transparent 32%),
+            linear-gradient(180deg, #fff8fa, #ffffff);
+    }
+
+    @media (max-width: 991.98px) {
+        .dashboard-overview__hero {
+            padding: 1.3rem;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .dashboard-overview .dashboard-stat .value {
+            font-size: 1.85rem;
+        }
+
+        .dashboard-overview__snapshot span {
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
+
+    /* High-contrast dark-gold overrides */
+    .dashboard-overview {
+        --overview-paper: #0b0f1a;
+        --overview-surface: #111827;
+        --overview-border: rgba(255, 255, 255, 0.05);
+        --overview-ink: #ffffff;
+        --overview-muted: #9ca3af;
+        --overview-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        --overview-gold: #d4af37;
+        --overview-navy: #d4af37;
+        --overview-teal: #f5d76e;
+        --overview-blue: #d4af37;
+        --overview-violet: #d4af37;
+        --overview-emerald: #d4af37;
+        --overview-rose: #d4af37;
+        --overview-amber: #f5d76e;
+        background: linear-gradient(180deg, #0b0f1a 0%, #111827 100%) !important;
+        color: #fff !important;
+        opacity: 1 !important;
+    }
+
+    .dashboard-overview,
+    .dashboard-overview * {
+        opacity: 1;
+        filter: none;
+    }
+
+    .dashboard-overview__hero {
+        border: 1px solid rgba(212, 175, 55, 0.35) !important;
+        background: linear-gradient(180deg, #0b0f1a 0%, #111827 100%) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 28px rgba(212, 175, 55, 0.15) !important;
+    }
+
+    .dashboard-overview__eyebrow {
+        background: rgba(212, 175, 55, 0.15) !important;
+        color: #d4af37 !important;
+        border: 1px solid rgba(212, 175, 55, 0.35);
+    }
+
+    .dashboard-overview__hero .section-title,
+    .dashboard-overview .dashboard-stat .value,
+    .dashboard-overview .dashboard-panel .card-title,
+    .dashboard-overview__snapshot strong {
+        color: #fff !important;
+    }
+
+    .dashboard-overview .text-muted,
+    .dashboard-overview .dashboard-stat .label {
+        color: #9ca3af !important;
+    }
+
+    .dashboard-overview__snapshot span {
+        background: #1f2937 !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        color: #d1d5db !important;
+        box-shadow: none !important;
+    }
+
+    .dashboard-overview .btn-outline-primary {
+        background: transparent !important;
+        color: #d4af37 !important;
+        border: 1px solid #d4af37 !important;
+    }
+
+    .dashboard-overview .btn-outline-primary:hover {
+        background: rgba(212, 175, 55, 0.15) !important;
+        color: #f5d76e !important;
+        border-color: #f5d76e !important;
+    }
+
+    .dashboard-overview .dashboard-stat,
+    .dashboard-overview .dashboard-panel {
+        background: #1f2937 !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    .dashboard-overview .dashboard-stat-featured {
+        background: linear-gradient(135deg, #111827 0%, #1f2937 55%, rgba(212, 175, 55, 0.28) 100%) !important;
+        border-color: rgba(212, 175, 55, 0.35) !important;
+    }
+
+    .dashboard-overview .dashboard-stat::before,
+    .dashboard-overview .dashboard-stat-featured::before,
+    .dashboard-overview .tone-authors::before,
+    .dashboard-overview .tone-novels::before,
+    .dashboard-overview .tone-stories::before,
+    .dashboard-overview .tone-poetry::before,
+    .dashboard-overview .tone-blog::before,
+    .dashboard-overview .tone-quotes::before,
+    .dashboard-overview .tone-videos::before,
+    .dashboard-overview .tone-memberships::before,
+    .dashboard-overview .tone-plans::before,
+    .dashboard-overview .tone-messages::before {
+        background: linear-gradient(90deg, #d4af37, #f5d76e) !important;
+    }
+
+    .dashboard-overview .dashboard-panel .list-group-item {
+        background: transparent !important;
+        border-color: rgba(255, 255, 255, 0.05) !important;
+        color: #d1d5db !important;
+    }
+
+    .dashboard-overview a {
+        color: #d4af37 !important;
+    }
+
+    .dashboard-overview a:hover {
+        color: #f5d76e !important;
+    }
+
+    .dashboard-overview .activity-bar-track {
+        background: #111827 !important;
+    }
+
+    .dashboard-overview .activity-bar-fill {
+        background: linear-gradient(90deg, #d4af37, #f5d76e) !important;
+    }
+
+    .dashboard-overview .panel-gold,
+    .dashboard-overview .panel-navy,
+    .dashboard-overview .panel-teal,
+    .dashboard-overview .panel-violet,
+    .dashboard-overview .panel-blue,
+    .dashboard-overview .panel-emerald,
+    .dashboard-overview .panel-rose {
+        background: #1f2937 !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="section-spacing dashboard-overview">
+    <div class="dashboard-overview__hero d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <span class="dashboard-overview__eyebrow">Control Center</span>
+            <h2 class="section-title mb-1">Dashboard Overview</h2>
+            <p class="text-muted mb-0">Quick snapshot of content across the platform.</p>
+            <div class="dashboard-overview__snapshot">
+                <span><strong>{{ total_users }}</strong> registered members</span>
+                <span><strong>{{ total_authors }}</strong> active authors</span>
+                <span><strong>{{ active_memberships }}</strong> premium memberships</span>
+            </div>
+        </div>
+        <a class="btn btn-outline-primary" href="{% url 'home' %}" target="_blank" rel="noopener">
+            <i class="bi bi-box-arrow-up-left me-1"></i> Open Website
+        </a>
+    </div>
+
+    <div class="dashboard-stats mb-4">
+        <div class="dashboard-stat dashboard-stat-featured">
+            <div class="label">Total Users</div>
+            <div class="value">{{ total_users }}</div>
+        </div>
+        <div class="dashboard-stat tone-authors">
+            <div class="label">Total Authors</div>
+            <div class="value">{{ total_authors }}</div>
+        </div>
+        <div class="dashboard-stat tone-novels">
+            <div class="label">Total Novels</div>
+            <div class="value">{{ total_novels }}</div>
+        </div>
+        <div class="dashboard-stat tone-stories">
+            <div class="label">Total Stories</div>
+            <div class="value">{{ total_stories }}</div>
+        </div>
+        <div class="dashboard-stat tone-poetry">
+            <div class="label">Total Poetry</div>
+            <div class="value">{{ total_poetry }}</div>
+        </div>
+        <div class="dashboard-stat tone-blog">
+            <div class="label">Total Blog Posts</div>
+            <div class="value">{{ total_blog }}</div>
+        </div>
+        <div class="dashboard-stat tone-quotes">
+            <div class="label">Total Quotes</div>
+            <div class="value">{{ total_quotes }}</div>
+        </div>
+        <div class="dashboard-stat tone-videos">
+            <div class="label">Total Videos</div>
+            <div class="value">{{ total_videos }}</div>
+        </div>
+        <div class="dashboard-stat tone-memberships">
+            <div class="label">Active Memberships</div>
+            <div class="value">{{ active_memberships }}</div>
+        </div>
+        <div class="dashboard-stat tone-plans">
+            <div class="label">Premium Plans</div>
+            <div class="value">{{ premium_plans_count }}</div>
+        </div>
+        <div class="dashboard-stat tone-messages">
+            <div class="label">Unread Messages</div>
+            <div class="value">{{ pending_messages }}</div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-4">
+            <div class="card glass-card analytics-panel dashboard-panel panel-navy h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Daily Activity</h5>
+                    <div class="activity-bar-list">
+                        {% for point in daily_activity %}
+                        <div class="activity-bar-row">
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span>{{ point.date|date:'D' }}</span>
+                                <span>{{ point.count }}</span>
+                            </div>
+                            <div class="activity-bar-track">
+                                <span class="activity-bar-fill" style="width: {% if point.count %}{{ point.count|add:1 }}0{% else %}6{% endif %}%"></span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card glass-card analytics-panel dashboard-panel panel-gold h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Latest Novels</h5>
+                    {% if latest_novels %}
+                    <ul class="list-group list-group-flush">
+                        {% for item in latest_novels %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <a href="{{ item.get_absolute_url }}" target="_blank" rel="noopener">{{ item.title|truncatechars:36 }}</a>
+                            <small class="text-muted">{{ item.created_at|date:'d M Y' }}</small>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted mb-0">No novels yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card glass-card analytics-panel dashboard-panel panel-teal h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Latest Stories</h5>
+                    {% if latest_stories %}
+                    <ul class="list-group list-group-flush">
+                        {% for item in latest_stories %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <a href="{{ item.get_absolute_url }}" target="_blank" rel="noopener">{{ item.title|truncatechars:36 }}</a>
+                            <small class="text-muted">{{ item.created_at|date:'d M Y' }}</small>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted mb-0">No stories yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card glass-card analytics-panel dashboard-panel panel-rose h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Latest Blog Posts</h5>
+                    {% if latest_blog_posts %}
+                    <ul class="list-group list-group-flush">
+                        {% for item in latest_blog_posts %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <a href="{{ item.get_absolute_url }}" target="_blank" rel="noopener">{{ item.title|truncatechars:36 }}</a>
+                            <small class="text-muted">{{ item.created_at|date:'d M Y' }}</small>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted mb-0">No blog posts yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-lg-4">
+            <div class="card glass-card analytics-panel dashboard-panel panel-violet h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Trending Poetry</h5>
+                    {% for item in trending_poetry %}
+                    <p class="mb-2"><a href="{{ item.get_absolute_url }}" target="_blank" rel="noopener">{{ item.title|truncatechars:40 }}</a></p>
+                    {% empty %}
+                    <p class="text-muted mb-0">No trending poetry yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card glass-card analytics-panel dashboard-panel panel-blue h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Trending Blogs</h5>
+                    {% for item in trending_blogs %}
+                    <p class="mb-2"><a href="{{ item.get_absolute_url }}" target="_blank" rel="noopener">{{ item.title|truncatechars:40 }}</a></p>
+                    {% empty %}
+                    <p class="text-muted mb-0">No trending blogs yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card glass-card analytics-panel dashboard-panel panel-emerald h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Trending Videos</h5>
+                    {% for item in trending_videos %}
+                    <p class="mb-2"><a href="{{ item.get_absolute_url }}" target="_blank" rel="noopener">{{ item.title|truncatechars:40 }}</a></p>
+                    {% empty %}
+                    <p class="text-muted mb-0">No trending videos yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-lg-6">
+            <div class="card glass-card analytics-panel dashboard-panel panel-navy h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Recent Users</h5>
+                    <div class="list-group list-group-flush">
+                        {% for member in recent_users %}
+                        <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                            <span>{{ member.get_full_name|default:member.username }}</span>
+                            <small class="text-muted">{{ member.date_joined|date:'d M Y' }}</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card glass-card analytics-panel dashboard-panel panel-gold h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Community Snapshot</h5>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item px-0 d-flex justify-content-between"><span>Notifications sent</span><strong>{{ notifications_count }}</strong></div>
+                        <div class="list-group-item px-0 d-flex justify-content-between"><span>Newsletter subscribers</span><strong>{{ subscribers_count }}</strong></div>
+                        <div class="list-group-item px-0 d-flex justify-content-between"><span>Active memberships</span><strong>{{ active_memberships }}</strong></div>
+                        <div class="list-group-item px-0 d-flex justify-content-between"><span>Premium plans</span><strong>{{ premium_plans_count }}</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-lg-6">
+            <div class="card glass-card analytics-panel dashboard-panel panel-teal h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Recent Authors</h5>
+                    <div class="list-group list-group-flush">
+                        {% for author in recent_authors %}
+                        <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                            <a href="{{ author.get_absolute_url }}" target="_blank" rel="noopener">{{ author.name|truncatechars:36 }}</a>
+                            <small class="text-muted">{{ author.created_at|date:'d M Y' }}</small>
+                        </div>
+                        {% empty %}
+                        <div class="list-group-item px-0 text-muted">No authors yet.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card glass-card analytics-panel dashboard-panel panel-violet h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Cross-platform Trending</h5>
+                    <div class="list-group list-group-flush">
+                        {% for item in trending_content %}
+                        <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                            {% firstof item.title item.name item.text as item_label %}
+                            <a href="{{ item.get_absolute_url }}" target="_blank" rel="noopener">{{ item_label|truncatechars:42 }}</a>
+                            <small class="text-muted">{{ item.content_kind|title }}</small>
+                        </div>
+                        {% empty %}
+                        <div class="list-group-item px-0 text-muted">No trending content yet.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

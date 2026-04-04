@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search: {{ query }} - {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Advanced search across poets, poetry, novels, stories, quotes, blogs, and videos.{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Search</li>
+            </ol>
+        </nav>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
+            <div>
+                <h1 class="mb-1">Advanced Search</h1>
+                <p class="section-subtitle">Find poetry, poets, stories, blogs, quotes, and videos with live suggestions and smart filters.</p>
+            </div>
+            <div class="hero-chip-row">
+                <span class="hero-chip"><i class="bi bi-search"></i> Live suggestions</span>
+                <span class="hero-chip"><i class="bi bi-funnel"></i> Content filters</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="main-container">
+        <div class="card glass-card literary-card">
+            <div class="card-body">
+                <form class="search-shell search-shell-page" method="get" action="{% url 'search' %}">
+                    <div class="search-input-wrap search-input-wrap-page position-relative" data-search-autocomplete>
+                        <i class="bi bi-search search-input-icon"></i>
+                        <input class="form-control search-input search-input-page" type="search" name="q" value="{{ query }}" placeholder="Try: love poetry by Iqbal" autocomplete="off" data-search-input>
+                        <div class="search-suggestions" data-search-suggestions></div>
+                    </div>
+                    <div class="filter-chip-row" role="radiogroup" aria-label="Search filters">
+                        {% for item in content_filters %}
+                        <label class="filter-chip">
+                            <input type="radio" name="type" value="{{ item }}" {% if content_filter == item %}checked{% endif %}>
+                            <span>{{ item|title }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-stars me-1"></i> Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="main-container">
+        {% if not query %}
+        <div class="card glass-card literary-card">
+            <div class="card-body empty-state">
+                <i class="bi bi-search-heart display-4 text-muted"></i>
+                <h3 class="mt-3">Start with a word, poet, or mood</h3>
+                <p class="text-muted mb-0">Try searching for Faiz, &#1605;&#1581;&#1576;&#1578;, video, or the title of a poem.</p>
+            </div>
+        </div>
+        {% else %}
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+            <div class="search-results-summary">
+                <h2 class="section-title mb-1">Results for "{{ query }}"</h2>
+                <p class="section-subtitle">{{ total_results }} result{{ total_results|pluralize }} found{% if content_filter != 'all' %} in {{ content_filter|title }}{% endif %}.</p>
+                {% if ai_intent %}
+                <p class="small text-muted mb-0">Smart interpretation:
+                    {{ ai_intent.content_type|default:"all"|title }}
+                    {% if ai_intent.author %} &middot; {{ ai_intent.author }}{% endif %}
+                    {% if ai_intent.keywords %} &middot; {{ ai_intent.keywords|join:", " }}{% endif %}
+                </p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if total_results == 0 %}
+        <div class="card glass-card literary-card">
+            <div class="card-body empty-state">
+                <i class="bi bi-inbox display-4 text-muted"></i>
+                <h3 class="mt-3">No results found</h3>
+                <p class="text-muted mb-0">Try a broader keyword, a poet name, or switch the filter to All.</p>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if authors %}
+        <div class="search-section">
+            <div class="section-header">
+                <h3 class="section-title"><i class="bi bi-people me-2"></i>Authors</h3>
+            </div>
+            <div class="row g-3">
+                {% for author in authors %}
+                <div class="col-lg-4">
+                    <a href="{{ author.get_absolute_url }}" class="card glass-card literary-card h-100 search-card-link">
+                        <div class="card-body">
+                            <h5 class="mb-1">{{ author.name }}</h5>
+                            <p class="card-snippet line-clamp-3 mb-0">{{ author.bio|default:"Writer profile" }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if poetry %}
+        <div class="search-section">
+            <div class="section-header">
+                <h3 class="section-title"><i class="bi bi-feather me-2"></i>Poetry</h3>
+            </div>
+            <div class="row g-3">
+                {% for item in poetry %}
+                <div class="col-lg-6">
+                    <a href="{{ item.get_absolute_url }}" class="card glass-card literary-card h-100 search-card-link">
+                        <div class="card-body">
+                            <h5 class="mb-1">{{ item.title }}</h5>
+                            <p class="text-muted mb-2">{{ item.author.name }}</p>
+                            <p class="poetry-content card-snippet line-clamp-3 mb-0">{{ item.plain_text_content|truncatechars:160 }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if novels %}
+        <div class="search-section">
+            <div class="section-header">
+                <h3 class="section-title"><i class="bi bi-book me-2"></i>Novels</h3>
+            </div>
+            <div class="row g-3">
+                {% for item in novels %}
+                <div class="col-lg-4">
+                    <a href="{{ item.get_absolute_url }}" class="card glass-card literary-card h-100 search-card-link">
+                        {% if item.cover_image %}
+                        <img class="card-img-top" src="{{ item.cover_image.url }}" alt="{{ item.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="mb-1">{{ item.title }}</h5>
+                            <p class="text-muted mb-0">{{ item.author.name }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if stories %}
+        <div class="search-section">
+            <div class="section-header">
+                <h3 class="section-title"><i class="bi bi-journal-text me-2"></i>Stories</h3>
+            </div>
+            <div class="row g-3">
+                {% for item in stories %}
+                <div class="col-lg-4">
+                    <a href="{{ item.get_absolute_url }}" class="card glass-card literary-card h-100 search-card-link">
+                        <div class="card-body">
+                            <h5 class="mb-1">{{ item.title }}</h5>
+                            <p class="text-muted mb-2">{{ item.author.name }}</p>
+                            <p class="card-snippet line-clamp-3 mb-0">{{ item.excerpt|default:item.content|striptags|truncatechars:160 }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if blogs %}
+        <div class="search-section">
+            <div class="section-header">
+                <h3 class="section-title"><i class="bi bi-newspaper me-2"></i>Blogs</h3>
+            </div>
+            <div class="row g-3">
+                {% for item in blogs %}
+                <div class="col-lg-6">
+                    <a href="{{ item.get_absolute_url }}" class="card glass-card literary-card h-100 search-card-link">
+                        <div class="card-body">
+                            <h5 class="mb-1">{{ item.title }}</h5>
+                            <p class="text-muted mb-2">{{ item.author.name }}</p>
+                            <p class="card-snippet line-clamp-3 mb-0">{{ item.excerpt|default:item.content|striptags|truncatechars:180 }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if quotes %}
+        <div class="search-section">
+            <div class="section-header">
+                <h3 class="section-title"><i class="bi bi-chat-quote me-2"></i>Quotes</h3>
+            </div>
+            <div class="row g-3">
+                {% for item in quotes %}
+                <div class="col-lg-6">
+                    <a href="{{ item.get_absolute_url }}" class="card quote-preview-card literary-card h-100 search-card-link">
+                        <div class="card-body">
+                            <blockquote class="mb-3">{{ item.text|truncatechars:180 }}</blockquote>
+                            <p class="mb-0 text-white-50">{{ item.author.name }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if videos %}
+        <div class="search-section">
+            <div class="section-header">
+                <h3 class="section-title"><i class="bi bi-play-circle me-2"></i>Videos</h3>
+            </div>
+            <div class="row g-3">
+                {% for item in videos %}
+                <div class="col-lg-4">
+                    <a href="{{ item.get_absolute_url }}" class="card glass-card literary-card h-100 search-card-link">
+                        {% with thumb=item.get_thumbnail_url %}
+                        {% if thumb %}
+                        <img class="card-img-top" src="{{ thumb }}" alt="{{ item.title }}">
+                        {% endif %}
+                        {% endwith %}
+                        <div class="card-body">
+                            <h5 class="mb-1">{{ item.title }}</h5>
+                            <p class="card-snippet line-clamp-2 mb-0">{{ item.description|default:"Watch this Urdu literature video." }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

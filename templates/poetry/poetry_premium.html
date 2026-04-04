@@ -1,0 +1,388 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ poem.title }} - {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}{{ poem.meta_description|default:poem.plain_text_content|truncatechars:160 }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ poem.title|escapejs }}",
+  "description": "{{ meta_description|default:poem.meta_description|default:poem.plain_text_content|truncatechars:160|escapejs }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ poem.author.name|escapejs }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ SITE_NAME|escapejs }}"
+  },
+  "inLanguage": "ur",
+  "articleSection": "Poetry",
+  "datePublished": "{{ poem.published_at|default:poem.created_at|date:'c' }}",
+  "dateModified": "{{ poem.updated_at|date:'c' }}",
+  "mainEntityOfPage": "{{ canonical_url|default:request.build_absolute_uri|escapejs }}",
+  "url": "{{ canonical_url|default:request.build_absolute_uri|escapejs }}",
+  "keywords": "{{ meta_keywords|default:poem.meta_keywords|default:SITE_KEYWORDS|escapejs }}"
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/poetry-premium.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Premium Poetry Reading Page -->
+<div class="premium-poetry-page" data-page-type="premium-poetry" data-content-id="{{ poem.id }}" data-content-type="poetry">
+
+    <!-- Minimal Header -->
+    <header class="premium-header">
+        <div class="premium-header__container">
+            <a href="{% url 'poetry_list' %}" class="premium-back-btn" aria-label="Go back">
+                <i class="bi bi-arrow-right"></i>
+            </a>
+            
+            <a href="{% url 'home' %}" class="premium-logo">
+                <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }}" class="premium-logo__image">
+            </a>
+            
+            <div class="premium-header__actions">
+                <button class="premium-icon-btn bookmark-toggle {% if is_bookmarked %}active{% endif %}"
+                        data-action="bookmark"
+                        data-content-type="poetry"
+                        data-content-id="{{ poem.id }}"
+                        data-url="{% url 'toggle_bookmark' content_type='poetry' object_id=poem.id %}"
+                        aria-label="Bookmark">
+                    <i class="bi {% if is_bookmarked %}bi-bookmark-fill{% else %}bi-bookmark{% endif %}"></i>
+                </button>
+                <button class="premium-icon-btn share-btn"
+                        data-action="share"
+                        data-share-title="{{ poem.title }}"
+                        data-share-text="{{ poem.plain_text_content|truncatechars:100 }}"
+                        data-share-url="{{ request.build_absolute_uri }}"
+                        aria-label="Share">
+                    <i class="bi bi-share"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Screenshot Protection Overlay (for non-authenticated users) -->
+    <div class="screenshot-protection" id="screenshotProtection" aria-hidden="true">
+        <div class="watermark-overlay"></div>
+    </div>
+
+    <!-- Login Required Overlay -->
+    {% if not user.is_authenticated %}
+    <div class="login-required-overlay" id="loginRequiredOverlay">
+        <div class="login-required-card">
+            <div class="login-required-card__icon">
+                <i class="bi bi-lock"></i>
+            </div>
+            <h3 class="login-required-card__title">Login Required</h3>
+            <p class="login-required-card__text">
+                Create a free account or sign in to copy, share, and interact with this poetry.
+            </p>
+            <div class="login-required-card__actions">
+                <a href="{% url 'login' %}?next={{ request.path|urlencode }}" class="premium-btn premium-btn--primary">
+                    <i class="bi bi-box-arrow-in-right"></i> Login / Sign In
+                </a>
+                <a href="{% url 'register' %}" class="premium-btn premium-btn--outline">
+                    <i class="bi bi-person-plus"></i> Create Account
+                </a>
+            </div>
+            <button class="login-required-card__close" id="closeLoginOverlay" aria-label="Close">
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Main Poetry Content -->
+    <main class="premium-main">
+        <div class="premium-reading-container">
+            
+            <!-- Poetry Card -->
+            <article class="poetry-card" id="poetryCard">
+                <div class="poetry-card__glow"></div>
+                <div class="poetry-card__content">
+                    
+                    <!-- Category Tag -->
+                    <div class="poetry-card__category">
+                        <span class="category-tag">{{ poem.get_poetry_type_display }}</span>
+                        {% if poem.mood %}
+                        <span class="mood-tag">{{ poem.get_mood_display }}</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Title -->
+                    <h1 class="poetry-card__title">{{ poem.title }}</h1>
+                    
+                    <!-- Poet Name -->
+                    <div class="poetry-card__poet">
+                        <a href="{{ poem.author.get_absolute_url }}" class="poet-link">
+                            <i class="bi bi-person-circle"></i>
+                            {{ poem.author.name }}
+                        </a>
+                    </div>
+
+                    <!-- Poetry Text -->
+                    <div class="poetry-text-container {% if not user.is_authenticated %}protected{% endif %}"
+                         id="poetryTextContainer"
+                         data-protected=" {% if not user.is_authenticated %}true{% else %}false{% endif %}">
+                        
+                        <div class="poetry-text" id="poetryText">
+                            {{ poem.formatted_poetry_html|safe }}
+                        </div>
+
+                        <!-- Content Protection Blur Overlay -->
+                        {% if not user.is_authenticated %}
+                        <div class="content-blur-overlay" id="contentBlurOverlay">
+                            <div class="blur-message">
+                                <i class="bi bi-shield-lock"></i>
+                                <p>Sign in to read full poetry</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Tags -->
+                    {% if poem.tags %}
+                    <div class="poetry-card__tags">
+                        {% for tag in poem.tags.split ',' %}
+                        <span class="poetry-tag"># {{ tag|strip }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Stats -->
+                    <div class="poetry-card__stats">
+                        <span class="stat-item">
+                            <i class="bi bi-eye"></i>
+                            <span class="stat-value">{{ poem.views_count }}</span>
+                        </span>
+                        <span class="stat-item">
+                            <i class="bi bi-calendar3"></i>
+                            <span class="stat-value">{{ poem.published_at|default:poem.created_at|date:'d M Y' }}</span>
+                        </span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Action Bar -->
+            <div class="action-bar" id="actionBar">
+                <button class="action-btn like-action {% if is_liked %}active{% endif %}"
+                        data-action="like"
+                        data-url="{% url 'toggle_like' content_type='poetry' object_id=poem.id %}"
+                        aria-label="Like">
+                    <span class="action-btn__icon"><i class="bi bi-heart"></i></span>
+                    <span class="action-btn__label">Like</span>
+                    <span class="action-btn__count" id="likeCount">{{ poem.likes_count }}</span>
+                </button>
+
+                <button class="action-btn save-action {% if is_bookmarked %}active{% endif %}"
+                        data-action="save"
+                        aria-label="Save">
+                    <span class="action-btn__icon"><i class="bi {% if is_bookmarked %}bi-bookmark-fill{% else %}bi-bookmark{% endif %}"></i></span>
+                    <span class="action-btn__label">Save</span>
+                </button>
+
+                <button class="action-btn share-action"
+                        data-action="share"
+                        data-share-title="{{ poem.title }}"
+                        data-share-url="{{ request.build_absolute_uri }}"
+                        aria-label="Share">
+                    <span class="action-btn__icon"><i class="bi bi-share"></i></span>
+                    <span class="action-btn__label">Share</span>
+                    <span class="action-btn__count" id="shareCount">{{ poem.shares_count|default:0 }}</span>
+                </button>
+
+                <button class="action-btn copy-action"
+                        data-action="copy"
+                        data-copy-text="{{ poem.plain_text_content }}"
+                        aria-label="Copy">
+                    <span class="action-btn__icon"><i class="bi bi-clipboard"></i></span>
+                    <span class="action-btn__label">Copy</span>
+                </button>
+
+                <button class="action-btn tts-action"
+                        data-action="tts"
+                        data-tts-url="{% url 'poetry_tts' author_slug=poem.author.slug slug=poem.slug %}"
+                        aria-label="Listen">
+                    <span class="action-btn__icon"><i class="bi bi-volume-up"></i></span>
+                    <span class="action-btn__label">Listen</span>
+                </button>
+            </div>
+
+            <!-- TTS Player -->
+            <div class="tts-player" id="ttsPlayer" style="display: none;">
+                <div class="tts-player__controls">
+                    <button class="tts-play-btn" id="ttsPlayBtn">
+                        <i class="bi bi-play-fill"></i>
+                    </button>
+                    <div class="tts-progress">
+                        <div class="tts-progress__bar" id="ttsProgressBar"></div>
+                    </div>
+                    <span class="tts-time" id="ttsTime">0:00</span>
+                    <button class="tts-close-btn" id="ttsCloseBtn">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+                <audio id="ttsAudio" preload="none"></audio>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Related Content Section -->
+    <section class="related-section" id="relatedSection">
+        <div class="related-section__container">
+            
+            <!-- More from Same Poet -->
+            {% if related_poems %}
+            <div class="related-block">
+                <h3 class="related-block__title">
+                    <i class="bi bi-person-hearts"></i>
+                    More from {{ poem.author.name }}
+                </h3>
+                <div class="related-grid">
+                    {% for related in related_poems|slice:":4" %}
+                    <a href="{{ related.get_absolute_url }}" class="related-card">
+                        <div class="related-card__content">
+                            <h4 class="related-card__title">{{ related.title }}</h4>
+                            <p class="related-card__excerpt">{{ related.plain_text_content|truncatechars:60 }}</p>
+                            <div class="related-card__meta">
+                                <span><i class="bi bi-heart"></i> {{ related.likes_count }}</span>
+                                <span><i class="bi bi-eye"></i> {{ related.views_count }}</span>
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Related by Category -->
+            {% if suggested_content %}
+            <div class="related-block">
+                <h3 class="related-block__title">
+                    <i class="bi bi-collection"></i>
+                    You May Also Like
+                </h3>
+                <div class="related-grid">
+                    {% for item in suggested_content|slice:":4" %}
+                    {% with title=item.title|default:item.name|default:item.text %}
+                    <a href="{{ item.get_absolute_url }}" class="related-card">
+                        <div class="related-card__content">
+                            <span class="related-card__type">{{ item.content_type_name|default:"Content" }}</span>
+                            <h4 class="related-card__title">{{ title|truncatechars:50 }}</h4>
+                            <p class="related-card__reason">{{ item.recommendation_reason|default:"Recommended for you" }}</p>
+                        </div>
+                    </a>
+                    {% endwith %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </section>
+
+    <!-- Comments Section -->
+    <section class="comments-section" id="commentsSection">
+        <div class="comments-section__container">
+            <h3 class="comments-section__title">
+                <i class="bi bi-chat-left-text"></i>
+                Responses
+                <span class="comments-count">({{ comments.count|default:0 }})</span>
+            </h3>
+
+            <!-- Comment Form -->
+            {% if user.is_authenticated %}
+            <form class="comment-form" method="post" action="{% url 'add_comment' content_type='poetry' object_id=poem.id %}" data-comment-form>
+                {% csrf_token %}
+                <div class="comment-form__avatar">
+                    <img src="{{ user.profile.avatar.url|default:'/static/images/default-avatar.svg' }}" alt="{{ user.get_full_name }}">
+                </div>
+                <div class="comment-form__input-wrapper">
+                    <textarea name="text" class="comment-form__input" placeholder="Share your thoughts on this poetry..." rows="3"></textarea>
+                    <button type="submit" class="comment-form__submit">
+                        <i class="bi bi-send"></i>
+                    </button>
+                </div>
+            </form>
+            {% else %}
+            <div class="comment-login-prompt">
+                <p>Join the conversation</p>
+                <a href="{% url 'login' %}?next={{ request.path|urlencode }}" class="premium-btn premium-btn--primary">
+                    <i class="bi bi-box-arrow-in-right"></i> Login to Comment
+                </a>
+            </div>
+            {% endif %}
+
+            <!-- Comments List -->
+            <div class="comments-list" id="commentsList">
+                {% for comment in comments %}
+                <div class="comment-item" id="comment-{{ comment.id }}">
+                    <div class="comment-item__avatar">
+                        <img src="{{ comment.user.profile.avatar.url|default:'/static/images/default-avatar.svg' }}" alt="{{ comment.user.get_full_name }}">
+                    </div>
+                    <div class="comment-item__content">
+                        <div class="comment-item__header">
+                            <strong class="comment-item__author">{{ comment.user.get_full_name|default:comment.user.username }}</strong>
+                            <time class="comment-item__time">{{ comment.created_at|timesince }} ago</time>
+                        </div>
+                        <p class="comment-item__text">{{ comment.text }}</p>
+                        <div class="comment-item__actions">
+                            {% if user.is_authenticated %}
+                            <button class="comment-action-btn reply-btn" data-comment-id="{{ comment.id }}">
+                                <i class="bi bi-reply"></i> Reply
+                            </button>
+                            {% endif %}
+                            {% if comment.replies.exists %}
+                            <button class="comment-action-btn show-replies-btn" data-comment-id="{{ comment.id }}">
+                                <i class="bi bi-chat-left"></i> {{ comment.replies.count }} Replies
+                            </button>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Replies -->
+                        {% if comment.replies.exists %}
+                        <div class="comment-replies" id="replies-{{ comment.id }}">
+                            {% for reply in comment.replies.all %}
+                            <div class="comment-item comment-item--reply">
+                                <div class="comment-item__avatar">
+                                    <img src="{{ reply.user.profile.avatar.url|default:'/static/images/default-avatar.svg' }}" alt="{{ reply.user.get_full_name }}">
+                                </div>
+                                <div class="comment-item__content">
+                                    <div class="comment-item__header">
+                                        <strong class="comment-item__author">{{ reply.user.get_full_name|default:reply.user.username }}</strong>
+                                        <time class="comment-item__time">{{ reply.created_at|timesince }} ago</time>
+                                    </div>
+                                    <p class="comment-item__text">{{ reply.text }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="comments-empty">
+                    <i class="bi bi-chat-left"></i>
+                    <p>No responses yet. Be the first to share your thoughts!</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+</div>
+
+{% block extra_js %}
+<script src="{% static 'js/poetry-premium.js' %}"></script>
+{% endblock %}
+{% endblock %}

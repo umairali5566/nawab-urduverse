@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ novel.title }} - {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}{{ novel.meta_description|default:novel.description_text|truncatechars:160 }}{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'novel_list' %}">Novels</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ novel.title }}</li>
+            </ol>
+        </nav>
+        <h1 class="mt-3 mb-1 section-title-urdu">{{ novel.title }}</h1>
+        <p class="section-subtitle mb-0">Database-driven novel page with chapter reading, likes, bookmarks, and optional PDF access.</p>
+    </div>
+</section>
+
+<section
+    class="page-section content-protected-shell"
+    data-protected-content
+    data-content-type="novel"
+    data-content-title="{{ novel.title|escape }}"
+    data-content-url="{{ request.build_absolute_uri|escape }}"
+    data-content-id="novel-detail-{{ novel.id }}"
+>
+    <div class="main-container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card glass-card literary-card">
+                    {% if novel.cover_image %}
+                    <img src="{{ novel.cover_image.url }}" class="card-img-top" alt="{{ novel.title }}" loading="lazy">
+                    {% else %}
+                    <img src="{% static 'images/placeholder-cover.svg' %}" class="card-img-top" alt="{{ novel.title }}" loading="lazy">
+                    {% endif %}
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <span class="badge {% if novel.status == 'completed' %}bg-success{% elif novel.status == 'ongoing' %}bg-warning text-dark{% else %}bg-secondary{% endif %}">{{ novel.get_status_display }}</span>
+                            {% if novel.is_premium %}<span class="badge bg-warning text-dark"><i class="bi bi-gem"></i> Premium</span>{% endif %}
+                            {% if novel.pdf_file %}<span class="badge bg-danger-subtle text-danger"><i class="bi bi-file-earmark-pdf"></i> PDF</span>{% endif %}
+                        </div>
+                        <p class="text-muted mb-3">{{ novel.author.name }}</p>
+                        <div class="video-info-line mb-4">
+                            <span><i class="bi bi-eye"></i> {{ novel.views_count }}</span>
+                            <span><i class="bi bi-heart"></i> {{ novel.likes_count }}</span>
+                            <span><i class="bi bi-share"></i> {{ novel.shares_count|default:0 }}</span>
+                            <span><i class="bi bi-list-ol"></i> {{ novel.total_chapters }} chapters</span>
+                        </div>
+                        <div class="d-grid gap-2">
+                            {% if novel.get_first_chapter %}
+                            <a href="{% url 'continue_reading' slug=novel.slug %}" class="btn btn-primary"><i class="bi bi-book-half me-1"></i> Continue Reading</a>
+                            <a href="{{ novel.get_first_chapter.get_absolute_url }}" class="btn btn-outline-primary"><i class="bi bi-book-open me-1"></i> Start from Chapter 1</a>
+                            {% endif %}
+                            {% if novel.pdf_file %}
+                            <a href="{{ novel.pdf_file.url }}" class="btn btn-outline-danger" target="_blank"><i class="bi bi-file-earmark-pdf me-1"></i> Open PDF</a>
+                            {% endif %}
+                            <button type="button" class="btn btn-outline-primary like-btn {% if is_liked %}active{% endif %}" data-url="{% url 'toggle_like' content_type='novel' object_id=novel.id %}">
+                                <i class="bi bi-heart"></i>
+                                <span class="like-count">{{ novel.likes_count }}</span>
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary"
+                                data-reader-share
+                                data-share-title="{{ novel.title }}"
+                                data-share-url="{{ request.build_absolute_uri }}"
+                                data-share-track-url="{% url 'track_share' content_type='novel' object_id=novel.id %}"
+                            >
+                                <i class="bi bi-share"></i>
+                                <span class="share-count">{{ novel.shares_count|default:0 }}</span>
+                            </button>
+                            {% include 'includes/bookmark_button.html' with content_type='novel' object_id=novel.id is_bookmarked=is_bookmarked btn_class='btn btn-outline-secondary justify-content-center' %}
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    {% include 'includes/trending_sidebar.html' %}
+                </div>
+            </div>
+            <div class="col-lg-8">
+                {% if novel.is_premium and not has_premium_access %}
+                <div class="premium-alert mb-4">
+                    <i class="bi bi-gem"></i>
+                    <div>
+                        <strong>Premium novel</strong>
+                        <p class="mb-0">Upgrade your membership to unlock premium chapters and the full reading experience.</p>
+                    </div>
+                    <a href="{% url 'membership' %}" class="btn btn-primary btn-sm">Upgrade</a>
+                </div>
+                {% endif %}
+
+                <div class="card glass-card literary-card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title section-title-urdu">Description</h5>
+                        <div class="reader-content novel-reader">{{ novel.description|safe }}</div>
+                    </div>
+                </div>
+
+                <div class="card glass-card literary-card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title section-title-urdu">Chapters</h5>
+                        {% if chapters %}
+                        <div class="list-group">
+                            {% for chapter in chapters %}
+                            <a href="{{ chapter.get_absolute_url }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="badge bg-primary">{{ chapter.chapter_number }}</span>
+                                    <div>
+                                        <div class="fw-semibold">{{ chapter.title }}</div>
+                                        <small class="text-muted">{{ chapter.created_at|date:"d M Y" }}</small>
+                                    </div>
+                                </div>
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="text-muted mb-0">Chapters will appear here once they are published.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if reviews %}
+                <div class="card glass-card literary-card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title section-title-urdu">Recent Reviews</h5>
+                        {% for review in reviews %}
+                        <div class="comment-block">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong>{{ review.user.username }}</strong>
+                                <small class="text-muted">{{ review.created_at|date:"d M Y" }}</small>
+                            </div>
+                            <p class="mb-1 mt-2 text-warning">
+                                {% for i in "12345"|make_list %}{% if forloop.counter <= review.rating %}<i class="bi bi-star-fill"></i>{% else %}<i class="bi bi-star"></i>{% endif %}{% endfor %}
+                            </p>
+                            <p class="mb-0">{{ review.review_text }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if suggested_content %}
+                <div class="card glass-card literary-card">
+                    <div class="card-body">
+                        <h5 class="card-title section-title-urdu">You may also like</h5>
+                        {% for item in suggested_content %}
+                        {% firstof item.title item.name item.text as item_label %}
+                        <p class="mb-1"><a href="{{ item.get_absolute_url }}">{{ item_label|truncatechars:70 }}</a></p>
+                        <p class="small text-muted mb-2">{{ item.content_type_name|default:"Content" }} · {{ item.recommendation_reason|default:"matching theme" }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

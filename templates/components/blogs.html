@@ -1,0 +1,546 @@
+{% load static %}
+<!-- =====================================================
+     BLOGS & VIDEOS SECTION COMPONENT
+     ===================================================== -->
+<section class="section content-section" id="contentSection">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Blogs & Videos</h2>
+                <p class="section-subtitle">Insights, reviews, and multimedia content</p>
+            </div>
+        </div>
+
+        <!-- Split Layout -->
+        <div class="content-split">
+            <!-- Blogs Column -->
+            <div class="content-column">
+                <div class="content-section-header">
+                    <h3 class="content-section-title">
+                        <i class="bi bi-pencil-square"></i>
+                        <span>Latest Articles</span>
+                    </h3>
+                    <a href="{% url 'blog_list' %}" class="btn btn-ghost btn-sm">
+                        <span>View All</span>
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
+                </div>
+
+                <div class="blog-list stagger">
+                    {% for blog in latest_blogs %}
+                    <article class="blog-card">
+                        <a href="{{ blog.get_absolute_url }}" class="blog-card-link">
+                            {% if blog.featured_image %}
+                                <img src="{{ blog.featured_image.url }}" alt="{{ blog.title }}" class="blog-card-image" loading="lazy">
+                            {% else %}
+                                <div class="blog-card-image-placeholder">
+                                    <i class="bi bi-image"></i>
+                                </div>
+                            {% endif %}
+                            <div class="blog-card-content">
+                                <span class="blog-card-category">{{ blog.display_category_name|default:"Blog" }}</span>
+                                <h4 class="blog-card-title">{{ blog.title }}</h4>
+                                <p class="blog-card-excerpt">{{ blog.excerpt|truncatechars:100 }}</p>
+                                <div class="blog-card-meta">
+                                    <span>{{ blog.author.name }}</span>
+                                    <span>•</span>
+                                    <span>{{ blog.reading_time|default:1 }} min read</span>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                    {% empty %}
+                    <!-- Default Blog Items -->
+                    <article class="blog-card">
+                        <a href="#" class="blog-card-link">
+                            <div class="blog-card-image-placeholder">
+                                <i class="bi bi-book"></i>
+                            </div>
+                            <div class="blog-card-content">
+                                <span class="blog-card-category">Literature</span>
+                                <h4 class="blog-card-title">The Evolution of Urdu Poetry Through the Ages</h4>
+                                <p class="blog-card-excerpt">Explore the rich history and transformation of Urdu poetry from its origins to modern times.</p>
+                                <div class="blog-card-meta">
+                                    <span>Dr. Hassan</span>
+                                    <span>•</span>
+                                    <span>8 min read</span>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                    
+                    <article class="blog-card">
+                        <a href="#" class="blog-card-link">
+                            <div class="blog-card-image-placeholder">
+                                <i class="bi bi-chat-quote"></i>
+                            </div>
+                            <div class="blog-card-content">
+                                <span class="blog-card-category">Analysis</span>
+                                <h4 class="blog-card-title">Understanding the Depth of Ghalib's Couplets</h4>
+                                <p class="blog-card-excerpt">A deep dive into the philosophical meanings hidden in Mirza Ghalib's immortal verses.</p>
+                                <div class="blog-card-meta">
+                                    <span>Sarah Ahmed</span>
+                                    <span>•</span>
+                                    <span>12 min read</span>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                    
+                    <article class="blog-card">
+                        <a href="#" class="blog-card-link">
+                            <div class="blog-card-image-placeholder">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <div class="blog-card-content">
+                                <span class="blog-card-category">Biography</span>
+                                <h4 class="blog-card-title">Allama Iqbal: The Poet of the East</h4>
+                                <p class="blog-card-excerpt">Understanding the vision and philosophy of Pakistan's national poet.</p>
+                                <div class="blog-card-meta">
+                                    <span>Kashif Ali</span>
+                                    <span>•</span>
+                                    <span>10 min read</span>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Videos Column -->
+            <div class="content-column">
+                <div class="content-section-header">
+                    <h3 class="content-section-title">
+                        <i class="bi bi-play-circle"></i>
+                        <span>Watch & Learn</span>
+                    </h3>
+                    <a href="{% url 'video_list' %}" class="btn btn-ghost btn-sm">
+                        <span>View All</span>
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
+                </div>
+
+                <div class="video-list stagger">
+                    {% for video in latest_videos %}
+                    <article class="video-card">
+                        <a href="{{ video.get_absolute_url }}" class="video-card-link">
+                            <div class="video-thumbnail">
+                                {% if video.display_image_url %}
+                                    <img src="{{ video.display_image_url }}" alt="{{ video.title }}" loading="lazy">
+                                {% else %}
+                                    <div class="video-thumbnail-placeholder">
+                                        <i class="bi bi-play-circle"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="video-play-icon">
+                                    <i class="bi bi-play-fill"></i>
+                                </div>
+                                <span class="video-duration">{{ video.duration }}</span>
+                            </div>
+                            <div class="video-content">
+                                <h4 class="video-title">{{ video.title }}</h4>
+                                <p class="video-excerpt">{{ video.description|truncatechars:80 }}</p>
+                                <div class="video-meta">
+                                    <span>{{ video.display_author_name|default:video.get_platform_display }}</span>
+                                    <span>•</span>
+                                    <span>{{ video.views_count|default:0 }} views</span>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                    {% empty %}
+                    <!-- Default Video Items -->
+                    <article class="video-card">
+                        <a href="#" class="video-card-link">
+                            <div class="video-thumbnail">
+                                <div class="video-thumbnail-placeholder">
+                                    <i class="bi bi-play-circle"></i>
+                                </div>
+                                <div class="video-play-icon">
+                                    <i class="bi bi-play-fill"></i>
+                                </div>
+                                <span class="video-duration">15:30</span>
+                            </div>
+                            <div class="video-content">
+                                <h4 class="video-title">Introduction to Urdu Poetry Forms</h4>
+                                <p class="video-excerpt">Learn about ghazal, nazm, rubaiyat and other forms of Urdu poetry.</p>
+                                <div class="video-meta">
+                                    <span>Urdu Academy</span>
+                                    <span>•</span>
+                                    <span>2.5K views</span>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                    
+                    <article class="video-card">
+                        <a href="#" class="video-card-link">
+                            <div class="video-thumbnail">
+                                <div class="video-thumbnail-placeholder">
+                                    <i class="bi bi-play-circle"></i>
+                                </div>
+                                <div class="video-play-icon">
+                                    <i class="bi bi-play-fill"></i>
+                                </div>
+                                <span class="video-duration">22:45</span>
+                            </div>
+                            <div class="video-content">
+                                <h4 class="video-title">Understanding Urdu Meter and Rhythm</h4>
+                                <p class="video-excerpt">Master the art of scanning Urdu verses and understanding poetic meter.</p>
+                                <div class="video-meta">
+                                    <span>Poetry Academy</span>
+                                    <span>•</span>
+                                    <span>1.8K views</span>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                    
+                    <article class="video-card">
+                        <a href="#" class="video-card-link">
+                            <div class="video-thumbnail">
+                                <div class="video-thumbnail-placeholder">
+                                    <i class="bi bi-play-circle"></i>
+                                </div>
+                                <div class="video-play-icon">
+                                    <i class="bi bi-play-fill"></i>
+                                </div>
+                                <span class="video-duration">18:20</span>
+                            </div>
+                            <div class="video-content">
+                                <h4 class="video-title">Famous Couplets Explained</h4>
+                                <p class="video-excerpt">Breaking down the meaning and beauty of legendary Urdu couplets.</p>
+                                <div class="video-meta">
+                                    <span>Classic Verses</span>
+                                    <span>•</span>
+                                    <span>3.2K views</span>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* =====================================================
+   BLOGS & VIDEOS SECTION STYLES
+   ===================================================== */
+.content-section {
+    padding: var(--space-8) 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(212, 175, 55, 0.02) 50%, transparent 100%);
+}
+
+/* Split Layout */
+.content-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+}
+
+.content-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.content-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border);
+}
+
+.content-section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-card-title);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.content-section-title i {
+    color: var(--gold);
+    font-size: 1.25rem;
+}
+
+/* Blog Cards */
+.blog-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.blog-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    overflow: hidden;
+}
+
+.blog-card:hover {
+    background: var(--glass);
+    border-color: var(--gold);
+}
+
+.blog-card-link {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    text-decoration: none;
+    color: inherit;
+}
+
+.blog-card-image {
+    width: 120px;
+    height: 90px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    flex-shrink: 0;
+    transition: transform var(--transition-fast);
+}
+
+.blog-card:hover .blog-card-image {
+    transform: scale(1.05);
+}
+
+.blog-card-image-placeholder {
+    width: 120px;
+    height: 90px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-purple);
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.blog-card-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.blog-card-category {
+    display: inline-block;
+    padding: 2px 8px;
+    background: rgba(139, 92, 246, 0.1);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    color: var(--accent-purple);
+    margin-bottom: var(--space-1);
+}
+
+.blog-card-title {
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.blog-card-excerpt {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: var(--space-1);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.blog-card-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* Video Cards */
+.video-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.video-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    overflow: hidden;
+}
+
+.video-card:hover {
+    background: var(--glass);
+    border-color: var(--gold);
+}
+
+.video-card-link {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    text-decoration: none;
+    color: inherit;
+}
+
+.video-thumbnail {
+    position: relative;
+    width: 140px;
+    height: 90px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.video-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-fast);
+}
+
+.video-card:hover .video-thumbnail img {
+    transform: scale(1.05);
+}
+
+.video-thumbnail-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.05) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    font-size: 2rem;
+}
+
+.video-play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    background: rgba(212, 175, 55, 0.95);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bg-main);
+    font-size: 1rem;
+    transition: all var(--transition-fast);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.video-card:hover .video-play-icon {
+    background: var(--gold);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.video-duration {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    padding: 2px 6px;
+    background: rgba(11, 18, 32, 0.9);
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: var(--weight-medium);
+    color: var(--text-primary);
+}
+
+.video-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.video-title {
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.video-excerpt {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: var(--space-1);
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.video-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .content-split {
+        gap: var(--space-4);
+    }
+}
+
+@media (max-width: 768px) {
+    .content-split {
+        grid-template-columns: 1fr;
+    }
+    
+    .blog-card-image,
+    .blog-card-image-placeholder {
+        width: 100px;
+        height: 75px;
+    }
+    
+    .video-thumbnail {
+        width: 120px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .blog-card-link,
+    .video-card-link {
+        flex-direction: column;
+    }
+    
+    .blog-card-image,
+    .blog-card-image-placeholder {
+        width: 100%;
+        height: 150px;
+    }
+    
+    .video-thumbnail {
+        width: 100%;
+        height: 180px;
+    }
+}
+</style>

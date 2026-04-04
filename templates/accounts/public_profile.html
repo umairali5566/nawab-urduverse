@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ profile_user.get_full_name }} - {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <div class="profile-hero">
+            <div class="profile-hero-main">
+                <div class="profile-avatar-shell">
+                    {% if profile_user.avatar %}
+                    <img src="{{ profile_user.avatar.url }}" alt="{{ profile_user.username }}" class="profile-avatar-lg">
+                    {% else %}
+                    <img src="{% static 'images/default-avatar.svg' %}" alt="{{ profile_user.username }}" class="profile-avatar-lg">
+                    {% endif %}
+                </div>
+                <div>
+                    <h1 class="mb-1">{{ profile_user.get_full_name }}</h1>
+                    <p class="text-muted mb-2">@{{ profile_user.username }}</p>
+                    <p class="mb-0">{{ profile_user.bio|default:'No bio available yet.' }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="main-container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card glass-card h-100">
+                    <div class="card-body">
+                        <div class="profile-stat-grid">
+                            <div class="profile-stat-card">
+                                <span class="profile-stat-value">{{ likes_count }}</span>
+                                <span class="profile-stat-label">Likes</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="profile-meta-list">
+                            <div><strong>City:</strong> {{ profile_user.city|default:"Not shared" }}</div>
+                            <div><strong>Country:</strong> {{ profile_user.country|default:"Not shared" }}</div>
+                            <div><strong>Website:</strong> {% if profile_user.website %}<a href="{{ profile_user.website }}" target="_blank" rel="noopener">{{ profile_user.website }}</a>{% else %}Not shared{% endif %}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="card glass-card mb-4">
+                    <div class="card-body">
+                        <div class="section-header">
+                            <h3 class="section-title mb-0">Published Content</h3>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="profile-content-panel">
+                                    <h5>Novels</h5>
+                                    {% for item in novels %}
+                                    <p class="mb-2"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></p>
+                                    {% empty %}
+                                    <p class="text-muted mb-0">No novels published.</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="profile-content-panel">
+                                    <h5>Stories</h5>
+                                    {% for item in stories %}
+                                    <p class="mb-2"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></p>
+                                    {% empty %}
+                                    <p class="text-muted mb-0">No stories published.</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="profile-content-panel">
+                                    <h5>Poetry</h5>
+                                    {% for item in poetry %}
+                                    <p class="mb-2"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></p>
+                                    {% empty %}
+                                    <p class="text-muted mb-0">No poetry published.</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card glass-card">
+                    <div class="card-body">
+                        <div class="section-header">
+                            <h3 class="section-title mb-0">Liked Posts</h3>
+                        </div>
+                        {% if liked_items %}
+                        <div class="list-group list-group-flush">
+                            {% for item in liked_items %}
+                            <a href="{{ item.url }}" class="list-group-item list-group-item-action px-0 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="fw-semibold">{{ item.title|truncatechars:80 }}</div>
+                                    <small class="text-muted">{{ item.content_type|title }}</small>
+                                </div>
+                                <small class="text-muted">{{ item.created_at|date:'d M' }}</small>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="text-muted mb-0">No public likes to show yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

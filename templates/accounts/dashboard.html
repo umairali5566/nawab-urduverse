@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Manage profile, membership, social activity, bookmarks, notifications, and reading history.{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+            </ol>
+        </nav>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
+            <div>
+                <h1 class="mb-1">Your Dashboard</h1>
+                <p class="section-subtitle">Profile, social activity, premium status, and reading history in one place.</p>
+            </div>
+            <a class="btn btn-outline-primary" href="{% url 'public_profile' username=user.username %}">
+                <i class="bi bi-arrow-up-right-circle me-1"></i> View Public Profile
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="main-container">
+        <div class="dashboard-hero-grid">
+            <div class="dashboard-summary-card">
+                <div class="d-flex align-items-center gap-3">
+                    {% if user.avatar %}
+                    <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="profile-avatar-md">
+                    {% else %}
+                    <div class="profile-avatar-md fallback-avatar"><i class="bi bi-person"></i></div>
+                    {% endif %}
+                    <div>
+                        <h3 class="mb-1">{{ user.get_full_name|default:user.username }}</h3>
+                        <p class="text-muted mb-0">@{{ user.username }} • joined {{ user.date_joined|date:"d M Y" }}</p>
+                    </div>
+                </div>
+                <div class="profile-stat-grid mt-4">
+                    <div class="profile-stat-card">
+                        <span class="profile-stat-value">{{ likes_count }}</span>
+                        <span class="profile-stat-label">Likes</span>
+                    </div>
+                    <div class="profile-stat-card">
+                        <span class="profile-stat-value">{{ bookmarks_count }}</span>
+                        <span class="profile-stat-label">Bookmarks</span>
+                    </div>
+                    <div class="profile-stat-card">
+                        <span class="profile-stat-value">{{ comments_count }}</span>
+                        <span class="profile-stat-label">Comments</span>
+                    </div>
+                    <div class="profile-stat-card">
+                        <span class="profile-stat-value">{{ bookmarks_count }}</span>
+                        <span class="profile-stat-label">Bookmarks</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-summary-card premium-summary-card">
+                <span class="eyebrow">Membership</span>
+                <h3 class="mb-2">{% if has_premium_access %}Premium Active{% else %}Free Tier{% endif %}</h3>
+                <p class="text-muted">
+                    {% if membership.plan %}
+                    {{ membership.plan.name }}{% if membership.ends_at %} until {{ membership.ends_at|date:'d M Y' }}{% endif %}
+                    {% else %}
+                    Upgrade for premium content access, member-first tools, and future paywalled releases.
+                    {% endif %}
+                </p>
+                <a class="btn btn-primary" href="{% url 'membership' %}">
+                    <i class="bi bi-gem me-1"></i> Manage Membership
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="main-container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card glass-card mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title mb-3">Edit Profile</h3>
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% for field in profile_form %}
+                            <div class="mb-3">
+                                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-check2-circle me-1"></i> Save Changes
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card glass-card">
+                    <div class="card-body">
+                        <div class="section-header">
+                            <h3 class="section-title mb-0">Notifications</h3>
+                            <a href="{% url 'notifications' %}" class="btn btn-sm btn-outline-primary">Inbox</a>
+                        </div>
+                        {% if notifications %}
+                        <div class="notification-stack compact">
+                            {% for item in notifications %}
+                            <div class="notification-card {% if not item.is_read %}notification-card-unread{% endif %}">
+                                <div class="notification-copy">
+                                    <strong class="d-block">{{ item.title }}</strong>
+                                    <small class="text-muted d-block">{{ item.message }}</small>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="text-muted mb-0">No notifications yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="card glass-card mb-4">
+                    <div class="card-body">
+                        <div class="section-header">
+                            <h3 class="section-title mb-0">Bookmarked Posts</h3>
+                            <a href="{% url 'bookmarks_dashboard' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                        </div>
+                        {% if bookmarks %}
+                        <div class="list-group list-group-flush">
+                            {% for item in bookmarks %}
+                            <a href="{{ item.url }}" class="list-group-item list-group-item-action px-0 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="fw-semibold">{{ item.title|truncatechars:80 }}</div>
+                                    <small class="text-muted text-capitalize">{{ item.content_type }}</small>
+                                </div>
+                                <small class="text-muted">{{ item.created_at|date:"d M" }}</small>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="text-muted mb-0">No bookmarks yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card glass-card mb-4">
+                    <div class="card-body">
+                        <div class="section-header">
+                            <h3 class="section-title mb-0">Liked Content</h3>
+                        </div>
+                        {% if liked_items %}
+                        <div class="list-group list-group-flush">
+                            {% for item in liked_items %}
+                            <a href="{{ item.url }}" class="list-group-item list-group-item-action px-0 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="fw-semibold">{{ item.title|truncatechars:80 }}</div>
+                                    <small class="text-muted text-capitalize">{{ item.content_type }}</small>
+                                </div>
+                                <small class="text-muted">{{ item.created_at|date:"d M" }}</small>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="text-muted mb-0">You have not liked anything yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card glass-card mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title mb-3">Recent Comments</h3>
+                        {% if comments %}
+                        <div class="list-group list-group-flush">
+                            {% for comment in comments %}
+                            <div class="list-group-item px-0">
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted text-capitalize">{{ comment.content_type }}</small>
+                                    <small class="text-muted">{{ comment.created_at|date:"d M Y" }}</small>
+                                </div>
+                                <div class="mt-1">{{ comment.text|truncatechars:160 }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="text-muted mb-0">No comments yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card glass-card">
+                    <div class="card-body">
+                        <h3 class="card-title mb-3">Reading History</h3>
+                        {% if reading_history %}
+                        <div class="list-group list-group-flush">
+                            {% for item in reading_history %}
+                            <a href="{{ item.chapter.get_absolute_url }}" class="list-group-item list-group-item-action px-0 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="fw-semibold">{{ item.novel.title }}</div>
+                                    <small class="text-muted">Chapter {{ item.chapter.chapter_number }}: {{ item.chapter.title|truncatechars:50 }}</small>
+                                </div>
+                                <small class="text-muted">{{ item.last_read_at|date:"d M Y" }}</small>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        {% elif recent_views %}
+                        <div class="list-group list-group-flush">
+                            {% for view in recent_views %}
+                            <div class="list-group-item px-0 d-flex justify-content-between">
+                                <span>{{ view.description }}</span>
+                                <small class="text-muted">{{ view.created_at|date:"d M Y" }}</small>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="text-muted mb-0">No reading history yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

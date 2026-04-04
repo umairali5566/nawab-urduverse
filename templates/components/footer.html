@@ -1,0 +1,367 @@
+{% load static %}
+<!-- =====================================================
+     FOOTER COMPONENT
+     ===================================================== -->
+<footer class="footer" id="mainFooter">
+    <div class="container">
+        <!-- Footer Grid -->
+        <div class="footer-grid">
+            <!-- Brand Column -->
+            <div class="footer-brand">
+                <a href="{% url 'home' %}" class="footer-brand-logo">
+                    <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }}">
+                    <span class="footer-brand-text">{{ SITE_NAME }}</span>
+                </a>
+                <p class="footer-brand-description">
+                    A modern platform celebrating the rich heritage of Urdu literature. Discover poetry, novels, stories, and connect with writers from across the globe.
+                </p>
+                <div class="footer-social">
+                    <a href="#" class="footer-social-link" aria-label="Facebook">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <a href="#" class="footer-social-link" aria-label="Twitter">
+                        <i class="bi bi-twitter-x"></i>
+                    </a>
+                    <a href="#" class="footer-social-link" aria-label="Instagram">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="#" class="footer-social-link" aria-label="YouTube">
+                        <i class="bi bi-youtube"></i>
+                    </a>
+                    <a href="#" class="footer-social-link" aria-label="Telegram">
+                        <i class="bi bi-telegram"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-column">
+                <h4>Explore</h4>
+                <ul class="footer-links">
+                    <li><a href="{% url 'poetry_list' %}">Poetry</a></li>
+                    <li><a href="{% url 'novel_list' %}">Novels</a></li>
+                    <li><a href="{% url 'story_list' %}">Stories</a></li>
+                    <li><a href="{% url 'quote_list' %}">Quotes</a></li>
+                    <li><a href="{% url 'blog_list' %}">Blog</a></li>
+                    <li><a href="{% url 'video_list' %}">Videos</a></li>
+                </ul>
+            </div>
+
+            <!-- Categories -->
+            <div class="footer-column">
+                <h4>Categories</h4>
+                <ul class="footer-links">
+                    <li><a href="{% url 'poetry_by_type' 'ghazal' %}">Ghazal</a></li>
+                    <li><a href="{% url 'poetry_by_type' 'nazm' %}">Nazm</a></li>
+                    <li><a href="{% url 'poetry_by_type' 'rubai' %}">Rubai</a></li>
+                    <li><a href="{% url 'poetry_by_type' 'shayari' %}">Shayari</a></li>
+                    <li><a href="{% url 'poetry_by_mood' 'romantic' %}">Romantic</a></li>
+                    <li><a href="{% url 'poetry_by_mood' 'philosophical' %}">Philosophical</a></li>
+                </ul>
+            </div>
+
+            <!-- Company -->
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul class="footer-links">
+                    <li><a href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                    <li><a href="{% url 'membership' %}">Membership</a></li>
+                    <li><a href="{% url 'search' %}">Search</a></li>
+                    {% if PREMIUM_MEMBERSHIP_ENABLED %}
+                    <li><a href="{% url 'membership' %}">Premium</a></li>
+                    {% endif %}
+                    {% if AI_STUDIO_ENABLED %}
+                    <li><a href="{% url 'ai_studio' %}">AI Studio</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="footer-newsletter">
+            <div class="footer-newsletter-content">
+                <div class="footer-newsletter-text">
+                    <h4>Subscribe to Our Newsletter</h4>
+                    <p>Get the latest poetry and updates delivered to your inbox</p>
+                </div>
+                <form class="footer-newsletter-form" action="{% url 'newsletter_subscribe' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="footer-newsletter-input-wrap">
+                        <input type="email" name="email" placeholder="Enter your email" class="footer-newsletter-input" required>
+                        <button type="submit" class="btn btn-primary">
+                            <span>Subscribe</span>
+                            <i class="bi bi-send"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <p>&copy; {% now "Y" %} {{ SITE_NAME }}. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="{% url 'privacy_policy' %}">Privacy Policy</a>
+                <a href="{% url 'terms_of_service' %}">Terms of Service</a>
+                <a href="{% url 'contact' %}">Contact</a>
+                <a href="{% url 'django.contrib.sitemaps.views.sitemap' %}">Sitemap</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+/* =====================================================
+   FOOTER STYLES
+   ===================================================== */
+.footer {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    padding: var(--space-8) 0 var(--space-4);
+    margin-top: var(--space-8);
+}
+
+/* Grid */
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: var(--space-6);
+    margin-bottom: var(--space-6);
+}
+
+/* Brand */
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.footer-brand-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 1.25rem;
+    font-weight: var(--weight-bold);
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.footer-brand-logo img {
+    height: 40px;
+}
+
+.footer-brand-text {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.footer-brand-description {
+    font-size: var(--text-small);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 320px;
+}
+
+/* Social Links */
+.footer-social {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.footer-social-link {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+    font-size: 1rem;
+    transition: all var(--transition-fast);
+}
+
+.footer-social-link:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--bg-main);
+    transform: translateY(-2px);
+}
+
+/* Columns */
+.footer-column h4 {
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+}
+
+.footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin: 0;
+}
+
+.footer-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--text-small);
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.footer-links a::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: var(--radius-full);
+    opacity: 0;
+    transform: scale(0);
+    transition: all var(--transition-fast);
+}
+
+.footer-links a:hover {
+    color: var(--gold);
+    padding-right: var(--space-2);
+}
+
+.footer-links a:hover::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Newsletter */
+.footer-newsletter {
+    padding: var(--space-4);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.02) 100%);
+    border: 1px solid var(--border-gold);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-6);
+}
+
+.footer-newsletter-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+}
+
+.footer-newsletter-text h4 {
+    font-size: var(--text-card-title);
+    margin-bottom: var(--space-1);
+}
+
+.footer-newsletter-text p {
+    font-size: var(--text-small);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.footer-newsletter-form {
+    flex-shrink: 0;
+}
+
+.footer-newsletter-input-wrap {
+    display: flex;
+    gap: var(--space-1);
+}
+
+.footer-newsletter-input {
+    width: 280px;
+    padding: var(--space-2) var(--space-3);
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: var(--text-small);
+}
+
+.footer-newsletter-input::placeholder {
+    color: var(--text-muted);
+}
+
+.footer-newsletter-input:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+/* Bottom */
+.footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.footer-bottom-links {
+    display: flex;
+    gap: var(--space-3);
+}
+
+.footer-bottom-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer-bottom-links a:hover {
+    color: var(--gold);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-newsletter-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-newsletter-input-wrap {
+        width: 100%;
+    }
+    
+    .footer-newsletter-input {
+        flex: 1;
+        width: auto;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        gap: var(--space-2);
+        text-align: center;
+    }
+    
+    .footer-bottom-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

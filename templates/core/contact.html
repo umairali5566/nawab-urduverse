@@ -1,0 +1,73 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Contact - {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <h1 class="mb-1">Contact Us</h1>
+        <p class="text-muted mb-0">Send us feedback, suggestions, or collaboration ideas.</p>
+    </div>
+</section>
+
+<section class="py-3">
+    <div class="main-container">
+        <div class="card">
+            <div class="card-body">
+                <form id="contactForm" class="row g-3">
+                    {% csrf_token %}
+                    <div class="col-md-6">
+                        <label class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Subject</label>
+                        <input type="text" name="subject" class="form-control" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Message</label>
+                        <textarea name="message" class="form-control" rows="6" required></textarea>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% block extra_js %}
+<script>
+document.getElementById('contactForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    try {
+        const response = await fetch('{% url "contact" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+            }
+        });
+        const data = await response.json();
+        if (window.NawabUrduVerse && data.message) {
+            NawabUrduVerse.showToast(data.message, data.success ? 'success' : 'danger');
+        }
+        if (data.success) {
+            form.reset();
+        }
+    } catch (error) {
+        if (window.NawabUrduVerse) {
+            NawabUrduVerse.showToast('Unable to send message right now.', 'danger');
+        }
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

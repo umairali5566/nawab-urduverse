@@ -1,0 +1,31 @@
+﻿{% extends 'dashboard/dashboard_base.html' %}
+{% block title %}Add Story - Dashboard{% endblock %}
+
+{% block content %}
+<div class="section-spacing">
+    <h2 class="section-title mb-3">Add New Story</h2>
+    <div class="card">
+        <div class="card-body">
+            <form method="post" class="row g-3">
+                {% csrf_token %}
+                <div class="col-md-6">
+                    <label class="form-label">Title *</label>
+                    <input type="text" name="title" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Author *</label>
+                    <input type="text" name="author" class="form-control" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Story Content *</label>
+                    <textarea name="content" class="form-control" rows="10" required></textarea>
+                </div>
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Publish Story</button>
+                    <a href="{% url 'dashboard_story_list' %}" class="btn btn-outline-primary">Back to list</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

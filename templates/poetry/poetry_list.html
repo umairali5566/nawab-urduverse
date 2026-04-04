@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Urdu Poetry - {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Browse the latest Urdu poetry, ghazals, nazms, and featured verses from Nawab UrduVerse.{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Poetry</li>
+            </ol>
+        </nav>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
+            <div>
+                <h1 class="section-title-urdu mb-1">اردو شاعری</h1>
+                <p class="section-subtitle mb-0">Dynamic poetry archive with search, filters, pagination, and live view counts.</p>
+            </div>
+            <div class="hero-chip-row">
+                <span class="hero-chip"><i class="bi bi-feather"></i> {{ page_obj.paginator.count }} poems</span>
+                <span class="hero-chip"><i class="bi bi-fire"></i> Trending ready</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="main-container">
+        <div class="card glass-card literary-card">
+            <div class="card-body">
+                <form method="get" class="row g-3 align-items-end">
+                    <div class="col-lg-4">
+                        <label class="form-label">Search</label>
+                        <input type="search" name="search" class="form-control" value="{{ request.GET.search }}" placeholder="Search title, poet, or text">
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <label class="form-label">Type</label>
+                        <select name="type" class="form-select">
+                            <option value="">All Types</option>
+                            {% for value, label in poetry_types %}
+                            <option value="{{ value }}" {% if request.GET.type == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <label class="form-label">Mood</label>
+                        <select name="mood" class="form-select">
+                            <option value="">All Moods</option>
+                            {% for value, label in moods %}
+                            <option value="{{ value }}" {% if request.GET.mood == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <label class="form-label">Sort</label>
+                        <select name="sort" class="form-select">
+                            <option value="latest" {% if request.GET.sort == 'latest' or not request.GET.sort %}selected{% endif %}>Latest</option>
+                            <option value="popular" {% if request.GET.sort == 'popular' %}selected{% endif %}>Popular</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2 d-grid">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-search me-1"></i> Apply</button>
+                    </div>
+                </form>
+                {% if categories %}
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="{% url 'poetry_list' %}" class="btn btn-sm {% if not request.GET.category %}btn-primary{% else %}btn-outline-secondary{% endif %}">All</a>
+                    {% for category in categories %}
+                    <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.type %}type={{ request.GET.type }}&{% endif %}{% if request.GET.mood %}mood={{ request.GET.mood }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}&{% endif %}category={{ category.slug }}" class="btn btn-sm {% if request.GET.category == category.slug %}btn-primary{% else %}btn-outline-secondary{% endif %}">{{ category.name }}</a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-section pt-0">
+    <div class="main-container">
+        <div class="row g-4">
+            {% for poem in poems %}
+            <div class="col-lg-4 col-md-6">
+                <article class="card glass-card literary-card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                            <span class="badge bg-primary-subtle text-primary">{{ poem.get_poetry_type_display }}</span>
+                            <small class="text-muted"><i class="bi bi-eye me-1"></i>{{ poem.views_count }}</small>
+                        </div>
+                        <h3 class="h5 mb-1"><a href="{{ poem.get_absolute_url }}">{{ poem.title }}</a></h3>
+                        <p class="text-muted mb-3">{{ poem.poet_name }}</p>
+                        <div class="poetry-render mb-3" style="font-size:1.25rem; line-height:2.25;">
+                            {% for pair in poem.get_sher_pairs|slice:":2" %}
+                            <p class="mb-1">{{ pair.0 }}</p>
+                            {% if pair.1 %}<p class="mb-2">{{ pair.1 }}</p>{% endif %}
+                            {% empty %}
+                            <p class="mb-0">{{ poem.plain_text_content|truncatechars:130 }}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="mt-auto d-flex justify-content-between align-items-center">
+                            <small class="text-muted">{% if poem.primary_category %}{{ poem.primary_category.name }}{% endif %}</small>
+                            <a href="{{ poem.get_absolute_url }}" class="btn btn-outline-primary btn-sm">Read</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="card glass-card literary-card">
+                    <div class="card-body text-center py-5">
+                        <i class="bi bi-inbox display-4 text-muted"></i>
+                        <h3 class="mt-3">No poetry found</h3>
+                        <p class="text-muted mb-0">Adjust the filters or add new poetry from the admin panel.</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+        <nav class="mt-4" aria-label="Poetry pagination">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ request.GET.search }}&type={{ request.GET.type }}&mood={{ request.GET.mood }}&category={{ request.GET.category }}&sort={{ request.GET.sort }}">Previous</a></li>
+                {% endif %}
+                {% for num in paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}&search={{ request.GET.search }}&type={{ request.GET.type }}&mood={{ request.GET.mood }}&category={{ request.GET.category }}&sort={{ request.GET.sort }}">{{ num }}</a></li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ request.GET.search }}&type={{ request.GET.type }}&mood={{ request.GET.mood }}&category={{ request.GET.category }}&sort={{ request.GET.sort }}">Next</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

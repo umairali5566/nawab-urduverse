@@ -1,0 +1,49 @@
+﻿{% extends 'dashboard/dashboard_base.html' %}
+{% block title %}Add Poetry - Dashboard{% endblock %}
+
+{% block content %}
+<div class="section-spacing">
+    <h2 class="section-title mb-3">Add New Poetry</h2>
+    <div class="card">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" class="row g-3">
+                {% csrf_token %}
+                <div class="col-md-6">
+                    <label class="form-label">Title *</label>
+                    <input type="text" name="title" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Author *</label>
+                    <input type="text" name="author" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Poetry Type</label>
+                    <select name="poetry_type" class="form-select">
+                        <option value="ghazal">Ghazal</option>
+                        <option value="nazm">Nazm</option>
+                        <option value="shayari">Shayari</option>
+                        <option value="rubai">Rubai</option>
+                        <option value="qata">Qata</option>
+                        <option value="marsiya">Marsiya</option>
+                        <option value="manqabat">Manqabat</option>
+                        <option value="naat">Naat</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Poetry Content *</label>
+                    <textarea name="content" class="form-control" rows="10" required></textarea>
+                    <small class="text-muted d-block mt-1">Auto layout is enabled: every 2 lines will be displayed as one sher.</small>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Background Image</label>
+                    <input type="file" name="background_image" class="form-control" accept="image/*">
+                </div>
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Publish Poetry</button>
+                    <a href="{% url 'dashboard_poetry_list' %}" class="btn btn-outline-primary">Back to list</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

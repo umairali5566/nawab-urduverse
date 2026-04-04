@@ -1,0 +1,619 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hover Cards Demo - Nawab UrduVerse{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<script src="{% static 'js/hover-cards.js' %}" defer></script>
+
+<style>
+    .demo-section {
+        padding: 4rem 0;
+    }
+    
+    .demo-card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+    
+    .demo-header {
+        text-align: center;
+        padding: 4rem 0 2rem;
+        background: linear-gradient(135deg, rgba(108, 74, 182, 0.1) 0%, rgba(141, 114, 225, 0.1) 100%);
+    }
+    
+    .demo-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #6C4AB6, #8D72E1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .demo-header p {
+        color: #666;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .demo-section-title {
+        margin: 3rem 0 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid rgba(108, 74, 182, 0.2);
+        color: #6C4AB6;
+    }
+    
+    .demo-card {
+        min-height: 320px;
+    }
+    
+    .demo-card .card-body {
+        min-height: 120px;
+    }
+    
+    .demo-code {
+        background: #1a1a2e;
+        color: #a8dadc;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.85rem;
+        overflow-x: auto;
+    }
+    
+    .demo-code code {
+        color: #f1faee;
+    }
+    
+    .color-chips {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+    
+    .color-chip {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 2px solid white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+</style>
+
+<div class="demo-header">
+    <div class="container">
+        <h1>✨ Dynamic Hover Cards</h1>
+        <p>Beautiful card interactions that reveal dynamic content on hover. 
+           Move your mouse over the cards to see the effects!</p>
+    </div>
+</div>
+
+<div class="container demo-section">
+    
+    <!-- Slide Up Reveal -->
+    <h2 class="demo-section-title">📖 Slide Up Reveal</h2>
+    <p class="text-muted mb-4">Content slides up from the bottom with a gradient overlay.</p>
+    <div class="demo-card-grid">
+        <article class="card hover-reveal-card hover-slide-up hover-zoom-container demo-card h-100">
+            <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600" class="card-img-top zoom-image" alt="Mountain" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">Classic Poetry</h5>
+                <p class="card-text text-muted">Explore timeless Urdu poetry</p>
+            </div>
+            <div class="card-reveal-content">
+                <h4 class="reveal-title">Discover the Beauty</h4>
+                <p class="reveal-text">Immerse yourself in centuries of poetic tradition</p>
+                <a href="#" class="btn btn-light btn-sm mt-2">Read More</a>
+            </div>
+        </article>
+        
+        <article class="card hover-reveal-card hover-slide-up hover-zoom-container demo-card h-100">
+            <img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=600" class="card-img-top zoom-image" alt="Library" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">Nature & Beauty</h5>
+                <p class="card-text text-muted">Where words meet wonder</p>
+            </div>
+            <div class="card-reveal-content">
+                <h4 class="reveal-title">Written in Starlight</h4>
+                <p class="reveal-text">Let the verses guide your imagination</p>
+                <a href="#" class="btn btn-light btn-sm mt-2">Explore</a>
+            </div>
+        </article>
+        
+        <article class="card hover-reveal-card hover-slide-up hover-zoom-container demo-card h-100">
+            <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600" class="card-img-top zoom-image" alt="Book" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">Literary Tales</h5>
+                <p class="card-text text-muted">Stories that transcend time</p>
+            </div>
+            <div class="card-reveal-content">
+                <h4 class="reveal-title">Begin Your Journey</h4>
+                <p class="reveal-text">Every page holds a new adventure</p>
+                <a href="#" class="btn btn-light btn-sm mt-2">Start Reading</a>
+            </div>
+        </article>
+    </div>
+    <div class="demo-code">
+        <code><article class="card hover-reveal-card hover-slide-up hover-zoom-container"></code>
+    </div>
+
+    <!-- 3D Tilt Cards -->
+    <h2 class="demo-section-title">🎯 3D Tilt Effect</h2>
+    <p class="text-muted mb-4">Cards that tilt dynamically based on mouse position.</p>
+    <div class="demo-card-grid">
+        <article class="card hover-tilt-card demo-card h-100">
+            <div class="card-body">
+                <span class="badge bg-primary mb-2">Featured</span>
+                <h5 class="card-title">Tilt Card One</h5>
+                <p class="card-text">Move your mouse over this card to see the 3D tilt effect!</p>
+                <div class="color-chips">
+                    <span class="color-chip" style="background: #6C4AB6;"></span>
+                    <span class="color-chip" style="background: #8D72E1;"></span>
+                    <span class="color-chip" style="background: #F9C74F;"></span>
+                </div>
+            </div>
+        </article>
+        
+        <article class="card hover-tilt-card demo-card h-100">
+            <div class="card-body">
+                <span class="badge bg-success mb-2">New</span>
+                <h5 class="card-title">Tilt Card Two</h5>
+                <p class="card-text">The perspective changes based on where your cursor enters!</p>
+                <div class="color-chips">
+                    <span class="color-chip" style="background: #11998e;"></span>
+                    <span class="color-chip" style="background: #38ef7d;"></span>
+                    <span class="color-chip" style="background: #f9d423;"></span>
+                </div>
+            </div>
+        </article>
+        
+        <article class="card hover-tilt-card demo-card h-100">
+            <div class="card-body">
+                <span class="badge bg-warning text-dark mb-2">Popular</span>
+                <h5 class="card-title">Tilt Card Three</h5>
+                <p class="card-text">A subtle yet engaging interaction that feels premium!</p>
+                <div class="color-chips">
+                    <span class="color-chip" style="background: #fc4a1a;"></span>
+                    <span class="color-chip" style="background: #f7b733;"></span>
+                    <span class="color-chip" style="background: #4facfe;"></span>
+                </div>
+            </div>
+        </article>
+    </div>
+    <div class="demo-code">
+        <code><article class="card hover-tilt-card" data-tilt></code>
+    </div>
+
+    <!-- Overlay Expand Cards -->
+    <h2 class="demo-section-title">🔮 Overlay Expand</h2>
+    <p class="text-muted mb-4">Full overlay reveal with animated icons and content.</p>
+    <div class="demo-card-grid">
+        <article class="card hover-overlay-card demo-card h-100">
+            <img src="https://images.unsplash.com/photo-1474366521946-c3d4b507abf2?w=600" class="card-img-top" alt="Library" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">Hidden Library</h5>
+                <p class="card-text text-muted">Unlock the mysteries within</p>
+            </div>
+            <div class="overlay-layer">
+                <div class="overlay-icon"><i class="bi bi-book"></i></div>
+                <div class="overlay-content">
+                    <h4>Explore Collection</h4>
+                    <p>Browse thousands of literary works</p>
+                    <a href="#" class="btn btn-outline-light">View Library</a>
+                </div>
+            </div>
+        </article>
+        
+        <article class="card hover-overlay-card demo-card h-100">
+            <img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=600" class="card-img-top" alt="Poetry" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">Verse Garden</h5>
+                <p class="card-text text-muted">Where words bloom</p>
+            </div>
+            <div class="overlay-layer">
+                <div class="overlay-icon"><i class="bi bi-pen"></i></div>
+                <div class="overlay-content">
+                    <h4>Write & Share</h4>
+                    <p>Your poetry deserves to be heard</p>
+                    <a href="#" class="btn btn-outline-light">Compose</a>
+                </div>
+            </div>
+        </article>
+        
+        <article class="card hover-overlay-card demo-card h-100">
+            <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600" class="card-img-top" alt="Study" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">Study Corner</h5>
+                <p class="card-text text-muted">Knowledge awaits</p>
+            </div>
+            <div class="overlay-layer">
+                <div class="overlay-icon"><i class="bi bi-mortarboard"></i></div>
+                <div class="overlay-content">
+                    <h4>Learn & Grow</h4>
+                    <p>Master the art of expression</p>
+                    <a href="#" class="btn btn-outline-light">Start Learning</a>
+                </div>
+            </div>
+        </article>
+    </div>
+    <div class="demo-code">
+        <code><article class="card hover-overlay-card"></code>
+    </div>
+
+    <!-- Glow Border Cards -->
+    <h2 class="demo-section-title">✨ Glow Border</h2>
+    <p class="text-muted mb-4">Animated gradient borders that pulse with color.</p>
+    <div class="demo-card-grid">
+        <article class="card hover-glow-card demo-card h-100">
+            <div class="card-body">
+                <span class="badge bg-gradient mb-2" style="background: linear-gradient(135deg, #6C4AB6, #8D72E1); color: white;">Glow</span>
+                <h5 class="card-title mt-2">Glowing Card</h5>
+                <p class="card-text">Hover to see the animated gradient border effect!</p>
+            </div>
+        </article>
+        
+        <article class="card hover-glow-card demo-card h-100">
+            <div class="card-body">
+                <span class="badge bg-gradient mb-2" style="background: linear-gradient(135deg, #11998e, #38ef7d); color: white;">Nature</span>
+                <h5 class="card-title mt-2">Fresh Design</h5>
+                <p class="card-text">Borders that shift through a spectrum of colors!</p>
+            </div>
+        </article>
+        
+        <article class="card hover-glow-card demo-card h-100">
+            <div class="card-body">
+                <span class="badge bg-gradient mb-2" style="background: linear-gradient(135deg, #fc4a1a, #f7b733); color: white;">Bold</span>
+                <h5 class="card-title mt-2">Vibrant Style</h5>
+                <p class="card-text">Perfect for highlighting featured content!</p>
+            </div>
+        </article>
+    </div>
+    <div class="demo-code">
+        <code><article class="card hover-glow-card"></code>
+    </div>
+
+    <!-- Depth Cards -->
+    <h2 class="demo-section-title">🎭 Depth Effect</h2>
+    <p class="text-muted mb-4">Cards that pop out of the page with 3D depth.</p>
+    <div class="demo-card-grid">
+        <article class="card hover-depth-card demo-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Float Above</h5>
+                <p class="card-text">This card rises and gains depth on hover, creating a floating effect.</p>
+                <button class="btn btn-primary btn-sm">Learn More</button>
+            </div>
+        </article>
+        
+        <article class="card hover-depth-card demo-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Pop Out</h5>
+                <p class="card-text">Watch the card emerge from the page with enhanced shadows.</p>
+                <button class="btn btn-primary btn-sm">Discover</button>
+            </div>
+        </article>
+        
+        <article class="card hover-depth-card demo-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Layered</h5>
+                <p class="card-text">Multiple depth layers create a sophisticated interaction.</p>
+                <button class="btn btn-primary btn-sm">Explore</button>
+            </div>
+        </article>
+    </div>
+    <div class="demo-code">
+        <code><article class="card hover-depth-card"></code>
+    </div>
+
+    <!-- Morphing Cards -->
+    <h2 class="demo-section-title">🔄 Morphing Shape</h2>
+    <p class="text-muted mb-4">Cards that change shape on hover.</p>
+    <div class="demo-card-grid">
+        <article class="card hover-morph-card demo-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Shape Shifter</h5>
+                <p class="card-text">Watch the corners soften and the card transform!</p>
+            </div>
+        </article>
+        
+        <article class="card hover-morph-card demo-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Smooth Transition</h5>
+                <p class="card-text">The border-radius morphs from square to rounded.</p>
+            </div>
+        </article>
+        
+        <article class="card hover-morph-card demo-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Organic Feel</h5>
+                <p class="card-text">Feels more alive and responsive to interaction.</p>
+            </div>
+        </article>
+    </div>
+    <div class="demo-code">
+        <code><article class="card hover-morph-card"></code>
+    </div>
+
+    <!-- Shine Effect Cards -->
+    <h2 class="demo-section-title">💫 Shine Sweep</h2>
+    <p class="text-muted mb-4">Light sweeps across the card on hover.</p>
+    <div class="demo-card-grid">
+        <article class="card hover-shine-card demo-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Shiny Card</h5>
+                <p class="card-text">A light beam sweeps across when you hover!</p>
+            </div>
+        </article>
+        
+        <article class="card hover-shine-card demo-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Glitter Effect</h5>
+                <p class="card-text">Perfect for premium or featured content.</p>
+            </div>
+        </article>
+        
+        <article class="card hover-shine-card demo-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Attention Grabber</h5>
+                <p class="card-text">Makes the card stand out from the rest.</p>
+            </div>
+        </article>
+    </div>
+    <div class="demo-code">
+        <code><article class="card hover-shine-card"></code>
+    </div>
+
+    <!-- Preview Cards -->
+    <h2 class="demo-section-title">👁️ Content Preview</h2>
+    <p class="text-muted mb-4">See more content on hover with a preview overlay.</p>
+    <div class="demo-card-grid">
+        <article class="card hover-preview-card demo-card h-100">
+            <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?w=600" class="card-img-top" alt="Featured" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">Novel Preview</h5>
+                <p class="card-text text-muted">First few lines of a story...</p>
+            </div>
+            <div class="preview-overlay">
+                <div class="preview-content">
+                    The old mansion stood at the end of the cobblestone street, its windows dark as midnight eyes watching the travelers below...
+                </div>
+                <div class="preview-meta">
+                    <i class="bi bi-book"></i> Novel • Chapter 1 • 2 min read
+                </div>
+            </div>
+        </article>
+        
+        <article class="card hover-preview-card demo-card h-100">
+            <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600" class="card-img-top" alt="Book" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">Poetry Preview</h5>
+                <p class="card-text text-muted">A glimpse into verse...</p>
+            </div>
+            <div class="preview-overlay">
+                <div class="preview-content">
+                    "In the garden of words, I wander free, Through verses ancient, wild, and fancy-free..."
+                </div>
+                <div class="preview-meta">
+                    <i class="bi bi-heart"></i> Ghazal • 4 couplets
+                </div>
+            </div>
+        </article>
+        
+        <article class="card hover-preview-card demo-card h-100">
+            <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600" class="card-img-top" alt="Library" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">Blog Preview</h5>
+                <p class="card-text text-muted">Article excerpt...</p>
+            </div>
+            <div class="preview-overlay">
+                <div class="preview-content">
+                    Literature has always been the mirror of society, reflecting our hopes, fears, dreams, and the very essence of what it means to be human...
+                </div>
+                <div class="preview-meta">
+                    <i class="bi bi-newspaper"></i> Blog • 5 min read
+                </div>
+            </div>
+        </article>
+    </div>
+    <div class="demo-code">
+        <code><article class="card hover-preview-card"></code>
+    </div>
+
+    <!-- Icon Reveal Cards -->
+    <h2 class="demo-section-title">🎨 Icon Reveal</h2>
+    <p class="text-muted mb-4">Animated icons appear on hover.</p>
+    <div class="demo-card-grid">
+        <article class="card hover-icon-reveal hover-zoom-container demo-card h-100">
+            <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600" class="card-img-top zoom-image" alt="Mountain" style="height: 200px; object-fit: cover;">
+            <div class="card-icon-overlay">
+                <i class="bi bi-compass"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Explore</h5>
+                <p class="card-text text-muted">Discover new horizons</p>
+            </div>
+        </article>
+        
+        <article class="card hover-icon-reveal hover-zoom-container demo-card h-100">
+            <img src="https://images.unsplash.com/photo-1474366521946-c3d4b507abf2?w=600" class="card-img-top zoom-image" alt="Library" style="height: 200px; object-fit: cover;">
+            <div class="card-icon-overlay">
+                <i class="bi bi-bookmark-heart"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Save</h5>
+                <p class="card-text text-muted">Bookmark for later</p>
+            </div>
+        </article>
+        
+        <article class="card hover-icon-reveal hover-zoom-container demo-card h-100">
+            <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600" class="card-img-top zoom-image" alt="Writing" style="height: 200px; object-fit: cover;">
+            <div class="card-icon-overlay">
+                <i class="bi bi-share"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Share</h5>
+                <p class="card-text text-muted">Spread the word</p>
+            </div>
+        </article>
+    </div>
+    <div class="demo-code">
+        <code><article class="card hover-icon-reveal hover-zoom-container"></code>
+    </div>
+
+    <!-- Stagger Reveal Cards -->
+    <h2 class="demo-section-title">📋 Stagger Reveal</h2>
+    <p class="text-muted mb-4">List items animate in sequence.</p>
+    <div class="demo-card-grid">
+        <article class="card hover-stagger-reveal demo-card h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Featured Works</h5>
+                <div class="stagger-item d-flex align-items-center gap-2 mb-2">
+                    <i class="bi bi-star-fill text-warning"></i>
+                    <span>Poetry Collection</span>
+                </div>
+                <div class="stagger-item d-flex align-items-center gap-2 mb-2">
+                    <i class="bi bi-book-half text-primary"></i>
+                    <span>Novel Series</span>
+                </div>
+                <div class="stagger-item d-flex align-items-center gap-2 mb-2">
+                    <i class="bi bi-chat-quote text-success"></i>
+                    <span>Quote Anthology</span>
+                </div>
+                <div class="stagger-item d-flex align-items-center gap-2">
+                    <i class="bi bi-film text-danger"></i>
+                    <span>Video Essays</span>
+                </div>
+            </div>
+        </article>
+        
+        <article class="card hover-stagger-reveal demo-card h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Author Stats</h5>
+                <div class="stagger-item mb-2">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Poems Written</span>
+                        <strong>142</strong>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-primary" style="width: 85%;"></div>
+                    </div>
+                </div>
+                <div class="stagger-item mb-2">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Stories Published</span>
+                        <strong>28</strong>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success" style="width: 60%;"></div>
+                    </div>
+                </div>
+                <div class="stagger-item">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Articles</span>
+                        <strong>56</strong>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-warning" style="width: 72%;"></div>
+                    </div>
+                </div>
+            </div>
+        </article>
+        
+        <article class="card hover-stagger-reveal demo-card h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Quick Actions</h5>
+                <div class="stagger-item mb-2">
+                    <a href="#" class="btn btn-outline-primary w-100 text-start">
+                        <i class="bi bi-plus-circle me-2"></i>New Post
+                    </a>
+                </div>
+                <div class="stagger-item mb-2">
+                    <a href="#" class="btn btn-outline-success w-100 text-start">
+                        <i class="bi bi-pencil-square me-2"></i>Edit Profile
+                    </a>
+                </div>
+                <div class="stagger-item">
+                    <a href="#" class="btn btn-outline-info w-100 text-start">
+                        <i class="bi bi-gear me-2"></i>Settings
+                    </a>
+                </div>
+            </div>
+        </article>
+    </div>
+    <div class="demo-code">
+        <code><article class="card hover-stagger-reveal"></code>
+    </div>
+
+    <!-- Usage Guide -->
+    <h2 class="demo-section-title">📚 How to Use</h2>
+    <div class="card glass-card">
+        <div class="card-body">
+            <h4>Adding Hover Cards to Your Templates</h4>
+            <p class="text-muted">Simply add one or more hover effect classes to your existing cards:</p>
+            
+            <div class="demo-code">
+                <code>
+<!-- Basic Reveal Card --><br>
+<article class="card hover-reveal-card hover-zoom-container"><br>
+&nbsp;&nbsp;<img src="..." class="card-img-top"><br>
+&nbsp;&nbsp;<div class="card-body"><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<h5>Title</h5><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<p>Description</p><br>
+&nbsp;&nbsp;</div><br>
+&nbsp;&nbsp;<div class="card-reveal-content"><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<!-- Revealed on hover --><br>
+&nbsp;&nbsp;</div><br>
+</article><br><br>
+<!-- 3D Tilt Card --><br>
+<article class="card hover-tilt-card"><br>
+&nbsp;&nbsp;<div class="card-body">...</div><br>
+</article><br><br>
+<!-- Overlay Card --><br>
+<article class="card hover-overlay-card"><br>
+&nbsp;&nbsp;<div class="overlay-layer"><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<div class="overlay-icon"><i class="bi bi-book"></i></div><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<div class="overlay-content">...</div><br>
+&nbsp;&nbsp;</div><br>
+</article>
+                </code>
+            </div>
+            
+            <h4 class="mt-4">Available Hover Classes</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="list-group">
+                        <li class="list-group-item"><code>hover-reveal-card</code> - Slide reveal from bottom</li>
+                        <li class="list-group-item"><code>hover-slide-up</code> - Enhanced slide up</li>
+                        <li class="list-group-item"><code>hover-slide-left</code> - Content slides from left</li>
+                        <li class="list-group-item"><code>hover-tilt-card</code> - 3D tilt effect</li>
+                        <li class="list-group-item"><code>hover-overlay-card</code> - Full overlay reveal</li>
+                        <li class="list-group-item"><code>hover-glow-card</code> - Animated gradient border</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul class="list-group">
+                        <li class="list-group-item"><code>hover-shine-card</code> - Light sweep effect</li>
+                        <li class="list-group-item"><code>hover-morph-card</code> - Shape morphing</li>
+                        <li class="list-group-item"><code>hover-depth-card</code> - 3D depth rise</li>
+                        <li class="list-group-item"><code>hover-preview-card</code> - Content preview</li>
+                        <li class="list-group-item"><code>hover-icon-reveal</code> - Icon animation</li>
+                        <li class="list-group-item"><code>hover-stagger-reveal</code> - Staggered items</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <p class="text-muted mt-3 mb-0">
+                <i class="bi bi-lightbulb me-2"></i>
+                <strong>Tip:</strong> Combine multiple classes for unique effects! Try 
+                <code>hover-reveal-card hover-slide-up hover-zoom-container</code> together.
+            </p>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock %}

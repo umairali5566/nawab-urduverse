@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}AI Studio - {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Generate Urdu poetry with AI, listen in Urdu voice, and run smart search across Nawab UrduVerse.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ai-studio.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="ai-studio-shell">
+    <div class="main-container">
+        <div class="ai-studio-hero glass-card">
+            <div class="ai-studio-copy">
+                <span class="ai-studio-kicker">Nawab UrduVerse AI</span>
+                <h1 class="ai-studio-title">Create Urdu poetry, hear it aloud, and discover literature with smart intent.</h1>
+                <p class="ai-studio-subtitle">A focused AI workspace for poetry generation, Urdu TTS playback, and natural-language search across the platform.</p>
+                <div class="ai-studio-pill-row">
+                    <span class="ai-studio-pill"><i class="bi bi-stars"></i> OpenAI Poetry</span>
+                    <span class="ai-studio-pill"><i class="bi bi-volume-up"></i> Urdu Voice</span>
+                    <span class="ai-studio-pill"><i class="bi bi-search-heart"></i> Smart Search</span>
+                </div>
+            </div>
+            <div class="ai-studio-aside">
+                <div class="ai-insight-card">
+                    <span class="ai-insight-label">Trending Poetry</span>
+                    <ul class="ai-insight-list">
+                        {% for poem in trending_poetry %}
+                        <li><a href="{{ poem.get_absolute_url }}">{{ poem.title }}</a></li>
+                        {% empty %}
+                        <li>Fresh poetry will appear here once content is published.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mt-1">
+            <div class="col-lg-5">
+                <div class="glass-card ai-panel h-100">
+                    <div class="ai-panel-head">
+                        <h2>Poetry Generator</h2>
+                        <p>Generate sher-form Urdu poetry from a theme or feeling, then format and listen instantly.</p>
+                    </div>
+                    <form id="aiPoetryForm" class="ai-form" action="{% url 'ai_generate' %}" method="post" data-ai-studio-mode="v2">
+                        {% csrf_token %}
+                        <label class="ai-field">
+                            <span>Topic</span>
+                            <input type="text" name="topic" placeholder="محبت، بارش، امید، ہجرت" maxlength="120" required>
+                        </label>
+                        <label class="ai-field">
+                            <span>Style</span>
+                            <select name="style">
+                                {% for value, label in ai_styles %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                        <button type="submit" class="ai-primary-btn">
+                            <i class="bi bi-magic"></i>
+                            <span>Generate Poetry</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="glass-card ai-panel h-100">
+                    <div class="ai-panel-head ai-panel-head-inline">
+                        <div>
+                            <h2>Generated Result</h2>
+                            <p id="aiPoetryMeta">Sher-formatted Urdu poetry will appear here.</p>
+                        </div>
+                        <div class="ai-action-row">
+                            <button type="button" class="ai-secondary-btn" id="aiCopyPoetry" disabled>
+                                <i class="bi bi-clipboard"></i>
+                                <span>Copy</span>
+                            </button>
+                            <button type="button" class="ai-secondary-btn" id="aiListenPoetry" disabled>
+                                <i class="bi bi-play-fill"></i>
+                                <span>Listen</span>
+                            </button>
+                            <button type="button" class="ai-secondary-btn" id="aiPausePoetry" disabled>
+                                <i class="bi bi-pause-fill"></i>
+                                <span>Pause</span>
+                            </button>
+                            <button type="button" class="ai-secondary-btn" id="aiStopPoetry" disabled>
+                                <i class="bi bi-stop-fill"></i>
+                                <span>Stop</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="aiPoetryOutput" class="ai-output-stage reader-card poetry-reader"></div>
+                    <p class="ai-status-line" id="aiPoetryStatus">Ready for your first prompt.</p>
+                    <audio id="aiStudioAudio" preload="none" class="d-none"></audio>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card ai-panel mt-4">
+            <div class="ai-panel-head">
+                <h2>Smart AI Search</h2>
+                <p>Ask naturally like “love poetry by iqbal” and get ranked platform results.</p>
+            </div>
+            <form id="aiSearchForm" class="ai-search-form" action="{% url 'ai_search' %}" method="get">
+                <div class="search-input-wrap ai-search-wrap" data-search-autocomplete>
+                    <i class="bi bi-search search-input-icon"></i>
+                    <input type="search" name="q" class="form-control search-input" placeholder="love poetry by iqbal" autocomplete="off" data-search-input>
+                    <div class="search-suggestions" data-search-suggestions></div>
+                </div>
+                <select name="type" class="ai-search-select">
+                    <option value="all">All</option>
+                    <option value="author">Author</option>
+                    <option value="poetry">Poetry</option>
+                    <option value="quote">Quote</option>
+                    <option value="blog">Blog</option>
+                    <option value="video">Video</option>
+                    <option value="novel">Novel</option>
+                    <option value="story">Story</option>
+                </select>
+                <button type="submit" class="ai-primary-btn ai-search-btn">
+                    <i class="bi bi-stars"></i>
+                    <span>Search</span>
+                </button>
+            </form>
+            <div class="ai-search-intent" id="aiSearchIntent"></div>
+            <div class="row g-3 mt-1" id="aiSearchResults"></div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/ai-studio.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,61 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Stories - {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Browse Urdu stories on {{ SITE_NAME }}. Read short stories, fiction, and more.{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Stories</li>
+            </ol>
+        </nav>
+        <h1 class="mt-3 mb-1 section-title-urdu">تازہ کہانیاں</h1>
+        <p class="section-subtitle">Curated Urdu stories with balanced readability</p>
+    </div>
+</section>
+
+<section class="py-3">
+    <div class="main-container">
+        <div class="row g-4">
+            {% for story in stories %}
+            <div class="col-lg-4 col-md-6">
+                <article class="card content-card h-100">
+                    {% if story.featured_image %}
+                    <img src="{{ story.featured_image.url }}" class="card-img-top" alt="{{ story.title }}" style="height: 220px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title mb-2"><a href="{{ story.get_absolute_url }}">{{ story.title }}</a></h5>
+                        <p class="card-snippet">{{ story.excerpt|default:story.content|striptags|truncatechars:120 }}</p>
+                        <p class="card-meta mb-0"><i class="bi bi-person"></i>{{ story.author.name }} <span class="mx-2">|</span> <i class="bi bi-eye"></i>{{ story.views_count }}</p>
+                    </div>
+                </article>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No stories found.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+        <nav class="mt-4" aria-label="Story pagination">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                {% endif %}
+                {% for num in paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

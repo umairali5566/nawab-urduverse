@@ -1,0 +1,159 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ story.title }} - {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'story_list' %}">Stories</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ story.title|truncatechars:50 }}</li>
+            </ol>
+        </nav>
+        <h1 class="mt-3 mb-1 section-title-urdu">{{ story.title }}</h1>
+        <p class="section-subtitle">Readable story format with clean spacing</p>
+    </div>
+</section>
+
+<section class="py-3">
+    <div class="main-container">
+        <div class="reading-progress" aria-hidden="true">
+            <div class="reading-progress-bar"></div>
+        </div>
+
+        <div class="reading-area">
+            <div
+                class="reader-shell content-protected-shell"
+                data-protected-content
+                data-content-type="story"
+                data-content-title="{{ story.title|escape }}"
+                data-content-url="{{ request.build_absolute_uri|escape }}"
+                data-content-id="story-{{ story.id }}"
+            >
+                <div class="reader-toolbar">
+                    <div class="reader-toolset">
+                        {% include 'includes/bookmark_button.html' with content_type='story' object_id=story.id is_bookmarked=is_bookmarked btn_class='reader-tool-btn' %}
+                        <button
+                            type="button"
+                            class="reader-tool-btn like-btn {% if is_liked %}active{% endif %}"
+                            data-url="{% url 'toggle_like' content_type='story' object_id=story.id %}"
+                            aria-label="Like story"
+                        >
+                            <i class="bi bi-heart"></i>
+                            <span class="like-count">{{ story.likes_count }}</span>
+                        </button>
+                        <button
+                            type="button"
+                            class="reader-tool-btn"
+                            data-reader-share
+                            data-share-title="{{ story.title }}"
+                            data-share-url="{{ request.build_absolute_uri }}"
+                            data-share-track-url="{% url 'track_share' content_type='story' object_id=story.id %}"
+                            aria-label="Share story"
+                        >
+                            <i class="bi bi-share"></i> Share
+                        </button>
+                        <button
+                            type="button"
+                            class="reader-tool-btn"
+                            data-copy-target="#storyReaderContent"
+                            aria-label="Copy story text"
+                        >
+                            <i class="bi bi-clipboard"></i> Copy
+                        </button>
+                    </div>
+
+                    <div class="reader-toolset">
+                        <div class="font-control">
+                            <span class="font-control-label">Font</span>
+                            <button type="button" class="font-control-btn" data-font-action="decrease" data-reader-target="#storyReaderContent">A-</button>
+                            <button type="button" class="font-control-btn" data-font-action="increase" data-reader-target="#storyReaderContent">A+</button>
+                        </div>
+                        <button type="button" class="reader-tool-btn" data-reader-dark-target="#storyReaderCard" aria-pressed="false">
+                            <i class="bi bi-moon-stars"></i> Night
+                        </button>
+                    </div>
+                </div>
+
+                <article class="reader-card story-reader" id="storyReaderCard">
+                    {% if story.featured_image %}
+                    <img src="{{ story.featured_image.url }}" alt="{{ story.title }}" class="img-fluid mb-3" loading="lazy">
+                    {% endif %}
+
+                    <h2 class="reader-title">{{ story.title }}</h2>
+                    <div class="reader-meta">
+                        <span><i class="bi bi-person"></i> {{ story.author.name }}</span>
+                        <span><i class="bi bi-calendar"></i> {{ story.created_at|date:'d M Y' }}</span>
+                        <span><i class="bi bi-clock"></i> {{ story.reading_time }} min</span>
+                        <span><i class="bi bi-eye"></i> {{ story.views_count }}</span>
+                        <span><i class="bi bi-heart"></i> {{ story.likes_count }}</span>
+                        <span><i class="bi bi-share"></i> {{ story.shares_count|default:0 }}</span>
+                    </div>
+
+                    <div class="reader-content" id="storyReaderContent">
+                        {{ story.content|safe }}
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <div class="row g-3 mt-3">
+            <div class="col-lg-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title section-title-urdu">Related Stories</h5>
+                        {% for item in related_stories %}
+                        <p class="mb-2"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></p>
+                        {% empty %}
+                        <p class="text-muted mb-0">No related stories found.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title section-title-urdu">Comments</h5>
+                        {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'add_comment' content_type='story' object_id=story.id %}" class="comment-form mb-4" data-comment-form>
+                            {% csrf_token %}
+                            <textarea class="form-control mb-3" name="text" rows="3" placeholder="Share your thoughts on this story"></textarea>
+                            <button class="btn btn-primary" type="submit">Post Comment</button>
+                        </form>
+                        {% else %}
+                        <button type="button" class="btn btn-outline-primary mb-4" data-auth-required data-auth-action="comment">Log in to comment</button>
+                        {% endif %}
+                        {% for comment in comments %}
+                        <div class="comment-block">
+                            <strong>{{ comment.user.username }}</strong>
+                            <p class="mb-0 small">{{ comment.text }}</p>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted mb-0">No comments yet.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if suggested_content %}
+        <div class="reading-area mt-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title section-title-urdu">You may also like</h5>
+                    {% for item in suggested_content %}
+                    {% firstof item.title item.name item.text as item_label %}
+                    <p class="mb-1"><a href="{{ item.get_absolute_url }}">{{ item_label|truncatechars:70 }}</a></p>
+                    <p class="small text-muted mb-2">{{ item.content_type_name|default:"Content" }} · {{ item.recommendation_reason|default:"matching theme" }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

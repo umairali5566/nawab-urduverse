@@ -1,0 +1,72 @@
+﻿{% extends 'dashboard/dashboard_base.html' %}
+{% block title %}Add Video - Dashboard{% endblock %}
+
+{% block content %}
+<div class="section-spacing">
+    <h2 class="section-title mb-3">Add New Video</h2>
+    <div class="card">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" class="row g-3">
+                {% csrf_token %}
+                <div class="col-md-6">
+                    <label class="form-label">Title *</label>
+                    <input type="text" name="title" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Author (optional)</label>
+                    <input type="text" name="author" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Video Type</label>
+                    <select name="video_type" class="form-select">
+                        <option value="poetry">Poetry</option>
+                        <option value="story">Story</option>
+                        <option value="novel">Novel</option>
+                        <option value="interview">Interview</option>
+                        <option value="documentary">Documentary</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Platform</label>
+                    <select name="platform" class="form-select">
+                        <option value="youtube">YouTube</option>
+                        <option value="vimeo">Vimeo</option>
+                        <option value="dailymotion">Dailymotion</option>
+                        <option value="facebook">Facebook</option>
+                        <option value="local">Local</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">YouTube Link</label>
+                    <input type="url" name="youtube_link" class="form-control" placeholder="https://youtube.com/watch?...">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Video ID</label>
+                    <input type="text" name="video_id" class="form-control" placeholder="e.g. dQw4w9WgXcQ">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Video URL</label>
+                    <input type="url" name="video_url" class="form-control" placeholder="https://...">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Upload Video File</label>
+                    <input type="file" name="video_file" class="form-control" accept="video/*">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Thumbnail</label>
+                    <input type="file" name="thumbnail" class="form-control" accept="image/*">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" class="form-control" rows="5"></textarea>
+                </div>
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Publish Video</button>
+                    <a href="{% url 'dashboard_video_list' %}" class="btn btn-outline-primary">Back to list</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

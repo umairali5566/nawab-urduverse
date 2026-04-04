@@ -1,0 +1,30 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}{{ quote_type_display }} Quotes - {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <h1 class="mb-1">{{ quote_type_display }} Quotes</h1>
+    </div>
+</section>
+
+<section class="py-3">
+    <div class="main-container">
+        <div class="row g-3">
+            {% for quote in quotes %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <blockquote class="mb-2">{{ quote.text|truncatechars:220 }}</blockquote>
+                        <p class="text-muted small mb-0">{{ quote.author.name }}</p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-4"><p class="text-muted mb-0">No quotes found for this type.</p></div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

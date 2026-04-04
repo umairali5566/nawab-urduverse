@@ -1,0 +1,128 @@
+{% load static %}
+<nav class="site-navbar" aria-label="Main navigation">
+    <div class="main-container navbar-inner">
+        <div class="navbar-left">
+            <a class="site-brand" href="{% url 'home' %}">
+                <span class="site-brand-media">
+                    <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }} logo" class="site-brand-logo" loading="eager">
+                </span>
+                <span class="brand-text-wrap">
+                    <span class="brand-text">{{ SITE_NAME }}</span>
+                    <span class="brand-caption">Premium Urdu literature platform</span>
+                </span>
+            </a>
+        </div>
+
+        <div class="navbar-center">
+            <ul class="site-nav d-none d-lg-flex">
+                <li><a class="site-nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}"><i class="bi bi-house-door"></i><span>Home</span></a></li>
+                <li><a class="site-nav-link {% if '/poetry/' in request.path %}active{% endif %}" href="{% url 'poetry_list' %}"><i class="bi bi-feather"></i><span>Poetry</span></a></li>
+                <li><a class="site-nav-link {% if '/novels/' in request.path %}active{% endif %}" href="{% url 'novel_list' %}"><i class="bi bi-book"></i><span>Novels</span></a></li>
+                <li><a class="site-nav-link {% if '/stories/' in request.path %}active{% endif %}" href="{% url 'story_list' %}"><i class="bi bi-journal-text"></i><span>Stories</span></a></li>
+                <li><a class="site-nav-link {% if '/blog/' in request.path %}active{% endif %}" href="{% url 'blog_list' %}"><i class="bi bi-newspaper"></i><span>Blog</span></a></li>
+                <li><a class="site-nav-link {% if '/videos/' in request.path %}active{% endif %}" href="{% url 'video_list' %}"><i class="bi bi-play-circle"></i><span>Videos</span></a></li>
+                <li><a class="site-nav-link {% if '/quotes/' in request.path %}active{% endif %}" href="{% url 'quote_list' %}"><i class="bi bi-chat-quote"></i><span>Quotes</span></a></li>
+                {% if AI_STUDIO_ENABLED %}
+                <li><a class="site-nav-link {% if '/ai-studio/' in request.path %}active{% endif %}" href="{% url 'ai_studio' %}"><i class="bi bi-stars"></i><span>AI Studio</span></a></li>
+                {% endif %}
+                {% if PREMIUM_MEMBERSHIP_ENABLED %}
+                <li><a class="site-nav-link {% if '/membership/' in request.path %}active{% endif %}" href="{% url 'membership' %}"><i class="bi bi-gem"></i><span>Membership</span></a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div class="navbar-right navbar-actions">
+            <form action="{% url 'search' %}" method="get" class="nav-search d-none d-xl-block">
+                <div class="search-input-wrap search-input-wrap-nav" data-search-autocomplete>
+                    <i class="bi bi-search search-input-icon"></i>
+                    <input type="search" name="q" class="form-control search-input search-input-nav nav-search-input" placeholder="Search poetry, blogs, videos, novels, quotes, authors" autocomplete="off" data-search-input>
+                    <div class="search-suggestions" data-search-suggestions></div>
+                </div>
+            </form>
+
+            <a href="{% url 'search' %}" class="nav-icon-btn d-xl-none" aria-label="Search" title="Search">
+                <i class="bi bi-search"></i>
+            </a>
+
+            {% if user.is_authenticated %}
+            <div class="dropdown">
+                <button class="nav-icon-btn notification-btn position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
+                    <i class="bi bi-bell"></i>
+                    {% if unread_notifications_count %}
+                    <span class="notification-count">{{ unread_notifications_count }}</span>
+                    {% endif %}
+                </button>
+                <div class="dropdown-menu dropdown-menu-end notification-menu text-end">
+                    <div class="dropdown-header d-flex justify-content-between align-items-center">
+                        <span>Notifications</span>
+                        <a href="{% url 'notifications' %}" class="small text-decoration-none">View all</a>
+                    </div>
+                    {% for notification in header_notifications %}
+                    <a class="dropdown-item notification-item {% if not notification.is_read %}notification-item-unread{% endif %}" href="{{ notification.link|default:'#' }}">
+                        <strong class="d-block">{{ notification.title }}</strong>
+                        <span class="small d-block">{{ notification.message }}</span>
+                    </a>
+                    {% empty %}
+                    <div class="dropdown-item text-muted">No new notifications.</div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <button class="nav-icon-btn" id="darkModeToggle" title="Dark mode" type="button" aria-label="Toggle dark mode">
+                <i class="bi bi-moon"></i>
+            </button>
+
+            <div class="dropdown">
+                <button class="btn btn-sm user-dropdown-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="user-avatar-chip">
+                        {% if user.is_authenticated and user.avatar %}
+                        <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="user-avatar-img">
+                        {% else %}
+                        <i class="bi bi-person-circle"></i>
+                        {% endif %}
+                    </span>
+                    <span class="d-none d-md-inline">
+                        {% if user.is_authenticated %}
+                        {{ user.get_full_name|default:user.username }}
+                        {% else %}
+                        Account
+                        {% endif %}
+                    </span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end text-end">
+                    {% if user.is_authenticated %}
+                    <li class="dropdown-item-text small text-muted">
+                        {% if active_membership and active_membership.is_active_membership %}
+                        <i class="bi bi-gem me-1"></i> {{ active_membership.plan.name|default:"Premium Member" }}
+                        {% else %}
+                        <i class="bi bi-person me-1"></i> Free Member
+                        {% endif %}
+                    </li>
+                    <li><a class="dropdown-item" href="{% url 'dashboard' %}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+                    <li><a class="dropdown-item" href="{% url 'public_profile' username=user.username %}"><i class="bi bi-person me-2"></i>Public Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'notifications' %}"><i class="bi bi-bell me-2"></i>Notifications</a></li>
+                    {% if PREMIUM_MEMBERSHIP_ENABLED %}
+                    <li><a class="dropdown-item" href="{% url 'membership' %}"><i class="bi bi-gem me-2"></i>Membership</a></li>
+                    {% endif %}
+                    {% if user.is_staff or user.is_superuser %}
+                    <li><a class="dropdown-item" href="{% url 'dashboard_home' %}"><i class="bi bi-clipboard-data me-2"></i>Admin Dashboard</a></li>
+                    {% endif %}
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                    {% else %}
+                    <li><a class="dropdown-item" href="{% url 'login' %}"><i class="bi bi-box-arrow-in-right me-2"></i>Login</a></li>
+                    <li><a class="dropdown-item" href="{% url 'register' %}"><i class="bi bi-person-plus me-2"></i>Register</a></li>
+                    {% if PREMIUM_MEMBERSHIP_ENABLED %}
+                    <li><a class="dropdown-item" href="{% url 'membership' %}"><i class="bi bi-gem me-2"></i>Membership</a></li>
+                    {% endif %}
+                    {% endif %}
+                </ul>
+            </div>
+
+            <button id="sidebarToggle" class="nav-icon-btn d-lg-none" type="button" aria-label="Open menu" aria-controls="sideMenu" aria-expanded="false">
+                <i class="bi bi-list"></i>
+            </button>
+        </div>
+    </div>
+</nav>

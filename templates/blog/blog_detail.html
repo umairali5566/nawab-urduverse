@@ -1,0 +1,163 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} - {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'blog_list' %}">Blog</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ post.title|truncatechars:45 }}</li>
+            </ol>
+        </nav>
+        <h1 class="mt-3 mb-1 section-title-urdu">{{ post.title }}</h1>
+        <p class="section-subtitle">Modern article reading layout</p>
+    </div>
+</section>
+
+<section class="py-3">
+    <div class="main-container">
+        <div class="reading-progress" aria-hidden="true">
+            <div class="reading-progress-bar"></div>
+        </div>
+
+        <div class="reading-area">
+            <div
+                class="reader-shell content-protected-shell"
+                data-protected-content
+                data-content-type="blog"
+                data-content-title="{{ post.title|escape }}"
+                data-content-url="{{ request.build_absolute_uri|escape }}"
+                data-content-id="blog-{{ post.id }}"
+            >
+                <div class="reader-toolbar">
+                    <div class="reader-toolset">
+                        {% include 'includes/bookmark_button.html' with content_type='blog' object_id=post.id is_bookmarked=is_bookmarked btn_class='reader-tool-btn' %}
+                        <button
+                            type="button"
+                            class="reader-tool-btn like-btn {% if is_liked %}active{% endif %}"
+                            data-url="{% url 'toggle_like' content_type='blog' object_id=post.id %}"
+                            aria-label="Like article"
+                        >
+                            <i class="bi bi-heart"></i>
+                            <span class="like-count">{{ post.likes_count }}</span>
+                        </button>
+                        <button
+                            type="button"
+                            class="reader-tool-btn"
+                            data-reader-share
+                            data-share-title="{{ post.title }}"
+                            data-share-url="{{ request.build_absolute_uri }}"
+                            data-share-track-url="{% url 'track_share' content_type='blog' object_id=post.id %}"
+                            aria-label="Share article"
+                        >
+                            <i class="bi bi-share"></i> Share
+                        </button>
+                        <button
+                            type="button"
+                            class="reader-tool-btn"
+                            data-copy-target="#blogReaderContent"
+                            aria-label="Copy article text"
+                        >
+                            <i class="bi bi-clipboard"></i> Copy
+                        </button>
+                    </div>
+
+                    <div class="reader-toolset">
+                        <div class="font-control">
+                            <span class="font-control-label">Font</span>
+                            <button type="button" class="font-control-btn" data-font-action="decrease" data-reader-target="#blogReaderContent">A-</button>
+                            <button type="button" class="font-control-btn" data-font-action="increase" data-reader-target="#blogReaderContent">A+</button>
+                        </div>
+                        <button type="button" class="reader-tool-btn" data-reader-dark-target="#blogReaderCard" aria-pressed="false">
+                            <i class="bi bi-moon-stars"></i> Night
+                        </button>
+                    </div>
+                </div>
+
+                <article class="reader-card blog-reader" id="blogReaderCard">
+                    {% if post.featured_image %}
+                    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="img-fluid mb-3" loading="lazy">
+                    {% endif %}
+
+                    <h2 class="reader-title">{{ post.title }}</h2>
+                    <div class="reader-meta">
+                        <span><i class="bi bi-person"></i> {{ post.author.name }}</span>
+                        <span><i class="bi bi-calendar"></i> {{ post.published_at|date:'d M Y' }}</span>
+                        <span><i class="bi bi-clock"></i> {{ post.reading_time }} min read</span>
+                        <span><i class="bi bi-eye"></i> {{ post.views_count }}</span>
+                        <span><i class="bi bi-heart"></i> {{ post.likes_count }}</span>
+                        <span><i class="bi bi-share"></i> {{ post.shares_count|default:0 }}</span>
+                    </div>
+
+                    <div class="reader-content" id="blogReaderContent">
+                        {{ post.content|safe }}
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <div class="row g-3 mt-3">
+            <div class="col-lg-8">
+                {% if related_posts %}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title section-title-urdu">Related Articles</h5>
+                        {% for item in related_posts %}
+                        <p class="mb-2"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title section-title-urdu">Reader Conversation</h5>
+                        {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'add_comment' content_type='blog' object_id=post.id %}" class="comment-form" data-comment-form>
+                            {% csrf_token %}
+                            <textarea class="form-control mb-3" name="text" rows="4" placeholder="Share your thoughts on this article"></textarea>
+                            <button class="btn btn-primary" type="submit"><i class="bi bi-send me-1"></i> Post Comment</button>
+                        </form>
+                        {% else %}
+                        <button type="button" class="btn btn-outline-primary" data-auth-required data-auth-action="comment">Log in to comment</button>
+                        {% endif %}
+
+                        <div class="mt-4">
+                            {% for comment in comments %}
+                            <div class="comment-block">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <strong>{{ comment.user.get_full_name|default:comment.user.username }}</strong>
+                                    <small class="text-muted">{{ comment.created_at|date:'d M Y' }}</small>
+                                </div>
+                                <p class="mb-0 mt-2">{{ comment.text }}</p>
+                            </div>
+                            {% empty %}
+                            <p class="text-muted mb-0">No comments yet.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                {% include 'includes/trending_sidebar.html' %}
+                {% if suggested_content %}
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title section-title-urdu">You may also like</h5>
+                        {% for item in suggested_content %}
+                        {% firstof item.title item.name item.text as item_label %}
+                        <p class="mb-1"><a href="{{ item.get_absolute_url }}">{{ item_label|truncatechars:70 }}</a></p>
+                        <p class="small text-muted mb-2">{{ item.content_type_name|default:"Content" }} · {{ item.recommendation_reason|default:"matching theme" }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

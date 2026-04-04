@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Nawab Urdu acadmey">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f6f8d"/>
+      <stop offset="100%" stop-color="#35a8c3"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <circle cx="180" cy="120" r="120" fill="#ffffff" opacity="0.12"/>
+  <circle cx="1080" cy="520" r="160" fill="#ffffff" opacity="0.08"/>
+  <text x="600" y="290" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial" font-size="52" font-weight="700">Nawab Urdu acadmey</text>
+  <text x="600" y="355" text-anchor="middle" fill="#e9f7fb" font-family="Segoe UI, Arial" font-size="30">Urdu Literature Platform</text>
+</svg>

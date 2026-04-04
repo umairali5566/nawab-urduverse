@@ -1,0 +1,388 @@
+{% load static %}
+<!-- =====================================================
+     AUTHORS SECTION COMPONENT
+     ===================================================== -->
+<section class="section authors-section" id="authorsSection">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Featured Authors</h2>
+                <p class="section-subtitle">Discover talented writers from across the Urdu literary world</p>
+            </div>
+            <a href="{% url 'author_list' %}" class="btn btn-ghost">
+                <span>View All</span>
+                <i class="bi bi-arrow-left"></i>
+            </a>
+        </div>
+
+        <!-- Authors Grid -->
+        <div class="authors-grid stagger">
+            {% for author in featured_authors %}
+            <article class="author-card">
+                <!-- Avatar -->
+                <div class="author-card-avatar-wrap">
+                    {% if author.image %}
+                        <img src="{{ author.image.url }}" alt="{{ author.name }}" class="author-card-image" loading="lazy">
+                    {% else %}
+                        <div class="author-card-avatar-placeholder">
+                            <i class="bi bi-person"></i>
+                        </div>
+                    {% endif %}
+                    {% if author.is_featured %}
+                    <span class="author-verified-badge" title="Verified Author">
+                        <i class="bi bi-patch-check-fill"></i>
+                    </span>
+                    {% endif %}
+                </div>
+
+                <!-- Info -->
+                <h3 class="author-card-name">
+                    <a href="{{ author.get_absolute_url }}">{{ author.name }}</a>
+                </h3>
+                
+                {% if author.bio %}
+                <p class="author-card-bio">{{ author.bio|truncatechars:80 }}</p>
+                {% else %}
+                <p class="author-card-bio">Urdu literature enthusiast and writer</p>
+                {% endif %}
+
+                <!-- Stats -->
+                <div class="author-card-stats">
+                    <span>
+                        <i class="bi bi-file-text"></i>
+                        {{ author.poetry_count|default:0 }}
+                    </span>
+                    <span>
+                        <i class="bi bi-heart"></i>
+                        {{ author.total_likes|default:0 }}
+                    </span>
+                </div>
+
+                <!-- Actions -->
+                <div class="author-card-actions">
+                        <a href="{{ author.get_absolute_url }}" class="btn btn-secondary btn-sm">
+                            <i class="bi bi-eye"></i>
+                            <span>Profile</span>
+                        </a>
+                </div>
+
+            </article>
+            {% empty %}
+            <!-- Default Authors -->
+            <article class="author-card">
+                <div class="author-card-avatar-wrap">
+                    <div class="author-card-avatar-placeholder" style="font-size: 2rem;">م</div>
+                    <span class="author-verified-badge"><i class="bi bi-patch-check-fill"></i></span>
+                </div>
+                <h3 class="author-card-name"><a href="#">Mirza Ghalib</a></h3>
+                <p class="author-card-bio">Legendary poet of the Mughal era, known for his profound ghazals</p>
+                <div class="author-card-stats">
+                    <span><i class="bi bi-file-text"></i>500+</span>
+                    <span><i class="bi bi-heart"></i>10K</span>
+                    <span><i class="bi bi-people"></i>50K</span>
+                </div>
+                <div class="author-card-actions">
+                    <button class="btn btn-primary btn-sm">
+                        <i class="bi bi-user-plus"></i>
+                        <span>Follow</span>
+                    </button>
+                </div>
+            </article>
+            
+            <article class="author-card">
+                <div class="author-card-avatar-wrap">
+                    <div class="author-card-avatar-placeholder" style="font-size: 2rem;">ع</div>
+                    <span class="author-verified-badge"><i class="bi bi-patch-check-fill"></i></span>
+                </div>
+                <h3 class="author-card-name"><a href="#">Allama Iqbal</a></h3>
+                <p class="author-card-bio">Poet, philosopher, and political leader who inspired the Pakistan movement</p>
+                <div class="author-card-stats">
+                    <span><i class="bi bi-file-text"></i>300+</span>
+                    <span><i class="bi bi-heart"></i>8K</span>
+                    <span><i class="bi bi-people"></i>40K</span>
+                </div>
+                <div class="author-card-actions">
+                    <button class="btn btn-primary btn-sm">
+                        <i class="bi bi-user-plus"></i>
+                        <span>Follow</span>
+                    </button>
+                </div>
+            </article>
+            
+            <article class="author-card">
+                <div class="author-card-avatar-wrap">
+                    <div class="author-card-avatar-placeholder" style="font-size: 2rem;">ف</div>
+                    <span class="author-verified-badge"><i class="bi bi-patch-check-fill"></i></span>
+                </div>
+                <h3 class="author-card-name"><a href="#">Faiz Ahmed Faiz</a></h3>
+                <p class="author-card-bio">Revolutionary poet known for his progressive and romantic poetry</p>
+                <div class="author-card-stats">
+                    <span><i class="bi bi-file-text"></i>200+</span>
+                    <span><i class="bi bi-heart"></i>6K</span>
+                    <span><i class="bi bi-people"></i>30K</span>
+                </div>
+                <div class="author-card-actions">
+                    <button class="btn btn-primary btn-sm">
+                        <i class="bi bi-user-plus"></i>
+                        <span>Follow</span>
+                    </button>
+                </div>
+            </article>
+            
+            <article class="author-card">
+                <div class="author-card-avatar-wrap">
+                    <div class="author-card-avatar-placeholder" style="font-size: 2rem;">ا</div>
+                    <span class="author-verified-badge"><i class="bi bi-patch-check-fill"></i></span>
+                </div>
+                <h3 class="author-card-name"><a href="#">Ahmed Faraz</a></h3>
+                <p class="author-card-bio">Modern poet celebrated for his love poetry and witty verses</p>
+                <div class="author-card-stats">
+                    <span><i class="bi bi-file-text"></i>180+</span>
+                    <span><i class="bi bi-heart"></i>5K</span>
+                    <span><i class="bi bi-people"></i>25K</span>
+                </div>
+                <div class="author-card-actions">
+                    <button class="btn btn-primary btn-sm">
+                        <i class="bi bi-user-plus"></i>
+                        <span>Follow</span>
+                    </button>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        <!-- Join as Author CTA -->
+        <div class="authors-cta">
+            <div class="authors-cta-content">
+                <div class="authors-cta-icon">
+                    <i class="bi bi-pen"></i>
+                </div>
+                <div class="authors-cta-text">
+                    <h3>Share Your Poetry with the World</h3>
+                    <p>Join our community of talented writers and showcase your Urdu literature</p>
+                </div>
+                <a href="{% url 'register' %}?type=author" class="btn btn-primary btn-lg">
+                    <i class="bi bi-rocket-takeoff"></i>
+                    <span>Become an Author</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* =====================================================
+   AUTHORS SECTION STYLES
+   ===================================================== */
+.authors-section {
+    padding: var(--space-8) 0;
+}
+
+/* Grid */
+.authors-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+}
+
+/* Author Card */
+.author-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-4);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+}
+
+.author-card:hover {
+    background: var(--glass);
+    border-color: var(--gold);
+    transform: translateY(-4px);
+}
+
+/* Avatar */
+.author-card-avatar-wrap {
+    position: relative;
+    margin-bottom: var(--space-2);
+}
+
+.author-card-image {
+    width: 96px;
+    height: 96px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    border: 3px solid var(--border);
+    transition: border-color var(--transition-fast);
+}
+
+.author-card:hover .author-card-image {
+    border-color: var(--gold);
+}
+
+.author-card-avatar-placeholder {
+    width: 96px;
+    height: 96px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.1) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-family: var(--font-urdu);
+    color: var(--gold);
+    border: 3px solid var(--border);
+}
+
+.author-verified-badge {
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gold);
+    color: var(--bg-main);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    border: 2px solid var(--bg-main);
+}
+
+/* Info */
+.author-card-name {
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+    margin-bottom: var(--space-1);
+}
+
+.author-card-name a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.author-card-name a:hover {
+    color: var(--gold);
+}
+
+.author-card-bio {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: var(--space-2);
+}
+
+/* Stats */
+.author-card-stats {
+    display: flex;
+    gap: var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-bottom: var(--space-3);
+}
+
+.author-card-stats span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.author-card-stats i {
+    color: var(--gold);
+    font-size: 0.75rem;
+}
+
+/* Actions */
+.author-card-actions {
+    margin-bottom: var(--space-2);
+}
+
+.author-follow-btn.following {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: var(--accent-emerald);
+    color: var(--accent-emerald);
+}
+
+/* Specialties */
+.author-card-specialties {
+    display: flex;
+    gap: var(--space-1);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Authors CTA */
+.authors-cta {
+    margin-top: var(--space-6);
+    padding: var(--space-4);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.02) 100%);
+    border: 1px solid var(--border-gold);
+    border-radius: var(--radius-lg);
+}
+
+.authors-cta-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.authors-cta-icon {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gold);
+    border-radius: var(--radius-lg);
+    font-size: 1.75rem;
+    color: var(--bg-main);
+    flex-shrink: 0;
+}
+
+.authors-cta-text {
+    flex: 1;
+}
+
+.authors-cta-text h3 {
+    font-size: var(--text-card-title);
+    margin-bottom: var(--space-1);
+}
+
+.authors-cta-text p {
+    font-size: var(--text-small);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .authors-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .authors-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .authors-cta-content {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .authors-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+

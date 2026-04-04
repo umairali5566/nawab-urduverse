@@ -1,0 +1,37 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}{{ collection.title }} - {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-header py-4">
+    <div class="main-container">
+        <h1 class="mb-1">{{ collection.title }}</h1>
+        <p class="text-muted mb-0">{{ collection.author.name }}</p>
+    </div>
+</section>
+
+<section class="py-3">
+    <div class="main-container">
+        <div class="card mb-3">
+            <div class="card-body">
+                <p class="mb-0">{{ collection.description|default:'No description available.' }}</p>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            {% for poem in poems %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{{ poem.get_absolute_url }}">{{ poem.title }}</a></h5>
+                        <p class="text-muted small mb-0">{{ poem.get_poetry_type_display }}</p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-4"><p class="text-muted mb-0">No poems in this collection.</p></div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

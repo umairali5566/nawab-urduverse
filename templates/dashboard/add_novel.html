@@ -1,0 +1,39 @@
+﻿{% extends 'dashboard/dashboard_base.html' %}
+{% block title %}Add Novel - Dashboard{% endblock %}
+
+{% block content %}
+<div class="section-spacing">
+    <h2 class="section-title mb-3">Add New Novel</h2>
+    <div class="card">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" class="row g-3">
+                {% csrf_token %}
+                <div class="col-md-6">
+                    <label class="form-label">Title *</label>
+                    <input type="text" name="title" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Author *</label>
+                    <input type="text" name="author" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Cover Image *</label>
+                    <input type="file" name="cover_image" class="form-control" accept="image/*" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">PDF File</label>
+                    <input type="file" name="pdf_file" class="form-control" accept=".pdf,application/pdf">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Description *</label>
+                    <textarea name="description" class="form-control" rows="8" required></textarea>
+                </div>
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Publish Novel</button>
+                    <a href="{% url 'dashboard_novel_list' %}" class="btn btn-outline-primary">Back to list</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

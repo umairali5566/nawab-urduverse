@@ -1,0 +1,312 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ SITE_NAME }} - Premium Urdu Literature Platform{% endblock %}
+{% block meta_description %}Discover the beauty of Urdu poetry, novels, stories, and quotes. A modern platform celebrating the rich heritage of Urdu literature with thousands of poems, stories, and quotes from legendary and emerging writers.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/design-system.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- =====================================================
+     HOME PAGE - Premium Urdu Literature Platform
+     ===================================================== -->
+
+<!-- 1. HERO SECTION -->
+{% include "components/hero.html" %}
+
+<!-- 2. CATEGORIES SECTION -->
+{% include "components/categories.html" %}
+
+<!-- 3. LATEST POETRY SECTION -->
+{% include "components/poetry_list.html" %}
+
+<!-- 4. FEATURED CONTENT SECTION -->
+{% include "components/featured.html" %}
+
+<!-- 5. AUTHORS SECTION -->
+{% include "components/authors.html" %}
+
+<!-- 6. BLOGS + VIDEOS SECTION -->
+{% include "components/blogs.html" %}
+
+<!-- 7. CTA SECTION -->
+{% include "components/cta.html" %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// =====================================================
+// HOME PAGE SCRIPTS - Premium Urdu Literature Platform
+// =====================================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    // =====================================================
+    // SCROLL ANIMATIONS (Intersection Observer)
+    // =====================================================
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const animateOnScroll = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-visible');
+                animateOnScroll.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Observe all sections for scroll animations
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.add('scroll-animate');
+        animateOnScroll.observe(section);
+    });
+
+    // =====================================================
+    // LAZY LOADING IMAGES
+    // =====================================================
+    if ('loading' in HTMLImageElement.prototype) {
+        // Native lazy loading supported
+        const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+        lazyImages.forEach(img => {
+            if (img.dataset.src) {
+                img.src = img.dataset.src;
+            }
+        });
+    } else {
+        // Fallback for older browsers
+        const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+        const lazyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                    }
+                    lazyObserver.unobserve(img);
+                }
+            });
+        });
+        lazyImages.forEach(img => lazyObserver.observe(img));
+    }
+
+    // =====================================================
+    // SMOOTH SCROLL FOR ANCHOR LINKS
+    // =====================================================
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href !== '#' && href.length > 1) {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    const navHeight = document.querySelector('.navbar')?.offsetHeight || 72;
+                    const targetPosition = target.offsetTop - navHeight;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
+
+    // =====================================================
+    // PARALLAX EFFECT FOR HERO (Desktop only)
+    // =====================================================
+    if (window.innerWidth > 1024) {
+        const heroSection = document.getElementById('heroSection');
+        if (heroSection) {
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                if (scrolled < window.innerHeight * 0.8) {
+                    const parallaxElements = heroSection.querySelectorAll('.hero-gradient');
+                    parallaxElements.forEach(el => {
+                        el.style.transform = `translateY(${scrolled * 0.15}px)`;
+                    });
+                }
+            }, { passive: true });
+        }
+    }
+
+    // =====================================================
+    // BACK TO TOP BUTTON
+    // =====================================================
+    const backToTopBtn = document.getElementById('backToTop');
+    if (backToTopBtn) {
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 400) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        }, { passive: true });
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // =====================================================
+    // SEARCH FORM ENHANCEMENT
+    // =====================================================
+    const searchForms = document.querySelectorAll('.hero-search, .search-container');
+    searchForms.forEach(form => {
+        const input = form.querySelector('input[type="text"], input[name="q"]');
+        if (input) {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    form.submit();
+                }
+            });
+        }
+    });
+
+    // =====================================================
+    // CATEGORY CARDS HOVER EFFECT
+    // =====================================================
+    const categoryCards = document.querySelectorAll('.category-card');
+    categoryCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.querySelector('.category-icon')?.classList.add('hovered');
+        });
+        card.addEventListener('mouseleave', function() {
+            this.querySelector('.category-icon')?.classList.remove('hovered');
+        });
+    });
+
+    // =====================================================
+    // POETRY ITEM INTERACTION
+    // =====================================================
+    const poetryItems = document.querySelectorAll('.poetry-item');
+    poetryItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Don't trigger if clicking on interactive elements
+            if (e.target.closest('a, button, .tag')) return;
+            const link = this.querySelector('.poetry-item-title a');
+            if (link) {
+                window.location.href = link.href;
+            }
+        });
+    });
+
+    // =====================================================
+    // VIDEO PLAY BUTTON
+    // =====================================================
+    const videoCards = document.querySelectorAll('.video-card');
+    videoCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            if (!e.target.closest('.video-play-icon')) {
+                const link = this.querySelector('.video-card-link');
+                if (link) {
+                    window.location.href = link.href;
+                }
+            }
+        });
+    });
+
+
+    // =====================================================
+    // NEWSLETTER SUBSCRIPTION
+    // =====================================================
+    const newsletterForm = document.querySelector('.footer-newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.querySelector('input').value = '';
+                    showNotification('Successfully subscribed!', 'success');
+                } else {
+                    showNotification(data.error || 'Subscription failed', 'error');
+                }
+            })
+            .catch(error => {
+                showNotification('Something went wrong', 'error');
+            });
+        });
+    }
+});
+
+// =====================================================
+// HELPER FUNCTIONS
+// =====================================================
+
+// Get CSRF token from cookies
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Show notification toast
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <i class="bi bi-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => notification.classList.add('show'), 10);
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Performance: Debounce function
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Throttle function for scroll events
+function throttle(func, limit) {
+    let inThrottle;
+    return function(...args) {
+        if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
+}
+</script>
+{% endblock %}
