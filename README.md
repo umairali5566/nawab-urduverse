@@ -1,8 +1,8 @@
-# Nawab UrduVerse
+# Nawab Urdu Academy
 
 **A Complete Urdu Literature Platform by Nawab**
 
-Nawab UrduVerse is a modern, scalable, and feature-rich web application for Urdu literature enthusiasts. It provides a comprehensive platform for reading Urdu novels, stories, poetry, quotes, blogs, and watching related videos.
+Nawab Urdu Academy is a modern, scalable, and feature-rich web application for Urdu literature enthusiasts. It provides a comprehensive platform for reading Urdu novels, stories, poetry, quotes, blogs, and watching related videos.
 
 ## Features
 

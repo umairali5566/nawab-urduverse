@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const helpers = window.NawabUrduVerse || {};
+    const helpers = window.NawabUrduAcademy || {};
     const showToast = helpers.showToast || ((message) => window.alert(message));
 
     const searchBtn = document.getElementById("searchBtn");

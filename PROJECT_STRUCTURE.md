@@ -1,4 +1,4 @@
-# Nawab UrduVerse - Project Structure
+# Nawab Urdu Academy - Project Structure
 
 This document provides a comprehensive overview of the project structure and architecture.
 

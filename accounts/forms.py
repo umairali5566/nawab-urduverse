@@ -9,7 +9,7 @@ from .models import User
 
 class UserRegistrationForm(UserCreationForm):
     """User registration form"""
-    
+
     email = forms.EmailField(
         required=True,
         widget=forms.EmailInput(attrs={
@@ -18,12 +18,15 @@ class UserRegistrationForm(UserCreationForm):
         })
     )
     username = forms.CharField(
+        min_length=3,
+        max_length=30,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'صارف نام منتخب کریں'
         })
     )
     password1 = forms.CharField(
+        min_length=8,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'placeholder': 'پاس ورڈ درج کریں'
@@ -35,16 +38,46 @@ class UserRegistrationForm(UserCreationForm):
             'placeholder': 'پاس ورڈ کی تصدیق کریں'
         })
     )
-    
+
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("یہ صارف نام پہلے سے موجود ہے۔")
+        # Check for spaces and special characters
+        if ' ' in username:
+            raise forms.ValidationError("صارف نام میں خالی جگہ نہیں ہو سکتی۔")
+        if not username.replace('_', '').replace('-', '').isalnum():
+            raise forms.ValidationError("صارف نام میں صرف حروف، اعداد، انڈر سکور اور ڈیش استعمال کریں۔")
+        return username
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("یہ ای میل پہلے سے رجسٹرڈ ہے۔")
         return email
+
+    def clean_password1(self):
+        password = self.cleaned_data.get('password1')
+        if len(password) < 8:
+            raise forms.ValidationError("پاس ورڈ کم از کم 8 حروف کا ہونا چاہیے۔")
+        if password.isdigit():
+            raise forms.ValidationError("پاس ورڈ صرف اعداد نہیں ہو سکتا۔")
+        if password.isalpha():
+            raise forms.ValidationError("پاس ورڈ صرف حروف نہیں ہو سکتا۔")
+        return password
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("پاس ورڈ اور تصدیقی پاس ورڈ مماثل نہیں ہیں۔")
+        return cleaned_data
 
 
 class UserLoginForm(AuthenticationForm):

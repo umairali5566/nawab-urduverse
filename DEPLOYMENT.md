@@ -1,6 +1,6 @@
-# Nawab UrduVerse - Deployment Guide
+# Nawab Urdu Academy - Deployment Guide
 
-This guide covers the deployment of Nawab UrduVerse to a production server.
+This guide covers the deployment of Nawab Urdu Academy to a production server.
 
 ## Prerequisites
 
@@ -131,7 +131,7 @@ sudo nano /etc/systemd/system/nawab_urduverse.service
 Add:
 ```ini
 [Unit]
-Description=Nawab UrduVerse Gunicorn Daemon
+Description=Nawab Urdu Academy Gunicorn Daemon
 After=network.target
 
 [Service]

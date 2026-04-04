@@ -1,5 +1,5 @@
 """
-Nawab UrduVerse - URL Configuration
+Nawab Urdu Academy - URL Configuration
 """
 
 from django.contrib import admin

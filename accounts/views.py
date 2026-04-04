@@ -160,9 +160,33 @@ def user_login(request):
             password = form.cleaned_data.get("password")
             user = authenticate(username=username, password=password)
             if user is not None:
-                login(request, user)
-                next_url = request.GET.get("next")
-                return redirect(next_url or "dashboard")
+                if user.is_active:
+                    login(request, user)
+                    # Handle remember me
+                    if request.POST.get('remember') == 'on':
+                        # Set session to expire in 30 days
+                        request.session.set_expiry(60 * 60 * 24 * 30)
+                    else:
+                        # Set session to expire on browser close
+                        request.session.set_expiry(0)
+
+                    next_url = request.GET.get("next")
+                    if user.is_staff or user.is_superuser:
+                        return redirect(next_url or "admin:index")
+                    else:
+                        return redirect(next_url or "dashboard")
+                else:
+                    messages.error(request, "Your account is inactive. Please contact support.")
+            else:
+                # Check if user exists but password is wrong vs user doesn't exist
+                from django.contrib.auth.models import User
+                if User.objects.filter(username=username).exists() or User.objects.filter(email=username).exists():
+                    messages.error(request, "Invalid password. Please try again.")
+                else:
+                    messages.error(request, "Account does not exist with this username or email.")
+        else:
+            # Form validation errors are handled by the template
+            pass
     else:
         form = UserLoginForm()
 

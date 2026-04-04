@@ -56,15 +56,15 @@ document.getElementById('contactForm').addEventListener('submit', async function
             }
         });
         const data = await response.json();
-        if (window.NawabUrduVerse && data.message) {
-            NawabUrduVerse.showToast(data.message, data.success ? 'success' : 'danger');
+        if (window.NawabUrduAcademy && data.message) {
+            NawabUrduAcademy.showToast(data.message, data.success ? 'success' : 'danger');
         }
         if (data.success) {
             form.reset();
         }
     } catch (error) {
-        if (window.NawabUrduVerse) {
-            NawabUrduVerse.showToast('Unable to send message right now.', 'danger');
+        if (window.NawabUrduAcademy) {
+            NawabUrduAcademy.showToast('Unable to send message right now.', 'danger');
         }
     }
 });

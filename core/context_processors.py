@@ -22,7 +22,7 @@ def site_context(request):
         active_membership = UserMembership.objects.select_related("plan").filter(user=request.user).first()
 
     context = {
-        "SITE_NAME": getattr(settings, "SITE_NAME", "Nawab UrduVerse"),
+        "SITE_NAME": getattr(settings, "SITE_NAME", "Nawab Urdu Academy"),
         "SITE_TAGLINE": getattr(settings, "SITE_TAGLINE", ""),
         "SITE_DESCRIPTION": getattr(settings, "SITE_DESCRIPTION", ""),
         "SITE_KEYWORDS": getattr(settings, "SITE_KEYWORDS", ""),

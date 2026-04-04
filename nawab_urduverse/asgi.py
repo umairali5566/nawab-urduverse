@@ -1,5 +1,5 @@
 """
-ASGI config for Nawab UrduVerse project.
+ASGI config for Nawab Urdu Academy project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

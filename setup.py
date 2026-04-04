@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Nawab UrduVerse - Setup Script
+Nawab Urdu Academy - Setup Script
 Automated setup for development environment
 """
 
@@ -48,7 +48,7 @@ def create_env_file():
         print(".env file already exists.")
         return True
     
-    env_content = """# Nawab UrduVerse - Environment Configuration
+    env_content = """# Nawab Urdu Academy - Environment Configuration
 DEBUG=True
 SECRET_KEY=change-this-in-production-to-a-secure-random-string
 ALLOWED_HOSTS=localhost,127.0.0.1
@@ -148,7 +148,7 @@ def run_server():
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Nawab UrduVerse Setup")
+    parser = argparse.ArgumentParser(description="Nawab Urdu Academy Setup")
     parser.add_argument("--skip-superuser", action="store_true", help="Skip creating superuser")
     parser.add_argument("--skip-server", action="store_true", help="Skip running server")
     args = parser.parse_args()
@@ -156,7 +156,7 @@ def main():
     print("""
     ╔══════════════════════════════════════════════════════════════╗
     ║                                                              ║
-    ║              Nawab UrduVerse - Setup Script                  ║
+    ║              Nawab Urdu Academy - Setup Script               ║
     ║                                                              ║
     ║         A Complete Urdu Literature Platform                  ║
     ║                                                              ║

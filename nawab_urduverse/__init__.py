@@ -1,2 +1,2 @@
-# Nawab UrduVerse - Urdu Literature Platform
+# Nawab Urdu Academy - Urdu Literature Platform
 # Developed for Nawab

@@ -1,5 +1,5 @@
 # Mobile App UI Design Guide
-## Nawab UrduVerse - Premium Urdu Literature Platform
+## Nawab Urdu Academy - Premium Urdu Literature Platform
 
 ---
 
@@ -118,7 +118,7 @@ The mobile app follows the same premium design system as the web platform:
 ### Mobile Drawer (Secondary Nav)
 ```
 ┌────────────────────────────┐
-│  ≡  Nawab UrduVerse    ✕  │
+│  ≡  Nawab Urdu Academy    ✕  │
 ├────────────────────────────┤
 │  🔍 Search                 │
 ├────────────────────────────┤
@@ -143,7 +143,7 @@ The mobile app follows the same premium design system as the web platform:
 
 ```
 ┌─────────────────────────────┐
-│  Nawab UrduVerse      🔔   │  <- Header
+│  Nawab Urdu Academy      🔔   │  <- Header
 ├─────────────────────────────┤
 │                             │
 │  ┌───────────────────────┐  │
@@ -523,7 +523,7 @@ For long lists (>50 items):
 ### Manifest
 ```json
 {
-    "name": "Nawab UrduVerse",
+    "name": "Nawab Urdu Academy",
     "short_name": "UrduVerse",
     "theme_color": "#0b1220",
     "background_color": "#0b1220",
@@ -580,5 +580,5 @@ For long lists (>50 items):
 
 ---
 
-*This document is part of the Nawab UrduVerse design system.*
+*This document is part of the Nawab Urdu Academy design system.*
 *Last updated: March 2026*

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Nawab UrduVerse - Django Management Script
+Nawab Urdu Academy - Django Management Script
 A complete Urdu literature platform by Nawab
 """
 

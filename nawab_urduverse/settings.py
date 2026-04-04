@@ -1,5 +1,5 @@
 """
-Nawab UrduVerse - Django Settings
+Nawab Urdu Academy - Django Settings
 A complete Urdu literature platform by Nawab
 """
 
@@ -260,24 +260,28 @@ LOGOUT_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'accounts.User'
 
 # Site Settings
-SITE_NAME = 'Nawab UrduVerse'
+SITE_NAME = 'Nawab Urdu Academy'
 SITE_TAGLINE = 'اردو ادب کی جدید دنیا'
-SITE_DESCRIPTION = 'Nawab UrduVerse is a modern Urdu literature platform for poetry, blogs, quotes, novels, and literary videos.'
-SITE_KEYWORDS = 'Urdu poetry, Urdu novels, Urdu blogs, Urdu quotes, Urdu literature, literary videos, Nawab UrduVerse, اردو شاعری, اردو ناول, اردو ادب'
+SITE_DESCRIPTION = 'Nawab Urdu Academy is a modern Urdu literature platform for poetry, blogs, quotes, novels, and literary videos.'
+SITE_KEYWORDS = 'Urdu poetry, Urdu novels, Urdu blogs, Urdu quotes, Urdu literature, literary videos, Nawab Urdu Academy, اردو شاعری, اردو ناول, اردو ادب'
 
 # Poetry TTS configuration
 POETRY_TTS_ENGINE = os.environ.get('POETRY_TTS_ENGINE', 'edge')  # edge | gtts
 POETRY_TTS_EDGE_VOICE = os.environ.get('POETRY_TTS_EDGE_VOICE', 'ur-PK-AsadNeural')
 POETRY_TTS_GTTS_TLD = os.environ.get('POETRY_TTS_GTTS_TLD', 'com')
 
-# Email Settings (configure for production)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'your-email@gmail.com'
-# EMAIL_HOST_PASSWORD = 'your-password'
+# Email Settings
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True').lower() == 'true'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER or os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@nawaburduverse.com')
+
+# Fallback to console backend for development
+if DEBUG and not EMAIL_HOST_USER:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Pagination
 PAGINATION_PAGE_SIZE = 12

@@ -1,5 +1,5 @@
 /**
- * Premium UI JavaScript for Nawab UrduVerse
+ * Premium UI JavaScript for Nawab Urdu Academy
  * Handles copy/share control, content protection, and interaction controls
  */
 
@@ -180,7 +180,7 @@
             }
 
             const shareData = {
-                title: button.dataset.shareTitle || 'Nawab UrduVerse',
+                title: button.dataset.shareTitle || 'Nawab Urdu Academy',
                 url: button.dataset.shareUrl || window.location.href
             };
 

@@ -1,6 +1,6 @@
-# Nawab UrduVerse - Quick Start Guide
+# Nawab Urdu Academy - Quick Start Guide
 
-Get started with Nawab UrduVerse in minutes!
+Get started with Nawab Urdu Academy in minutes!
 
 ## Prerequisites
 

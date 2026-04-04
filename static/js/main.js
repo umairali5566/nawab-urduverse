@@ -1,5 +1,5 @@
 /**
- * Shared frontend interactions for Nawab UrduVerse.
+ * Shared frontend interactions for Nawab Urdu Academy.
  */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -84,7 +84,7 @@ function getRegisterUrl() {
 }
 
 function getSiteName() {
-    return document.body?.dataset.siteName || "Nawab UrduVerse";
+    return document.body?.dataset.siteName || "Nawab Urdu Academy";
 }
 
 function getCurrentUsername() {
@@ -1035,7 +1035,7 @@ function initPwaSupport() {
     });
 }
 
-window.NawabUrduVerse = {
+window.NawabUrduAcademy = {
     showToast,
     getCsrfToken,
 };

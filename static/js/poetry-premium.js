@@ -1,6 +1,6 @@
 /**
  * Premium Poetry Page JavaScript
- * Nawab UrduVerse - Interactions, Login Protection, and TTS
+ * Nawab Urdu Academy - Interactions, Login Protection, and TTS
  */
 
 (function() {
@@ -20,7 +20,7 @@
         loginUrl: document.body.dataset.loginUrl || '/accounts/login/',
         registerUrl: document.body.dataset.registerUrl || '/accounts/register/',
         username: document.body.dataset.username || '',
-        siteName: document.body.dataset.siteName || 'Nawab UrduVerse',
+        siteName: document.body.dataset.siteName || 'Nawab Urdu Academy',
         isProtected: false,
         ttsPlaying: false,
     };

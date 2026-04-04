@@ -1,5 +1,5 @@
 """
-WSGI config for Nawab UrduVerse project.
+WSGI config for Nawab Urdu Academy project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

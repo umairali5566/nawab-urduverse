@@ -1,59 +1,150 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Register - {{ SITE_NAME }}{% endblock %}
+
+{% block title %}رجسٹر - {{ SITE_NAME }}{% endblock %}
 {% block meta_description %}Create a new account to access {{ SITE_NAME }} features.{% endblock %}
+
 {% block content %}
-<section class="page-header py-4 bg-light">
-    <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'login' %}">Login</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Register</li>
-            </ol>
-        </nav>
-        <h1 class="display-6 mt-2 mb-0">Register</h1>
-        <p class="lead text-muted">Create your account to access all features.</p>
-    </div>
-</section>
-<section class="py-4">
+<!-- Premium Register Section -->
+<section class="min-vh-100 d-flex align-items-center" style="background: var(--premium-bg-gradient);">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8 col-12">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title mb-4">Sign Up</h5>
+                <!-- Glassmorphism Card -->
+                <div class="card border-0 shadow-lg" style="background: var(--premium-card-glass); backdrop-filter: blur(16px); border: var(--premium-border-gold);">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="text-center mb-4">
+                            <div class="mb-3">
+                                <i class="bi bi-person-plus display-4" style="color: var(--premium-gold);"></i>
+                            </div>
+                            <h2 class="mb-2" style="color: var(--premium-text);">اکاؤنٹ بنائیں</h2>
+                            <p class="text-muted">اپنا نیا اکاؤنٹ رجسٹر کریں</p>
+                        </div>
+
+                        <!-- Messages -->
+                        {% if messages %}
+                        <div class="mb-3">
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
                         <form method="post" novalidate>
                             {% csrf_token %}
+
                             {% if form.errors %}
-                                <div class="alert alert-danger text-end" dir="rtl">
-                                    {% for field in form %}
-                                        {% for error in field.errors %}
-                                            <div class="mb-1">{{ error }}</div>
-                                        {% endfor %}
+                            <div class="alert alert-danger mb-3" style="background: rgba(220, 53, 69, 0.1); border: 1px solid rgba(220, 53, 69, 0.3); color: #ff6b7d;">
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <div class="mb-1">
+                                            <i class="bi bi-exclamation-triangle me-1"></i>
+                                            <strong>{{ field.label }}:</strong> {{ error }}
+                                        </div>
                                     {% endfor %}
-                                    {% for error in form.non_field_errors %}
-                                        <div class="mb-1">{{ error }}</div>
-                                    {% endfor %}
-                                </div>
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                    <div class="mb-1">
+                                        <i class="bi bi-exclamation-triangle me-1"></i>{{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
                             {% endif %}
+
                             {% for field in form %}
-                                <div class="mb-3 text-end" dir="rtl">
-                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label fw-bold" style="color: var(--premium-text-secondary);">
+                                    {{ field.label }}
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text border-0" style="background: var(--premium-card-glass-strong); color: var(--premium-gold);">
+                                        {% if field.name == 'username' %}
+                                            <i class="bi bi-person"></i>
+                                        {% elif field.name == 'email' %}
+                                            <i class="bi bi-envelope"></i>
+                                        {% elif field.name == 'password1' %}
+                                            <i class="bi bi-lock"></i>
+                                        {% elif field.name == 'password2' %}
+                                            <i class="bi bi-lock-fill"></i>
+                                        {% endif %}
+                                    </span>
                                     {{ field }}
-                                    {% if field.help_text %}
-                                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    {% if field.name == 'password1' or field.name == 'password2' %}
+                                    <button class="btn border-0 toggle-password" type="button" data-target="{{ field.id_for_label }}" style="background: var(--premium-card-glass-strong); color: var(--premium-text-secondary);">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
                                     {% endif %}
                                 </div>
+                                {% if field.help_text %}
+                                <small class="form-text" style="color: var(--premium-text-muted);">{{ field.help_text }}</small>
+                                {% endif %}
+                            </div>
                             {% endfor %}
-                            <button type="submit" class="btn btn-primary w-100">Register</button>
+
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-lg fw-bold" style="background: var(--premium-gradient); border: none; color: var(--premium-dark); box-shadow: var(--premium-shadow-gold);">
+                                    <i class="bi bi-person-plus me-2"></i> اکاؤنٹ بنائیں
+                                </button>
+                            </div>
                         </form>
-                        <hr>
-                        <p class="text-center mb-0">Already have an account? <a href="{% url 'login' %}">Login here</a>.</p>
+
+                        <hr style="border-color: var(--premium-border-gold); opacity: 0.3;">
+
+                        <p class="text-center mb-0">
+                            پہلے سے اکاؤنٹ ہے؟
+                            <a href="{% url 'login' %}" class="text-decoration-none fw-bold" style="color: var(--premium-primary);">
+                                لاگ ان کریں
+                            </a>
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<style>
+/* Custom input styling for glassmorphism */
+#id_username, #id_email, #id_password1, #id_password2 {
+    background: var(--premium-card-glass-strong) !important;
+    border: var(--premium-border-gold) !important;
+    color: var(--premium-text) !important;
+}
+
+#id_username:focus, #id_email:focus, #id_password1:focus, #id_password2:focus {
+    background: var(--premium-card-glass) !important;
+    border-color: var(--premium-gold) !important;
+    box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25) !important;
+    color: var(--premium-text) !important;
+}
+
+#id_username::placeholder, #id_email::placeholder, #id_password1::placeholder, #id_password2::placeholder {
+    color: var(--premium-text-muted) !important;
+}
+</style>
+
+{% block extra_js %}
+<script>
+document.querySelectorAll('.toggle-password').forEach(button => {
+    button.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        const passwordInput = document.getElementById(targetId);
+        const icon = this.querySelector('i');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
+    });
+});
+</script>
+{% endblock %}
 {% endblock %}
