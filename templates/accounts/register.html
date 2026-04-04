@@ -6,10 +6,10 @@
 
 {% block content %}
 <!-- Premium Register Section -->
-<section class="min-vh-100 d-flex align-items-center" style="background: var(--premium-bg-gradient);">
+<section class="min-vh-100 d-flex align-items-center justify-content-center" style="background: var(--premium-bg-gradient); padding: 20px;">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-6 col-md-8 col-12">
+            <div class="col-12 col-md-8 col-lg-6">
                 <!-- Glassmorphism Card -->
                 <div class="card border-0 shadow-lg" style="background: var(--premium-card-glass); backdrop-filter: blur(16px); border: var(--premium-border-gold);">
                     <div class="card-body p-4 p-md-5">
@@ -123,6 +123,47 @@
 
 #id_username::placeholder, #id_email::placeholder, #id_password1::placeholder, #id_password2::placeholder {
     color: var(--premium-text-muted) !important;
+}
+
+/* Mobile Responsive Fixes */
+@media (max-width: 768px) {
+    .min-vh-100 {
+        min-height: auto;
+        padding: 30px 15px;
+    }
+    
+    .card-body {
+        padding: 20px !important;
+    }
+    
+    .display-4 {
+        font-size: 3rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    .btn-lg {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .input-group {
+        flex-direction: column;
+    }
+    
+    .input-group-text {
+        display: none;
+    }
+    
+    .form-check {
+        text-align: center;
+    }
+    
+    .mb-3 {
+        margin-bottom: 15px !important;
+    }
 }
 </style>
 

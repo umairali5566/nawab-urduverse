@@ -111,12 +111,12 @@
                     </div>
                 </div>
             {% else %}
-                <!-- Auth Buttons -->
-                <a href="{% url 'login' %}" class="btn btn-ghost">Login</a>
-                <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+                <!-- Auth Buttons - Hidden on mobile, shown in drawer -->
+                <a href="{% url 'login' %}" class="btn btn-ghost hide-mobile">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-primary hide-mobile">Register</a>
             {% endif %}
 
-            <!-- Mobile Menu Toggle -->
+            <!-- Mobile Menu Toggle - Always visible on mobile -->
             <button class="navbar-mobile-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
                 <i class="bi bi-list"></i>
             </button>
@@ -244,11 +244,11 @@
                 <span>Dashboard</span>
             </a>
         {% else %}
-            <a href="{% url 'login' %}" class="btn btn-secondary btn-lg" style="width: 100%; margin-bottom: 8px;">
+            <a href="{% url 'login' %}" class="btn btn-secondary btn-lg show-mobile" style="width: 100%; margin-bottom: 8px;">
                 <i class="bi bi-box-arrow-in-right"></i>
                 <span>Login</span>
             </a>
-            <a href="{% url 'register' %}" class="btn btn-primary btn-lg" style="width: 100%;">
+            <a href="{% url 'register' %}" class="btn btn-primary btn-lg show-mobile" style="width: 100%;">
                 <i class="bi bi-person-plus"></i>
                 <span>Register</span>
             </a>

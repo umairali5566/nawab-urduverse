@@ -196,7 +196,7 @@ a:hover {
 }
 
 @media (max-width: 768px) {
-    .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
@@ -533,6 +533,12 @@ a:hover {
     
     .navbar-mobile-toggle {
         display: flex;
+    }
+    
+    .navbar-actions .btn-ghost,
+    .navbar-actions .btn-secondary,
+    .navbar-actions .btn-primary {
+        display: none;
     }
 }
 
@@ -2237,6 +2243,402 @@ img {
 .card:hover img,
 .hero-featured-card:hover img {
     transform: scale(1.05);
+}
+
+/* =====================================================
+   MOBILE RESPONSIVE FIXES
+   ===================================================== */
+
+/* 1. Navbar Mobile Fix */
+@media (max-width: 768px) {
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+    }
+    
+    .navbar-brand-text {
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .navbar-brand img {
+        height: 30px;
+    }
+    
+    .navbar-actions {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .navbar-actions .btn {
+        padding: 6px 10px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+    
+    .navbar-actions .btn-ghost {
+        display: none;
+    }
+    
+    /* Show mobile auth buttons in drawer only */
+    .hide-mobile {
+        display: none !important;
+    }
+    
+    .show-mobile {
+        display: block !important;
+    }
+}
+
+/* 2. Hero Section Fix */
+@media (max-width: 768px) {
+    .hero {
+        text-align: center;
+        padding: 20px 15px;
+    }
+    
+    .hero h1, .hero-title {
+        font-size: 22px;
+        line-height: 1.4;
+    }
+    
+    .hero p, .hero-description {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    
+    .hero-tagline {
+        font-size: 16px;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .hero-search {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .hero-search-input {
+        width: 100%;
+    }
+}
+
+/* 3. Card Responsive Fix */
+@media (max-width: 768px) {
+    .card {
+        width: 100%;
+        margin-bottom: 15px;
+        padding: 15px;
+    }
+    
+    .card h2, .card-title {
+        font-size: 18px;
+    }
+    
+    .card p, .card-text {
+        font-size: 13px;
+    }
+    
+    .card-featured-text {
+        font-size: 18px;
+    }
+}
+
+/* 4. Grid System Fix */
+@media (max-width: 768px) {
+    .grid, 
+    .grid-2, 
+    .grid-3, 
+    .grid-4 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .featured-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .featured-main,
+    .featured-side {
+        grid-column: span 1;
+    }
+    
+    .content-split {
+        grid-template-columns: 1fr;
+    }
+    
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .authors-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 5. Bottom Navbar Fix */
+@media (max-width: 768px) {
+    .mobile-nav {
+        height: 60px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    
+    .mobile-nav-list {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+    }
+    
+    .mobile-nav-item {
+        padding: 5px;
+    }
+    
+    .mobile-nav-item i {
+        font-size: 18px;
+    }
+    
+    .mobile-nav-item span {
+        font-size: 10px;
+    }
+    
+    .site-main {
+        padding-bottom: 70px;
+    }
+}
+
+/* 6. Footer Mobile Fix */
+@media (max-width: 768px) {
+    .footer {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+        padding: 20px;
+    }
+    
+    .footer-column {
+        width: 100%;
+    }
+    
+    .footer-brand {
+        text-align: center;
+    }
+    
+    .footer-brand-description {
+        max-width: 100%;
+    }
+    
+    .footer-social {
+        justify-content: center;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* 7. Button Fix */
+@media (max-width: 768px) {
+    button, 
+    .btn {
+        width: 100%;
+        max-width: 250px;
+    }
+    
+    .btn-lg {
+        padding: 12px 20px;
+    }
+}
+
+/* 8. Image Fix */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.card-image {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    object-fit: cover;
+}
+
+/* 9. Overflow Fix (IMPORTANT) */
+body {
+    overflow-x: hidden;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* 10. Container Mobile Fix */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        max-width: 100%;
+        padding: 0 15px;
+    }
+    
+    .container-sm {
+        width: 90%;
+        padding: 0 15px;
+    }
+}
+
+/* 11. Form Mobile Fix */
+@media (max-width: 768px) {
+    .input, 
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    textarea,
+    select {
+        width: 100%;
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+    
+    form {
+        width: 100%;
+    }
+    
+    .form-group {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+}
+
+/* 12. Section Mobile Fix */
+@media (max-width: 768px) {
+    section, 
+    .section {
+        padding: 40px 15px;
+    }
+    
+    .section-title {
+        font-size: 20px;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+}
+
+/* 13. Auth Pages Mobile Fix */
+@media (max-width: 768px) {
+    .auth-page .card {
+        width: 100%;
+        margin: 10px;
+        padding: 20px;
+    }
+    
+    .auth-page .btn {
+        width: 100%;
+    }
+    
+    .min-vh-100 {
+        min-height: auto;
+        padding: 40px 15px;
+    }
+}
+
+/* 14. Text Overflow Fix */
+h1, h2, h3, h4, h5, h6, p, a, span {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+/* 15. Search Bar Mobile */
+@media (max-width: 768px) {
+    .search-container {
+        width: 100%;
+    }
+    
+    .search-input {
+        width: 100%;
+        padding: 12px;
+    }
+}
+
+/* 16. Dashboard Mobile Fix */
+@media (max-width: 768px) {
+    .dashboard-summary-card,
+    .profile-stat-card {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 17. Video/Blog Card Mobile Fix */
+@media (max-width: 768px) {
+    .video-card,
+    .blog-card,
+    .poetry-item {
+        flex-direction: column;
+    }
+    
+    .video-thumbnail,
+    .blog-card-image,
+    .poetry-item-image {
+        width: 100%;
+        height: 150px;
+    }
+}
+
+/* 18. Modal Mobile Fix */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        margin: 10px;
+        padding: 15px;
+    }
+}
+
+/* 19. Tab Navigation Mobile */
+@media (max-width: 768px) {
+    .tabs, 
+    .tab-nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .tab-link {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* 20. Final Mobile Utilities */
+@media (max-width: 768px) {
+    .hide-mobile { display: none !important; }
+    .show-mobile { display: block !important; }
+    
+    .text-center-mobile { text-align: center; }
+    .mb-3-mobile { margin-bottom: 15px; }
+    .mt-3-mobile { margin-top: 15px; }
 }
 
 /* Temporary debug check helper: add `debug-no-fade` on body if needed */
