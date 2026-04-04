@@ -1,5 +1,5 @@
 """
-Blog Views for Nawab UrduVerse
+Blog Views for Nawab Urdu Academy
 """
 
 from django.shortcuts import render, get_object_or_404

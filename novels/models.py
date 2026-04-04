@@ -1,5 +1,5 @@
 """
-Novels Models for Nawab UrduVerse
+Novels Models for Nawab Urdu Academy
 """
 
 from django.db import models

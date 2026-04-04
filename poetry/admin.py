@@ -1,5 +1,5 @@
 ﻿"""
-Poetry Admin Configuration for Nawab UrduVerse
+Poetry Admin Configuration for Nawab Urdu Academy
 """
 
 from django.contrib import admin

@@ -1,5 +1,5 @@
 ﻿"""
-Poetry Models for Nawab UrduVerse
+Poetry Models for Nawab Urdu Academy
 """
 
 import re

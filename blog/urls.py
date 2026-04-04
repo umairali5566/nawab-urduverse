@@ -1,5 +1,5 @@
 """
-Blog URL Configuration for Nawab UrduVerse
+Blog URL Configuration for Nawab Urdu Academy
 """
 
 from django.urls import path

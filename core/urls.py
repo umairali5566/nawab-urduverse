@@ -1,5 +1,5 @@
 """
-Core URL Configuration for Nawab UrduVerse
+Core URL Configuration for Nawab Urdu Academy
 """
 
 from django.urls import path

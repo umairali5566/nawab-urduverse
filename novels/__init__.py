@@ -1,1 +1,1 @@
-# Novels app for Nawab UrduVerse
+# Novels app for Nawab Urdu Academy

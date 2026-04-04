@@ -1,5 +1,5 @@
 """
-Videos Models for Nawab UrduVerse
+Videos Models for Nawab Urdu Academy
 """
 
 from urllib.parse import parse_qs, urlparse

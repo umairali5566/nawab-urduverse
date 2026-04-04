@@ -1,5 +1,5 @@
 """
-Blog App Configuration for Nawab UrduVerse
+Blog App Configuration for Nawab Urdu Academy
 """
 
 from django.apps import AppConfig

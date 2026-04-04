@@ -1,1 +1,1 @@
-# Poetry app for Nawab UrduVerse
+# Poetry app for Nawab Urdu Academy

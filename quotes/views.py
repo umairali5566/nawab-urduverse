@@ -1,5 +1,5 @@
 """
-Quotes Views for Nawab UrduVerse
+Quotes Views for Nawab Urdu Academy
 """
 
 from django.shortcuts import render, get_object_or_404

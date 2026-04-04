@@ -1,5 +1,5 @@
 """
-Videos Admin Configuration for Nawab UrduVerse
+Videos Admin Configuration for Nawab Urdu Academy
 """
 
 from django.contrib import admin

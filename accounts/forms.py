@@ -1,5 +1,5 @@
 """
-Accounts Forms for Nawab UrduVerse
+Accounts Forms for Nawab Urdu Academy
 """
 
 from django import forms

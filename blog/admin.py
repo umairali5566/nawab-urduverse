@@ -1,5 +1,5 @@
 """
-Blog Admin Configuration for Nawab UrduVerse
+Blog Admin Configuration for Nawab Urdu Academy
 """
 
 from django.contrib import admin

@@ -16,8 +16,8 @@
     --card-bg: #121826;
     --glass: rgba(18, 24, 38, 0.8);
 
-    --gold: linear-gradient(135deg, #D4AF37 0%, #E6C76E 100%);
-    --gold-solid: #E6C76E;
+    --gold: linear-gradient(135deg, #D4AF37 0%, #F5C542 100%);
+    --gold-solid: #F5C542;
     --gold-light: #f5d76e;
     --gold-dark: #b8942e;
 
@@ -169,8 +169,9 @@ a:hover {
    LAYOUT UTILITIES
    ===================================================== */
 .container {
-    width: min(100%, var(--container-max));
-    margin-inline: auto;
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
     padding-inline: var(--container-padding);
 }
 
@@ -191,7 +192,7 @@ a:hover {
 .grid-4 { grid-template-columns: repeat(4, 1fr); }
 
 @media (max-width: 1024px) {
-    .grid-4 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
@@ -2227,7 +2228,10 @@ a:hover {
 }
 
 img {
+    max-width: 100%;
+    height: auto;
     transition: transform var(--transition-base);
+    loading: lazy;
 }
 
 .card:hover img,

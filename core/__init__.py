@@ -1,1 +1,1 @@
-# Core app for Nawab UrduVerse
+# Core app for Nawab Urdu Academy

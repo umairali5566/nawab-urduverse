@@ -524,7 +524,7 @@ For long lists (>50 items):
 ```json
 {
     "name": "Nawab Urdu Academy",
-    "short_name": "UrduVerse",
+    "short_name": "Urdu Academy",
     "theme_color": "#0b1220",
     "background_color": "#0b1220",
     "display": "standalone",

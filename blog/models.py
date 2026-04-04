@@ -1,5 +1,5 @@
 """
-Blog Models for Nawab UrduVerse
+Blog Models for Nawab Urdu Academy
 """
 
 from django.db import models

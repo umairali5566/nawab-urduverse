@@ -1,1 +1,1 @@
-# Quotes app for Nawab UrduVerse
+# Quotes app for Nawab Urdu Academy

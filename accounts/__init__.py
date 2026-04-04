@@ -1,1 +1,1 @@
-# Accounts app for Nawab UrduVerse
+# Accounts app for Nawab Urdu Academy

@@ -1,1 +1,1 @@
-# Videos app for Nawab UrduVerse
+# Videos app for Nawab Urdu Academy

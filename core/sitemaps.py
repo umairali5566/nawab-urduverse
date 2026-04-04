@@ -1,5 +1,5 @@
 """
-Sitemaps for Nawab UrduVerse - SEO Optimization
+Sitemaps for Nawab Urdu Academy - SEO Optimization
 """
 
 from django.contrib.sitemaps import Sitemap

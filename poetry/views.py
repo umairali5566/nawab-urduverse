@@ -1,5 +1,5 @@
 ﻿"""
-Poetry Views for Nawab UrduVerse
+Poetry Views for Nawab Urdu Academy
 """
 
 from django.conf import settings

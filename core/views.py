@@ -1,5 +1,5 @@
 """
-Core Views for Nawab UrduVerse
+Core Views for Nawab Urdu Academy
 """
 
 from pathlib import Path

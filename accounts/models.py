@@ -1,5 +1,5 @@
 """
-Accounts Models for Nawab UrduVerse
+Accounts Models for Nawab Urdu Academy
 """
 
 from django.contrib.auth.models import AbstractUser

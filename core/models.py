@@ -1,5 +1,5 @@
 """
-Core Models for Nawab UrduVerse
+Core Models for Nawab Urdu Academy
 """
 
 from django.db import models

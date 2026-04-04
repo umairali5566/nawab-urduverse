@@ -1,1 +1,1 @@
-# Stories app for Nawab UrduVerse
+# Stories app for Nawab Urdu Academy

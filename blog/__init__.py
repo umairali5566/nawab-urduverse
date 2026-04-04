@@ -1,1 +1,1 @@
-# Blog app for Nawab UrduVerse
+# Blog app for Nawab Urdu Academy

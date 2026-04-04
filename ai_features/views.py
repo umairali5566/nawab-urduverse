@@ -31,7 +31,7 @@ def ai_studio(request):
             **build_seo_context(
                 request,
                 title=f"AI Studio | {settings.SITE_NAME}",
-                description="Generate Urdu poetry with AI, listen in Urdu voice, and explore smart search inside the Nawab UrduVerse AI Studio.",
+                description="Generate Urdu poetry with AI, listen in Urdu voice, and explore smart search inside the Nawab Urdu Academy AI Studio.",
                 keywords=f"AI Urdu poetry, Urdu TTS, Urdu search, {settings.SITE_KEYWORDS}",
                 og_type="website",
             ),

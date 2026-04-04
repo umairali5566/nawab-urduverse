@@ -24,7 +24,7 @@ def site_context(request):
     context = {
         "SITE_NAME": getattr(settings, "SITE_NAME", "Nawab Urdu Academy"),
         "SITE_TAGLINE": getattr(settings, "SITE_TAGLINE", ""),
-        "SITE_DESCRIPTION": getattr(settings, "SITE_DESCRIPTION", ""),
+        "SITE_DESCRIPTION": getattr(settings, "SITE_DESCRIPTION", "Premium Urdu poetry, novels, blogs and literary content"),
         "SITE_KEYWORDS": getattr(settings, "SITE_KEYWORDS", ""),
         "AI_STUDIO_ENABLED": getattr(settings, "AI_STUDIO_ENABLED", True),
         "PREMIUM_MEMBERSHIP_ENABLED": getattr(settings, "PREMIUM_MEMBERSHIP_ENABLED", True),
