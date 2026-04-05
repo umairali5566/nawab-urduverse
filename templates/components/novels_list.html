@@ -1,0 +1,169 @@
+{% load static %}
+<!-- =====================================================
+     NOVELS LIST COMPONENT
+     ===================================================== -->
+<section class="section novels-section" id="novelsSection">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Latest Novels</h2>
+                <p class="section-subtitle">Urdu novels and continuing stories</p>
+            </div>
+            <a href="{% url 'novel_list' %}" class="btn btn-ghost">
+                <span>View All</span>
+                <i class="bi bi-arrow-left"></i>
+            </a>
+        </div>
+
+        <!-- Novels Grid -->
+        <div class="novels-grid stagger">
+            {% for novel in latest_novels %}
+            <article class="novel-card">
+                <a href="{{ novel.get_absolute_url }}" class="novel-card-link">
+                    {% if novel.cover_image %}
+                        <img src="{{ novel.cover_image.url }}" alt="{{ novel.title }}" class="novel-card-image" loading="lazy">
+                    {% else %}
+                        <div class="novel-card-image-placeholder">
+                            <i class="bi bi-book"></i>
+                        </div>
+                    {% endif %}
+                    <div class="novel-card-body">
+                        <h3 class="novel-card-title">{{ novel.title }}</h3>
+                        <p class="novel-card-author">{{ novel.author.name }}</p>
+                        {% if novel.description %}
+                        <p class="novel-card-excerpt">{{ novel.description|truncatechars:100 }}</p>
+                        {% endif %}
+                        <div class="novel-card-meta">
+                            <span>
+                                <i class="bi bi-eye"></i>
+                                {{ novel.views_count|default:0 }}
+                            </span>
+                            <span>
+                                <i class="bi bi-chat"></i>
+                                {{ novel.comments_count|default:0 }}
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </article>
+            {% empty %}
+            <div class="novels-empty">
+                <p>Novels coming soon...</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<style>
+/* =====================================================
+   NOVELS LIST STYLES
+   ===================================================== */
+.novels-section {
+    padding: var(--space-8) 0;
+}
+
+.novels-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+}
+
+.novel-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--transition-base);
+}
+
+.novel-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.novel-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.novel-card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.novel-card-image-placeholder {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    font-size: 3rem;
+    color: var(--gold);
+}
+
+.novel-card-body {
+    padding: var(--space-3);
+}
+
+.novel-card-title {
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.novel-card-author {
+    font-size: var(--text-small);
+    color: var(--text-muted);
+    margin-bottom: var(--space-2);
+}
+
+.novel-card-excerpt {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.novel-card-meta {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.novel-card-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.novels-empty {
+    grid-column: span 3;
+    text-align: center;
+    padding: var(--space-8);
+    color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+    .novels-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .novels-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

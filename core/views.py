@@ -56,7 +56,7 @@ from .services import (
 
 
 def home(request):
-    """Rekhta-style homepage focused on Urdu poetry"""
+    """Clean homepage with focused content sections"""
 
     # Latest Poetry
     latest_poetry = list(
@@ -76,8 +76,26 @@ def home(request):
         {'name': 'اقتباس', 'slug': 'quotes', 'count': Poetry.objects.filter(poetry_type='qata', is_published=True).count()},
     ]
 
-    # Featured Authors
-    featured_authors = Author.objects.filter(is_featured=True, is_active=True).select_related()[:6]
+    # Latest Blogs
+    latest_blogs = list(
+        BlogPost.objects.filter(is_published=True)
+        .select_related('author')
+        .order_by('-published_at', '-created_at')[:6]
+    )
+
+    # Latest Videos
+    latest_videos = list(
+        Video.objects.filter(is_published=True)
+        .select_related('author')
+        .order_by('-published_at', '-created_at')[:6]
+    )
+
+    # Latest Novels
+    latest_novels = list(
+        Novel.objects.filter(is_published=True)
+        .select_related('author')
+        .order_by('-published_at', '-created_at')[:6]
+    )
 
     # Stats
     total_poetry = Poetry.objects.filter(is_published=True).count()
@@ -87,7 +105,9 @@ def home(request):
         'latest_poetry': latest_poetry,
         'featured_poetry': featured_poetry,
         'poetry_categories': poetry_categories,
-        'featured_authors': featured_authors,
+        'latest_blogs': latest_blogs,
+        'latest_videos': latest_videos,
+        'latest_novels': latest_novels,
         'total_poetry': total_poetry,
         'total_authors': total_authors,
         **build_seo_context(
