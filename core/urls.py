@@ -22,6 +22,7 @@ urlpatterns = [
     # Search
     path('search/', views.search, name='search'),
     path('search/api/', views.search_api, name='search_api'),
+    path('search/poetry/', views.poetry_search_api, name='poetry_search_api'),
     path('search/suggestions/', views.search_suggestions, name='search_suggestions'),
 
     # Admin Upload

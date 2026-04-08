@@ -192,23 +192,27 @@ def home(request):
     """Modern Urdu search homepage."""
     categories = Category.objects.filter(category_type__in=['poetry', 'novel', 'blog'], is_active=True).order_by('name')
     authors = Author.objects.filter(is_active=True).order_by('name')[:25]
-    
+
     # Latest poetry
     latest_poetry = Poetry.objects.filter(is_published=True).order_by('-created_at')[:9]
-    
-    # Trending poetry (most viewed)
-    trending_poetry = Poetry.objects.filter(is_published=True).order_by('-views_count')[:6]
-    
+
     # Featured content
     featured_content = Content.objects.filter(is_published=True).order_by('-created_at')[:6]
+
+    # Stats
+    total_poetry = Poetry.objects.filter(is_published=True).count()
+    total_authors = Author.objects.filter(is_active=True).count()
+    total_readers = 50000  # Placeholder, can be updated with actual user count
 
     context = {
         'categories': categories,
         'authors': authors,
         'latest_poetry': latest_poetry,
-        'trending_poetry': trending_poetry,
         'content_types': Content.CONTENT_TYPES,
         'featured_content': featured_content,
+        'total_poetry': total_poetry,
+        'total_authors': total_authors,
+        'total_readers': total_readers,
         'show_superuser_panel': request.user.is_authenticated and request.user.is_superuser,
         **build_seo_context(
             request,
@@ -357,6 +361,33 @@ def search_api(request):
         'results': serialized,
         'suggestions': suggestions,
     })
+
+
+def poetry_search_api(request):
+    """API endpoint for live poetry search on homepage."""
+    query = request.GET.get('q', '').strip()
+    if not query or len(query) < 2:
+        return JsonResponse({'success': True, 'results': []})
+
+    # Search poetry by title, author name, or content
+    poetry_results = Poetry.objects.filter(is_published=True).filter(
+        Q(title__icontains=query) |
+        Q(author__name__icontains=query) |
+        Q(content__icontains=query)
+    ).select_related('author').order_by('-views_count', '-created_at')[:10]
+
+    results = []
+    for poetry in poetry_results:
+        results.append({
+            'id': poetry.id,
+            'title': poetry.title,
+            'author': poetry.author.name,
+            'content_preview': poetry.content[:150] + '...' if len(poetry.content) > 150 else poetry.content,
+            'url': poetry.get_absolute_url(),
+            'views': poetry.views_count,
+        })
+
+    return JsonResponse({'success': True, 'results': results})
 
 
 def about(request):

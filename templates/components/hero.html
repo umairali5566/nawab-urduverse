@@ -11,29 +11,12 @@
     </div>
 
     <div class="container">
-<<<<<<< HEAD
-        <div class="hero-container">
-            <!-- Hero Content -->
-            <div class="hero-content animate-fade-in">
-                <!-- Badge -->
-                <div class="hero-badge">
-                    <i class="bi bi-gem"></i>
-                    <span>Premium Urdu Literature</span>
-                </div>
-=======
         <div class="hero-content">
-            <!-- Badge -->
-            <div class="hero-badge">
-                <i class="bi bi-gem"></i>
-                <span>Premium Urdu Literature</span>
-            </div>
-
             <!-- Title -->
             <h1 class="hero-title">
                 Discover the Beauty of<br>
                 <span class="gold">Urdu Poetry</span>
             </h1>
->>>>>>> d433a3c (update)
 
             <!-- Urdu Tagline -->
             <p class="hero-tagline">
@@ -41,21 +24,17 @@
             </p>
 
             <!-- Search Bar (Centered) -->
-            <form action="{% url 'search' %}" method="GET" class="hero-search-form">
+            <div class="hero-search-form">
                 <div class="search-input-wrapper">
                     <i class="bi bi-search"></i>
-                    <input 
-                        type="text" 
-                        name="q" 
-                        placeholder="Urdu shayari, ghazal, nazam search karein..." 
+                    <input
+                        type="text"
+                        placeholder="Urdu shayari, ghazal, nazam search karein..."
                         class="hero-search-input"
                         autocomplete="off"
                     >
                 </div>
-                <button type="submit" class="btn-search">
-                    <i class="bi bi-search"></i>
-                </button>
-            </form>
+            </div>
 
             <!-- CTA Buttons -->
             <div class="hero-buttons">
@@ -72,17 +51,17 @@
             <!-- Quick Stats -->
             <div class="hero-stats">
                 <div class="stat-item">
-                    <span class="stat-number">10K+</span>
+                    <span class="stat-number">{{ total_poetry|default:"10K+" }}</span>
                     <span class="stat-label">Poetry</span>
                 </div>
                 <div class="stat-divider"></div>
                 <div class="stat-item">
-                    <span class="stat-number">5K+</span>
+                    <span class="stat-number">{{ total_authors|default:"5K+" }}</span>
                     <span class="stat-label">Authors</span>
                 </div>
                 <div class="stat-divider"></div>
                 <div class="stat-item">
-                    <span class="stat-number">50K+</span>
+                    <span class="stat-number">{{ total_readers|default:"50K+" }}</span>
                     <span class="stat-label">Readers</span>
                 </div>
             </div>
@@ -99,6 +78,7 @@
     justify-content: center;
     overflow: hidden;
     padding: 60px 20px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
 }
 
 .hero-background {
