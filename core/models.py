@@ -130,7 +130,6 @@ class Author(models.Model):
         return total
 
 
-<<<<<<< HEAD
 class BaseContentModel(models.Model):
     """Base model for all content types with common fields"""
 
@@ -161,7 +160,7 @@ class BaseContentModel(models.Model):
         super().save(*args, **kwargs)
 
 
-=======
+
 class Content(models.Model):
     CONTENT_TYPES = (
         ('poetry', 'شاعری'),
@@ -192,7 +191,6 @@ class Content(models.Model):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
->>>>>>> d433a3c (update)
 
 class Story(models.Model):
     """Story model"""
