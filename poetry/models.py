@@ -12,10 +12,10 @@ from django.utils.html import escape, strip_tags
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
-from core.models import Author, Category
+from core.models import Author, BaseContentModel, Category
 
 
-class Poetry(models.Model):
+class Poetry(BaseContentModel):
     """Poetry model"""
 
     POETRY_TYPES = (
@@ -40,41 +40,20 @@ class Poetry(models.Model):
         ("philosophical", "فلسفیانہ"),
     )
 
-    title = models.CharField(max_length=300, verbose_name="عنوان")
-    slug = models.SlugField(unique=True, verbose_name="سلگ")
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="poetry", verbose_name="شاعر")
     poetry_type = models.CharField(max_length=20, choices=POETRY_TYPES, default="ghazal", verbose_name="قسم")
     mood = models.CharField(max_length=20, choices=MOOD_CHOICES, blank=True, verbose_name="موڈ")
     content = RichTextUploadingField(verbose_name="اشعار")
     background_image = models.ImageField(upload_to="poetry/backgrounds/", blank=True, verbose_name="پس منظر")
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, limit_choices_to={"category_type": "poetry"}, verbose_name="زمرہ")
     tags = models.CharField(max_length=500, blank=True, verbose_name="ٹیگز")
-    is_published = models.BooleanField(default=True, verbose_name="شائع شدہ")
-    is_featured = models.BooleanField(default=False, verbose_name="نمایاں")
-    views_count = models.PositiveIntegerField(default=0, verbose_name="مشاہدات")
-    likes_count = models.PositiveIntegerField(default=0, verbose_name="پسندیدگی")
-    shares_count = models.PositiveIntegerField(default=0, verbose_name="شیئرز")
-    published_at = models.DateTimeField(null=True, blank=True, verbose_name="تاریخ اشاعت")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, limit_choices_to={"category_type": "poetry"}, related_name='poetry_set', verbose_name="زمرہ")
 
-    # SEO fields
-    meta_title = models.CharField(max_length=200, blank=True, verbose_name="Meta Title")
-    meta_description = models.TextField(blank=True, verbose_name="Meta Description")
-    meta_keywords = models.CharField(max_length=500, blank=True, verbose_name="Meta Keywords")
+    class Meta(BaseContentModel.Meta):
+        verbose_name = "شاعری"
+        verbose_name_plural = "اشعار"
 
     class Meta:
         verbose_name = "شاعری"
         verbose_name_plural = "اشعار"
-        ordering = ["-created_at"]
-
-    def __str__(self):
-        return f"{self.title} - {self.author.name}"
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
-        super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("poetry_detail", kwargs={"author_slug": self.author.slug, "slug": self.slug})

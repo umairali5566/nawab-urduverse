@@ -6,12 +6,12 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 
-from core.models import Author, Category
+from core.models import Author, BaseContentModel, Category
 
 
-class Quote(models.Model):
+class Quote(BaseContentModel):
     """Quote model"""
-    
+
     QUOTE_TYPES = (
         ('islamic', 'اسلامی'),
         ('motivational', 'حوصلہ افزائی'),
@@ -24,10 +24,9 @@ class Quote(models.Model):
         ('sad', 'اداسی'),
         ('poetry', 'شاعری'),
     )
-    
+
+    title = models.CharField(max_length=300, blank=True, default='', verbose_name='عنوان')
     text = models.TextField(verbose_name='اقتباس')
-    slug = models.SlugField(unique=True, verbose_name='سلگ')
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='quotes', verbose_name='مصنف')
     quote_type = models.CharField(max_length=20, choices=QUOTE_TYPES, default='motivational', verbose_name='اقتباس کی قسم')
     background_image = models.ImageField(upload_to='quotes/backgrounds/', blank=True, verbose_name='پس منظر کی تصویر')
     text_color = models.CharField(max_length=7, default='#FFFFFF', verbose_name='متن کا رنگ')
@@ -35,26 +34,14 @@ class Quote(models.Model):
     font_size = models.PositiveSmallIntegerField(default=24, verbose_name='فونٹ سائز')
     categories = models.ManyToManyField(Category, limit_choices_to={'category_type': 'quote'}, verbose_name='زمرہ جات')
     tags = models.CharField(max_length=500, blank=True, verbose_name='ٹیگز')
-    is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
-    is_featured = models.BooleanField(default=False, verbose_name='نمایاں')
-    views_count = models.PositiveIntegerField(default=0, verbose_name='مشاہدات')
-    likes_count = models.PositiveIntegerField(default=0, verbose_name='پسندیدگی')
-    shares_count = models.PositiveIntegerField(default=0, verbose_name='شیئرز')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    # SEO Fields
-    meta_title = models.CharField(max_length=200, blank=True, verbose_name='میٹا عنوان')
-    meta_description = models.TextField(blank=True, verbose_name='میٹا تفصیل')
-    
-    class Meta:
+
+    class Meta(BaseContentModel.Meta):
         verbose_name = 'اقتباس'
         verbose_name_plural = 'اقتباسات'
-        ordering = ['-created_at']
-    
+
     def __str__(self):
         return self.text[:100] + '...' if len(self.text) > 100 else self.text
-    
+
     def save(self, *args, **kwargs):
         if not self.slug:
             base_slug = slugify(self.text[:50])

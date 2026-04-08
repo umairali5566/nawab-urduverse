@@ -92,20 +92,20 @@ class Author(models.Model):
     is_active = models.BooleanField(default=True, verbose_name='فعال')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         verbose_name = 'مصنف'
         verbose_name_plural = 'مصنفین'
         ordering = ['name']
-    
+
     def __str__(self):
         return self.name
-    
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
-    
+
     def get_absolute_url(self):
         return reverse('author_detail', kwargs={'slug': self.slug})
 
@@ -128,6 +128,36 @@ class Author(models.Model):
                 queryset = queryset.filter(is_published=True)
             total += queryset.count()
         return total
+
+
+class BaseContentModel(models.Model):
+    """Base model for all content types with common fields"""
+
+    title = models.CharField(max_length=300, verbose_name='عنوان')
+    slug = models.SlugField(unique=True, verbose_name='سلگ')
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='%(class)s_set', verbose_name='مصنف')
+    is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
+    is_featured = models.BooleanField(default=False, verbose_name='نمایاں')
+    views_count = models.PositiveIntegerField(default=0, verbose_name='مشاہدات')
+    likes_count = models.PositiveIntegerField(default=0, verbose_name='پسندیدگی')
+    shares_count = models.PositiveIntegerField(default=0, verbose_name='شیئرز')
+    published_at = models.DateTimeField(null=True, blank=True, verbose_name='تاریخ اشاعت')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    # SEO Fields
+    meta_title = models.CharField(max_length=200, blank=True, verbose_name='میٹا عنوان')
+    meta_description = models.TextField(blank=True, verbose_name='میٹا تفصیل')
+    meta_keywords = models.CharField(max_length=500, blank=True, verbose_name='میٹا کی ورڈز')
+
+    class Meta:
+        abstract = True
+        ordering = ['-created_at']
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(getattr(self, 'title', '') or str(self))
+        super().save(*args, **kwargs)
 
 
 

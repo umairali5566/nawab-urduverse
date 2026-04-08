@@ -17,82 +17,7 @@
 
     <div class="container">
         <div class="hero-container">
-            <!-- Left: Featured Poetry Card -->
-            <div class="hero-featured animate-slide-up">
-                <div class="hero-featured-card">
-                    <div class="hero-featured-badge">
-                        <i class="bi bi-star-fill"></i>
-                        <span>Featured Poetry</span>
-                    </div>
-                    
-                    <div class="hero-featured-content">
-                        {% if featured_poetry %}
-                        <!-- Author Info -->
-                        <div class="hero-featured-author">
-                            {% if featured_poetry.display_author_avatar_url %}
-                                <img src="{{ featured_poetry.display_author_avatar_url }}" alt="{{ featured_poetry.display_author_name }}">
-                            {% else %}
-                                <div class="hero-featured-avatar-placeholder">
-                                    <i class="bi bi-person"></i>
-                                </div>
-                            {% endif %}
-                            <div class="hero-featured-author-info">
-                                <h4>{{ featured_poetry.display_author_name }}</h4>
-                                <span>{{ featured_poetry.display_category_name }}</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Urdu Poetry Text -->
-                        <div class="hero-featured-text urdu-text">
-                            {{ featured_poetry.content|truncatechars:200 }}
-                        </div>
-                        
-                        <!-- Stats & Actions -->
-                        <div class="hero-featured-meta">
-                            <div class="hero-featured-stats">
-                                <span>
-                                    <i class="bi bi-heart"></i>
-                                    {{ featured_poetry.likes_count|default:0 }}
-                                </span>
-                                <span>
-                                    <i class="bi bi-eye"></i>
-                                    {{ featured_poetry.views_count|default:0 }}
-                                </span>
-                                <span>
-                                    <i class="bi bi-chat"></i>
-                                    {{ featured_poetry.comments_count|default:0 }}
-                                </span>
-                            </div>
-                            <a href="{{ featured_poetry.get_absolute_url }}" class="btn btn-outline btn-sm">
-                                <span>Read More</span>
-                                <i class="bi bi-arrow-left"></i>
-                            </a>
-                        </div>
-                        {% else %}
-                        <div class="hero-featured-author">
-                            <div class="hero-featured-avatar-placeholder">
-                                <i class="bi bi-feather"></i>
-                            </div>
-                            <div class="hero-featured-author-info">
-                                <h4>Fresh Urdu Selections</h4>
-                                <span>Poetry Spotlight</span>
-                            </div>
-                        </div>
-                        <div class="hero-featured-text urdu-text">
-                            خوبصورت شاعری، نئے خیالات، اور منتخب ادبی تحریریں یہاں نمودار ہوں گی۔
-                        </div>
-                        <div class="hero-featured-meta">
-                            <a href="{% url 'poetry_list' %}" class="btn btn-outline btn-sm">
-                                <span>Browse Poetry</span>
-                                <i class="bi bi-arrow-left"></i>
-                            </a>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right: Content -->
+            <!-- Hero Content -->
             <div class="hero-content animate-fade-in">
                 <!-- Badge -->
                 <div class="hero-badge">
@@ -252,11 +177,12 @@
 /* Hero Container */
 .hero-container {
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: 1fr;
     gap: var(--space-8);
     align-items: center;
     position: relative;
     z-index: 1;
+    text-align: center;
 }
 
 /* Hero Featured Card */
@@ -358,36 +284,23 @@
 
 /* Responsive */
 @media (max-width: 1024px) {
-    .hero-container {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    
-    .hero-featured {
-        order: -1;
-    }
-    
-    .hero-content {
-        order: 1;
-    }
-    
     .hero-description {
         margin-inline: auto;
     }
-    
+
     .hero-actions {
         justify-content: center;
     }
-    
+
     .hero-search {
         max-width: 500px;
         margin-inline: auto;
     }
-    
+
     .hero-stats {
         justify-content: center;
     }
-    
+
     .hero-scroll-indicator {
         display: none;
     }

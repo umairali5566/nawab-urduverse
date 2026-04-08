@@ -18,66 +18,36 @@ from core.services import (
     track_content_share,
     track_content_view,
 )
+from core.views import BaseContentListView, BaseContentDetailView, base_like_view, base_share_view
 from .models import Poetry, PoetryCollection
 from .tts import generate_tts_audio
 
 
-class PoetryListView(ListView):
+class PoetryListView(BaseContentListView):
     """Poetry list view"""
 
     model = Poetry
     template_name = "poetry/poetry_list.html"
     context_object_name = "poems"
-    paginate_by = 12
-
-    def get_queryset(self):
-        queryset = Poetry.objects.filter(is_published=True).select_related("author", "category")
-
-        category = self.request.GET.get("category")
-        if category:
-            queryset = queryset.filter(category__slug=category)
-
-        search = self.request.GET.get("search")
-        if search:
-            queryset = queryset.filter(title__icontains=search)
-
-        sort = self.request.GET.get("sort", "latest")
-        if sort == "latest":
-            queryset = queryset.order_by("-published_at", "-created_at")
-        elif sort == "popular":
-            queryset = queryset.order_by("-views_count", "-likes_count")
-        elif sort == "trending":
-            queryset = queryset.order_by("-views_count", "-likes_count")
-
-        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["poetry_types"] = Poetry.POETRY_TYPES
         context["moods"] = Poetry.MOOD_CHOICES
         context["categories"] = Category.objects.filter(category_type="poetry", is_active=True)
-        context["featured_poems"] = Poetry.objects.filter(is_featured=True, is_published=True).select_related("author")[:6]
         context["love_poetry"] = Poetry.objects.filter(mood="love", is_published=True).select_related("author")[:6]
         context["sad_poetry"] = Poetry.objects.filter(mood="sad", is_published=True).select_related("author")[:6]
-        context.update(
-            build_seo_context(
-                self.request,
-                title=f"Urdu Poetry | {settings.SITE_NAME}",
-                description="Read ghazals, nazms, and popular Urdu poetry.",
-                keywords=settings.SITE_KEYWORDS,
-                og_type="website",
-            )
-        )
         return context
 
 
-class PoetryDetailView(DetailView):
+class PoetryDetailView(BaseContentDetailView):
     """Poetry detail view"""
 
     model = Poetry
     template_name = "poetry/poetry_detail.html"
     context_object_name = "poem"
     slug_url_kwarg = "slug"
+    content_type = "poetry"
 
     def get_object(self, queryset=None):
         slug = self.kwargs.get("slug")
@@ -102,34 +72,7 @@ class PoetryDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         poem = self.object
 
-        track_content_view(self.request, poem, "poetry", poem.title)
-
-        if self.request.user.is_authenticated:
-            context["is_bookmarked"] = Bookmark.objects.filter(
-                user=self.request.user,
-                content_type="poetry",
-                object_id=poem.id,
-            ).exists()
-            context["is_liked"] = ContentLike.objects.filter(
-                user=self.request.user,
-                content_type="poetry",
-                object_id=poem.id,
-            ).exists()
-        else:
-            context["is_bookmarked"] = False
-            context["is_liked"] = False
-
-        context["comments"] = Comment.objects.filter(
-            content_type="poetry",
-            object_id=poem.id,
-            is_approved=True,
-            parent=None,
-        )
-
-        context["related_poems"] = (
-            Poetry.objects.filter(category=poem.category, is_published=True)
-            .exclude(id=poem.id)[:4]
-        )
+        # Override suggested_content for poetry
         context["suggested_content"] = get_cross_content_suggestions(
             author=poem.author,
             categories=[poem.category] if poem.category else [],
@@ -139,6 +82,7 @@ class PoetryDetailView(DetailView):
             seed_text=f"{poem.title} {poem.plain_text_content}",
         )
 
+        # Override SEO for poetry
         seo_title = poem.meta_title or f"{poem.title} Poetry by {poem.author.name} | {settings.SITE_NAME}"
         seo_description = poem.meta_description or (
             f"Read {poem.title} poetry by {poem.author.name} in beautiful Urdu Nastaliq format on {settings.SITE_NAME}."
@@ -239,27 +183,14 @@ def _resolve_poem(slug, author_slug=None):
 
 def like_poetry(request, slug, author_slug=None):
     """Like poetry and return updated counter."""
-
     poem = _resolve_poem(slug=slug, author_slug=author_slug)
-
-    if not request.user.is_authenticated:
-        return JsonResponse({"success": False, "message": "Login required."}, status=403)
-
-    if request.method in {"POST", "GET"}:
-        return JsonResponse(toggle_content_like(request.user, "poetry", poem.id))
-
-    return JsonResponse({"success": False, "message": "Invalid request"}, status=405)
+    return base_like_view(request, Poetry, "poetry", poem.slug)
 
 
 def share_poetry(request, slug, author_slug=None):
     """Track poetry shares for trending scoring."""
-
     poem = _resolve_poem(slug=slug, author_slug=author_slug)
-
-    if request.method in {"POST", "GET"}:
-        return JsonResponse({"success": True, "shares_count": track_content_share(poem)})
-
-    return JsonResponse({"success": False, "message": "Invalid request"}, status=405)
+    return base_share_view(request, Poetry, "poetry", poem.slug)
 
 
 def ai_studio(request):

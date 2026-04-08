@@ -6,6 +6,11 @@
  * Apple-level premium UI + Medium-level readability + HamariWeb-level content
  */
 
+/* Utility Classes */
+.hide-section {
+    display: none !important;
+}
+
 /* =====================================================
    CSS CUSTOM PROPERTIES (Design Tokens)
    ===================================================== */
@@ -92,7 +97,7 @@
     
     /* --- Layout --- */
     --container-max: 1280px;
-    --container-padding: var(--space-2);
+    --container-padding: 15px;
     --navbar-height: 72px;
 }
 

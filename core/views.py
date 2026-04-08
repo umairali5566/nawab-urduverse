@@ -55,6 +55,136 @@ from .services import (
 )
 
 
+class BaseContentListView(ListView):
+    """Base list view for content types"""
+
+    paginate_by = 12
+
+    def get_queryset(self):
+        queryset = self.model.objects.filter(is_published=True).select_related('author')
+
+        category = self.request.GET.get('category')
+        if category:
+            queryset = queryset.filter(category__slug=category)
+
+        search = self.request.GET.get('search')
+        if search:
+            queryset = queryset.filter(title__icontains=search)
+
+        sort = self.request.GET.get('sort', 'latest')
+        if sort == 'latest':
+            queryset = queryset.order_by('-published_at', '-created_at')
+        elif sort == 'popular':
+            queryset = queryset.order_by('-views_count', '-likes_count')
+        elif sort == 'trending':
+            queryset = queryset.order_by('-views_count', '-likes_count')
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['featured_items'] = self.model.objects.filter(is_featured=True, is_published=True).select_related('author')[:6]
+        context.update(
+            build_seo_context(
+                self.request,
+                title=f"{self.model._meta.verbose_name_plural} | {settings.SITE_NAME}",
+                description=f"Read {self.model._meta.verbose_name_plural.lower()}.",
+                keywords=settings.SITE_KEYWORDS,
+                og_type='website',
+            )
+        )
+        return context
+
+
+class BaseContentDetailView(DetailView):
+    """Base detail view for content types"""
+
+    def get_queryset(self):
+        return self.model.objects.filter(is_published=True).select_related('author')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        content_obj = self.object
+
+        track_content_view(self.request, content_obj, self.content_type, content_obj.title)
+
+        if self.request.user.is_authenticated:
+            context['is_bookmarked'] = Bookmark.objects.filter(
+                user=self.request.user,
+                content_type=self.content_type,
+                object_id=content_obj.id,
+            ).exists()
+            context['is_liked'] = ContentLike.objects.filter(
+                user=self.request.user,
+                content_type=self.content_type,
+                object_id=content_obj.id,
+            ).exists()
+        else:
+            context['is_bookmarked'] = False
+            context['is_liked'] = False
+
+        context['comments'] = Comment.objects.filter(
+            content_type=self.content_type,
+            object_id=content_obj.id,
+            is_approved=True,
+            parent=None,
+        )
+
+        context['related_items'] = (
+            self.model.objects.filter(category=content_obj.category, is_published=True)
+            .exclude(id=content_obj.id)[:4]
+        )
+        context['suggested_content'] = get_cross_content_suggestions(
+            author=content_obj.author,
+            categories=[content_obj.category] if content_obj.category else [],
+            exclude_type=self.content_type,
+            exclude_id=content_obj.id,
+            limit=4,
+            seed_text=f"{content_obj.title} {getattr(content_obj, 'content', '')}",
+        )
+
+        seo_title = content_obj.meta_title or f"{content_obj.title} | {settings.SITE_NAME}"
+        seo_description = content_obj.meta_description or f"Read {content_obj.title}."
+        seo_keywords = content_obj.meta_keywords or settings.SITE_KEYWORDS
+
+        context.update(
+            build_seo_context(
+                self.request,
+                title=seo_title,
+                description=seo_description,
+                keywords=seo_keywords,
+                og_type='article',
+                og_image=getattr(content_obj, 'background_image', None) or getattr(content_obj, 'cover_image', None) or getattr(content_obj, 'featured_image', None),
+                canonical_url=self.request.build_absolute_uri(content_obj.get_absolute_url()),
+            )
+        )
+
+        return context
+
+
+def base_like_view(request, model, content_type, slug):
+    """Generic like function for content types"""
+    obj = get_object_or_404(model, slug=slug, is_published=True)
+
+    if not request.user.is_authenticated:
+        return JsonResponse({'success': False, 'message': 'Login required.'}, status=403)
+
+    if request.method in {'POST', 'GET'}:
+        return JsonResponse(toggle_content_like(request.user, content_type, obj.id))
+
+    return JsonResponse({'success': False, 'message': 'Invalid request'}, status=405)
+
+
+def base_share_view(request, model, content_type, slug):
+    """Generic share function for content types"""
+    obj = get_object_or_404(model, slug=slug, is_published=True)
+
+    if request.method in {'POST', 'GET'}:
+        return JsonResponse({'success': True, 'shares_count': track_content_share(obj)})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request'}, status=405)
+
+
 def home(request):
     """Clean homepage with focused content sections"""
 
