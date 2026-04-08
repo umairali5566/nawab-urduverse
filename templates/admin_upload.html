@@ -1,0 +1,9 @@
+<form method="POST" class="upload-form">
+    {% csrf_token %}
+
+    <textarea name="text" placeholder="Write poetry..." required></textarea>
+
+    <input type="text" name="author" placeholder="Author name" required>
+
+    <button type="submit">Upload Poetry</button>
+</form>

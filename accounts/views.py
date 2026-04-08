@@ -5,7 +5,7 @@ Accounts views for authentication and user dashboard.
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -18,8 +18,25 @@ from .forms import (
     UserProfileForm,
     UserRegistrationForm,
 )
-from .models import User, UserActivity
+from .models import User, UserActivity, Poetry
 
+def is_admin(user):
+    return user.is_superuser
+
+@user_passes_test(is_admin)
+def admin_upload(request):
+    if request.method == 'POST':
+        text = request.POST.get('text')
+        author = request.POST.get('author')
+
+        Poetry.objects.create(
+            text=text,
+            author=author
+        )
+
+        return redirect('home')
+
+    return render(request, 'admin_upload.html')
 
 def _resolve_user_bookmarks(user, limit=12):
     """Resolve bookmarked objects to title/url records for dashboard widgets."""
