@@ -1,7 +1,295 @@
 {% load static %}
-<!-- =====================================================
-     FOOTER COMPONENT
-     ===================================================== -->
+<!-- FOOTER COMPONENT - Clean Professional Footer -->
+<footer class="footer" id="mainFooter">
+    <div class="footer-container">
+        <!-- Footer Grid -->
+        <div class="footer-grid">
+            <!-- About Column -->
+            <div class="footer-column">
+                <a href="{% url 'home' %}" class="footer-brand">
+                    <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }}">
+                    <span>{{ SITE_NAME }}</span>
+                </a>
+                <p class="footer-description">
+                    A modern platform celebrating the rich heritage of Urdu literature. Discover poetry, novels, stories, and connect with writers from across the world.
+                </p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                </div>
+            </div>
+
+            <!-- Quick Links Column -->
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'poetry_list' %}">Poetry</a></li>
+                    <li><a href="{% url 'all_categories' %}">Categories</a></li>
+                    <li><a href="{% url 'search' %}">Search</a></li>
+                </ul>
+            </div>
+
+            <!-- Categories Column -->
+            <div class="footer-column">
+                <h4>Categories</h4>
+                <ul>
+                    <li><a href="{% url 'poetry_list' %}">Poetry</a></li>
+                    <li><a href="{% url 'novel_list' %}">Novels</a></li>
+                    <li><a href="{% url 'blog_list' %}">Blogs</a></li>
+                    <li><a href="{% url 'quote_list' %}">Quotes</a></li>
+                </ul>
+            </div>
+
+            <!-- Company Column -->
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                    {% if user.is_superuser %}
+                    <li><a href="{% url 'admin_upload' %}">Upload</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'search' %}">Search</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="footer-newsletter">
+            <div class="newsletter-content">
+                <h4>Newsletter</h4>
+                <p>Get the latest poetry updates in your inbox</p>
+                <form action="{% url 'newsletter_subscribe' %}" method="POST" class="newsletter-form">
+                    {% csrf_token %}
+                    <input type="email" name="email" placeholder="Your email" required>
+                    <button type="submit"><i class="bi bi-send"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <p>&copy; {% now "Y" %} {{ SITE_NAME }}. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="{% url 'privacy_policy' %}">Privacy</a>
+                <a href="{% url 'terms_of_service' %}">Terms</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+.footer {
+    background: linear-gradient(135deg, rgba(11, 15, 26, 0.95) 0%, rgba(20, 24, 40, 0.95) 100%);
+    border-top: 1px solid rgba(255, 184, 28, 0.1);
+    padding: 60px 20px 20px;
+    margin-top: 80px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.footer-brand img {
+    width: 40px;
+    height: 40px;
+}
+
+.footer-description {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.footer-social {
+    display: flex;
+    gap: 12px;
+}
+
+.footer-social a {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 184, 28, 0.1);
+    border: 1px solid rgba(255, 184, 28, 0.2);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.footer-social a:hover {
+    background: #FFB81C;
+    color: #000;
+    border-color: #FFB81C;
+}
+
+.footer-column h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #FFB81C;
+    margin: 0 0 12px 0;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-column a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.footer-column a:hover {
+    color: #FFB81C;
+    transform: translateX(4px);
+}
+
+.footer-newsletter {
+    background: rgba(255, 184, 28, 0.05);
+    border: 1px solid rgba(255, 184, 28, 0.2);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 40px;
+}
+
+.newsletter-content h4 {
+    margin: 0 0 8px 0;
+    color: #FFB81C;
+    font-size: 16px;
+}
+
+.newsletter-content p {
+    margin: 0 0 16px 0;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+}
+
+.newsletter-form {
+    display: flex;
+    gap: 8px;
+}
+
+.newsletter-form input {
+    flex: 1;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 184, 28, 0.2);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+}
+
+.newsletter-form input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.newsletter-form button {
+    padding: 10px 16px;
+    background: #FFB81C;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.newsletter-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 184, 28, 0.3);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 184, 28, 0.1);
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.footer-bottom p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #FFB81C;
+}
+
+@media (max-width: 768px) {
+    .footer-grid {
+        gap: 30px;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .footer-links {
+        width: 100%;
+        order: 1;
+    }
+}
+</style>
+
+{% comment %}
+BACKUP - Old code below:
 <footer class="footer" id="mainFooter">
     <div class="container">
         <!-- Footer Grid -->
@@ -38,12 +326,12 @@
             <div class="footer-column">
                 <h4>Explore</h4>
                 <ul class="footer-links">
-                    <li><a href="{% url 'poetry_list' %}">Poetry</a></li>
-                    <li><a href="{% url 'novel_list' %}">Novels</a></li>
-                    <li><a href="{% url 'story_list' %}">Stories</a></li>
-                    <li><a href="{% url 'quote_list' %}">Quotes</a></li>
-                    <li><a href="{% url 'blog_list' %}">Blog</a></li>
-                    <li><a href="{% url 'video_list' %}">Videos</a></li>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'home' %}#searchSection">Search</a></li>
+                    <li><a href="{% url 'all_categories' %}">Categories</a></li>
+                    {% if user.is_superuser %}
+                    <li><a href="{% url 'admin_upload' %}">Upload Content</a></li>
+                    {% endif %}
                 </ul>
             </div>
 
@@ -365,3 +653,4 @@
     }
 }
 </style>
+{% endcomment %}

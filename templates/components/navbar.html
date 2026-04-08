@@ -1,12 +1,12 @@
 {% load static %}
 <!-- =====================================================
-     NAVBAR COMPONENT - Premium Urdu Literature Platform
+     NAVBAR COMPONENT - Clean Minimal Design
      ===================================================== -->
-<nav class="navbar" id="mainNavbar">
+<nav class="navbar navbar-minimal" id="mainNavbar">
     <div class="navbar-container">
         <!-- Brand Logo -->
         <a href="{% url 'home' %}" class="navbar-brand">
-            <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }}">
+            <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }}" class="navbar-logo">
             <span class="navbar-brand-text">{{ SITE_NAME }}</span>
         </a>
 
@@ -14,60 +14,44 @@
         <ul class="navbar-menu">
             <li>
                 <a href="{% url 'home' %}" class="navbar-link {% if request.path == '/' %}active{% endif %}">
-                    <i class="bi bi-house-door"></i>
-                    <span>Home</span>
+                    Home
                 </a>
             </li>
             <li>
                 <a href="{% url 'poetry_list' %}" class="navbar-link {% if '/poetry/' in request.path %}active{% endif %}">
-                    <i class="bi bi-feather"></i>
-                    <span>Poetry</span>
+                    Poetry
                 </a>
             </li>
             <li>
                 <a href="{% url 'novel_list' %}" class="navbar-link {% if '/novels/' in request.path %}active{% endif %}">
-                    <i class="bi bi-book"></i>
-                    <span>Novels</span>
+                    Novels
                 </a>
             </li>
             <li>
                 <a href="{% url 'blog_list' %}" class="navbar-link {% if '/blog/' in request.path %}active{% endif %}">
-                    <i class="bi bi-pencil-square"></i>
-                    <span>Blog</span>
+                    Blogs
                 </a>
             </li>
             <li>
-                <a href="{% url 'video_list' %}" class="navbar-link {% if '/videos/' in request.path %}active{% endif %}">
-                    <i class="bi bi-play-circle"></i>
-                    <span>Videos</span>
+                <a href="{% url 'all_categories' %}" class="navbar-link {% if '/categories/' in request.path %}active{% endif %}">
+                    Categories
                 </a>
             </li>
-            {% if AI_STUDIO_ENABLED %}
-            <li>
-                <a href="{% url 'ai_studio' %}" class="navbar-link {% if '/ai-studio/' in request.path %}active{% endif %}">
-                    <i class="bi bi-stars"></i>
-                    <span>AI Studio</span>
-                </a>
-            </li>
-            {% endif %}
         </ul>
 
         <!-- Right Actions -->
         <div class="navbar-actions">
             <!-- Search Button -->
-            <a href="{% url 'search' %}" class="btn btn-ghost btn-icon" aria-label="Search">
+            <a href="{% url 'search' %}" class="btn-icon-search" aria-label="Search">
                 <i class="bi bi-search"></i>
             </a>
 
             {% if user.is_authenticated %}
-                <!-- Notifications -->
-                <a href="{% url 'notifications' %}" class="btn btn-ghost btn-icon" aria-label="Notifications">
-                    <i class="bi bi-bell"></i>
-                </a>
-                
-                <!-- User Avatar -->
+                <!-- User Menu -->
                 <div class="navbar-user">
-                    <button class="navbar-user-toggle" id="userMenuToggle" aria-label="User menu">
+                    <div class="navbar-user-info">
+                        <span class="navbar-username">{{ user.username }}</span>
+                    </div>
                         {% if user.avatar %}
                             <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="navbar-user-avatar">
                         {% else %}
@@ -96,7 +80,12 @@
                             <i class="bi bi-pen"></i>
                             <span>My Content</span>
                         </a>
-                        {% if user.is_staff %}
+                        {% if user.is_superuser %}
+                        <div class="navbar-dropdown-divider"></div>
+                        <a href="{% url 'admin_upload' %}" class="navbar-dropdown-item">
+                            <i class="bi bi-upload"></i>
+                            <span>Upload Content</span>
+                        </a>
                         <div class="navbar-dropdown-divider"></div>
                         <a href="{% url 'admin:index' %}" class="navbar-dropdown-item">
                             <i class="bi bi-gear"></i>
@@ -134,30 +123,15 @@
             </a>
         </li>
         <li>
-            <a href="{% url 'search' %}" class="mobile-nav-item {% if '/search/' in request.path %}active{% endif %}">
+            <a href="{% url 'home' %}#searchSection" class="mobile-nav-item {% if '/search/' in request.path or request.path == '/' %}active{% endif %}">
                 <i class="bi bi-search"></i>
                 <span>Search</span>
             </a>
         </li>
-        {% if user.is_authenticated %}
         <li>
-            <a href="{% url 'my_content' %}" class="mobile-nav-item">
-                <i class="bi bi-plus-circle"></i>
-                <span>Write</span>
-            </a>
-        </li>
-        {% else %}
-        <li>
-            <a href="{% url 'login' %}" class="mobile-nav-item">
-                <i class="bi bi-plus-circle"></i>
-                <span>Write</span>
-            </a>
-        </li>
-        {% endif %}
-        <li>
-            <a href="{% url 'notifications' %}" class="mobile-nav-item {% if '/notifications/' in request.path %}active{% endif %}">
-                <i class="bi bi-bell"></i>
-                <span>Alerts</span>
+            <a href="{% url 'all_categories' %}" class="mobile-nav-item {% if '/categories/' in request.path %}active{% endif %}">
+                <i class="bi bi-tags"></i>
+                <span>Categories</span>
             </a>
         </li>
         <li>
@@ -169,7 +143,7 @@
             {% else %}
             <a href="{% url 'login' %}" class="mobile-nav-item">
                 <i class="bi bi-person"></i>
-                <span>Profile</span>
+                <span>Login</span>
             </a>
             {% endif %}
         </li>
@@ -205,34 +179,18 @@
             <i class="bi bi-house-door"></i>
             <span>Home</span>
         </a>
-        <a href="{% url 'poetry_list' %}" class="mobile-drawer-link {% if '/poetry/' in request.path %}active{% endif %}">
-            <i class="bi bi-feather"></i>
-            <span>Poetry</span>
+        <a href="{% url 'home' %}#searchSection" class="mobile-drawer-link {% if '/search/' in request.path or request.path == '/' %}active{% endif %}">
+            <i class="bi bi-search"></i>
+            <span>Search</span>
         </a>
-        <a href="{% url 'novel_list' %}" class="mobile-drawer-link {% if '/novels/' in request.path %}active{% endif %}">
-            <i class="bi bi-book"></i>
-            <span>Novels</span>
+        <a href="{% url 'all_categories' %}" class="mobile-drawer-link {% if '/categories/' in request.path %}active{% endif %}">
+            <i class="bi bi-tags"></i>
+            <span>Categories</span>
         </a>
-        <a href="{% url 'story_list' %}" class="mobile-drawer-link {% if '/stories/' in request.path %}active{% endif %}">
-            <i class="bi bi-journal-text"></i>
-            <span>Stories</span>
-        </a>
-        <a href="{% url 'blog_list' %}" class="mobile-drawer-link {% if '/blog/' in request.path %}active{% endif %}">
-            <i class="bi bi-pencil-square"></i>
-            <span>Blog</span>
-        </a>
-        <a href="{% url 'quote_list' %}" class="mobile-drawer-link {% if '/quotes/' in request.path %}active{% endif %}">
-            <i class="bi bi-chat-quote"></i>
-            <span>Quotes</span>
-        </a>
-        <a href="{% url 'video_list' %}" class="mobile-drawer-link {% if '/videos/' in request.path %}active{% endif %}">
-            <i class="bi bi-play-circle"></i>
-            <span>Videos</span>
-        </a>
-        {% if AI_STUDIO_ENABLED %}
-        <a href="{% url 'ai_studio' %}" class="mobile-drawer-link {% if '/ai-studio/' in request.path %}active{% endif %}">
-            <i class="bi bi-stars"></i>
-            <span>AI Studio</span>
+        {% if user.is_superuser %}
+        <a href="{% url 'admin_upload' %}" class="mobile-drawer-link {% if '/admin-upload/' in request.path %}active{% endif %}">
+            <i class="bi bi-upload"></i>
+            <span>Upload</span>
         </a>
         {% endif %}
     </nav>

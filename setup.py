@@ -128,7 +128,8 @@ def run_server():
     sslserver_available = find_spec("sslserver") is not None
     cert_exists = os.path.exists("cert.pem")
     key_exists = os.path.exists("key.pem")
-    use_https = sslserver_available and cert_exists and key_exists
+    env_prefers_https = _parse_env_bool("DEVSERVER_USE_HTTPS", default=False)
+    use_https = sslserver_available and cert_exists and key_exists and env_prefers_https
     protocol = "https" if use_https else "http"
     server_command = f"{python_cmd} manage.py runserver --https" if use_https else f"{python_cmd} manage.py runserver"
     

@@ -1,14 +1,9 @@
 {% load static %}
-<!-- =====================================================
-     HERO SECTION COMPONENT
-     ===================================================== -->
+<!-- HERO SECTION - Clean Professional Design -->
 <section class="hero" id="heroSection">
     <div class="hero-background" aria-hidden="true">
-        <div class="hero-gradient hero-gradient-1"></div>
-        <div class="hero-gradient hero-gradient-2"></div>
+        <div class="hero-gradient"></div>
         <div class="hero-particles">
-            <span class="particle"></span>
-            <span class="particle"></span>
             <span class="particle"></span>
             <span class="particle"></span>
             <span class="particle"></span>
@@ -16,6 +11,7 @@
     </div>
 
     <div class="container">
+<<<<<<< HEAD
         <div class="hero-container">
             <!-- Hero Content -->
             <div class="hero-content animate-fade-in">
@@ -24,55 +20,387 @@
                     <i class="bi bi-gem"></i>
                     <span>Premium Urdu Literature</span>
                 </div>
+=======
+        <div class="hero-content">
+            <!-- Badge -->
+            <div class="hero-badge">
+                <i class="bi bi-gem"></i>
+                <span>Premium Urdu Literature</span>
+            </div>
 
-                <!-- Title -->
-                <h1 class="hero-title">
-                    Discover the Beauty of<br>
-                    <span class="gold">Urdu Poetry</span>
-                </h1>
+            <!-- Title -->
+            <h1 class="hero-title">
+                Discover the Beauty of<br>
+                <span class="gold">Urdu Poetry</span>
+            </h1>
+>>>>>>> d433a3c (update)
 
-                <!-- Urdu Tagline -->
-                <p class="hero-tagline urdu-text">
-                    شاعری کی دنیا میں خوش آمدید
-                </p>
+            <!-- Urdu Tagline -->
+            <p class="hero-tagline">
+                شاعری کی دنیا میں خوش آمدید
+            </p>
 
-                <!-- Description -->
-                <p class="hero-description">
-                    Explore thousands of Urdu poems, novels, stories, and quotes from legendary and emerging writers. A modern platform celebrating the rich heritage of Urdu literature.
-                </p>
-
-                <!-- Search Bar -->
-                <form action="{% url 'search' %}" method="GET" class="hero-search">
+            <!-- Search Bar (Centered) -->
+            <form action="{% url 'search' %}" method="GET" class="hero-search-form">
+                <div class="search-input-wrapper">
+                    <i class="bi bi-search"></i>
                     <input 
                         type="text" 
                         name="q" 
-                        placeholder="Search poetry, authors, topics..." 
+                        placeholder="Urdu shayari, ghazal, nazam search karein..." 
                         class="hero-search-input"
                         autocomplete="off"
                     >
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </form>
-
-                <!-- CTA Buttons -->
-                <div class="hero-actions">
-                    <a href="{% url 'poetry_list' %}" class="btn btn-primary btn-lg">
-                        <i class="bi bi-book"></i>
-                        <span>Explore Poetry</span>
-                    </a>
-                    <a href="{% url 'register' %}" class="btn btn-secondary btn-lg">
-                        <i class="bi bi-pen"></i>
-                        <span>Start Writing</span>
-                    </a>
                 </div>
+                <button type="submit" class="btn-search">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
 
-                <!-- Quick Stats -->
-                <div class="hero-stats">
-                    <div class="hero-stat">
-                        <span class="hero-stat-number">{{ total_poetry|default:"10,000+" }}</span>
-                        <span class="hero-stat-label">Poems</span>
-                    </div>
+            <!-- CTA Buttons -->
+            <div class="hero-buttons">
+                <a href="{% url 'poetry_list' %}" class="btn-primary-large">
+                    <i class="bi bi-book"></i>
+                    <span>Explore Poetry</span>
+                </a>
+                <a href="{% url 'register' %}" class="btn-secondary-large">
+                    <i class="bi bi-pen"></i>
+                    <span>Start Reading</span>
+                </a>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">10K+</span>
+                    <span class="stat-label">Poetry</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">5K+</span>
+                    <span class="stat-label">Authors</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">50K+</span>
+                    <span class="stat-label">Readers</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.hero {
+    position: relative;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 60px 20px;
+}
+
+.hero-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.hero-gradient {
+    position: absolute;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(255, 184, 28, 0.15) 0%, transparent 70%);
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    filter: blur(60px);
+    animation: float 20s ease-in-out infinite;
+}
+
+.hero-particles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #FFB81C;
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: float-particle linear infinite;
+}
+
+.particle:nth-child(1) { top: 10%; left: 10%; animation-duration: 20s; animation-delay: 0s; }
+.particle:nth-child(2) { top: 30%; right: 15%; animation-duration: 25s; animation-delay: -5s; }
+.particle:nth-child(3) { bottom: 20%; left: 20%; animation-duration: 30s; animation-delay: -10s; }
+
+@keyframes float {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-30px); }
+}
+
+@keyframes float-particle {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 0.3; }
+    90% { opacity: 0.3; }
+    100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-content {
+    text-align: center;
+    animation: fade-in-up 0.8s ease-out;
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(255, 184, 28, 0.1);
+    border: 1px solid rgba(255, 184, 28, 0.3);
+    border-radius: 50px;
+    color: #FFB81C;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.hero-badge i {
+    font-size: 14px;
+}
+
+.hero-title {
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #fff;
+    margin: 0 0 10px 0;
+    letter-spacing: -1px;
+}
+
+.hero-title .gold {
+    background: linear-gradient(135deg, #FFB81C 0%, #FFA500 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-tagline {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 40px 0;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    letter-spacing: 0.5px;
+}
+
+.hero-search-form {
+    display: flex;
+    gap: 12px;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    animation: fade-in-up 1s ease-out 0.2s both;
+}
+
+.search-input-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input-wrapper i {
+    position: absolute;
+    left: 16px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 18px;
+}
+
+.hero-search-input {
+    width: 100%;
+    padding: 14px 16px 14px 48px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 184, 28, 0.3);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 15px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.hero-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.hero-search-input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #FFB81C;
+    box-shadow: 0 0 0 3px rgba(255, 184, 28, 0.1);
+}
+
+.btn-search {
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #FFB81C 0%, #FFA500 100%);
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-search:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 184, 28, 0.3);
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 40px;
+    animation: fade-in-up 1s ease-out 0.4s both;
+}
+
+.btn-primary-large,
+.btn-secondary-large {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary-large {
+    background: linear-gradient(135deg, #FFB81C 0%, #FFA500 100%);
+    color: #000;
+}
+
+.btn-primary-large:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(255, 184, 28, 0.3);
+}
+
+.btn-secondary-large {
+    background: rgba(255, 255, 255, 0.1);
+    color: #FFB81C;
+    border: 1px solid rgba(255, 184, 28, 0.3);
+}
+
+.btn-secondary-large:hover {
+    background: rgba(255, 184, 28, 0.1);
+    border-color: #FFB81C;
+    transform: translateY(-3px);
+}
+
+.hero-stats {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: center;
+    animation: fade-in-up 1s ease-out 0.6s both;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 28px;
+    font-weight: 700;
+    color: #FFB81C;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    display: block;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+    .hero {
+        min-height: 500px;
+        padding: 40px 20px;
+    }
+    
+    .hero-title {
+        font-size: 36px;
+    }
+    
+    .hero-tagline {
+        font-size: 16px;
+    }
+    
+    .hero-search-form {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .btn-primary-large,
+    .btn-secondary-large {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .hero-stats {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .stat-divider {
+        width: 40px;
+        height: 1px;
+    }
+}
+</style>
+
                     <div class="hero-stat">
                         <span class="hero-stat-number">{{ total_authors|default:"500+" }}</span>
                         <span class="hero-stat-label">Authors</span>

@@ -20,7 +20,7 @@ def _parse_env_bool(name, default=False):
 
 def _rewrite_dev_server_args(argv):
     """
-    Route `runserver` to HTTPS automatically when local certs are present.
+    Route `runserver` to HTTPS only when explicitly requested.
     Flags:
     - --https: force HTTPS
     - --http: force plain HTTP
@@ -37,8 +37,7 @@ def _rewrite_dev_server_args(argv):
 
     cert_path = Path(os.environ.get("DEVSERVER_CERT", "cert.pem"))
     key_path = Path(os.environ.get("DEVSERVER_KEY", "key.pem"))
-    auto_https_default = cert_path.exists() and key_path.exists()
-    env_prefers_https = _parse_env_bool("DEVSERVER_USE_HTTPS", default=auto_https_default)
+    env_prefers_https = _parse_env_bool("DEVSERVER_USE_HTTPS", default=False)
     wants_https = not force_http and (force_https or env_prefers_https)
 
     if not wants_https:

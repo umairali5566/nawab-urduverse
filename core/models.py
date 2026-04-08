@@ -130,6 +130,7 @@ class Author(models.Model):
         return total
 
 
+<<<<<<< HEAD
 class BaseContentModel(models.Model):
     """Base model for all content types with common fields"""
 
@@ -160,6 +161,38 @@ class BaseContentModel(models.Model):
         super().save(*args, **kwargs)
 
 
+=======
+class Content(models.Model):
+    CONTENT_TYPES = (
+        ('poetry', 'شاعری'),
+        ('novel', 'ناول'),
+        ('blog', 'بلاگ'),
+    )
+
+    title = models.CharField(max_length=255, verbose_name='عنوان')
+    slug = models.SlugField(unique=True, verbose_name='سلگ')
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='contents', verbose_name='مصنف')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='زمرہ')
+    content_type = models.CharField(max_length=20, choices=CONTENT_TYPES, verbose_name='قسم')
+    text = models.TextField(verbose_name='متن')
+    is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'مواد'
+        verbose_name_plural = 'مواد'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+>>>>>>> d433a3c (update)
 
 class Story(models.Model):
     """Story model"""

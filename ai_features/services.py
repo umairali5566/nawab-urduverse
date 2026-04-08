@@ -427,8 +427,7 @@ def _build_search_candidates(content_type: str, query: str, author_term: str):
     common_limit = 40
     if content_type == "author":
         return Author.objects.filter(
-            Q(name__icontains=query)
-            | Q(bio__icontains=query),
+            Q(name__icontains=query),
             is_active=True,
         )[:common_limit]
     if content_type == "poetry":

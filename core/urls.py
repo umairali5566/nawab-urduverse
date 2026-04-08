@@ -21,7 +21,11 @@ urlpatterns = [
     
     # Search
     path('search/', views.search, name='search'),
+    path('search/api/', views.search_api, name='search_api'),
     path('search/suggestions/', views.search_suggestions, name='search_suggestions'),
+
+    # Admin Upload
+    path('admin-upload/', views.admin_upload, name='admin_upload'),
 
     # SEO
     path('robots.txt', views.robots_txt, name='robots_txt'),

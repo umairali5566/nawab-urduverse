@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Admin Upload | {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Upload Urdu poetry, novels, and blogs from the frontend admin upload panel.{% endblock %}
+
+{% block extra_css %}
+<style>
+.admin-upload-page {
+    min-height: calc(100vh - 160px);
+    padding: 80px 20px 40px;
+    background: radial-gradient(circle at top, rgba(250,204,21,0.08), transparent 25%), #070b16;
+}
+
+.upload-form {
+    max-width: 680px;
+    margin: 0 auto;
+    background: rgba(10, 15, 32, 0.95);
+    border: 1px solid rgba(250,204,21,0.14);
+    border-radius: 22px;
+    padding: 28px;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.25);
+}
+
+.upload-form h1 {
+    margin-bottom: 18px;
+    font-size: 2rem;
+    color: #facc15;
+}
+
+.upload-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #d1d5db;
+    font-weight: 600;
+}
+
+.upload-form input,
+.upload-form textarea,
+.upload-form select {
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    color: #f8fafc;
+    font-size: 1rem;
+}
+
+.upload-form textarea {
+    min-height: 220px;
+    resize: vertical;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    line-height: 1.8;
+}
+
+.upload-form button {
+    width: 100%;
+    background: #facc15;
+    color: #05070f;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.upload-form .hint {
+    margin-top: -10px;
+    margin-bottom: 18px;
+    color: #9ca3af;
+    font-size: 0.95rem;
+}
+
+.alert-error {
+    background: rgba(248, 113, 113, 0.1);
+    border: 1px solid rgba(248, 113, 113, 0.25);
+    color: #fee2e2;
+    padding: 14px 16px;
+    border-radius: 14px;
+    margin-bottom: 18px;
+}
+
+@media (max-width: 768px) {
+    .upload-form {
+        padding: 22px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="admin-upload-page">
+    <div class="upload-form">
+        <h1>Upload Urdu Content</h1>
+        {% if error %}
+        <div class="alert-error">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" novalidate>
+            {% csrf_token %}
+
+            <label for="content_type">Content Type</label>
+            <select id="content_type" name="content_type" required>
+                <option value="poetry">Poetry</option>
+                <option value="novel">Novel</option>
+                <option value="blog">Blog</option>
+            </select>
+
+            <label for="title">Title</label>
+            <input id="title" type="text" name="title" placeholder="Title" required>
+
+            <label for="author">Author</label>
+            <input id="author" type="text" name="author" placeholder="Author name" required>
+
+            <label for="category">Category</label>
+            <select id="category" name="category">
+                <option value="">No category</option>
+                {% for category in categories %}
+                <option value="{{ category.slug }}">{{ category.name }} ({{ category.get_category_type_display }})</option>
+                {% endfor %}
+            </select>
+
+            <label for="text">Urdu Content</label>
+            <textarea id="text" name="text" placeholder="Write poetry or Urdu content..." required></textarea>
+
+            <label for="bulk_text">Bulk Upload (use --- between entries)</label>
+            <textarea id="bulk_text" name="bulk_text" placeholder="Paste multiple pieces separated by ---" rows="5"></textarea>
+            <p class="hint">Use bulk upload if you want to insert many entries at once. Each section separated by <strong>---</strong> becomes a separate content item.</p>
+
+            <button type="submit">Upload Content</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

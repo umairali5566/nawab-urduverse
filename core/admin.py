@@ -4,7 +4,7 @@ Core Admin Configuration for Nawab Urdu Academy
 
 from django.contrib import admin
 
-from .models import Category, Author, Story
+from .models import Category, Author, Story, Content
 
 
 @admin.register(Category)
@@ -31,6 +31,15 @@ class AuthorAdmin(admin.ModelAdmin):
             'fields': ('is_active',)
         }),
     )
+
+
+@admin.register(Content)
+class ContentAdmin(admin.ModelAdmin):
+    list_display = ['title', 'content_type', 'author', 'category', 'is_published', 'created_at']
+    list_filter = ['content_type', 'is_published', 'category']
+    search_fields = ['title', 'text', 'author__name']
+    prepopulated_fields = {'slug': ('title',)}
+    ordering = ['-created_at']
 
 
 @admin.register(Story)

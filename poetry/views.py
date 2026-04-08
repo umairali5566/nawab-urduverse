@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView
 
-from core.models import Author, Bookmark, Category, Comment, ContentLike
+from core.models import Author, Bookmark, Category, Comment, Content, ContentLike
 from core.services import (
     build_seo_context,
     generate_poetry_from_prompt,
@@ -194,15 +194,16 @@ def share_poetry(request, slug, author_slug=None):
 
 
 def ai_studio(request):
-    """Poetry search page."""
+    """Urdu content search page."""
     query = request.GET.get('q')
     results = []
     if query:
-        results = Poetry.objects.filter(
-            Q(content__icontains=query) |
+        results = Content.objects.filter(
+            Q(text__icontains=query) |
             Q(title__icontains=query) |
-            Q(author__name__icontains=query)
-        ).select_related('author', 'category')[:10]
+            Q(author__name__icontains=query),
+            is_published=True
+        ).select_related('author', 'category')[:20]
 
     return render(
         request,
@@ -212,8 +213,8 @@ def ai_studio(request):
             'results': results,
             **build_seo_context(
                 request,
-                title=f"Poetry Search | {settings.SITE_NAME}",
-                description="Search for Urdu poetry in our collection.",
+                title=f"Urdu Content Search | {settings.SITE_NAME}",
+                description="Search Urdu poetry, novels, and blogs in our collection.",
                 keywords=settings.SITE_KEYWORDS,
                 og_type="website",
             ),

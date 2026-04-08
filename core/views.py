@@ -10,8 +10,10 @@ from django.db.models import Q
 from django.http import Http404, HttpResponse, JsonResponse
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
+from django.utils import timezone
+from django.utils.text import slugify
 
 from accounts.models import User
 from novels.models import Novel, Chapter
@@ -26,6 +28,7 @@ from .models import (
     Category,
     Comment,
     ContactMessage,
+    Content,
     NewsletterSubscriber,
     Notification,
     PremiumPlan,
@@ -186,70 +189,174 @@ def base_share_view(request, model, content_type, slug):
 
 
 def home(request):
-    """Clean homepage with focused content sections"""
-
-    # Latest Poetry
-    latest_poetry = list(
-        Poetry.objects.filter(is_published=True)
-        .select_related('author')
-        .order_by('-created_at')[:12]
-    )
-
-    # Featured Poetry
-    featured_poetry = Poetry.objects.filter(is_featured=True, is_published=True).select_related('author').first()
-
-    # Categories (Poetry Types)
-    poetry_categories = [
-        {'name': 'غزل', 'slug': 'ghazal', 'count': Poetry.objects.filter(poetry_type='ghazal', is_published=True).count()},
-        {'name': 'نظم', 'slug': 'nazm', 'count': Poetry.objects.filter(poetry_type='nazm', is_published=True).count()},
-        {'name': 'شاعری', 'slug': 'shayari', 'count': Poetry.objects.filter(poetry_type='shayari', is_published=True).count()},
-        {'name': 'اقتباس', 'slug': 'quotes', 'count': Poetry.objects.filter(poetry_type='qata', is_published=True).count()},
-    ]
-
-    # Latest Blogs
-    latest_blogs = list(
-        BlogPost.objects.filter(is_published=True)
-        .select_related('author')
-        .order_by('-published_at', '-created_at')[:6]
-    )
-
-    # Latest Videos
-    latest_videos = list(
-        Video.objects.filter(is_published=True)
-        .select_related('author')
-        .order_by('-published_at', '-created_at')[:6]
-    )
-
-    # Latest Novels
-    latest_novels = list(
-        Novel.objects.filter(is_published=True)
-        .select_related('author')
-        .order_by('-published_at', '-created_at')[:6]
-    )
-
-    # Stats
-    total_poetry = Poetry.objects.filter(is_published=True).count()
-    total_authors = Author.objects.filter(is_active=True).count()
+    """Modern Urdu search homepage."""
+    categories = Category.objects.filter(category_type__in=['poetry', 'novel', 'blog'], is_active=True).order_by('name')
+    authors = Author.objects.filter(is_active=True).order_by('name')[:25]
+    
+    # Latest poetry
+    latest_poetry = Poetry.objects.filter(is_published=True).order_by('-created_at')[:9]
+    
+    # Trending poetry (most viewed)
+    trending_poetry = Poetry.objects.filter(is_published=True).order_by('-views_count')[:6]
+    
+    # Featured content
+    featured_content = Content.objects.filter(is_published=True).order_by('-created_at')[:6]
 
     context = {
+        'categories': categories,
+        'authors': authors,
         'latest_poetry': latest_poetry,
-        'featured_poetry': featured_poetry,
-        'poetry_categories': poetry_categories,
-        'latest_blogs': latest_blogs,
-        'latest_videos': latest_videos,
-        'latest_novels': latest_novels,
-        'total_poetry': total_poetry,
-        'total_authors': total_authors,
+        'trending_poetry': trending_poetry,
+        'content_types': Content.CONTENT_TYPES,
+        'featured_content': featured_content,
+        'show_superuser_panel': request.user.is_authenticated and request.user.is_superuser,
         **build_seo_context(
             request,
-            title=f"{settings.SITE_NAME} | اردو شاعری کا بہترین پلیٹ فارم",
-            description="اردو شاعری، غزلیں، نظمیں اور مشہور شاعروں کی تخلیقات پڑھیں۔",
-            keywords="اردو شاعری, غزل, نظم, شاعر, poetry, urdu",
+            title=f"{settings.SITE_NAME} | اردو شاعری کا بہترین منصہ",
+            description="Urdu poetry, novels, and blog content search karein aur instant results ek hi page par dekhein.",
+            keywords="Urdu search, poetry, novels, blog, search, nawab urdu academy",
             og_type='website',
         ),
-        'show_superuser_panel': request.user.is_authenticated and request.user.is_superuser,
     }
     return render(request, 'core/home.html', context)
+
+
+def is_admin(user):
+    return user.is_superuser
+
+
+@user_passes_test(is_admin)
+def admin_upload(request):
+    categories = Category.objects.filter(category_type__in=['poetry', 'novel', 'blog'], is_active=True).order_by('name')
+    authors = Author.objects.filter(is_active=True).order_by('name')[:50]
+    error = ''
+
+    if request.method == 'POST':
+        title = request.POST.get('title', '').strip()
+        text = request.POST.get('text', '').strip()
+        author_name = request.POST.get('author', '').strip()
+        content_type = request.POST.get('content_type', 'poetry')
+        category_slug = request.POST.get('category', '')
+        bulk_text = request.POST.get('bulk_text', '').strip()
+
+        if not author_name:
+            error = 'مصنف کا نام فراہم کریں۔'
+        elif bulk_text:
+            author_obj, _ = Author.objects.get_or_create(
+                name=author_name,
+                defaults={'slug': slugify(author_name)}
+            )
+            category = Category.objects.filter(slug=category_slug, category_type=content_type).first()
+            blocks = [block.strip() for block in bulk_text.split('---') if block.strip()]
+            for idx, block in enumerate(blocks, start=1):
+                slug = slugify(f"{title or 'content'}-{idx}")
+                if Content.objects.filter(slug=slug).exists():
+                    slug = f"{slug}-{idx}"
+                Content.objects.create(
+                    title=f"{title or 'Untitled'} {idx}",
+                    slug=slug,
+                    author=author_obj,
+                    category=category,
+                    content_type=content_type,
+                    text=block,
+                )
+            return redirect('home')
+        elif title and text:
+            author_obj, _ = Author.objects.get_or_create(
+                name=author_name,
+                defaults={'slug': slugify(author_name)}
+            )
+            category = Category.objects.filter(slug=category_slug, category_type=content_type).first()
+            slug = slugify(title)
+            if Content.objects.filter(slug=slug).exists():
+                slug = f"{slug}-{int(timezone.now().timestamp())}"
+            Content.objects.create(
+                title=title,
+                slug=slug,
+                author=author_obj,
+                category=category,
+                content_type=content_type,
+                text=text,
+            )
+            return redirect('home')
+        else:
+            error = 'Title, author, and text are required for upload.'
+
+    return render(request, 'core/admin_upload.html', {
+        'categories': categories,
+        'authors': authors,
+        'error': error,
+        **build_seo_context(
+            request,
+            title=f"Admin Upload | {settings.SITE_NAME}",
+            description="Upload Urdu poetry, novels, and blogs from the frontend admin panel.",
+            keywords="admin upload, urdu content, poetry upload",
+            og_type='website',
+        ),
+    })
+
+
+def search_api(request):
+    query = request.GET.get('q', '').strip()
+    category = request.GET.get('category', 'all').strip().lower()
+    author_query = request.GET.get('author', '').strip()
+    sort_by = request.GET.get('sort', 'latest').strip().lower()
+
+    results = Content.objects.filter(is_published=True)
+    if category in dict(Content.CONTENT_TYPES):
+        results = results.filter(content_type=category)
+
+    if author_query:
+        results = results.filter(author__name__icontains=author_query)
+
+    if query:
+        results = results.filter(
+            Q(title__icontains=query) |
+            Q(text__icontains=query) |
+            Q(author__name__icontains=query)
+        )
+
+    if sort_by == 'popular':
+        results = results.order_by('-created_at')
+    else:
+        results = results.order_by('-created_at')
+
+    results = results.select_related('author', 'category')[:50]
+
+    serialized = []
+    for item in results:
+        serialized.append({
+            'title': item.title,
+            'author': item.author.name,
+            'category': item.category.name if item.category else '',
+            'content_type': item.content_type,
+            'text': item.text,
+            'created_at': item.created_at.strftime('%Y-%m-%d'),
+        })
+
+    suggestions = []
+    if query:
+        suggestion_qs = Content.objects.filter(is_published=True).filter(
+            Q(title__icontains=query) |
+            Q(text__icontains=query) |
+            Q(author__name__icontains=query)
+        ).select_related('author')[:10]
+        seen = set()
+        for item in suggestion_qs:
+            if item.title not in seen:
+                seen.add(item.title)
+                suggestions.append(item.title)
+            if item.author.name not in seen:
+                seen.add(item.author.name)
+                suggestions.append(item.author.name)
+            if len(suggestions) >= 10:
+                break
+
+    return JsonResponse({
+        'success': True,
+        'results': serialized,
+        'suggestions': suggestions,
+    })
 
 
 def about(request):

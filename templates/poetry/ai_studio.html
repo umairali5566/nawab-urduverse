@@ -1,11 +1,122 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}AI Poetry Studio | {{ SITE_NAME }}{% endblock %}
-{% block meta_description %}AI-powered Urdu poetry search and exploration studio.{% endblock %}
+{% block title %}Poetry Search | {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Search Urdu poetry by title, text, or author name in our local collection.{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/ai-studio.css' %}">
+<style>
+.search-results-section {
+    margin-top: 2rem;
+}
+
+.search-results-title {
+    color: #FFD700;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.poetry-card {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    border: 1px solid #FFD700;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.1);
+}
+
+.poetry-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+}
+
+.poetry-title {
+    color: #FFD700;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-decoration: none;
+}
+
+.poetry-title:hover {
+    color: #fff;
+}
+
+.poetry-meta {
+    color: #ccc;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.poetry-preview {
+    color: #e0e0e0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    direction: rtl;
+    text-align: right;
+}
+
+.read-more-btn {
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    border: none;
+    color: #000;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.read-more-btn:hover {
+    background: linear-gradient(45deg, #FFA500, #FFD700);
+    color: #000;
+    transform: scale(1.05);
+}
+
+.no-results {
+    text-align: center;
+    color: #ccc;
+    font-size: 1.1rem;
+    margin-top: 2rem;
+}
+
+.search-form-container {
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+.search-input {
+    background: #2d2d2d;
+    border: 2px solid #FFD700;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    border-radius: 8px 0 0 8px;
+    flex: 1;
+}
+
+.search-input:focus {
+    border-color: #FFA500;
+    box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+}
+
+.search-btn {
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    border: 2px solid #FFD700;
+    color: #000;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0 8px 8px 0;
+    font-weight: bold;
+}
+
+.search-btn:hover {
+    background: linear-gradient(45deg, #FFA500, #FFD700);
+}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -13,67 +124,73 @@
     <div class="ai-studio-hero">
         <div class="ai-studio-copy">
             <span class="ai-studio-kicker">
-                <i class="bi bi-robot"></i>
-                AI Studio
+                <i class="bi bi-search"></i>
+                Poetry Search
             </span>
-            <h1 class="ai-studio-title">Poetry Search & Exploration</h1>
+            <h1 class="ai-studio-title">Urdu Poetry Search</h1>
             <p class="ai-studio-description">
-                Search through our Urdu poetry collection or explore external poetry databases for inspiration.
+                Search our extensive collection of Urdu poetry by title, text, or author name.
             </p>
         </div>
         <div class="ai-studio-aside">
             <div class="ai-panel">
-                <h3 class="ai-panel-title">Local Search</h3>
-                <form method="get" class="ai-search-form">
+                <form method="get" class="search-form-container">
                     <div class="input-group">
-                        <input type="search" name="q" class="form-control" value="{{ query }}" placeholder="Search our poetry..." id="localQuery">
-                        <button class="btn btn-primary" type="submit">
-                            <i class="bi bi-search"></i>
+                        <input type="search" name="q" class="form-control search-input" value="{{ query }}" placeholder="Urdu poetry, novel, blog search karein..." id="searchQuery">
+                        <button class="btn search-btn" type="submit">
+                            <i class="bi bi-search"></i> Search
                         </button>
                     </div>
                 </form>
-                {% if results %}
-                <div class="ai-results mt-3">
-                    <h4>Results ({{ results|length }})</h4>
-                    <ul class="list-group">
-                        {% for poem in results %}
-                        <li class="list-group-item">
-                            <a href="{% url 'poetry_detail' poem.author.slug poem.slug %}">{{ poem.title }}</a>
-                            by {{ poem.author.name }}
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
             </div>
         </div>
     </div>
 
-    <div class="main-container mt-4">
-        <div class="rekhta-search-section">
-            <h2>Explore Rekhta Poetry Database</h2>
-            <div class="rekhta-controls mb-3">
-                <div class="input-group">
-                    <input type="text" id="rekhtaQuery" class="form-control" placeholder="Search Rekhta for poetry...">
-                    <button class="btn btn-outline-primary" id="searchBtn">
-                        <i class="bi bi-search"></i> Search Rekhta
-                    </button>
+    {% if query %}
+    <div class="main-container search-results-section">
+        <h2 class="search-results-title">Search Results</h2>
+
+        {% if results %}
+            <div class="row">
+                {% for content in results %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="poetry-card">
+                        {% if content.content_type == 'poetry' %}
+                            <a href="{% url 'poetry_detail' content.author.slug content.slug %}" class="poetry-title">{{ content.title }}</a>
+                        {% elif content.content_type == 'novel' %}
+                            <a href="{% url 'novel_detail' content.slug %}" class="poetry-title">{{ content.title }}</a>
+                        {% elif content.content_type == 'blog' %}
+                            <a href="{% url 'blog_detail' content.slug %}" class="poetry-title">{{ content.title }}</a>
+                        {% endif %}
+                        <div class="poetry-meta">
+                            <strong>Author:</strong> {{ content.author.name }} |
+                            <strong>Type:</strong> {{ content.get_content_type_display }}
+                        </div>
+                        <div class="poetry-preview">
+                            {% with preview=content.text|truncatechars:150 %}
+                                {{ preview }}
+                            {% endwith %}
+                        </div>
+                        {% if content.content_type == 'poetry' %}
+                            <a href="{% url 'poetry_detail' content.author.slug content.slug %}" class="read-more-btn">Read More</a>
+                        {% elif content.content_type == 'novel' %}
+                            <a href="{% url 'novel_detail' content.slug %}" class="read-more-btn">Read More</a>
+                        {% elif content.content_type == 'blog' %}
+                            <a href="{% url 'blog_detail' content.slug %}" class="read-more-btn">Read More</a>
+                        {% endif %}
+                    </div>
                 </div>
+                {% endfor %}
             </div>
-            <div id="loadingSpinner" class="text-center d-none">
-                <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
+        {% else %}
+            <div class="no-results">
+                <p>No results found. Try different keywords.</p>
             </div>
-            <div id="blockedMessage" class="alert alert-warning d-none">
-                <p>If the embedded search doesn't load, <a id="openRekhtaBtn" href="#" target="_blank">click here to open Rekhta directly</a>.</p>
-            </div>
-            <iframe id="rekhtaFrame" style="display: none; width: 100%; height: 600px; border: none;"></iframe>
-        </div>
+        {% endif %}
     </div>
+    {% endif %}
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/ai-studio.js' %}"></script>
 {% endblock %}
