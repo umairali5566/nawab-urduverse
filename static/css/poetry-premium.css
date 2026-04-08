@@ -7,27 +7,27 @@
    CSS Variables & Design Tokens
    =================================== */
 :root {
-    /* Dark Navy Theme */
-    --pp-bg-primary: #0a0f1a;
+    /* Premium Dark Theme */
+    --pp-bg-primary: #0b0f1a;
     --pp-bg-secondary: #111827;
     --pp-bg-tertiary: #1a2235;
-    --pp-bg-card: rgba(20, 30, 50, 0.7);
-    
+    --pp-bg-card: rgba(255, 255, 255, 0.05);
+
     /* Gold Accent */
-    --pp-gold-primary: #D4AF37;
-    --pp-gold-light: #E5C76B;
-    --pp-gold-dark: #A68B2D;
-    --pp-gold-gradient: linear-gradient(135deg, #D4AF37 0%, #F5D77A 50%, #D4AF37 100%);
-    
+    --pp-gold-primary: #fbbf24;
+    --pp-gold-light: #fcd34d;
+    --pp-gold-dark: #f59e0b;
+    --pp-gold-gradient: linear-gradient(135deg, #fbbf24 0%, #fcd34d 50%, #fbbf24 100%);
+
     /* Glass Effects */
     --pp-glass-bg: rgba(255, 255, 255, 0.05);
     --pp-glass-border: rgba(255, 255, 255, 0.1);
-    --pp-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    
+    --pp-glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+
     /* Text Colors */
-    --pp-text-primary: #FFFFFF;
-    --pp-text-secondary: #B8C5D6;
-    --pp-text-muted: #6B7A8F;
+    --pp-text-primary: #ffffff;
+    --pp-text-secondary: #d1d5db;
+    --pp-text-muted: #9ca3af;
     
     /* Urdu Font */
     --pp-font-urdu: 'Noto Nastaliq Urdu', 'Noto Naskh Arabic', serif;
@@ -388,10 +388,10 @@
    =================================== */
 .poetry-card {
     position: relative;
-    background: var(--pp-glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--pp-glass-border);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--pp-radius-lg);
     padding: var(--pp-spacing-xl);
     box-shadow: var(--pp-shadow-card);
@@ -567,7 +567,7 @@
     font-size: 1.75rem;
     line-height: 1.8;
     text-align: center;
-    color: #E5E7EB;
+    color: #ffffff;
     font-weight: 400;
     direction: rtl;
 }

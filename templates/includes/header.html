@@ -1,52 +1,56 @@
 {% load static %}
-<nav class="site-navbar" aria-label="Main navigation">
-    <div class="main-container navbar-inner">
+<nav class="site-navbar navbar" aria-label="Main navigation">
+    <div class="navbar-container">
         <div class="navbar-left">
-            <a class="site-brand" href="{% url 'home' %}">
-                <span class="site-brand-media">
-                    <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }} logo" class="site-brand-logo" loading="eager">
-                </span>
-                <span class="brand-text-wrap">
-                    <span class="brand-text">{{ SITE_NAME }}</span>
-                    <span class="brand-caption">Premium Urdu literature platform</span>
-                </span>
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }} logo" class="navbar-brand-logo" loading="eager">
+                <span class="navbar-brand-text">{{ SITE_NAME }}</span>
             </a>
         </div>
 
-        <div class="navbar-center">
-            <ul class="site-nav d-none d-lg-flex">
-                <li><a class="site-nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}"><i class="bi bi-house-door"></i><span>Home</span></a></li>
-                <li><a class="site-nav-link {% if '/poetry/' in request.path %}active{% endif %}" href="{% url 'poetry_list' %}"><i class="bi bi-feather"></i><span>Poetry</span></a></li>
-                <li><a class="site-nav-link {% if '/novels/' in request.path %}active{% endif %}" href="{% url 'novel_list' %}"><i class="bi bi-book"></i><span>Novels</span></a></li>
-                <li><a class="site-nav-link {% if '/stories/' in request.path %}active{% endif %}" href="{% url 'story_list' %}"><i class="bi bi-journal-text"></i><span>Stories</span></a></li>
-                <li><a class="site-nav-link {% if '/blog/' in request.path %}active{% endif %}" href="{% url 'blog_list' %}"><i class="bi bi-newspaper"></i><span>Blog</span></a></li>
-                <li><a class="site-nav-link {% if '/videos/' in request.path %}active{% endif %}" href="{% url 'video_list' %}"><i class="bi bi-play-circle"></i><span>Videos</span></a></li>
-                <li><a class="site-nav-link {% if '/quotes/' in request.path %}active{% endif %}" href="{% url 'quote_list' %}"><i class="bi bi-chat-quote"></i><span>Quotes</span></a></li>
-                {% if AI_STUDIO_ENABLED %}
-                <li><a class="site-nav-link {% if '/ai-studio/' in request.path %}active{% endif %}" href="{% url 'ai_studio' %}"><i class="bi bi-stars"></i><span>AI Studio</span></a></li>
-                {% endif %}
-                {% if PREMIUM_MEMBERSHIP_ENABLED %}
-                <li><a class="site-nav-link {% if '/membership/' in request.path %}active{% endif %}" href="{% url 'membership' %}"><i class="bi bi-gem"></i><span>Membership</span></a></li>
-                {% endif %}
-            </ul>
+        <div class="navbar-menu">
+            <a class="navbar-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">
+                <i class="bi bi-house-door"></i>
+                <span>Home</span>
+            </a>
+            <a class="navbar-link {% if '/poetry/' in request.path %}active{% endif %}" href="{% url 'poetry_list' %}">
+                <i class="bi bi-feather"></i>
+                <span>Poetry</span>
+            </a>
+            <a class="navbar-link {% if '/novels/' in request.path %}active{% endif %}" href="{% url 'novel_list' %}">
+                <i class="bi bi-book"></i>
+                <span>Novels</span>
+            </a>
+            <a class="navbar-link {% if '/stories/' in request.path %}active{% endif %}" href="{% url 'story_list' %}">
+                <i class="bi bi-journal-text"></i>
+                <span>Stories</span>
+            </a>
+            <a class="navbar-link {% if '/blog/' in request.path %}active{% endif %}" href="{% url 'blog_list' %}">
+                <i class="bi bi-newspaper"></i>
+                <span>Blog</span>
+            </a>
+            {% if AI_STUDIO_ENABLED %}
+            <a class="navbar-link {% if '/ai-studio/' in request.path %}active{% endif %}" href="{% url 'ai_studio' %}">
+                <i class="bi bi-stars"></i>
+                <span>AI Studio</span>
+            </a>
+            {% endif %}
+            {% if PREMIUM_MEMBERSHIP_ENABLED %}
+            <a class="navbar-link {% if '/membership/' in request.path %}active{% endif %}" href="{% url 'membership' %}">
+                <i class="bi bi-gem"></i>
+                <span>Membership</span>
+            </a>
+            {% endif %}
         </div>
 
-        <div class="navbar-right navbar-actions">
-            <form action="{% url 'search' %}" method="get" class="nav-search d-none d-xl-block">
-                <div class="search-input-wrap search-input-wrap-nav" data-search-autocomplete>
-                    <i class="bi bi-search search-input-icon"></i>
-                    <input type="search" name="q" class="form-control search-input search-input-nav nav-search-input" placeholder="Search poetry, blogs, videos, novels, quotes, authors" autocomplete="off" data-search-input>
-                    <div class="search-suggestions" data-search-suggestions></div>
-                </div>
-            </form>
-
-            <a href="{% url 'search' %}" class="nav-icon-btn d-xl-none" aria-label="Search" title="Search">
+        <div class="navbar-actions">
+            <a href="{% url 'search' %}" class="btn-icon" aria-label="Search" title="Search">
                 <i class="bi bi-search"></i>
             </a>
 
             {% if user.is_authenticated %}
             <div class="dropdown">
-                <button class="nav-icon-btn notification-btn position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
+                <button class="btn-icon notification-btn position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
                     <i class="bi bi-bell"></i>
                     {% if unread_notifications_count %}
                     <span class="notification-count">{{ unread_notifications_count }}</span>
@@ -69,26 +73,17 @@
             </div>
             {% endif %}
 
-            <button class="nav-icon-btn" id="darkModeToggle" title="Dark mode" type="button" aria-label="Toggle dark mode">
+            <button class="btn-icon" id="darkModeToggle" title="Dark mode" type="button" aria-label="Toggle dark mode">
                 <i class="bi bi-moon"></i>
             </button>
 
             <div class="dropdown">
-                <button class="btn btn-sm user-dropdown-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span class="user-avatar-chip">
-                        {% if user.is_authenticated and user.avatar %}
-                        <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="user-avatar-img">
-                        {% else %}
-                        <i class="bi bi-person-circle"></i>
-                        {% endif %}
-                    </span>
-                    <span class="d-none d-md-inline">
-                        {% if user.is_authenticated %}
-                        {{ user.get_full_name|default:user.username }}
-                        {% else %}
-                        Account
-                        {% endif %}
-                    </span>
+                <button class="btn-icon user-dropdown-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if user.is_authenticated and user.avatar %}
+                    <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="user-avatar-img">
+                    {% else %}
+                    <i class="bi bi-person-circle"></i>
+                    {% endif %}
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end text-end">
                     {% if user.is_authenticated %}
@@ -120,7 +115,7 @@
                 </ul>
             </div>
 
-            <button id="sidebarToggle" class="nav-icon-btn d-lg-none" type="button" aria-label="Open menu" aria-controls="sideMenu" aria-expanded="false">
+            <button id="sidebarToggle" class="btn-icon d-lg-none" type="button" aria-label="Open menu" aria-controls="sideMenu" aria-expanded="false">
                 <i class="bi bi-list"></i>
             </button>
         </div>

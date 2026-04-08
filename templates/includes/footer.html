@@ -5,12 +5,6 @@
                 <span class="footer-kicker">Nawab Urdu Academy</span>
                 <h5 class="footer-title">A premium home for Urdu literature, readers, and creators.</h5>
                 <p class="footer-text">{{ SITE_DESCRIPTION }}</p>
-                <div class="footer-pill-row">
-                    <span class="footer-pill">Poetry</span>
-                    <span class="footer-pill">Stories</span>
-                    <span class="footer-pill">AI Studio</span>
-                    <span class="footer-pill">Membership</span>
-                </div>
                 <div class="footer-social">
                     <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
                     <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
@@ -27,35 +21,19 @@
                     <li><a href="{% url 'story_list' %}">Stories</a></li>
                     <li><a href="{% url 'blog_list' %}">Blog</a></li>
                     <li><a href="{% url 'video_list' %}">Videos</a></li>
+                    <li><a href="{% url 'search' %}">Search</a></li>
                 </ul>
             </div>
 
             <div>
-                <h5 class="footer-title">Company</h5>
+                <h5 class="footer-title">Support</h5>
                 <ul class="footer-links">
                     <li><a href="{% url 'about' %}">About</a></li>
                     <li><a href="{% url 'contact' %}">Contact</a></li>
-                    <li><a href="{% url 'privacy_policy' %}">Privacy Policy</a></li>
-                    <li><a href="{% url 'terms_of_service' %}">Terms of Service</a></li>
-                    {% if AI_STUDIO_ENABLED %}
-                    <li><a href="{% url 'ai_studio' %}">AI Studio</a></li>
-                    {% endif %}
+                    <li><a href="{% url 'privacy_policy' %}">Privacy</a></li>
+                    <li><a href="{% url 'terms_of_service' %}">Terms</a></li>
                     {% if PREMIUM_MEMBERSHIP_ENABLED %}
-                    <li><a href="{% url 'membership' %}">Premium Membership</a></li>
-                    {% endif %}
-                    <li><a href="{% url 'search' %}">Advanced Search</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h5 class="footer-title">Connect</h5>
-                <p class="footer-text">Reach out for editorial collaboration, creator access, platform partnerships, or premium support.</p>
-                <ul class="footer-links">
-                    <li><a href="{% url 'author_list' %}">Authors</a></li>
-                    <li><a href="{% url 'contact' %}">Editorial Contact</a></li>
-                    <li><a href="#newsletter-signup">Join Newsletter</a></li>
-                    {% if request.user.is_superuser or request.user.is_staff %}
-                    <li><a href="{% url 'dashboard_home' %}">Creator Dashboard</a></li>
+                    <li><a href="{% url 'membership' %}">Membership</a></li>
                     {% endif %}
                 </ul>
             </div>
