@@ -16,21 +16,21 @@
    ===================================================== */
  :root {
     /* --- Colors --- */
-    --bg-main: linear-gradient(135deg, #0b0f1a 0%, #111827 50%, #020617 100%);
+    --bg-main: #0B1120;
     --bg-secondary: #111827;
     --bg-tertiary: #1a2235;
     --card-bg: rgba(255, 255, 255, 0.05);
     --glass: rgba(255, 255, 255, 0.05);
 
-    --gold: #fbbf24;
-    --gold-solid: #fbbf24;
+    --gold: #F59E0B;
+    --gold-solid: #F59E0B;
     --gold-light: #fcd34d;
-    --gold-dark: #f59e0b;
+    --gold-dark: #d97706;
 
-    --text-primary: #ffffff;
+    --text-primary: #E5E7EB;
     --text-secondary: #d1d5db;
     --text-muted: #9ca3af;
-    --text-author: #fbbf24;
+    --text-author: #F59E0B;
 
     --border: rgba(255, 255, 255, 0.1);
     --border-gold: rgba(251, 191, 36, 0.3);
@@ -655,7 +655,7 @@ a:hover {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    padding-top: var(--navbar-height);
+    padding-top: 80px;
     position: relative;
     overflow: hidden;
 }
@@ -1479,7 +1479,7 @@ a:hover {
 .footer {
     background: var(--bg-secondary);
     border-top: 1px solid var(--border);
-    padding: var(--space-8) 0 var(--space-4);
+    padding: var(--space-6) 0 var(--space-4);
 }
 
 .footer-grid {
@@ -1893,7 +1893,7 @@ main,
 }
 
 .site-bg {
-    background: linear-gradient(135deg, #0b0f1a 0%, #111827 50%, #020617 100%) !important;
+    background: #0B1120 !important;
     opacity: 1 !important;
     filter: none !important;
 }
@@ -1922,8 +1922,8 @@ main,
 .hero-section-home,
 .home-hero-section,
 .page-header {
-    background: linear-gradient(135deg, #0b0f1a 0%, #111827 50%, #020617 100%) !important;
-    color: #ffffff !important;
+    background: #0B1120 !important;
+    color: #E5E7EB !important;
 }
 
 .card,

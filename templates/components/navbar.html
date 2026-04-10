@@ -22,16 +22,21 @@
                     Poetry
                 </a>
             </li>
-            <li>
-                <a href="{% url 'novel_list' %}" class="navbar-link {% if '/novels/' in request.path %}active{% endif %}">
-                    Novels
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'blog_list' %}" class="navbar-link {% if '/blog/' in request.path %}active{% endif %}">
-                    Blogs
-                </a>
-            </li>
+             <li>
+                 <a href="{% url 'story_list' %}" class="navbar-link {% if '/stories/' in request.path %}active{% endif %}">
+                     Stories
+                 </a>
+             </li>
+             <li>
+                 <a href="{% url 'novel_list' %}" class="navbar-link {% if '/novels/' in request.path %}active{% endif %}">
+                     Novels
+                 </a>
+             </li>
+             <li>
+                 <a href="{% url 'blog_list' %}" class="navbar-link {% if '/blog/' in request.path %}active{% endif %}">
+                     Blog
+                 </a>
+             </li>
             <li>
                 <a href="{% url 'all_categories' %}" class="navbar-link {% if '/categories/' in request.path %}active{% endif %}">
                     Categories
@@ -122,12 +127,12 @@
                 <span>Home</span>
             </a>
         </li>
-        <li>
-            <a href="{% url 'home' %}#searchSection" class="mobile-nav-item {% if '/search/' in request.path or request.path == '/' %}active{% endif %}">
-                <i class="bi bi-search"></i>
-                <span>Search</span>
-            </a>
-        </li>
+         <li>
+             <a href="{% url 'search' %}" class="mobile-nav-item {% if '/search/' in request.path %}active{% endif %}">
+                 <i class="bi bi-search"></i>
+                 <span>Search</span>
+             </a>
+         </li>
         <li>
             <a href="{% url 'all_categories' %}" class="mobile-nav-item {% if '/categories/' in request.path %}active{% endif %}">
                 <i class="bi bi-tags"></i>
@@ -179,7 +184,7 @@
             <i class="bi bi-house-door"></i>
             <span>Home</span>
         </a>
-        <a href="{% url 'home' %}#searchSection" class="mobile-drawer-link {% if '/search/' in request.path or request.path == '/' %}active{% endif %}">
+        <a href="{% url 'search' %}" class="mobile-drawer-link {% if '/search/' in request.path %}active{% endif %}">
             <i class="bi bi-search"></i>
             <span>Search</span>
         </a>

@@ -40,14 +40,13 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body class="{% block body_class %}site-shell{% endblock %}">
-    <!-- Skip to main content -->
-    <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+
 
     <!-- Navigation -->
     {% include "includes/header.html" %}
 
     <!-- Main Content -->
-    <main id="main-content" role="main">
+    <main role="main">
         {% block content %}{% endblock %}
     </main>
 
