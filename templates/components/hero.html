@@ -35,6 +35,9 @@
                         class="hero-search-input"
                         autocomplete="off"
                     >
+                    <button type="button" class="search-reset-btn" id="searchResetBtn" style="display: none;">
+                        <i class="bi bi-x"></i>
+                    </button>
                 </div>
             </div>
 
@@ -242,6 +245,26 @@
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(251, 191, 36, 0.3);
     box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+}
+
+.search-reset-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.search-reset-btn:hover {
+    color: #fbbf24;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .hero-buttons {

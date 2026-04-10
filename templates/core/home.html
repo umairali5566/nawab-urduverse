@@ -709,6 +709,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const query = e.target.value.trim();
             clearTimeout(searchTimeout);
 
+            // Show/hide reset button
+            const resetBtn = document.getElementById('searchResetBtn');
+            if (query.length > 0) {
+                resetBtn.style.display = 'block';
+            } else {
+                resetBtn.style.display = 'none';
+            }
+
             if (query.length >= 2) {
                 searchTimeout = setTimeout(() => performSearch(query), 300);
             } else {
@@ -721,7 +729,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 heroSearchInput.value = '';
                 hideSearchResults();
                 heroSearchInput.blur();
+                document.getElementById('searchResetBtn').style.display = 'none';
             }
+        });
+    }
+
+    // Reset button functionality
+    const searchResetBtn = document.getElementById('searchResetBtn');
+    if (searchResetBtn) {
+        searchResetBtn.addEventListener('click', function() {
+            heroSearchInput.value = '';
+            hideSearchResults();
+            heroSearchInput.focus();
+            this.style.display = 'none';
         });
     }
 
