@@ -4,187 +4,35 @@
 {% block title %}لاگ ان - {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<!-- Premium Login Section -->
-<section class="min-vh-100 d-flex align-items-center justify-content-center" style="background: var(--premium-bg-gradient); padding: 20px;">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-8 col-lg-5">
-                <!-- Glassmorphism Card -->
-                <div class="card border-0 shadow-lg" style="background: var(--premium-card-glass); backdrop-filter: blur(16px); border: var(--premium-border-gold);">
-                    <div class="card-body p-4 p-md-5">
-                        <div class="text-center mb-4">
-                            <div class="mb-3">
-                                <i class="bi bi-person-circle display-4" style="color: var(--premium-gold);"></i>
-                            </div>
-                            <h2 class="mb-2" style="color: var(--premium-text);">خوش آمدید</h2>
-                            <p class="text-muted">اپنے اکاؤنٹ میں لاگ ان کریں</p>
-                        </div>
-
-                        <!-- Messages -->
-                        {% if messages %}
-                        <div class="mb-3">
-                            {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                                {{ message }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-
-                        <form method="post" novalidate>
-                            {% csrf_token %}
-
-                            {% if form.non_field_errors %}
-                            <div class="alert alert-danger" style="background: rgba(220, 53, 69, 0.1); border: 1px solid rgba(220, 53, 69, 0.3); color: #ff6b7d;">
-                                {% for error in form.non_field_errors %}
-                                <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
-                                {% endfor %}
-                            </div>
-                            {% endif %}
-
-                            <div class="mb-3">
-                                <label for="id_username" class="form-label fw-bold" style="color: var(--premium-text-secondary);">صارف نام یا ای میل</label>
-                                <div class="input-group">
-                                    <span class="input-group-text border-0" style="background: var(--premium-card-glass-strong); color: var(--premium-gold);">
-                                        <i class="bi bi-person"></i>
-                                    </span>
-                                    {{ form.username }}
-                                </div>
-                                {% if form.username.errors %}
-                                <div class="text-danger small mt-1">
-                                    <i class="bi bi-exclamation-circle me-1"></i>{{ form.username.errors.0 }}
-                                </div>
-                                {% endif %}
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="id_password" class="form-label fw-bold" style="color: var(--premium-text-secondary);">پاس ورڈ</label>
-                                <div class="input-group">
-                                    <span class="input-group-text border-0" style="background: var(--premium-card-glass-strong); color: var(--premium-gold);">
-                                        <i class="bi bi-lock"></i>
-                                    </span>
-                                    {{ form.password }}
-                                    <button class="btn border-0" type="button" id="togglePassword" style="background: var(--premium-card-glass-strong); color: var(--premium-text-secondary);">
-                                        <i class="bi bi-eye"></i>
-                                    </button>
-                                </div>
-                                {% if form.password.errors %}
-                                <div class="text-danger small mt-1">
-                                    <i class="bi bi-exclamation-circle me-1"></i>{{ form.password.errors.0 }}
-                                </div>
-                                {% endif %}
-                            </div>
-
-                            <div class="mb-4 form-check">
-                                <input type="checkbox" class="form-check-input" id="rememberMe" name="remember" style="background: var(--premium-card-glass); border: 1px solid var(--premium-gold);">
-                                <label class="form-check-label fw-bold" for="rememberMe" style="color: var(--premium-text-secondary);">
-                                    مجھے یاد رکھیں
-                                </label>
-                            </div>
-
-                            <div class="d-grid mb-3">
-                                <button type="submit" class="btn btn-lg fw-bold" style="background: var(--premium-gradient); border: none; color: var(--premium-dark); box-shadow: var(--premium-shadow-gold);">
-                                    <i class="bi bi-box-arrow-in-right me-2"></i> لاگ ان
-                                </button>
-                            </div>
-                        </form>
-
-                        <hr style="border-color: var(--premium-border-gold); opacity: 0.3;">
-
-                        <div class="text-center">
-                            <p class="mb-2">
-                                <a href="{% url 'password_reset' %}" class="text-decoration-none fw-bold" style="color: var(--premium-gold);">
-                                    <i class="bi bi-key me-1"></i>پاس ورڈ بھول گئے؟
-                                </a>
-                            </p>
-                            <p class="mb-0">
-                                اکاؤنٹ نہیں ہے؟
-                                <a href="{% url 'register' %}" class="text-decoration-none fw-bold" style="color: var(--premium-primary);">
-                                    رجسٹر کریں
-                                </a>
-                            </p>
-                        </div>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">لاگ ان</h3>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                    <div class="mb-3">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
                     </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">لاگ ان</button>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'password_reset' %}">پاس ورڈ بھول گئے؟</a>
+                    <br>
+                    <a href="{% url 'register' %}">رجسٹر کریں</a>
                 </div>
             </div>
         </div>
     </div>
-</section>
-
-<style>
-/* Custom input styling for glassmorphism */
-#id_username, #id_password {
-    background: var(--premium-card-glass-strong) !important;
-    border: var(--premium-border-gold) !important;
-    color: var(--premium-text) !important;
-}
-
-#id_username:focus, #id_password:focus {
-    background: var(--premium-card-glass) !important;
-    border-color: var(--premium-gold) !important;
-    box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25) !important;
-    color: var(--premium-text) !important;
-}
-
-#id_username::placeholder, #id_password::placeholder {
-    color: var(--premium-text-muted) !important;
-}
-
-/* Mobile Responsive Fixes */
-@media (max-width: 768px) {
-    .min-vh-100 {
-        min-height: auto;
-        padding: 30px 15px;
-    }
-    
-    .card-body {
-        padding: 20px !important;
-    }
-    
-    .display-4 {
-        font-size: 3rem;
-    }
-    
-    h2 {
-        font-size: 1.5rem;
-    }
-    
-    .btn-lg {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-    
-    .input-group {
-        flex-direction: column;
-    }
-    
-    .input-group-text {
-        display: none;
-    }
-    
-    .form-check {
-        text-align: center;
-    }
-}
-</style>
-
-{% block extra_js %}
-<script>
-document.getElementById('togglePassword').addEventListener('click', function() {
-    const passwordInput = document.getElementById('id_password');
-    const icon = this.querySelector('i');
-
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        icon.classList.remove('bi-eye');
-        icon.classList.add('bi-eye-slash');
-    } else {
-        passwordInput.type = 'password';
-        icon.classList.remove('bi-eye-slash');
-        icon.classList.add('bi-eye');
-    }
-});
-</script>
-{% endblock %}
+</div>
 {% endblock %}
