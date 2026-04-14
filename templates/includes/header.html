@@ -1,123 +1,30 @@
 {% load static %}
-<nav class="site-navbar navbar" aria-label="Main navigation">
-    <div class="navbar-container">
-        <div class="navbar-left">
-            <a class="navbar-brand" href="{% url 'home' %}">
-                <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }} logo" class="navbar-brand-logo" loading="eager">
-                <span class="navbar-brand-text">{{ SITE_NAME }}</span>
-            </a>
-        </div>
+<header class="site-navbar">
+    <div class="main-container nav-shell">
+        <a class="nav-brand" href="{% url 'home' %}">
+            <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }} logo" class="nav-brand-mark" loading="eager">
+            <div class="nav-brand-copy">
+                <span class="nav-brand-title">{{ SITE_NAME }}</span>
+                <span class="nav-brand-subtitle">Curated Urdu literature</span>
+            </div>
+        </a>
 
-        <div class="navbar-menu">
-            <a class="navbar-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">
-                <i class="bi bi-house-door"></i>
-                <span>Home</span>
-            </a>
-            <a class="navbar-link {% if '/poetry/' in request.path %}active{% endif %}" href="{% url 'poetry_list' %}">
-                <i class="bi bi-feather"></i>
-                <span>Poetry</span>
-            </a>
-            <a class="navbar-link {% if '/novels/' in request.path %}active{% endif %}" href="{% url 'novel_list' %}">
-                <i class="bi bi-book"></i>
-                <span>Novels</span>
-            </a>
-            <a class="navbar-link {% if '/stories/' in request.path %}active{% endif %}" href="{% url 'story_list' %}">
-                <i class="bi bi-journal-text"></i>
-                <span>Stories</span>
-            </a>
-            <a class="navbar-link {% if '/blog/' in request.path %}active{% endif %}" href="{% url 'blog_list' %}">
-                <i class="bi bi-newspaper"></i>
-                <span>Blog</span>
-            </a>
-            {% if AI_STUDIO_ENABLED %}
-            <a class="navbar-link {% if '/ai-studio/' in request.path %}active{% endif %}" href="{% url 'ai_studio' %}">
-                <i class="bi bi-stars"></i>
-                <span>AI Studio</span>
-            </a>
-            {% endif %}
-            {% if PREMIUM_MEMBERSHIP_ENABLED %}
-            <a class="navbar-link {% if '/membership/' in request.path %}active{% endif %}" href="{% url 'membership' %}">
-                <i class="bi bi-gem"></i>
-                <span>Membership</span>
-            </a>
-            {% endif %}
-        </div>
-
-        <div class="navbar-actions">
-            <a href="{% url 'search' %}" class="btn-icon" aria-label="Search" title="Search">
-                <i class="bi bi-search"></i>
-            </a>
-
+        <nav class="nav-links" aria-label="Primary">
+            <a class="nav-link {% if '/home/' == request.path or request.path == '/' %}active{% endif %}" href="{% url 'home' %}">Home</a>
+            <a class="nav-link {% if '/poetry/' in request.path %}active{% endif %}" href="{% url 'poetry_list' %}">Poetry</a>
+            <a class="nav-link {% if '/novels/' in request.path %}active{% endif %}" href="{% url 'novel_list' %}">Novels</a>
+            <a class="nav-link {% if '/stories/' in request.path %}active{% endif %}" href="{% url 'story_list' %}">Stories</a>
+            <a class="nav-link {% if '/quotes/' in request.path %}active{% endif %}" href="{% url 'quote_list' %}">Quotes</a>
+            <a class="nav-link {% if '/blog/' in request.path %}active{% endif %}" href="{% url 'blog_list' %}">Blog</a>
+            <a class="nav-link {% if '/videos/' in request.path %}active{% endif %}" href="{% url 'video_list' %}">Videos</a>
+            <a class="nav-link {% if '/categories/' in request.path %}active{% endif %}" href="{% url 'all_categories' %}">Categories</a>
+            <a class="nav-link {% if '/search/' in request.path %}active{% endif %}" href="{% url 'search' %}">Search</a>
             {% if user.is_authenticated %}
-            <div class="dropdown">
-                <button class="btn-icon notification-btn position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
-                    <i class="bi bi-bell"></i>
-                    {% if unread_notifications_count %}
-                    <span class="notification-count">{{ unread_notifications_count }}</span>
-                    {% endif %}
-                </button>
-                <div class="dropdown-menu dropdown-menu-end notification-menu text-end">
-                    <div class="dropdown-header d-flex justify-content-between align-items-center">
-                        <span>Notifications</span>
-                        <a href="{% url 'notifications' %}" class="small text-decoration-none">View all</a>
-                    </div>
-                    {% for notification in header_notifications %}
-                    <a class="dropdown-item notification-item {% if not notification.is_read %}notification-item-unread{% endif %}" href="{{ notification.link|default:'#' }}">
-                        <strong class="d-block">{{ notification.title }}</strong>
-                        <span class="small d-block">{{ notification.message }}</span>
-                    </a>
-                    {% empty %}
-                    <div class="dropdown-item text-muted">No new notifications.</div>
-                    {% endfor %}
-                </div>
-            </div>
+            <a class="nav-link {% if '/dashboard/' in request.path %}active{% endif %}" href="{% url 'dashboard' %}">Dashboard</a>
+            {% else %}
+            <a class="nav-link {% if '/accounts/login/' in request.path %}active{% endif %}" href="{% url 'login' %}">Login</a>
+            <a class="nav-link {% if '/accounts/register/' in request.path %}active{% endif %}" href="{% url 'register' %}">Register</a>
             {% endif %}
-
-            <button class="btn-icon" id="darkModeToggle" title="Dark mode" type="button" aria-label="Toggle dark mode">
-                <i class="bi bi-moon"></i>
-            </button>
-
-            <div class="dropdown">
-                <button class="btn-icon user-dropdown-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    {% if user.is_authenticated and user.avatar %}
-                    <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="user-avatar-img">
-                    {% else %}
-                    <i class="bi bi-person-circle"></i>
-                    {% endif %}
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end text-end">
-                    {% if user.is_authenticated %}
-                    <li class="dropdown-item-text small text-muted">
-                        {% if active_membership and active_membership.is_active_membership %}
-                        <i class="bi bi-gem me-1"></i> {{ active_membership.plan.name|default:"Premium Member" }}
-                        {% else %}
-                        <i class="bi bi-person me-1"></i> Free Member
-                        {% endif %}
-                    </li>
-                    <li><a class="dropdown-item" href="{% url 'dashboard' %}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
-                    <li><a class="dropdown-item" href="{% url 'public_profile' username=user.username %}"><i class="bi bi-person me-2"></i>Public Profile</a></li>
-                    <li><a class="dropdown-item" href="{% url 'notifications' %}"><i class="bi bi-bell me-2"></i>Notifications</a></li>
-                    {% if PREMIUM_MEMBERSHIP_ENABLED %}
-                    <li><a class="dropdown-item" href="{% url 'membership' %}"><i class="bi bi-gem me-2"></i>Membership</a></li>
-                    {% endif %}
-                    {% if user.is_staff or user.is_superuser %}
-                    <li><a class="dropdown-item" href="{% url 'dashboard_home' %}"><i class="bi bi-clipboard-data me-2"></i>Admin Dashboard</a></li>
-                    {% endif %}
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-                    {% else %}
-                    <li><a class="dropdown-item" href="{% url 'login' %}"><i class="bi bi-box-arrow-in-right me-2"></i>Login</a></li>
-                    <li><a class="dropdown-item" href="{% url 'register' %}"><i class="bi bi-person-plus me-2"></i>Register</a></li>
-                    {% if PREMIUM_MEMBERSHIP_ENABLED %}
-                    <li><a class="dropdown-item" href="{% url 'membership' %}"><i class="bi bi-gem me-2"></i>Membership</a></li>
-                    {% endif %}
-                    {% endif %}
-                </ul>
-            </div>
-
-            <button id="sidebarToggle" class="btn-icon d-lg-none" type="button" aria-label="Open menu" aria-controls="sideMenu" aria-expanded="false">
-                <i class="bi bi-list"></i>
-            </button>
-        </div>
+        </nav>
     </div>
-</nav>
+</header>

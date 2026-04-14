@@ -33,7 +33,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('static/sw.js', core_views.service_worker, name='service_worker'),
     path('', include('core.urls')),
-    path('home/', views.home, name='home'),
+    path('home/', views.home, name='home_redirect'),
     path('ai-studio/', poetry_views.ai_studio, name='ai_studio'),
     path('ai/', include('ai_features.urls')),
     path('accounts/', include('accounts.urls')),

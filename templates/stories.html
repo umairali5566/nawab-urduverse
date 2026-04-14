@@ -1,0 +1,485 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Urdu Stories - Premium Reading Experience{% endblock %}
+{% block meta_description %}Discover beautiful Urdu stories, short fiction, and narrative writing. A premium collection of literary works in Urdu.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/animations.css' %}">
+<style>
+/* Stories Page Hero */
+.stories-hero {
+    position: relative;
+    padding: var(--space-12) 0;
+    background: linear-gradient(135deg, var(--bg-main) 0%, var(--bg-card-soft) 100%);
+    text-align: center;
+}
+
+.stories-hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: var(--weight-bold);
+    color: var(--text-main);
+    margin-bottom: var(--space-4);
+    font-family: var(--font-urdu);
+}
+
+.stories-hero-subtitle {
+    font-size: var(--text-h2);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-8);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.stories-stats {
+    display: flex;
+    gap: var(--space-8);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-8);
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-secondary);
+    font-size: var(--text-body);
+}
+
+.stat-item i {
+    color: var(--primary-gold);
+}
+
+/* Stories Grid */
+.stories-section {
+    padding: var(--space-12) 0;
+    background: var(--bg-main);
+}
+
+.stories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+}
+
+.story-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text-main);
+    transition: var(--transition-base);
+    box-shadow: var(--shadow-soft);
+}
+
+.story-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+    border-color: var(--primary-gold);
+}
+
+.story-image {
+    height: 200px;
+    background: linear-gradient(135deg, var(--bg-card-soft) 0%, var(--primary-gold) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 3rem;
+}
+
+.story-content {
+    padding: var(--space-4);
+}
+
+.story-title {
+    font-size: var(--text-h3);
+    font-weight: var(--weight-semibold);
+    margin-bottom: var(--space-2);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.3;
+}
+
+.story-excerpt {
+    color: var(--text-secondary);
+    font-size: var(--text-small);
+    line-height: 1.5;
+    margin-bottom: var(--space-3);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.story-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.story-author {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.story-read-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-3);
+    background: var(--primary-gold);
+    color: var(--bg-main);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--text-small);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.story-read-btn:hover {
+    transform: translateX(2px);
+}
+
+/* Categories Section */
+.categories-section {
+    padding: var(--space-12) 0;
+    background: var(--bg-card-soft);
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-4);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.category-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: var(--text-main);
+    transition: var(--transition-base);
+}
+
+.category-link:hover {
+    background: var(--glass);
+    border-color: var(--primary-gold);
+    color: var(--primary-gold);
+}
+
+.category-link i {
+    font-size: 1.25rem;
+}
+
+/* Load More */
+.load-more-section {
+    padding: var(--space-8) 0;
+    text-align: center;
+}
+
+.load-more-btn {
+    padding: var(--space-3) var(--space-6);
+    background: var(--primary-gold);
+    color: var(--bg-main);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.load-more-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stories-stats {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .stories-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .story-meta {
+        flex-direction: column;
+        gap: var(--space-1);
+        align-items: flex-start;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Stories Hero -->
+<section class="stories-hero scroll-animate">
+    <div class="main-container">
+        <h1 class="stories-hero-title">اردو کہانیاں</h1>
+        <p class="stories-hero-subtitle">Beautiful Urdu stories, short fiction, and narrative writing for your reading pleasure</p>
+
+        <div class="stories-stats">
+            <div class="stat-item">
+                <i class="bi bi-journal-text"></i>
+                <span>500+ Stories</span>
+            </div>
+            <div class="stat-item">
+                <i class="bi bi-person"></i>
+                <span>50+ Authors</span>
+            </div>
+            <div class="stat-item">
+                <i class="bi bi-tags"></i>
+                <span>Multiple Categories</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stories Grid -->
+<section class="stories-section scroll-animate">
+    <div class="main-container">
+        <div class="stories-grid">
+            <!-- Sample Story Cards - Replace with actual data -->
+            {% for story in stories %}
+            <div class="story-card">
+                <div class="story-image">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+                <div class="story-content">
+                    <h3 class="story-title">{{ story.title }}</h3>
+                    <p class="story-excerpt">{{ story.excerpt|truncatewords:20 }}</p>
+                    <div class="story-meta">
+                        <div class="story-author">
+                            <i class="bi bi-person"></i>
+                            <span>{{ story.author.name }}</span>
+                        </div>
+                        <a href="{% url 'story_detail' story.slug %}" class="story-read-btn">
+                            <span>Read</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <!-- Placeholder cards for demo -->
+            <div class="story-card">
+                <div class="story-image">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+                <div class="story-content">
+                    <h3 class="story-title">دل کی آواز</h3>
+                    <p class="story-excerpt">ایک دلدادہ نوجوان کی کہانی جو اپنے خوابوں کے پیچھے سفر پر نکلتا ہے...</p>
+                    <div class="story-meta">
+                        <div class="story-author">
+                            <i class="bi bi-person"></i>
+                            <span>احمد ندیم قاسمی</span>
+                        </div>
+                        <a href="#" class="story-read-btn">
+                            <span>Read</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="story-card">
+                <div class="story-image">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+                <div class="story-content">
+                    <h3 class="story-title">رات کی نیندی</h3>
+                    <p class="story-excerpt">ایک رات کی کہانی جو آپ کو سو جانے سے پہلے سنانی چاہیے...</p>
+                    <div class="story-meta">
+                        <div class="story-author">
+                            <i class="bi bi-person"></i>
+                            <span>بیدی</span>
+                        </div>
+                        <a href="#" class="story-read-btn">
+                            <span>Read</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="story-card">
+                <div class="story-image">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+                <div class="story-content">
+                    <h3 class="story-title">دوست کا لٹکا</h3>
+                    <p class="story-excerpt">دوستوں کے درمیان مخلصانہ محبت اور وفاداری کی کہانی...</p>
+                    <div class="story-meta">
+                        <div class="story-author">
+                            <i class="bi bi-person"></i>
+                            <span>پروین شاکر</span>
+                        </div>
+                        <a href="#" class="story-read-btn">
+                            <span>Read</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="story-card">
+                <div class="story-image">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+                <div class="story-content">
+                    <h3 class="story-title">گلیوں کی گواہی</h3>
+                    <p class="story-excerpt">شہر کی گلیوں کی کہانی جو بہت سی یادوں کی گواہی دےتی ہیں...</p>
+                    <div class="story-meta">
+                        <div class="story-author">
+                            <i class="bi bi-person"></i>
+                            <span>انتظار حسین</span>
+                        </div>
+                        <a href="#" class="story-read-btn">
+                            <span>Read</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="story-card">
+                <div class="story-image">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+                <div class="story-content">
+                    <h3 class="story-title">چاند کی چاندنی</h3>
+                    <p class="story-excerpt">رات کی چاندنی میں چھپی ہوئی ایک راز کی کہانی...</p>
+                    <div class="story-meta">
+                        <div class="story-author">
+                            <i class="bi bi-person"></i>
+                            <span>اشفاق احمد</span>
+                        </div>
+                        <a href="#" class="story-read-btn">
+                            <span>Read</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="story-card">
+                <div class="story-image">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+                <div class="story-content">
+                    <h3 class="story-title">وقت کی دھڑکن</h3>
+                    <p class="story-excerpt">وقت کے گزرنے اور زندگی کے معنی کی گہری کہانی...</p>
+                    <div class="story-meta">
+                        <div class="story-author">
+                            <i class="bi bi-person"></i>
+                            <span>قمر جالندھری</span>
+                        </div>
+                        <a href="#" class="story-read-btn">
+                            <span>Read</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section scroll-animate">
+    <div class="main-container">
+        <h2 style="text-align: center; margin-bottom: var(--space-8); color: var(--text-main);">Explore Categories</h2>
+        <div class="categories-grid">
+            <a href="/stories/?category=romantic" class="category-link">
+                <i class="bi bi-heart"></i>
+                <span>Romantic</span>
+            </a>
+            <a href="/stories/?category=mystery" class="category-link">
+                <i class="bi bi-search"></i>
+                <span>Mystery</span>
+            </a>
+            <a href="/stories/?category=drama" class="category-link">
+                <i class="bi bi-film"></i>
+                <span>Drama</span>
+            </a>
+            <a href="/stories/?category=humor" class="category-link">
+                <i class="bi bi-emoji-laughing"></i>
+                <span>Humor</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Load More Section -->
+<section class="load-more-section">
+    <div class="main-container">
+        <button class="load-more-btn" onclick="loadMoreStories()">
+            <i class="bi bi-arrow-down-circle"></i>
+            Load More Stories
+        </button>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Intersection Observer for scroll animations
+document.addEventListener('DOMContentLoaded', function() {
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.scroll-animate').forEach(section => {
+        observer.observe(section);
+    });
+});
+
+// Load more stories function
+function loadMoreStories() {
+    const button = document.querySelector('.load-more-btn');
+    button.innerHTML = '<i class="bi bi-arrow-repeat"></i> Loading...';
+    button.disabled = true;
+
+    // Simulate loading more stories
+    setTimeout(() => {
+        button.innerHTML = '<i class="bi bi-arrow-down-circle"></i> Load More Stories';
+        button.disabled = false;
+
+        // In a real implementation, you would fetch more stories from the server
+        // and append them to the stories-grid
+    }, 2000);
+}
+</script>
+{% endblock %}

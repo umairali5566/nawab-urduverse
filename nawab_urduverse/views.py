@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 
 def home(request):
-    return render(request, 'base.html')
+    """Legacy /home/ route redirect."""
+    return redirect('home')

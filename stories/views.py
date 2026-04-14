@@ -22,7 +22,7 @@ class StoryListView(ListView):
     paginate_by = 12
     
     def get_queryset(self):
-        queryset = Story.objects.filter(is_published=True)
+        queryset = Story.objects.filter(is_published=True).select_related('author').prefetch_related('categories')
         
         # Filter by category
         category = self.request.GET.get('category')
@@ -47,7 +47,7 @@ class StoryListView(ListView):
         elif sort == 'alphabetical':
             queryset = queryset.order_by('title')
         
-        return queryset
+        return queryset.distinct()
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

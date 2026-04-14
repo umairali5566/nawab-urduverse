@@ -47,7 +47,7 @@ class BlogListView(ListView):
         elif sort == 'alphabetical':
             queryset = queryset.order_by('title')
         
-        return queryset
+        return queryset.distinct()
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

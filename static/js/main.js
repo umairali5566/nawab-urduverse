@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
     initCommentForms();
     initTooltips();
     initLazyLoading();
-    initSidebarToggle();
     initReaderTools();
     initContentProtection();
     initReaderHistory();
@@ -458,41 +457,7 @@ function initLazyLoading() {
 }
 
 function initSidebarToggle() {
-    const sidebar = document.getElementById("sideMenu") || document.querySelector(".sidebar");
-    const toggleBtn = document.getElementById("sidebarToggle");
-    const backdrop = document.getElementById("menuBackdrop");
-    const closeBtn = document.getElementById("drawerClose");
-    if (!sidebar || !toggleBtn) return;
-
-    const closeMenu = () => {
-        sidebar.classList.remove("open", "is-open");
-        toggleBtn.setAttribute("aria-expanded", "false");
-        backdrop?.classList.remove("show");
-    };
-
-    const openMenu = () => {
-        sidebar.classList.add("open", "is-open");
-        toggleBtn.setAttribute("aria-expanded", "true");
-        backdrop?.classList.add("show");
-    };
-
-    toggleBtn.addEventListener("click", (event) => {
-        event.preventDefault();
-        if (sidebar.classList.contains("open") || sidebar.classList.contains("is-open")) {
-            closeMenu();
-        } else {
-            openMenu();
-        }
-    });
-
-    backdrop?.addEventListener("click", closeMenu);
-    closeBtn?.addEventListener("click", closeMenu);
-    document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") closeMenu();
-    });
-    window.addEventListener("resize", () => {
-        if (window.innerWidth >= 992) closeMenu();
-    });
+    // Mobile drawer has been removed from the shared UI.
 }
 
 function initReaderTools() {

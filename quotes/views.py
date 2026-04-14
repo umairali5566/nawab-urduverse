@@ -51,7 +51,7 @@ class QuoteListView(ListView):
         elif sort == 'likes':
             queryset = queryset.order_by('-likes_count')
         
-        return queryset
+        return queryset.distinct()
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

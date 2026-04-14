@@ -30,6 +30,19 @@ class PoetryListView(BaseContentListView):
     template_name = "poetry/poetry_list.html"
     context_object_name = "poems"
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        poetry_type = self.request.GET.get("type")
+        if poetry_type:
+            queryset = queryset.filter(poetry_type=poetry_type)
+
+        mood = self.request.GET.get("mood")
+        if mood:
+            queryset = queryset.filter(mood=mood)
+
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["poetry_types"] = Poetry.POETRY_TYPES
@@ -284,9 +297,9 @@ def legacy_poetry_redirect(request, slug):
     return redirect(poem.get_absolute_url(), permanent=True)
 
 
-def author_profile(request, author_name):
+def author_profile(request, author_slug):
     """Author profile page showing poetry in Rekhta-style layout"""
-    author = get_object_or_404(Author, name=author_name)
+    author = get_object_or_404(Author, slug=author_slug, is_active=True)
     
     category_filter = request.GET.get('category', 'all')
     
@@ -315,7 +328,6 @@ def author_profile(request, author_name):
             description=f"Read poetry by {author.name}. {total_poetry} poems including {ghazals_count} ghazals and {nazms_count} nazms.",
             keywords=f"{author.name}, Urdu poetry, ghazal, nazm",
             og_type='profile',
-            og_image=author.image.url if author.image else None,
         ),
     }
     

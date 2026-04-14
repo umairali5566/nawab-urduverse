@@ -1,46 +1,478 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ SITE_NAME }} - Premium Urdu Literature Platform{% endblock %}
+{% block title %}Discover the Beauty of Urdu Poetry{% endblock %}
 {% block meta_description %}Discover the beauty of Urdu poetry, novels, stories, and quotes. A modern platform celebrating the rich heritage of Urdu literature.{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/design-system.css' %}">
+<link rel="stylesheet" href="{% static 'css/animations.css' %}">
+<style>
+/* Hero Section */
+.hero-section {
+    position: relative;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--bg-main) 0%, var(--bg-card) 100%);
+    overflow: hidden;
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 800px;
+    z-index: 2;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: var(--weight-bold);
+    line-height: 1.1;
+    margin-bottom: var(--space-4);
+    background: linear-gradient(135deg, var(--text-main) 0%, var(--primary-gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+.hero-subtitle {
+    font-size: var(--text-h2);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-8);
+    font-family: var(--font-urdu);
+}
+
+.hero-search {
+    max-width: 500px;
+    margin: 0 auto var(--space-6);
+}
+
+.hero-search-bar {
+    position: relative;
+    width: 100%;
+}
+
+.hero-search-input {
+    width: 100%;
+    padding: var(--space-4) var(--space-6);
+    padding-right: 60px;
+    background: var(--glass);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-xl);
+    color: var(--text-main);
+    font-size: var(--text-body);
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-base);
+}
+
+.hero-search-input:focus {
+    outline: none;
+    border-color: var(--primary-gold);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+.hero-search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.hero-search-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    background: var(--primary-gold);
+    border: none;
+    border-radius: var(--radius-lg);
+    color: var(--bg-main);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.hero-search-btn:hover {
+    transform: translateY(-50%) scale(1.05);
+}
+
+.hero-buttons {
+    display: flex;
+    gap: var(--space-4);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.hero-btn-primary {
+    padding: var(--space-3) var(--space-6);
+    background: linear-gradient(135deg, var(--primary-gold) 0%, var(--primary-gold-light) 100%);
+    color: var(--bg-main);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-base);
+}
+
+.hero-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.hero-btn-outline {
+    padding: var(--space-3) var(--space-6);
+    background: transparent;
+    color: var(--text-main);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+    transition: var(--transition-base);
+}
+
+.hero-btn-outline:hover {
+    background: var(--glass);
+    border-color: var(--primary-gold);
+    color: var(--primary-gold);
+}
+
+/* Featured Section */
+.featured-section {
+    padding: var(--space-12) 0;
+    background: var(--bg-main);
+}
+
+.featured-card {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-base);
+}
+
+.featured-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.featured-title {
+    font-size: var(--text-h3);
+    color: var(--text-main);
+    margin-bottom: var(--space-4);
+    text-align: center;
+}
+
+.featured-text {
+    color: var(--text-secondary);
+    font-size: var(--text-body);
+    line-height: 1.6;
+    margin-bottom: var(--space-6);
+    text-align: center;
+}
+
+.featured-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    background: var(--primary-gold);
+    color: var(--bg-main);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+    margin: 0 auto;
+    transition: var(--transition-fast);
+}
+
+.featured-btn:hover {
+    transform: translateX(4px);
+}
+
+/* Stats Section */
+.stats-section {
+    padding: var(--space-12) 0;
+    background: var(--bg-card-soft);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-8);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.stat-card {
+    text-align: center;
+    padding: var(--space-6);
+    background: var(--glass);
+    border-radius: var(--radius-lg);
+    transition: var(--transition-base);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-number {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: var(--weight-bold);
+    background: linear-gradient(135deg, var(--primary-gold) 0%, var(--primary-gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--space-2);
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: var(--text-body);
+    font-weight: var(--weight-medium);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto var(--space-3);
+    background: var(--glass);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-gold);
+    font-size: 1.5rem;
+}
+
+/* Categories Section */
+.categories-section {
+    padding: var(--space-12) 0;
+    background: var(--bg-main);
+}
+
+.categories-title {
+    text-align: center;
+    font-size: var(--text-h2);
+    color: var(--text-main);
+    margin-bottom: var(--space-8);
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-6);
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.category-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-main);
+    transition: var(--transition-base);
+    box-shadow: var(--shadow-soft);
+}
+
+.category-card:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-card);
+    border-color: var(--primary-gold);
+}
+
+.category-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--space-4);
+    background: var(--glass);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-gold);
+    font-size: 2rem;
+    transition: var(--transition-fast);
+}
+
+.category-card:hover .category-icon {
+    background: var(--primary-gold);
+    color: var(--bg-main);
+}
+
+.category-title {
+    font-size: var(--text-h3);
+    font-weight: var(--weight-semibold);
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero-btn-primary,
+    .hero-btn-outline {
+        width: 200px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-title {
+        font-size: clamp(2rem, 8vw, 3rem);
+    }
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+    }
+    to {
+        text-shadow: 0 0 30px rgba(245, 158, 11, 0.5), 0 0 40px rgba(245, 158, 11, 0.3);
+    }
+}
+</style>
 {% endblock %}
 
 {% block content %}
-<!-- =====================================================
-     HOME PAGE - Premium Urdu Literature Platform
-     ===================================================== -->
+<!-- Hero Section -->
+<section class="hero-section scroll-animate">
+    <div class="main-container">
+        <div class="hero-content">
+            <h1 class="hero-title">Discover the Beauty of Urdu Poetry</h1>
+            <p class="hero-subtitle">خوبصورت اردو شاعری کی دنیا میں خوش آمدید</p>
 
-<!-- 1. HERO SECTION -->
-{% include "components/hero.html" %}
+            <div class="hero-search">
+                <div class="hero-search-bar">
+                    <input type="text" class="hero-search-input" placeholder="Search for poetry, stories, and more..." id="heroSearch">
+                    <button class="hero-search-btn" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
 
-<!-- 2. CATEGORIES SECTION -->
-{% include "components/categories.html" %}
+            <div class="hero-buttons">
+                <a href="/poetry/" class="hero-btn-primary">
+                    <i class="bi bi-feather"></i>
+                    Explore Poetry
+                </a>
+                <a href="/" class="hero-btn-outline">
+                    <i class="bi bi-book"></i>
+                    Start Reading
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 
-<!-- 3. LATEST POETRY SECTION -->
-{% include "components/poetry_list.html" %}
+<!-- Featured Section -->
+<section class="featured-section scroll-animate">
+    <div class="main-container">
+        <div class="featured-card">
+            <h2 class="featured-title">Featured Poem</h2>
+            <p class="featured-text">
+                "دل کی بات دل ہی کو سنانی چاہیے<br>
+                زبان سے نکل کر بھی رسوائی ہوتی ہے"
+            </p>
+            <a href="/poetry/" class="featured-btn">
+                <span>Read Now</span>
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
 
-<!-- 4. FEATURED CONTENT SECTION -->
-{% include "components/featured.html" %}
+<!-- Stats Section -->
+<section class="stats-section scroll-animate">
+    <div class="main-container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div class="stat-number">50K+</div>
+                <div class="stat-label">Readers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Authors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-book"></i>
+                </div>
+                <div class="stat-number">5K+</div>
+                <div class="stat-label">Poems</div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<!-- 5. AUTHORS SECTION -->
-{% include "components/authors.html" %}
-
-<!-- 6. BLOGS + VIDEOS SECTION -->
-{% include "components/blogs.html" %}
-
-<!-- 7. CTA SECTION -->
-{% include "components/cta.html" %}
-
+<!-- Categories Section -->
+<section class="categories-section scroll-animate">
+    <div class="main-container">
+        <h2 class="categories-title">Explore by Category</h2>
+        <div class="categories-grid">
+            <a href="/poetry/" class="category-card">
+                <div class="category-icon">
+                    <i class="bi bi-feather"></i>
+                </div>
+                <h3 class="category-title">Poetry</h3>
+            </a>
+            <a href="/" class="category-card">
+                <div class="category-icon">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+                <h3 class="category-title">Stories</h3>
+            </a>
+            <a href="/novels/" class="category-card">
+                <div class="category-icon">
+                    <i class="bi bi-book"></i>
+                </div>
+                <h3 class="category-title">Novels</h3>
+            </a>
+            <a href="/blog/" class="category-card">
+                <div class="category-icon">
+                    <i class="bi bi-newspaper"></i>
+                </div>
+                <h3 class="category-title">Blog</h3>
+            </a>
+        </div>
+    </div>
+</section>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-// =====================================================
-// HOME PAGE SCRIPTS
-// =====================================================
+// Hero search functionality
+document.getElementById('heroSearch').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        const query = this.value.trim();
+        if (query) {
+            window.location.href = `/search/?q=${encodeURIComponent(query)}`;
+        }
+    }
+});
 
 // Intersection Observer for scroll animations
 document.addEventListener('DOMContentLoaded', function() {
@@ -59,47 +491,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, observerOptions);
 
-    // Observe sections for animation
-    document.querySelectorAll('.section').forEach(section => {
-        section.classList.add('scroll-animate');
+    document.querySelectorAll('.scroll-animate').forEach(section => {
         observer.observe(section);
     });
-
-    // Lazy load images
-    if ('loading' in HTMLImageElement.prototype) {
-        // Native lazy loading supported
-        const lazyImages = document.querySelectorAll('img[loading="lazy"]');
-        lazyImages.forEach(img => {
-            img.src = img.dataset.src || img.src;
-        });
-    } else {
-        // Fallback for browsers that don't support native lazy loading
-        const lazyImages = document.querySelectorAll('img[loading="lazy"]');
-        const lazyObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.dataset.src || img.src;
-                    lazyObserver.unobserve(img);
-                }
-            });
-        });
-
-        lazyImages.forEach(img => lazyObserver.observe(img));
-    }
-
-
-
-    // Parallax effect for hero (subtle)
-    if (window.innerWidth > 768) {
-        const hero = document.getElementById('heroSection');
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            if (scrolled < window.innerHeight) {
-                hero.style.transform = `translateY(${scrolled * 0.3}px)`;
-            }
-        });
-    }
 });
 </script>
 {% endblock %}

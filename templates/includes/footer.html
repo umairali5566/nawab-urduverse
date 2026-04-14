@@ -1,47 +1,66 @@
+{% load static %}
 <footer class="site-footer">
-    <div class="main-container">
-        <div class="footer-grid">
+    <div class="main-container footer-shell">
+        <div class="footer-top">
             <div class="footer-brand-block">
-                <span class="footer-kicker">Nawab Urdu Academy</span>
-                <h5 class="footer-title">A premium home for Urdu literature, readers, and creators.</h5>
-                <p class="footer-text">{{ SITE_DESCRIPTION }}</p>
+                <a class="footer-brand" href="{% url 'home' %}">
+                    <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }} logo">
+                    <div>
+                        <span>{{ SITE_NAME }}</span>
+                        <small>اردو ادب کی جدید دنیا</small>
+                    </div>
+                </a>
+                <p class="footer-copy">
+                    {{ SITE_DESCRIPTION }}
+                </p>
                 <div class="footer-social">
                     <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
                     <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
                     <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                    <a href="#" aria-label="Telegram"><i class="bi bi-telegram"></i></a>
                 </div>
             </div>
 
-            <div>
-                <h5 class="footer-title">Explore</h5>
-                <ul class="footer-links">
-                    <li><a href="{% url 'poetry_list' %}">Poetry</a></li>
-                    <li><a href="{% url 'novel_list' %}">Novels</a></li>
-                    <li><a href="{% url 'story_list' %}">Stories</a></li>
-                    <li><a href="{% url 'blog_list' %}">Blog</a></li>
-                    <li><a href="{% url 'video_list' %}">Videos</a></li>
-                    <li><a href="{% url 'search' %}">Search</a></li>
-                </ul>
+            <div class="footer-links-grid">
+                <div>
+                    <h3>Explore</h3>
+                    <a href="{% url 'poetry_list' %}">Poetry</a>
+                    <a href="{% url 'novel_list' %}">Novels</a>
+                    <a href="{% url 'story_list' %}">Stories</a>
+                    <a href="{% url 'quote_list' %}">Quotes</a>
+                </div>
+                <div>
+                    <h3>Discover</h3>
+                    <a href="{% url 'blog_list' %}">Blog</a>
+                    <a href="{% url 'video_list' %}">Videos</a>
+                    <a href="{% url 'all_categories' %}">Categories</a>
+                    <a href="{% url 'search' %}">Search</a>
+                </div>
+                <div>
+                    <h3>Company</h3>
+                    <a href="{% url 'about' %}">About</a>
+                    <a href="{% url 'contact' %}">Contact</a>
+                    <a href="{% url 'privacy_policy' %}">Privacy</a>
+                    <a href="{% url 'terms_of_service' %}">Terms</a>
+                </div>
             </div>
+        </div>
 
+        <div class="footer-newsletter-card">
             <div>
-                <h5 class="footer-title">Support</h5>
-                <ul class="footer-links">
-                    <li><a href="{% url 'about' %}">About</a></li>
-                    <li><a href="{% url 'contact' %}">Contact</a></li>
-                    <li><a href="{% url 'privacy_policy' %}">Privacy</a></li>
-                    <li><a href="{% url 'terms_of_service' %}">Terms</a></li>
-                    {% if PREMIUM_MEMBERSHIP_ENABLED %}
-                    <li><a href="{% url 'membership' %}">Membership</a></li>
-                    {% endif %}
-                </ul>
+                <span class="eyebrow">Newsletter</span>
+                <h3>New poems, stories, and literary highlights in your inbox.</h3>
             </div>
+            <form id="newsletterForm" class="footer-newsletter-form" action="{% url 'newsletter_subscribe' %}" method="post">
+                {% csrf_token %}
+                <input type="email" name="email" placeholder="Enter your email" required>
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+            </form>
         </div>
 
         <div class="footer-bottom">
             <span>&copy; {% now "Y" %} {{ SITE_NAME }}. All rights reserved.</span>
-            <span>Built as a modern Urdu literature ecosystem with premium reading, discovery, and creator tools.</span>
+            <span>Built for readers, writers, and the craft of Urdu literature.</span>
         </div>
     </div>
 </footer>

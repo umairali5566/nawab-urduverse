@@ -1,641 +1,71 @@
 {% load static %}
-<!-- HERO SECTION - Premium Modern Design -->
-<section class="hero" id="heroSection">
-    <div class="hero-background" aria-hidden="true">
-        <div class="hero-gradient"></div>
-        <div class="hero-particles">
-            <span class="particle"></span>
-            <span class="particle"></span>
-            <span class="particle"></span>
-            <span class="particle"></span>
-            <span class="particle"></span>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="hero-content">
-            <!-- Title -->
-            <h1 class="hero-title">
-                Discover the Beauty of<br>
-                <span class="gold">Urdu Poetry</span>
-            </h1>
-
-            <!-- Urdu Tagline -->
-            <p class="hero-tagline">
-                شاعری کی دنیا میں خوش آمدید
+{% with featured_poem=latest_poetry|first %}
+<section class="page-hero home-hero">
+    <div class="home-hero-grid">
+        <div class="home-hero-copy">
+            <span class="eyebrow">Nawab Urdu Academy</span>
+            <p class="home-hero-urdu">اردو ادب کی خوب صورتی، ایک باوقار ڈیجیٹل تجربے میں</p>
+            <h1 class="home-hero-title">Read poetry, novels, stories, and literary voices in a calmer, more polished space.</h1>
+            <p class="home-hero-text">
+                Explore classic and contemporary Urdu writing with elegant reading layouts, curated collections, and quick discovery across every major format.
             </p>
 
-            <!-- Search Bar (Glass style) -->
-            <div class="hero-search-form">
-                <div class="search-input-wrapper">
+            <form class="home-search" id="homeSearchForm" action="{% url 'search' %}" method="get" novalidate>
+                <div class="home-search-input-wrap">
                     <i class="bi bi-search"></i>
                     <input
-                        type="text"
-                        placeholder="Urdu shayari, ghazal, nazam search karein..."
-                        class="hero-search-input"
+                        class="home-search-input"
+                        id="homePoetrySearchInput"
+                        type="search"
+                        name="q"
+                        placeholder="Search a poet, title, or line of poetry"
                         autocomplete="off"
                     >
-                    <button type="button" class="search-reset-btn" id="searchResetBtn" style="display: none;">
-                        <i class="bi bi-x"></i>
+                    <button class="home-search-reset" id="homeSearchReset" type="button" aria-label="Clear search" hidden>
+                        <i class="bi bi-x-lg"></i>
                     </button>
                 </div>
-            </div>
-
-            <!-- CTA Buttons -->
-            <div class="hero-buttons">
-                <a href="{% url 'poetry_list' %}" class="btn-primary-large">
-                    <i class="bi bi-book"></i>
-                    <span>Explore Poetry</span>
-                </a>
-                <a href="{% url 'register' %}" class="btn-secondary-large">
-                    <i class="bi bi-pen"></i>
-                    <span>Start Reading</span>
-                </a>
-            </div>
-
-            <!-- Quick Stats -->
-            <div class="hero-stats">
-                <div class="stat-item">
-                    <span class="stat-number">{{ total_poetry|default:"10K+" }}</span>
-                    <span class="stat-label">Poetry</span>
+                <div class="hero-chip-row">
+                    <span class="hero-chip"><i class="bi bi-feather"></i> {{ total_poetry|default:"1,000+" }} poems</span>
+                    <span class="hero-chip"><i class="bi bi-people"></i> {{ total_authors|default:"250+" }} authors</span>
+                    <span class="hero-chip"><i class="bi bi-journal-richtext"></i> Multi-format library</span>
                 </div>
-                <div class="stat-divider"></div>
-                <div class="stat-item">
-                    <span class="stat-number">{{ total_authors|default:"5K+" }}</span>
-                    <span class="stat-label">Authors</span>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat-item">
-                    <span class="stat-number">{{ total_readers|default:"50K+" }}</span>
-                    <span class="stat-label">Readers</span>
-                </div>
-            </div>
+            </form>
         </div>
+
+        <aside class="home-hero-panel">
+            <div class="feature-card">
+                <span class="eyebrow">Featured Reading</span>
+                {% if featured_poem %}
+                <h3 class="listing-title listing-title-urdu mt-3">{{ featured_poem.title }}</h3>
+                <p class="listing-excerpt urdu-text">{{ featured_poem.plain_text_content|truncatechars:170 }}</p>
+                <div class="listing-meta">
+                    <span><i class="bi bi-person"></i> {{ featured_poem.author.name }}</span>
+                    <span><i class="bi bi-eye"></i> {{ featured_poem.views_count|default:0 }}</span>
+                </div>
+                <a class="btn btn-primary mt-3" href="{{ featured_poem.get_absolute_url }}">Open featured poem</a>
+                {% else %}
+                <h3 class="mt-3">Your literary home is ready</h3>
+                <p class="listing-excerpt">Start publishing poetry and this spotlight card will automatically feature your latest work.</p>
+                <a class="btn btn-primary mt-3" href="{% url 'poetry_list' %}">Browse poetry</a>
+                {% endif %}
+            </div>
+
+            <div class="stat-grid">
+                <div class="stat-card-refined">
+                    <strong>{{ total_poetry|default:"0" }}</strong>
+                    <span>Published poems</span>
+                </div>
+                <div class="stat-card-refined">
+                    <strong>{{ total_authors|default:"0" }}</strong>
+                    <span>Featured authors</span>
+                </div>
+                <div class="stat-card-refined">
+                    <strong>{{ total_readers|default:"0" }}</strong>
+                    <span>Readers reached</span>
+                </div>
+            </div>
+        </aside>
     </div>
 </section>
-
-<style>
-.hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    padding: 60px 20px;
-    background: linear-gradient(135deg, #0b0f1a 0%, #111827 50%, #020617 100%);
-}
-
-.hero-background {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-}
-
-.hero-gradient {
-    position: absolute;
-    width: 800px;
-    height: 800px;
-    background: radial-gradient(circle, rgba(251, 191, 36, 0.15) 0%, transparent 70%);
-    top: -200px;
-    left: 50%;
-    transform: translateX(-50%);
-    filter: blur(60px);
-    animation: float 20s ease-in-out infinite;
-}
-
-.hero-particles {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-}
-
-.particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: #fbbf24;
-    border-radius: 50%;
-    opacity: 0.6;
-    animation: float-particle linear infinite;
-}
-
-.particle:nth-child(1) { top: 10%; left: 10%; animation-duration: 20s; animation-delay: 0s; }
-.particle:nth-child(2) { top: 30%; right: 15%; animation-duration: 25s; animation-delay: -5s; }
-.particle:nth-child(3) { bottom: 20%; left: 20%; animation-duration: 30s; animation-delay: -10s; }
-.particle:nth-child(4) { top: 60%; left: 70%; animation-duration: 22s; animation-delay: -3s; }
-.particle:nth-child(5) { bottom: 40%; right: 25%; animation-duration: 28s; animation-delay: -8s; }
-
-@keyframes float {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(-30px); }
-}
-
-@keyframes float-particle {
-    0% { transform: translateY(0) translateX(0); opacity: 0; }
-    10% { opacity: 0.6; }
-    90% { opacity: 0.6; }
-    100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-}
-
-.hero-content {
-    text-align: center;
-    animation: fade-in-up 1s ease-out;
-}
-
-@keyframes fade-in-up {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 60px;
-    font-weight: 700;
-    line-height: 1.2;
-    color: #ffffff;
-    margin: 0 0 20px 0;
-    letter-spacing: -1px;
-    text-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
-}
-
-.hero-title .gold {
-    background: linear-gradient(135deg, #fbbf24 0%, #fcd34d 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    position: relative;
-}
-
-.hero-title .gold::before {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    background: linear-gradient(135deg, #fbbf24 0%, #fcd34d 100%);
-    border-radius: 4px;
-    filter: blur(8px);
-    opacity: 0.3;
-    z-index: -1;
-}
-
-.hero-tagline {
-    font-size: 24px;
-    color: #d1d5db;
-    margin: 0 0 50px 0;
-    font-family: 'Noto Nastaliq Urdu', serif;
-    letter-spacing: 0.5px;
-    line-height: 1.6;
-}
-
-.hero-search-form {
-    display: flex;
-    gap: 12px;
-    max-width: 600px;
-    margin: 0 auto 50px;
-    animation: fade-in-up 1s ease-out 0.2s both;
-}
-
-.search-input-wrapper {
-    flex: 1;
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.search-input-wrapper i {
-    position: absolute;
-    left: 20px;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 18px;
-    z-index: 2;
-}
-
-.hero-search-input {
-    width: 100%;
-    padding: 16px 20px 16px 52px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    color: #ffffff;
-    font-size: 16px;
-    font-family: 'Inter', sans-serif;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-}
-
-.hero-search-input::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-}
-
-.hero-search-input:focus {
-    outline: none;
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(251, 191, 36, 0.3);
-    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
-}
-
-.search-reset-btn {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: rgba(255, 255, 255, 0.5);
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    z-index: 2;
-}
-
-.search-reset-btn:hover {
-    color: #fbbf24;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.hero-buttons {
-    display: flex;
-    gap: 24px;
-    justify-content: center;
-    margin-bottom: 60px;
-    animation: fade-in-up 1s ease-out 0.4s both;
-}
-
-.btn-primary-large,
-.btn-secondary-large {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px 36px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 16px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-}
-
-.btn-primary-large {
-    background: linear-gradient(135deg, #fbbf24 0%, #fcd34d 100%);
-    color: #000000;
-    border: none;
-}
-
-.btn-primary-large:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(251, 191, 36, 0.3);
-}
-
-.btn-secondary-large {
-    background: rgba(255, 255, 255, 0.05);
-    color: #fbbf24;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-}
-
-.btn-secondary-large:hover {
-    background: rgba(251, 191, 36, 0.1);
-    border-color: rgba(251, 191, 36, 0.3);
-    transform: translateY(-4px);
-    color: #fcd34d;
-}
-
-.hero-stats {
-    display: flex;
-    gap: 60px;
-    justify-content: center;
-    align-items: center;
-    animation: fade-in-up 1s ease-out 0.6s both;
-}
-
-.stat-item {
-    text-align: center;
-}
-
-.stat-number {
-    display: block;
-    font-size: 32px;
-    font-weight: 700;
-    color: #fbbf24;
-    margin-bottom: 8px;
-    font-family: 'Inter', sans-serif;
-}
-
-.stat-label {
-    display: block;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-family: 'Inter', sans-serif;
-}
-
-.stat-divider {
-    width: 1px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-@media (max-width: 768px) {
-    .hero {
-        min-height: 100vh;
-        padding: 40px 20px;
-    }
-
-    .hero-title {
-        font-size: 48px;
-    }
-
-    .hero-tagline {
-        font-size: 20px;
-    }
-
-    .hero-search-form {
-        max-width: 100%;
-    }
-
-    .hero-buttons {
-        flex-direction: column;
-        gap: 16px;
-    }
-
-    .btn-primary-large,
-    .btn-secondary-large {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .hero-stats {
-        flex-direction: column;
-        gap: 30px;
-    }
-
-    .stat-divider {
-        width: 60px;
-        height: 1px;
-    }
-}
-</style>
-
-                    <div class="hero-stat">
-                        <span class="hero-stat-number">{{ total_authors|default:"500+" }}</span>
-                        <span class="hero-stat-label">Authors</span>
-                    </div>
-                    <div class="hero-stat">
-                        <span class="hero-stat-number">{{ total_readers|default:"50,000+" }}</span>
-                        <span class="hero-stat-label">Readers</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scroll Indicator -->
-    <div class="hero-scroll-indicator">
-        <span>Scroll to explore</span>
-        <i class="bi bi-chevron-down"></i>
-    </div>
-</section>
-
-<style>
-/* =====================================================
-   HERO SECTION STYLES
-   ===================================================== */
-.hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding-top: var(--navbar-height);
-    overflow: hidden;
-}
-
-/* Hero Background */
-.hero-background {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-}
-
-.hero-gradient {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.4;
-}
-
-.hero-gradient-1 {
-    width: 600px;
-    height: 600px;
-    top: -200px;
-    right: -100px;
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
-    animation: float 20s ease-in-out infinite;
-}
-
-.hero-gradient-2 {
-    width: 500px;
-    height: 500px;
-    bottom: -150px;
-    left: -100px;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
-    animation: float 25s ease-in-out infinite reverse;
-}
-
-@keyframes float {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    25% { transform: translate(30px, -30px) scale(1.05); }
-    50% { transform: translate(-20px, 20px) scale(0.95); }
-    75% { transform: translate(20px, 10px) scale(1.02); }
-}
-
-/* Particles */
-.hero-particles {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-}
-
-.particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: var(--gold);
-    border-radius: 50%;
-    opacity: 0.3;
-    animation: particle-float 15s ease-in-out infinite;
-}
-
-.particle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
-.particle:nth-child(2) { top: 60%; left: 30%; animation-delay: 2s; }
-.particle:nth-child(3) { top: 40%; left: 70%; animation-delay: 4s; }
-.particle:nth-child(4) { top: 80%; left: 50%; animation-delay: 6s; }
-.particle:nth-child(5) { top: 30%; left: 85%; animation-delay: 8s; }
-
-@keyframes particle-float {
-    0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
-    50% { transform: translateY(-100px) scale(1.5); opacity: 0.6; }
-}
-
-/* Hero Container */
-.hero-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-8);
-    align-items: center;
-    position: relative;
-    z-index: 1;
-    text-align: center;
-}
-
-/* Hero Featured Card */
-.hero-featured-card {
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.02) 100%);
-    border: 1px solid var(--border-gold);
-    border-radius: var(--radius-xl);
-    padding: var(--space-4);
-    position: relative;
-    overflow: hidden;
-}
-
-.hero-featured-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 60%);
-    pointer-events: none;
-}
-
-.hero-featured-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    background: var(--gold);
-    color: var(--bg-main);
-    border-radius: var(--radius-full);
-    font-size: var(--text-xs);
-    font-weight: var(--weight-semibold);
-    margin-bottom: var(--space-3);
-}
-
-.hero-featured-avatar-placeholder {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-full);
-    background: var(--glass);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    font-size: 1.5rem;
-}
-
-/* Hero Stats */
-.hero-stats {
-    display: flex;
-    gap: var(--space-4);
-    margin-top: var(--space-4);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--border);
-}
-
-.hero-stat {
-    text-align: center;
-}
-
-.hero-stat-number {
-    display: block;
-    font-size: 1.5rem;
-    font-weight: var(--weight-bold);
-    color: var(--gold);
-}
-
-.hero-stat-label {
-    display: block;
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-    margin-top: 2px;
-}
-
-/* Scroll Indicator */
-.hero-scroll-indicator {
-    position: absolute;
-    bottom: var(--space-4);
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-1);
-    color: var(--text-muted);
-    font-size: var(--text-xs);
-    animation: bounce 2s ease-in-out infinite;
-}
-
-.hero-scroll-indicator i {
-    font-size: 1.25rem;
-}
-
-@keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(8px); }
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-    .hero-description {
-        margin-inline: auto;
-    }
-
-    .hero-actions {
-        justify-content: center;
-    }
-
-    .hero-search {
-        max-width: 500px;
-        margin-inline: auto;
-    }
-
-    .hero-stats {
-        justify-content: center;
-    }
-
-    .hero-scroll-indicator {
-        display: none;
-    }
-}
-
-@media (max-width: 640px) {
-    .hero {
-        padding-top: calc(var(--navbar-height) + var(--space-4));
-    }
-    
-    .hero-stats {
-        gap: var(--space-3);
-    }
-    
-    .hero-stat-number {
-        font-size: 1.25rem;
-    }
-}
-</style>
+{% endwith %}

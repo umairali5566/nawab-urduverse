@@ -29,6 +29,7 @@ from .models import (
     Comment,
     ContactMessage,
     Content,
+    ContentLike,
     NewsletterSubscriber,
     Notification,
     PremiumPlan,
@@ -189,25 +190,27 @@ def base_share_view(request, model, content_type, slug):
 
 
 def home(request):
-    """Modern Urdu search homepage."""
-    categories = Category.objects.filter(category_type__in=['poetry', 'novel', 'blog'], is_active=True).order_by('name')
-    authors = Author.objects.filter(is_active=True).order_by('name')[:25]
+    """Homepage for the main literary landing page."""
+    categories = Category.objects.filter(is_active=True).order_by('category_type', 'name')
+    authors = Author.objects.filter(is_active=True).order_by('-is_featured', 'name')[:25]
+    featured_authors = Author.objects.filter(is_active=True, is_featured=True).order_by('name')[:6]
 
-    # Latest poetry
-    latest_poetry = Poetry.objects.filter(is_published=True).order_by('-created_at')[:9]
-
-    # Featured content
+    latest_poetry = Poetry.objects.filter(is_published=True).select_related('author', 'category').order_by('-created_at')[:6]
+    latest_stories = Story.objects.filter(is_published=True).select_related('author').prefetch_related('categories').order_by('-created_at')[:6]
+    latest_novels = Novel.objects.filter(is_published=True).select_related('author', 'category').order_by('-created_at')[:6]
     featured_content = Content.objects.filter(is_published=True).order_by('-created_at')[:6]
 
-    # Stats
     total_poetry = Poetry.objects.filter(is_published=True).count()
     total_authors = Author.objects.filter(is_active=True).count()
-    total_readers = 50000  # Placeholder, can be updated with actual user count
+    total_readers = User.objects.filter(is_active=True).count()
 
     context = {
         'categories': categories,
         'authors': authors,
+        'featured_authors': featured_authors,
         'latest_poetry': latest_poetry,
+        'latest_stories': latest_stories,
+        'latest_novels': latest_novels,
         'content_types': Content.CONTENT_TYPES,
         'featured_content': featured_content,
         'total_poetry': total_poetry,
@@ -216,9 +219,9 @@ def home(request):
         'show_superuser_panel': request.user.is_authenticated and request.user.is_superuser,
         **build_seo_context(
             request,
-            title=f"{settings.SITE_NAME} | اردو شاعری کا بہترین منصہ",
-            description="Urdu poetry, novels, and blog content search karein aur instant results ek hi page par dekhein.",
-            keywords="Urdu search, poetry, novels, blog, search, nawab urdu academy",
+            title=f"{settings.SITE_NAME} | A premium home for Urdu literature",
+            description="Discover Urdu poetry, novels, stories, quotes, blogs, and literary voices in one elegant reading experience.",
+            keywords="Urdu literature, Urdu poetry, Urdu novels, Urdu stories, Urdu blog, Nawab Urdu Academy",
             og_type='website',
         ),
     }
@@ -244,7 +247,7 @@ def admin_upload(request):
         bulk_text = request.POST.get('bulk_text', '').strip()
 
         if not author_name:
-            error = 'مصنف کا نام فراہم کریں۔'
+            error = 'Please provide an author name.'
         elif bulk_text:
             author_obj, _ = Author.objects.get_or_create(
                 name=author_name,
@@ -604,7 +607,7 @@ def search(request):
     if query:
         try:
             author = Author.objects.get(name__iexact=query)
-            return redirect(reverse('author_profile', kwargs={'author_name': author.name}))
+            return redirect(reverse('author_detail', kwargs={'slug': author.slug}))
         except Author.DoesNotExist:
             pass
 
@@ -673,24 +676,24 @@ def newsletter_subscribe(request):
                 email=email,
                 defaults={'name': name}
             )
-            
+
             if created:
                 return JsonResponse({
                     'success': True,
-                    'message': 'آپ کامیابی سے سبسکرائب ہو گئے ہیں!'
+                    'message': 'You have been subscribed successfully.'
                 })
-            else:
-                return JsonResponse({
-                    'success': False,
-                    'message': 'یہ ای میل پہلے سے سبسکرائب ہے۔'
-                })
-        
+
+            return JsonResponse({
+                'success': False,
+                'message': 'This email is already subscribed.'
+            })
+
         return JsonResponse({
             'success': False,
-            'message': 'براہ کرم درست ای میل درج کریں۔'
+            'message': 'Please enter a valid email address.'
         })
-    
-    return JsonResponse({'success': False, 'message': 'غلط درخواست'})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request.'})
 
 
 @login_required
@@ -706,18 +709,18 @@ def add_bookmark(request, content_type, object_id):
         if created:
             return JsonResponse({
                 'success': True,
-                'message': 'بک مارک شامل کر دیا گیا',
+                'message': 'Saved to bookmarks.',
                 'bookmarked': True
             })
-        else:
-            bookmark.delete()
-            return JsonResponse({
-                'success': True,
-                'message': 'بک مارک ہٹا دیا گیا',
-                'bookmarked': False
-            })
-    
-    return JsonResponse({'success': False, 'message': 'غلط درخواست'})
+
+        bookmark.delete()
+        return JsonResponse({
+            'success': True,
+            'message': 'Removed from bookmarks.',
+            'bookmarked': False
+        })
+
+    return JsonResponse({'success': False, 'message': 'Invalid request.'})
 
 
 @login_required
@@ -784,16 +787,16 @@ def add_comment(request, content_type, object_id):
             
             return JsonResponse({
                 'success': True,
-                'message': 'آپ کا تبصرہ شامل کر دیا گیا',
+                'message': 'Your comment has been posted.',
                 'comment_id': comment.id
             })
-        
+
         return JsonResponse({
             'success': False,
-            'message': 'براہ کرم تبصرہ درج کریں'
+            'message': 'Please enter a comment.'
         })
-    
-    return JsonResponse({'success': False, 'message': 'غلط درخواست'})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request.'})
 
 
 @login_required
