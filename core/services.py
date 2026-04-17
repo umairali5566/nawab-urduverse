@@ -183,7 +183,7 @@ def resolve_author_user(author):
     if not name:
         return None
 
-    slug_name = slugify(name).replace("-", "")
+    slug_name = slugify(name, allow_unicode=True).replace("-", "")
     parts = [part for part in name.split() if part]
 
     filters = Q(display_name__iexact=name) | Q(username__iexact=slug_name)
@@ -644,7 +644,7 @@ def get_search_suggestions(query, limit=8):
     if len(normalized) < 2:
         return []
 
-    cache_key = f"search_suggestions_v1_{slugify(normalized)}_{limit}"
+    cache_key = f"search_suggestions_v1_{slugify(normalized, allow_unicode=True)}_{limit}"
     cached = cache.get(cache_key)
     if cached is not None:
         return cached

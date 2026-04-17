@@ -20,7 +20,7 @@ def get_tts_engine_priority():
 
 def build_audio_cache_path(cache_key, text, engine):
     digest = hashlib.sha256(text.encode("utf-8")).hexdigest()[:16]
-    normalized_key = slugify(str(cache_key or "audio")) or "audio"
+    normalized_key = slugify(str(cache_key or "audio"), allow_unicode=True) or "audio"
     filename = f"{normalized_key}-{engine}-{digest}.mp3"
     folder = Path(settings.MEDIA_ROOT) / "tts"
     folder.mkdir(parents=True, exist_ok=True)

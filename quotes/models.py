@@ -44,7 +44,7 @@ class Quote(BaseContentModel):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            base_slug = slugify(self.text[:50])
+            base_slug = slugify(self.text[:50], allow_unicode=True)
             self.slug = base_slug
         super().save(*args, **kwargs)
     
@@ -82,7 +82,7 @@ class QuoteCollection(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = slugify(self.title, allow_unicode=True)
         super().save(*args, **kwargs)
     
     def get_absolute_url(self):

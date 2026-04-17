@@ -251,12 +251,12 @@ def admin_upload(request):
         elif bulk_text:
             author_obj, _ = Author.objects.get_or_create(
                 name=author_name,
-                defaults={'slug': slugify(author_name)}
+                defaults={'slug': slugify(author_name, allow_unicode=True)}
             )
             category = Category.objects.filter(slug=category_slug, category_type=content_type).first()
             blocks = [block.strip() for block in bulk_text.split('---') if block.strip()]
             for idx, block in enumerate(blocks, start=1):
-                slug = slugify(f"{title or 'content'}-{idx}")
+                slug = slugify(f"{title or 'content'}-{idx}", allow_unicode=True)
                 if Content.objects.filter(slug=slug).exists():
                     slug = f"{slug}-{idx}"
                 Content.objects.create(
@@ -271,10 +271,10 @@ def admin_upload(request):
         elif title and text:
             author_obj, _ = Author.objects.get_or_create(
                 name=author_name,
-                defaults={'slug': slugify(author_name)}
+                defaults={'slug': slugify(author_name, allow_unicode=True)}
             )
             category = Category.objects.filter(slug=category_slug, category_type=content_type).first()
-            slug = slugify(title)
+            slug = slugify(title, allow_unicode=True)
             if Content.objects.filter(slug=slug).exists():
                 slug = f"{slug}-{int(timezone.now().timestamp())}"
             Content.objects.create(

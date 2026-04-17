@@ -73,11 +73,11 @@ class Video(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = slugify(self.title, allow_unicode=True)
 
         if self.video_file:
             self.platform = 'local'
-            self.video_id = self.video_id or slugify(self.title)[:100] or 'local-video'
+            self.video_id = self.video_id or slugify(self.title, allow_unicode=True)[:100] or 'local-video'
             self.video_url = ''
             self.youtube_link = ''
         else:
@@ -104,7 +104,7 @@ class Video(models.Model):
                     self.video_url = self.video_url or self.youtube_link
 
         if not self.video_id:
-            self.video_id = slugify(self.title)[:100] or 'video-item'
+            self.video_id = slugify(self.title, allow_unicode=True)[:100] or 'video-item'
         
         super().save(*args, **kwargs)
     

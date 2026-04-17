@@ -51,7 +51,7 @@ def superuser_upload_required(view_func):
 
 
 def _build_unique_slug(model, raw_value, max_length=90):
-    base = slugify(raw_value)[:max_length] or 'item'
+    base = slugify(raw_value, allow_unicode=True)[:max_length] or 'item'
     slug = base
     counter = 2
     while model.objects.filter(slug=slug).exists():
@@ -378,7 +378,7 @@ def add_video(request):
 
         try:
             author = _resolve_author(author_name) if author_name else None
-            resolved_video_id = video_id or slugify(title)[:100] or 'video-item'
+            resolved_video_id = video_id or slugify(title, allow_unicode=True)[:100] or 'video-item'
             video = Video(
                 title=title,
                 slug=_build_unique_slug(Video, title),
