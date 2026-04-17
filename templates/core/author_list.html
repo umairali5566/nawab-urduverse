@@ -34,9 +34,9 @@
             <div class="col-md-6 col-lg-4">
                 <div class="card shadow-sm h-100 text-center">
                     {% if author.image %}
-                    <img src="{{ author.image.url }}" class="card-img-top rounded-circle mx-auto mt-3" style="width: 120px; height: 120px; object-fit: cover;" alt="{{ author.name }}">
+                    <img src="{{ author.image.url }}" class="card-img-top rounded-circle mx-auto mt-3 img-avatar" alt="{{ author.name }}">
                     {% else %}
-                    <img src="{% static 'images/default-avatar.svg' %}" class="card-img-top rounded-circle mx-auto mt-3" style="width: 120px; height: 120px; object-fit: cover;" alt="{{ author.name }}">
+                    <img src="{% static 'images/default-avatar.svg' %}" class="card-img-top rounded-circle mx-auto mt-3 img-avatar" alt="{{ author.name }}">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title mb-2">{{ author.name }}</h5>

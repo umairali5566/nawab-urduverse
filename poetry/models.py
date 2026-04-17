@@ -57,7 +57,7 @@ class Poetry(BaseContentModel):
         verbose_name_plural = "اشعار"
 
     def get_absolute_url(self):
-        return reverse("poetry_detail", kwargs={"author_slug": self.author.slug, "slug": self.slug})
+        return reverse("poetry_detail", kwargs={"slug": self.slug})
 
     @property
     def poet_name(self):

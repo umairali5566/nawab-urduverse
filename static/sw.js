@@ -1,14 +1,11 @@
-const CACHE_NAME = "nawab-urduverse-v2";
+const CACHE_NAME = "nawab-urduverse-v3";
 const OFFLINE_URL = "/static/offline.html";
 const APP_SHELL = [
     "/",
     "/static/manifest.json",
     "/static/offline.html",
     "/static/css/style.css",
-    "/static/css/premium-ui.css",
-    "/static/css/dark-mode.css",
     "/static/js/main.js",
-    "/static/js/premium-ui.js",
     "/static/images/nawab-logo.png",
     "/static/images/pwa-icon-192.png",
     "/static/images/pwa-icon-512.png"

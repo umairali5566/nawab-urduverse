@@ -176,28 +176,19 @@ function escapeHTML(value = "") {
 
 function initDarkMode() {
     const darkModeToggle = document.getElementById("darkModeToggle");
-    const darkModeCSS = document.getElementById("dark-mode-css");
     if (!darkModeToggle) return;
 
     const isDarkMode = localStorage.getItem("darkMode") === "true";
     if (isDarkMode) {
         document.body.classList.add("dark-mode");
-        darkModeCSS?.removeAttribute("disabled");
         darkModeToggle.innerHTML = '<i class="bi bi-sun"></i>';
     } else {
         darkModeToggle.innerHTML = '<i class="bi bi-moon"></i>';
     }
 
     darkModeToggle.addEventListener("click", () => {
-        document.body.classList.toggle("dark-mode");
-        const isDark = document.body.classList.contains("dark-mode");
-        if (isDark) {
-            darkModeCSS?.removeAttribute("disabled");
-            darkModeToggle.innerHTML = '<i class="bi bi-sun"></i>';
-        } else {
-            darkModeCSS?.setAttribute("disabled", "true");
-            darkModeToggle.innerHTML = '<i class="bi bi-moon"></i>';
-        }
+        const isDark = document.body.classList.toggle("dark-mode");
+        darkModeToggle.innerHTML = isDark ? '<i class="bi bi-sun"></i>' : '<i class="bi bi-moon"></i>';
         localStorage.setItem("darkMode", String(isDark));
     });
 }

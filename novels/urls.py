@@ -5,8 +5,6 @@ Novels URL Configuration for Nawab Urdu Academy
 from django.urls import path
 from . import views
 
-app_name = 'novels'
-
 urlpatterns = [
     # Novel List
     path('', views.NovelListView.as_view(), name='novel_list'),

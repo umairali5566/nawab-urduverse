@@ -1,21 +1,36 @@
 {% load static %}
-<nav class="site-navbar">
-    <div class="navbar-inner">
-        <a href="{% url 'home' %}" class="navbar-brand">
-            <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }}" class="navbar-logo">
-            <span class="navbar-brand-text">{{ SITE_NAME }}</span>
-        </a>
-
-        <ul class="navbar-menu">
-            <li><a href="{% url 'home' %}" class="navbar-link {% if request.path == '/' %}active{% endif %}">Home</a></li>
-            <li><a href="{% url 'poetry_list' %}" class="navbar-link {% if '/poetry/' in request.path %}active{% endif %}">Poetry</a></li>
-            <li><a href="{% url 'novel_list' %}" class="navbar-link {% if '/novels/' in request.path %}active{% endif %}">Novels</a></li>
-            <li><a href="{% url 'story_list' %}" class="navbar-link {% if '/stories/' in request.path %}active{% endif %}">Stories</a></li>
-            <li><a href="{% url 'quote_list' %}" class="navbar-link {% if '/quotes/' in request.path %}active{% endif %}">Quotes</a></li>
-            <li><a href="{% url 'blog_list' %}" class="navbar-link {% if '/blog/' in request.path %}active{% endif %}">Blog</a></li>
-            <li><a href="{% url 'video_list' %}" class="navbar-link {% if '/videos/' in request.path %}active{% endif %}">Videos</a></li>
-            <li><a href="{% url 'all_categories' %}" class="navbar-link {% if '/categories/' in request.path %}active{% endif %}">Categories</a></li>
-            <li><a href="{% url 'search' %}" class="navbar-link {% if '/search/' in request.path %}active{% endif %}">Search</a></li>
-        </ul>
+<header class="navbar-sticky">
+    <div class="container">
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <a href="{% url 'home' %}">{{ SITE_NAME }}</a>
+            </div>
+            <ul class="navbar-menu">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'poetry_list' %}">Poetry</a></li>
+                <li><a href="{% url 'novel_list' %}">Novels</a></li>
+                <li><a href="{% url 'story_list' %}">Stories</a></li>
+                <li><a href="{% url 'quote_list' %}">Quotes</a></li>
+                <li><a href="{% url 'blog_list' %}">Blog</a></li>
+                <li><a href="{% url 'video_list' %}">Videos</a></li>
+                <li><a href="{% url 'all_categories' %}">Categories</a></li>
+                <li><a href="{% url 'search' %}">Search</a></li>
+            </ul>
+            <div class="navbar-auth">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}">Dashboard</a>
+                    <a href="{% url 'logout' %}">Logout</a>
+                    {% if user.is_superuser %}
+                        <a href="{% url 'admin:index' %}">Admin</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'login' %}">Login</a>
+                    <a href="{% url 'register' %}">Register</a>
+                {% endif %}
+            </div>
+            <button class="navbar-toggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
     </div>
-</nav>
+</header>

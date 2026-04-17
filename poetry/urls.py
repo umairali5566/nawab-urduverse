@@ -21,14 +21,16 @@ urlpatterns = [
     path("collections/<slug:slug>/", views.CollectionDetailView.as_view(), name="collection_detail"),
 
     # Premium Poetry Reading (distraction-free)
-    path("<slug:author_slug>/<slug:slug>/read/", views.PoetryPremiumView.as_view(), name="poetry_premium"),
+    path("<slug:slug>/read/", views.PoetryPremiumView.as_view(), name="poetry_premium"),
 
-    # Canonical SEO-friendly poetry routes
-    path("<slug:author_slug>/<slug:slug>/", views.PoetryDetailView.as_view(), name="poetry_detail"),
-    path("<slug:author_slug>/<slug:slug>/like/", views.like_poetry, name="like_poetry"),
-    path("<slug:author_slug>/<slug:slug>/share/", views.share_poetry, name="share_poetry"),
-    path("<slug:author_slug>/<slug:slug>/tts/", views.poetry_tts, name="poetry_tts"),
+    # Canonical SEO-friendly poetry detail route (clean URL)
+    path("<slug:slug>/", views.PoetryDetailView.as_view(), name="poetry_detail"),
 
-    # Legacy routes (backward compatibility)
-    path("<slug:slug>/", views.legacy_poetry_redirect, name="legacy_poetry_detail"),
+    # Engagement endpoints (clean URLs)
+    path("<slug:slug>/like/", views.like_poetry, name="like_poetry"),
+    path("<slug:slug>/share/", views.share_poetry, name="share_poetry"),
+    path("<slug:slug>/tts/", views.poetry_tts, name="poetry_tts"),
+
+    # Legacy routes (backward compatibility for old author-based URLs)
+    path("<slug:author_slug>/<slug:slug>/", views.legacy_poetry_redirect, name="legacy_poetry_detail"),
 ]

@@ -12,6 +12,16 @@
 {% block twitter_description %}{{ poem.meta_description|default:poem.excerpt }}{% endblock %}
 {% block twitter_image %}{{ poem.background_image.url|default:'' }}{% endblock %}
 
+{% block extra_css %}
+    {% if poem.background_image %}
+    <style>
+    .poetry-hero {
+        --hero-bg: url('{{ poem.background_image.url }}');
+    }
+    </style>
+    {% endif %}
+{% endblock %}
+
 {% block content %}
 <article class="poetry-detail">
     <section class="page-header py-4 bg-light">
@@ -28,7 +38,7 @@
     </section>
 
     {% if poem.background_image %}
-    <div class="poetry-hero" style="background-image: url('{{ poem.background_image.url }}');">
+    <div class="poetry-hero">
         <div class="hero-overlay"></div>
         <div class="container position-relative">
             <h1 class="poetry-title display-4">{{ poem.title }}</h1>

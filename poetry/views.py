@@ -70,21 +70,9 @@ class PoetryDetailView(BaseContentDetailView):
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
-        slug = self.kwargs.get("slug")
-        return get_object_or_404(
-            Poetry.objects.select_related("author", "category"),
-            slug=slug,
-            is_published=True,
-        )
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        requested_author_slug = kwargs.get("author_slug")
-        canonical_author_slug = self.object.author.slug
-
-        if requested_author_slug and requested_author_slug != canonical_author_slug:
-            return redirect(self.object.get_absolute_url(), permanent=True)
-
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
@@ -201,15 +189,15 @@ def _resolve_poem(slug, author_slug=None):
     return poem
 
 
-def like_poetry(request, slug, author_slug=None):
+def like_poetry(request, slug):
     """Like poetry and return updated counter."""
-    poem = _resolve_poem(slug=slug, author_slug=author_slug)
+    poem = get_object_or_404(Poetry, slug=slug, is_published=True)
     return base_like_view(request, Poetry, "poetry", poem.slug)
 
 
-def share_poetry(request, slug, author_slug=None):
+def share_poetry(request, slug):
     """Track poetry shares for trending scoring."""
-    poem = _resolve_poem(slug=slug, author_slug=author_slug)
+    poem = get_object_or_404(Poetry, slug=slug, is_published=True)
     return base_share_view(request, Poetry, "poetry", poem.slug)
 
 
@@ -263,10 +251,10 @@ def ai_generate(request):
     return JsonResponse({"success": True, **payload})
 
 
-def poetry_tts(request, slug, author_slug=None):
+def poetry_tts(request, slug):
     """Generate or return cached Urdu MP3 narration for poetry text."""
 
-    poem = _resolve_poem(slug=slug, author_slug=author_slug)
+    poem = get_object_or_404(Poetry, slug=slug, is_published=True)
     clean_text = poem.plain_text_content
 
     if not clean_text:
@@ -297,9 +285,8 @@ def poetry_tts(request, slug, author_slug=None):
     )
 
 
-def legacy_poetry_redirect(request, slug):
-    """Redirect old /poetry/<slug>/ URL to canonical author-based URL."""
-
+def legacy_poetry_redirect(request, author_slug, slug):
+    """Redirect old author-based poetry URLs to new clean slug-only URL."""
     poem = get_object_or_404(Poetry, slug=slug, is_published=True)
     return redirect(poem.get_absolute_url(), permanent=True)
 
@@ -358,12 +345,6 @@ class PoetryPremiumView(DetailView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        requested_author_slug = kwargs.get("author_slug")
-        canonical_author_slug = self.object.author.slug
-
-        if requested_author_slug and requested_author_slug != canonical_author_slug:
-            return redirect(self.object.get_absolute_url(), permanent=True)
-
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 

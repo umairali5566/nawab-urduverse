@@ -5,7 +5,6 @@
 {% block meta_description %}Search Urdu poetry by title, text, or author name in our local collection.{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/ai-studio.css' %}">
 <style>
 .search-results-section {
     margin-top: 2rem;
@@ -156,7 +155,7 @@
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="poetry-card">
                         {% if content.content_type == 'poetry' %}
-                            <a href="{% url 'poetry_detail' content.author.slug content.slug %}" class="poetry-title">{{ content.title }}</a>
+                            <a href="{% url 'poetry_detail' content.slug %}" class="poetry-title">{{ content.title }}</a>
                         {% elif content.content_type == 'novel' %}
                             <a href="{% url 'novel_detail' content.slug %}" class="poetry-title">{{ content.title }}</a>
                         {% elif content.content_type == 'blog' %}
@@ -172,7 +171,7 @@
                             {% endwith %}
                         </div>
                         {% if content.content_type == 'poetry' %}
-                            <a href="{% url 'poetry_detail' content.author.slug content.slug %}" class="read-more-btn">Read More</a>
+                            <a href="{% url 'poetry_detail' content.slug %}" class="read-more-btn">Read More</a>
                         {% elif content.content_type == 'novel' %}
                             <a href="{% url 'novel_detail' content.slug %}" class="read-more-btn">Read More</a>
                         {% elif content.content_type == 'blog' %}

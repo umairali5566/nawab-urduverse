@@ -6,28 +6,28 @@
 {% block content %}
 <section class="hero">
     <div class="container">
-        <span style="display: block; font-size: 0.9rem; color: rgba(255,255,255,0.8); margin-bottom: 8px;">Poetry Library</span>
+        <span class="hero-meta">Poetry Library</span>
         <h1 class="hero-title urdu-text">اردو شاعری</h1>
         <p class="hero-subtitle">A refined archive of ghazals, nazms, and expressive verse with better filtering, cleaner reading paths, and stronger visual hierarchy.</p>
-        <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 24px;">
-            <span style="background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 20px; font-size: 0.9rem;"><i class="bi bi-feather"></i> {{ page_obj.paginator.count }} poems</span>
-            <span style="background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 20px; font-size: 0.9rem;"><i class="bi bi-grid"></i> Type and mood filters</span>
-            <span style="background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 20px; font-size: 0.9rem;"><i class="bi bi-stars"></i> Reader-friendly layout</span>
+        <div class="hero-tags">
+            <span class="hero-tag"><i class="bi bi-feather"></i> {{ page_obj.paginator.count }} poems</span>
+            <span class="hero-tag"><i class="bi bi-grid"></i> Type and mood filters</span>
+            <span class="hero-tag"><i class="bi bi-stars"></i> Reader-friendly layout</span>
         </div>
     </div>
 </section>
 
 <section class="section">
     <div class="container">
-        <form method="get" style="background: var(--bg-soft); padding: 24px; border-radius: var(--radius-lg); margin-bottom: 40px;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+        <form method="get" class="filter-form">
+            <div class="filter-grid">
                 <div>
-                    <label style="display: block; font-weight: 500; margin-bottom: 8px;">Search</label>
-                    <input type="search" name="search" class="input" value="{{ request.GET.search }}" placeholder="Search title, poet, or verse">
+                    <label class="filter-label">Search</label>
+                    <input type="search" name="search" class="form-control" value="{{ request.GET.search }}" placeholder="Search title, poet, or verse">
                 </div>
                 <div>
-                    <label style="display: block; font-weight: 500; margin-bottom: 8px;">Type</label>
-                    <select name="type" class="input">
+                    <label class="filter-label">Type</label>
+                    <select name="type" class="form-select">
                         <option value="">All types</option>
                         {% for value, label in poetry_types %}
                         <option value="{{ value }}" {% if request.GET.type == value %}selected{% endif %}>{{ label }}</option>
@@ -35,8 +35,8 @@
                     </select>
                 </div>
                 <div>
-                    <label style="display: block; font-weight: 500; margin-bottom: 8px;">Mood</label>
-                    <select name="mood" class="input">
+                    <label class="filter-label">Mood</label>
+                    <select name="mood" class="form-select">
                         <option value="">All moods</option>
                         {% for value, label in moods %}
                         <option value="{{ value }}" {% if request.GET.mood == value %}selected{% endif %}>{{ label }}</option>
@@ -44,23 +44,23 @@
                     </select>
                 </div>
                 <div>
-                    <label style="display: block; font-weight: 500; margin-bottom: 8px;">Sort</label>
-                    <select name="sort" class="input">
+                    <label class="filter-label">Sort</label>
+                    <select name="sort" class="form-select">
                         <option value="latest" {% if request.GET.sort == 'latest' or not request.GET.sort %}selected{% endif %}>Latest</option>
                         <option value="popular" {% if request.GET.sort == 'popular' %}selected{% endif %}>Popular</option>
                         <option value="trending" {% if request.GET.sort == 'trending' %}selected{% endif %}>Trending</option>
                     </select>
                 </div>
-                <div style="display: flex; align-items: end;">
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Apply filters</button>
+                <div class="filter-submit">
+                    <button type="submit" class="btn btn-primary">Apply filters</button>
                 </div>
             </div>
 
             {% if categories %}
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <a href="{% url 'poetry_list' %}" style="background: {% if not request.GET.category %}var(--gold){% else %}rgba(0,0,0,0.1){% endif %}; color: {% if not request.GET.category %}black{% else %}var(--text-primary){% endif %}; padding: 6px 12px; border-radius: 20px; text-decoration: none; font-size: 0.9rem;">All categories</a>
+            <div class="category-pills">
+                <a href="{% url 'poetry_list' %}" class="category-pill {% if not request.GET.category %}active{% endif %}">All categories</a>
                 {% for category in categories %}
-                <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.type %}type={{ request.GET.type }}&{% endif %}{% if request.GET.mood %}mood={{ request.GET.mood }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}&{% endif %}category={{ category.slug }}" style="background: {% if request.GET.category == category.slug %}var(--gold){% else %}rgba(0,0,0,0.1){% endif %}; color: {% if request.GET.category == category.slug %}black{% else %}var(--text-primary){% endif %}; padding: 6px 12px; border-radius: 20px; text-decoration: none; font-size: 0.9rem;">
+                <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.type %}type={{ request.GET.type }}&{% endif %}{% if request.GET.mood %}mood={{ request.GET.mood }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}&{% endif %}category={{ category.slug }}" class="category-pill {% if request.GET.category == category.slug %}active{% endif %}">
                     {{ category.name }}
                 </a>
                 {% endfor %}
@@ -72,23 +72,23 @@
         <div class="poetry-grid">
             {% for poem in poems %}
             <div class="poetry-card">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <span style="background: rgba(212,175,55,0.1); color: var(--gold); padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;">{{ poem.get_poetry_type_display }}</span>
+                <div class="poem-meta">
+                    <span class="tag-badge type-badge">{{ poem.get_poetry_type_display }}</span>
                     {% if poem.category %}
-                    <span style="font-size: 0.9rem; color: var(--text-secondary);">{{ poem.category.name }}</span>
+                    <span class="poem-category">{{ poem.category.name }}</span>
                     {% endif %}
                 </div>
-                <h3 class="poetry-card-title"><a href="{{ poem.get_absolute_url }}" style="color: inherit; text-decoration: none;">{{ poem.title }}</a></h3>
+                <h3 class="poetry-card-title"><a href="{{ poem.get_absolute_url }}">{{ poem.title }}</a></h3>
                 <p class="poetry-card-preview urdu-text">{{ poem.plain_text_content|truncatechars:200 }}</p>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <span style="font-size: 0.9rem; color: var(--text-secondary);"><i class="bi bi-person"></i> {{ poem.author.name }}</span>
-                    <div style="display: flex; gap: 12px; font-size: 0.9rem; color: var(--text-secondary);">
+                <div class="poem-meta">
+                    <span class="poem-author"><i class="bi bi-person"></i> {{ poem.author.name }}</span>
+                    <div class="poem-stats">
                         <span><i class="bi bi-eye"></i> {{ poem.views_count }}</span>
                         <span><i class="bi bi-heart"></i> {{ poem.likes_count }}</span>
                     </div>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="background: rgba(0,0,0,0.1); color: var(--text-secondary); padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;">{{ poem.get_mood_display|default:"Poetry" }}</span>
+                <div class="poem-meta">
+                    <span class="tag-badge mood-badge">{{ poem.get_mood_display|default:"Poetry" }}</span>
                     <a href="{{ poem.get_absolute_url }}" class="btn btn-outline">Read poem</a>
                 </div>
             </div>
@@ -96,7 +96,7 @@
         </div>
 
         {% if is_paginated %}
-        <div style="display: flex; justify-content: center; gap: 8px; margin-top: 40px; flex-wrap: wrap;">
+        <div class="pagination">
             {% if page_obj.has_previous %}
             <a href="?page={{ page_obj.previous_page_number }}&search={{ request.GET.search }}&type={{ request.GET.type }}&mood={{ request.GET.mood }}&category={{ request.GET.category }}&sort={{ request.GET.sort }}" class="btn btn-outline">Previous</a>
             {% endif %}
@@ -109,9 +109,9 @@
         </div>
         {% endif %}
         {% else %}
-        <div class="card" style="text-align: center; padding: 60px 24px;">
-            <i class="bi bi-inbox" style="font-size: 3rem; color: var(--text-secondary); margin-bottom: 16px;"></i>
-            <h3 style="margin-bottom: 8px;">No poetry found</h3>
+        <div class="card empty-state">
+            <i class="bi bi-inbox"></i>
+            <h3>No poetry found</h3>
             <p>Try a broader keyword or adjust your type, mood, or category filters.</p>
         </div>
         {% endif %}
