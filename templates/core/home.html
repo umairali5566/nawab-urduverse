@@ -1,210 +1,71 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ SITE_NAME }} | Home for Urdu Literature{% endblock %}
-{% block meta_description %}Discover poetry, stories, novels, authors, and literary writing in a refined Urdu reading experience.{% endblock %}
+{% block title %}{{ SITE_NAME }} | Home{% endblock %}
 
 {% block content %}
-<div class="main-container section-stack">
-    {% include "components/hero.html" %}
+<section class="hero-section">
+    <div class="container">
+        <h1 class="hero-title urdu-text">اردو ادب کی خوبصورتی دریافت کریں</h1>
+        <p class="hero-subtitle">Discover the beauty of Urdu poetry, stories, and novels.</p>
+        <div class="hero-actions">
+            <a href="/poetry/" class="btn btn-primary">Explore Poetry</a>
+            <a href="/stories/" class="btn btn-outline">Start Reading</a>
+        </div>
+    </div>
+</section>
 
-    <section class="section-panel" id="homeSearchResultsSection" hidden>
-        <div class="section-panel-header">
-            <div>
-                <span class="eyebrow section-kicker">Quick Search</span>
-                <h2 class="section-heading">Instant Poetry Matches</h2>
-                <p class="section-subtitle mb-0" id="homeSearchSummary">Search across the latest published poems.</p>
+<section class="categories-section">
+    <div class="container">
+        <h2 class="section-title">Browse by Category</h2>
+        <p class="section-subtitle">Explore different genres of Urdu literature.</p>
+        <div class="categories-grid">
+            <div class="category-card">
+                <div class="category-icon">📖</div>
+                <h3 class="category-title">Poetry</h3>
+                <p class="category-text">Explore timeless Urdu poetry.</p>
+                <a href="/poetry/" class="category-link">Browse</a>
             </div>
-            <a class="btn btn-outline-primary section-cta" href="{% url 'search' %}">Open full search</a>
+            <div class="category-card">
+                <div class="category-icon">📚</div>
+                <h3 class="category-title">Stories</h3>
+                <p class="category-text">Dive into captivating stories.</p>
+                <a href="/stories/" class="category-link">Browse</a>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">📝</div>
+                <h3 class="category-title">Novels</h3>
+                <p class="category-text">Read classic and modern novels.</p>
+                <a href="/novels/" class="category-link">Browse</a>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">📰</div>
+                <h3 class="category-title">Blog</h3>
+                <p class="category-text">Stay updated with our blog.</p>
+                <a href="/blog/" class="category-link">Browse</a>
+            </div>
         </div>
-        <div class="home-search-results" id="homeSearchResults"></div>
-    </section>
+    </div>
+</section>
 
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <div>
-                <span class="eyebrow section-kicker">Explore</span>
-                <h2 class="section-heading">Browse by Category</h2>
-                <p class="section-subtitle mb-0">Jump into the main Urdu literature formats from one polished landing page.</p>
-            </div>
-            <a class="btn btn-outline-primary section-cta" href="{% url 'all_categories' %}">View all categories</a>
-        </div>
-        <div class="category-grid">
-            {% for category in categories|slice:":8" %}
-            <a class="category-tile" href="{{ category.get_absolute_url }}">
-                <span class="category-icon">
-                    {% if category.category_type == 'poetry' %}
-                    <i class="bi bi-feather"></i>
-                    {% elif category.category_type == 'story' %}
-                    <i class="bi bi-journal-text"></i>
-                    {% elif category.category_type == 'novel' %}
-                    <i class="bi bi-book"></i>
-                    {% elif category.category_type == 'quote' %}
-                    <i class="bi bi-chat-quote"></i>
-                    {% elif category.category_type == 'blog' %}
-                    <i class="bi bi-journal-richtext"></i>
-                    {% else %}
-                    <i class="bi bi-camera-video"></i>
-                    {% endif %}
-                </span>
-                <h3 class="h4 mb-1">{{ category.name }}</h3>
-                <p class="mb-0 text-muted">{{ category.description|default:"Browse this category."|truncatechars:90 }}</p>
-            </a>
-            {% endfor %}
-        </div>
-    </section>
-
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <div>
-                <span class="eyebrow section-kicker">Latest Poetry</span>
-                <h2 class="section-heading section-title-urdu">اردو شاعری</h2>
-                <p class="section-subtitle mb-0">Fresh ghazals, nazms, and expressive verses with cleaner reading paths.</p>
-            </div>
-            <a class="btn btn-outline-primary section-cta" href="{% url 'poetry_list' %}">Open poetry archive</a>
-        </div>
-        <div class="listing-grid">
+<section class="latest-poetry-section">
+    <div class="container">
+        <h2 class="section-title">Latest Poetry</h2>
+        <p class="section-subtitle">Read the most recent additions to our poetry collection.</p>
+        <div class="poetry-grid">
             {% for poem in latest_poetry %}
-            <article class="listing-card">
-                <div class="listing-body">
-                    <div class="listing-kicker">
-                        <span class="badge-soft">{{ poem.get_poetry_type_display }}</span>
-                        {% if poem.category %}
-                        <span>{{ poem.category.name }}</span>
-                        {% endif %}
-                    </div>
-                    <h3 class="listing-title listing-title-urdu"><a href="{{ poem.get_absolute_url }}">{{ poem.title }}</a></h3>
-                    <p class="listing-excerpt urdu-text">{{ poem.plain_text_content|truncatechars:170 }}</p>
-                    <div class="listing-meta">
-                        <span><i class="bi bi-person"></i> {{ poem.author.name }}</span>
-                        <span><i class="bi bi-eye"></i> {{ poem.views_count }}</span>
-                    </div>
-                    <div class="listing-footer">
-                        <span class="badge-soft">{{ poem.get_mood_display|default:"Poetry" }}</span>
-                        <a class="btn btn-outline-primary btn-sm" href="{{ poem.get_absolute_url }}">Read poem</a>
-                    </div>
-                </div>
-            </article>
+            <div class="poetry-card">
+                <h3 class="poetry-card-title">{{ poem.title }}</h3>
+                <p class="poetry-card-author">By {{ poem.author.name }}</p>
+                <p class="poetry-card-preview urdu-text">{{ poem.plain_text_content|truncatechars:150 }}</p>
+                <a href="{{ poem.get_absolute_url }}" class="btn btn-primary">Read Poem</a>
+            </div>
             {% empty %}
-            <div class="empty-state-card">
-                <p class="mb-0">Publish your first poem to populate this section.</p>
+            <div class="poetry-card">
+                <p class="card-text" style="text-align: center;">No poetry available yet.</p>
             </div>
             {% endfor %}
         </div>
-    </section>
-
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <div>
-                <span class="eyebrow section-kicker">Fresh Stories</span>
-                <h2 class="section-heading section-title-urdu">تازہ کہانیاں</h2>
-                <p class="section-subtitle mb-0">Short fiction and narrative reading with quicker discovery and better excerpts.</p>
-            </div>
-            <a class="btn btn-outline-primary section-cta" href="{% url 'story_list' %}">Browse stories</a>
-        </div>
-        <div class="listing-grid">
-            {% for story in latest_stories %}
-            <article class="listing-card">
-                {% if story.featured_image %}
-                <a class="listing-media" href="{{ story.get_absolute_url }}">
-                    <img src="{{ story.featured_image.url }}" alt="{{ story.title }}" loading="lazy">
-                </a>
-                {% endif %}
-                <div class="listing-body">
-                    <div class="listing-kicker">
-                        <span class="badge-soft">Story</span>
-                        <span>{{ story.reading_time }} min read</span>
-                    </div>
-                    <h3 class="listing-title"><a href="{{ story.get_absolute_url }}">{{ story.title }}</a></h3>
-                    <p class="listing-excerpt">{{ story.excerpt|default:story.content|striptags|truncatechars:150 }}</p>
-                    <div class="listing-meta">
-                        <span><i class="bi bi-person"></i> {{ story.author.name }}</span>
-                        <span><i class="bi bi-eye"></i> {{ story.views_count }}</span>
-                    </div>
-                    <div class="listing-footer">
-                        <span class="badge-soft">Narrative</span>
-                        <a class="btn btn-outline-primary btn-sm" href="{{ story.get_absolute_url }}">Read story</a>
-                    </div>
-                </div>
-            </article>
-            {% empty %}
-            <div class="empty-state-card">
-                <p class="mb-0">Stories will appear here as soon as they are published.</p>
-            </div>
-            {% endfor %}
-        </div>
-    </section>
-
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <div>
-                <span class="eyebrow section-kicker">Long-form Reading</span>
-                <h2 class="section-heading section-title-urdu">اردو ناول</h2>
-                <p class="section-subtitle mb-0">Move from covers to chapter reading with a cleaner novel shelf.</p>
-            </div>
-            <a class="btn btn-outline-primary section-cta" href="{% url 'novel_list' %}">Browse novels</a>
-        </div>
-        <div class="listing-grid">
-            {% for novel in latest_novels %}
-            <article class="listing-card">
-                <a class="listing-media" href="{{ novel.get_absolute_url }}">
-                    {% if novel.cover_image %}
-                    <img src="{{ novel.cover_image.url }}" alt="{{ novel.title }}" loading="lazy">
-                    {% else %}
-                    <img src="{% static 'images/placeholder-cover.svg' %}" alt="{{ novel.title }}" loading="lazy">
-                    {% endif %}
-                </a>
-                <div class="listing-body">
-                    <div class="listing-kicker">
-                        <span class="badge-soft">{{ novel.get_status_display }}</span>
-                        <span>{{ novel.total_chapters }} chapters</span>
-                    </div>
-                    <h3 class="listing-title"><a href="{{ novel.get_absolute_url }}">{{ novel.title }}</a></h3>
-                    <p class="listing-excerpt">{{ novel.description_text|truncatechars:150 }}</p>
-                    <div class="listing-meta">
-                        <span><i class="bi bi-person"></i> {{ novel.author.name }}</span>
-                        <span><i class="bi bi-eye"></i> {{ novel.views_count }}</span>
-                    </div>
-                    <div class="listing-footer">
-                        <span class="badge-soft">{% if novel.category %}{{ novel.category.name }}{% else %}Novel{% endif %}</span>
-                        <a class="btn btn-outline-primary btn-sm" href="{{ novel.get_absolute_url }}">Read novel</a>
-                    </div>
-                </div>
-            </article>
-            {% empty %}
-            <div class="empty-state-card">
-                <p class="mb-0">Add a novel to showcase long-form reading here.</p>
-            </div>
-            {% endfor %}
-        </div>
-    </section>
-
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <div>
-                <span class="eyebrow section-kicker">Writers</span>
-                <h2 class="section-heading">Featured Authors</h2>
-                <p class="section-subtitle mb-0">Meet the poets and writers behind the library.</p>
-            </div>
-            <a class="btn btn-outline-primary section-cta" href="{% url 'author_list' %}">View all authors</a>
-        </div>
-        <div class="author-grid">
-            {% for author in featured_authors|default:authors|slice:":6" %}
-            <article class="author-summary-card">
-                <h3 class="h4 mb-2"><a href="{{ author.get_absolute_url }}">{{ author.name }}</a></h3>
-                <p class="mb-3 text-muted">Published items: {{ author.published_content_total }}</p>
-                <a class="btn btn-outline-primary btn-sm" href="{{ author.get_absolute_url }}">View profile</a>
-            </article>
-            {% empty %}
-            <div class="empty-state-card">
-                <p class="mb-0">Author profiles will appear here when writers are added.</p>
-            </div>
-            {% endfor %}
-        </div>
-    </section>
-</div>
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'js/home.js' %}"></script>
+    </div>
+</section>
 {% endblock %}

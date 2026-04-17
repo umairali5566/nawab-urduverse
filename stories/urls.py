@@ -5,6 +5,8 @@ Stories URL Configuration for Nawab Urdu Academy
 from django.urls import path
 from . import views
 
+app_name = 'stories'
+
 urlpatterns = [
     # Story List
     path('', views.StoryListView.as_view(), name='story_list'),

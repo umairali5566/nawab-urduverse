@@ -16,6 +16,7 @@ from core.sitemaps import (
     AuthorSitemap, StaticViewSitemap
 )
 from nawab_urduverse import views
+from accounts import views as accounts_views
 
 sitemaps = {
     'novels': NovelSitemap,
@@ -36,6 +37,7 @@ urlpatterns = [
     path('home/', views.home, name='home_redirect'),
     path('ai-studio/', poetry_views.ai_studio, name='ai_studio'),
     path('ai/', include('ai_features.urls')),
+    path('login/', accounts_views.user_login, name='login'),
     path('accounts/', include('accounts.urls')),
     path('novels/', include('novels.urls')),
     path('stories/', include('stories.urls')),

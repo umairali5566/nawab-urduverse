@@ -1,0 +1,323 @@
+/**
+ * Poetry Detail Page - Premium Urdu Poetry Reader
+ * Nawab Urdu Academy
+ */
+
+:root {
+    --poetry-bg: #f7f3ea;
+    --poetry-card: #ffffff;
+    --poetry-primary: #1e2a38;
+    --poetry-accent: #c8a96a;
+    --poetry-accent-light: #e5d4a1;
+    --poetry-text: #222222;
+    --poetry-text-muted: #666666;
+    --poetry-border: rgba(200, 169, 106, 0.2);
+    --poetry-shadow: rgba(30, 42, 56, 0.1);
+    
+    --poetry-font-urdu: 'Noto Nastaliq Urdu', 'Noto Naskh Arabic', serif;
+    --poetry-radius: 16px;
+    --poetry-radius-lg: 24px;
+}
+
+.poetry-detail-page {
+    min-height: 100vh;
+    background: var(--poetry-bg);
+    padding: 100px 16px 60px;
+    position: relative;
+}
+
+.poetry-detail-page::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(ellipse at 10% 20%, rgba(200, 169, 106, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 80%, rgba(200, 169, 106, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.reading-container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.poem-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--poetry-border);
+    border-radius: var(--poetry-radius-lg);
+    padding: 48px 40px;
+    box-shadow: 
+        0 4px 20px var(--poetry-shadow),
+        0 1px 3px rgba(0, 0, 0, 0.05);
+    position: relative;
+    animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.poem-card::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    border-radius: var(--poetry-radius-lg);
+    background: linear-gradient(135deg, var(--poetry-accent), transparent 50%);
+    opacity: 0.15;
+    z-index: -1;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--poetry-bg);
+    border: 1px solid var(--poetry-border);
+    border-radius: 50px;
+    color: var(--poetry-primary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-bottom: 32px;
+}
+
+.back-btn:hover {
+    background: var(--poetry-accent);
+    color: white;
+    border-color: var(--poetry-accent);
+    transform: translateX(-4px);
+}
+
+.back-btn i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+.back-btn:hover i {
+    transform: translateX(-4px);
+}
+
+.poem-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.poem-title {
+    font-family: var(--poetry-font-urdu);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--poetry-primary);
+    line-height: 1.5;
+    margin: 0 0 12px;
+}
+
+.poem-author {
+    font-family: var(--poetry-font-urdu);
+    font-size: 1.1rem;
+    color: var(--poetry-text-muted);
+    margin: 0;
+    font-weight: 400;
+}
+
+.poem-content-wrapper {
+    direction: rtl;
+    text-align: center;
+    font-family: var(--poetry-font-urdu);
+    font-size: 1.6rem;
+    line-height: 2.4;
+    color: var(--poetry-text);
+    margin-bottom: 40px;
+    padding: 20px 0;
+}
+
+.poem-content-wrapper p {
+    margin: 0 0 1.5em;
+}
+
+.poem-content-wrapper p:last-child {
+    margin-bottom: 0;
+}
+
+.poem-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding-top: 32px;
+    border-top: 1px solid var(--poetry-border);
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 28px;
+    background: transparent;
+    border: 2px solid var(--poetry-border);
+    border-radius: var(--poetry-radius);
+    color: var(--poetry-text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--poetry-font-urdu);
+    font-size: 0.95rem;
+}
+
+.action-btn i {
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    border-color: var(--poetry-accent);
+    color: var(--poetry-accent);
+    background: rgba(200, 169, 106, 0.08);
+    transform: translateY(-3px);
+}
+
+.action-btn.active {
+    border-color: var(--poetry-accent);
+    color: var(--poetry-accent);
+    background: rgba(200, 169, 106, 0.12);
+}
+
+.action-btn.active i {
+    color: #e74c3c;
+}
+
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--poetry-primary);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(30, 42, 56, 0.3);
+}
+
+.toast.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast i {
+    color: var(--poetry-accent-light);
+}
+
+@media (max-width: 768px) {
+    .poetry-detail-page {
+        padding: 80px 12px 40px;
+    }
+    
+    .poem-card {
+        padding: 32px 24px;
+        border-radius: var(--poetry-radius);
+    }
+    
+    .poem-title {
+        font-size: 1.8rem;
+    }
+    
+    .poem-author {
+        font-size: 1rem;
+    }
+    
+    .poem-content-wrapper {
+        font-size: 1.4rem;
+        line-height: 2.2;
+        padding: 12px 0;
+    }
+    
+    .poem-actions {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid var(--poetry-border);
+        justify-content: space-around;
+        gap: 8px;
+        z-index: 90;
+    }
+    
+    .action-btn {
+        padding: 12px 16px;
+        gap: 4px;
+    }
+    
+    .action-btn span {
+        display: none;
+    }
+    
+    .action-btn i {
+        font-size: 1.4rem;
+    }
+    
+    .back-btn {
+        margin-bottom: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .poem-card {
+        padding: 24px 16px;
+    }
+    
+    .poem-title {
+        font-size: 1.5rem;
+    }
+    
+    .poem-content-wrapper {
+        font-size: 1.25rem;
+    }
+}
+
+@media print {
+    .poetry-detail-page {
+        background: white;
+        padding: 0;
+    }
+    
+    .poem-card {
+        box-shadow: none;
+        border: none;
+        padding: 20px;
+    }
+    
+    .back-btn,
+    .poem-actions {
+        display: none;
+    }
+}

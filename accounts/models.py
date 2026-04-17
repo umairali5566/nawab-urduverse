@@ -39,7 +39,6 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'صارف'
         verbose_name_plural = 'صارفین'
-        verbose_name_plural = 'صارفین'
         ordering = ['-date_joined']
     
     def __str__(self):

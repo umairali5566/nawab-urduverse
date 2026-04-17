@@ -119,14 +119,12 @@ class Chapter(models.Model):
         if not self.slug:
             self.slug = slugify(f'chapter-{self.chapter_number}-{self.title}')
         
-        # Calculate word count and reading time
         if self.content:
             self.word_count = len(self.content.split())
-            self.reading_time = max(1, self.word_count // 200)  # Assuming 200 WPM
+            self.reading_time = max(1, self.word_count // 200)
         
         super().save(*args, **kwargs)
         
-        # Update novel's chapter count
         self.novel.update_chapter_count()
     
     def get_absolute_url(self):

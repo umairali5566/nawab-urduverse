@@ -76,6 +76,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     # Django built-in apps
     'django.contrib.admin',
+    'accounts',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -93,7 +94,6 @@ INSTALLED_APPS = [
     
     # Custom apps
     'core',
-    'accounts',
     'novels',
     'stories',
     'poetry',
@@ -117,6 +117,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Custom UTF-8 encoding middleware
+    'nawab_urduverse.middleware.utf8_encoding_middleware',
 ]
 
 ROOT_URLCONF = 'nawab_urduverse.urls'
@@ -181,6 +183,22 @@ TIME_ZONE = 'Asia/Karachi'
 USE_I18N = True
 
 USE_TZ = True
+
+# UTF-8 encoding
+DEFAULT_CHARSET = 'utf-8'
+
+# Prevent double encoding issues
+FILE_CHARSET = 'utf-8'
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
+
+# Ensure proper encoding for all responses
+def set_utf8_encoding(get_response):
+    """Middleware to ensure UTF-8 encoding on all responses."""
+    def middleware(request):
+        response = get_response(request)
+        response.charset = 'utf-8'
+        return response
+    return middleware
 
 # Languages
 LANGUAGES = [
@@ -252,7 +270,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Authentication
-LOGIN_URL = '/accounts/login/'
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 

@@ -7,6 +7,7 @@ from django.db.models import F, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView
+from django.views.decorators.cache import never_cache
 
 from core.models import Author, Bookmark, Category, Comment, Content, ContentLike
 from core.services import (
@@ -53,6 +54,10 @@ class PoetryListView(BaseContentListView):
         return context
 
 
+from django.views.decorators.cache import never_cache
+from django.utils.decorators import method_decorator
+
+
 class PoetryDetailView(BaseContentDetailView):
     """Poetry detail view"""
 
@@ -62,7 +67,9 @@ class PoetryDetailView(BaseContentDetailView):
     slug_url_kwarg = "slug"
     content_type = "poetry"
 
-    def get_object(self, queryset=None):
+    @method_decorator(never_cache)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
         slug = self.kwargs.get("slug")
         return get_object_or_404(
             Poetry.objects.select_related("author", "category"),

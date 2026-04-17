@@ -47,11 +47,12 @@ class Poetry(BaseContentModel):
     tags = models.CharField(max_length=500, blank=True, verbose_name="ٹیگز")
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, limit_choices_to={"category_type": "poetry"}, related_name='poetry_set', verbose_name="زمرہ")
 
-    class Meta(BaseContentModel.Meta):
-        verbose_name = "شاعری"
-        verbose_name_plural = "اشعار"
+    # SEO Fields
+    meta_title = models.CharField(max_length=200, blank=True, verbose_name="SEO Title")
+    meta_description = models.TextField(blank=True, verbose_name="SEO Description")
+    meta_keywords = models.CharField(max_length=500, blank=True, verbose_name="SEO Keywords")
 
-    class Meta:
+    class Meta(BaseContentModel.Meta):
         verbose_name = "شاعری"
         verbose_name_plural = "اشعار"
 
@@ -77,6 +78,14 @@ class Poetry(BaseContentModel):
         text = unescape(text)
         lines = [line.strip() for line in text.splitlines() if line.strip()]
         return "\n".join(lines)
+
+    @property
+    def excerpt(self):
+        """Return a short excerpt of the poetry content."""
+        text = self.plain_text_content
+        if len(text) > 200:
+            return text[:200] + "..."
+        return text
 
     def get_sher_pairs(self):
         """Group every two lines into one sher pair."""
@@ -110,6 +119,23 @@ class Poetry(BaseContentModel):
                 html_chunks.append('<div class="sher-divider" aria-hidden="true"></div>')
 
         return mark_safe("".join(html_chunks))
+
+    def save(self, *args, **kwargs):
+        if not self.meta_title:
+            self.meta_title = f"{self.title} | Urdu Poetry"
+
+        if not self.meta_description:
+            plain_content = self.plain_text_content or ""
+            self.meta_description = plain_content[:150]
+
+        if not self.meta_keywords:
+            base_keywords = ["اردو شاعری", "poetry", "ghazal", "nazm"]
+            title_words = [word.strip() for word in self.title.split() if word.strip()]
+            all_keywords = [self.title] + base_keywords + title_words
+            unique_keywords = list(dict.fromkeys(all_keywords))
+            self.meta_keywords = ", ".join(unique_keywords)
+
+        super().save(*args, **kwargs)
 
 
 class PoetryCollection(models.Model):
