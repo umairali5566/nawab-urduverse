@@ -1,1 +1,1 @@
-web: gunicorn nawab_urduverse.wsgi --log-file -
+web: gunicorn nawab_urduverse.wsgi
