@@ -19,7 +19,7 @@ class NovelAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Basic Information', {
-            'fields': ('title', 'author', 'description', 'cover_image', 'category')
+            'fields': ('title', 'slug', 'author', 'category', 'content')
         }),
         ('Publishing', {
             'fields': ('is_published',)

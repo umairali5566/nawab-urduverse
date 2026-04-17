@@ -1,130 +1,33 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Urdu Novels | {{ SITE_NAME }}{% endblock %}
-{% block meta_description %}Browse Urdu novels by category, status, popularity, and latest updates on {{ SITE_NAME }}.{% endblock %}
+{% block title %}Novels - {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<div class="main-container section-stack">
-    <section class="page-hero">
-        <div class="page-hero-grid">
-            <div class="page-hero-copy">
-                <span class="eyebrow">Novel Archive</span>
-                <h1 class="page-hero-title section-title-urdu">اردو ناول</h1>
-                <p class="page-hero-text">Browse polished novel covers, status badges, chapter counts, and richer discovery filters from one dedicated reading shelf.</p>
-                <div class="hero-chip-row">
-                    <span class="hero-chip"><i class="bi bi-book-half"></i> {{ page_obj.paginator.count }} novels</span>
-                    <span class="hero-chip"><i class="bi bi-file-earmark-pdf"></i> PDF support</span>
-                    <span class="hero-chip"><i class="bi bi-collection"></i> Chapter-based reading</span>
-                </div>
-            </div>
-            <div class="page-hero-panel">
-                <div class="feature-card">
-                    <h3 class="h3">Built for long-form reading</h3>
-                    <p class="mb-0">Readers can move from discovery to novel detail pages faster with cleaner cover presentation and tighter metadata.</p>
+<div class="container my-4">
+    <h1 class="mb-4">Novels</h1>
+    <div class="row">
+        {% for novel in novels %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ novel.title }}</h5>
+                    <p class="card-text">By {{ novel.author.name }}</p>
+                    <a href="{% url 'novel_detail' novel.slug %}" class="btn btn-primary">Read</a>
                 </div>
             </div>
         </div>
-    </section>
-
-    <section class="filter-panel">
-        <form method="get" class="filter-row">
-            <div class="row g-3">
-                <div class="col-lg-4">
-                    <label class="form-label">Search</label>
-                    <input type="search" name="search" class="form-control" value="{{ request.GET.search }}" placeholder="Search title, author, or description">
-                </div>
-                <div class="col-md-4 col-lg-2">
-                    <label class="form-label">Status</label>
-                    <select name="status" class="form-select">
-                        <option value="">All statuses</option>
-                        <option value="ongoing" {% if request.GET.status == 'ongoing' %}selected{% endif %}>Ongoing</option>
-                        <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>Completed</option>
-                        <option value="hiatus" {% if request.GET.status == 'hiatus' %}selected{% endif %}>Hiatus</option>
-                    </select>
-                </div>
-                <div class="col-md-4 col-lg-3">
-                    <label class="form-label">Category</label>
-                    <select name="category" class="form-select">
-                        <option value="">All categories</option>
-                        {% for category in categories %}
-                        <option value="{{ category.slug }}" {% if request.GET.category == category.slug %}selected{% endif %}>{{ category.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-4 col-lg-1">
-                    <label class="form-label">Sort</label>
-                    <select name="sort" class="form-select">
-                        <option value="latest" {% if request.GET.sort == 'latest' or not request.GET.sort %}selected{% endif %}>Latest</option>
-                        <option value="popular" {% if request.GET.sort == 'popular' %}selected{% endif %}>Popular</option>
-                        <option value="rating" {% if request.GET.sort == 'rating' %}selected{% endif %}>Rating</option>
-                        <option value="alphabetical" {% if request.GET.sort == 'alphabetical' %}selected{% endif %}>A-Z</option>
-                    </select>
-                </div>
-                <div class="col-lg-2 d-grid">
-                    <label class="form-label d-none d-lg-block">&nbsp;</label>
-                    <button type="submit" class="btn btn-primary">Apply filters</button>
-                </div>
-            </div>
-        </form>
-    </section>
-
-    {% if novels %}
-    <section class="section-panel">
-        <div class="listing-grid listing-grid-tight">
-            {% for novel in novels %}
-            <article class="listing-card">
-                <a class="listing-media" href="{{ novel.get_absolute_url }}">
-                    {% if novel.cover_image %}
-                    <img src="{{ novel.cover_image.url }}" alt="{{ novel.title }}" loading="lazy">
-                    {% else %}
-                    <img src="{% static 'images/placeholder-cover.svg' %}" alt="{{ novel.title }}" loading="lazy">
-                    {% endif %}
-                </a>
-                <div class="listing-body">
-                    <div class="listing-kicker">
-                        <span class="badge-soft">{{ novel.get_status_display }}</span>
-                        {% if novel.is_premium %}
-                        <span class="badge-soft"><i class="bi bi-gem"></i> Premium</span>
-                        {% endif %}
-                    </div>
-                    <h2 class="listing-title"><a href="{{ novel.get_absolute_url }}">{{ novel.title }}</a></h2>
-                    <p class="listing-excerpt">{{ novel.description_text|truncatechars:140 }}</p>
-                    <div class="listing-meta">
-                        <span><i class="bi bi-person"></i> {{ novel.author.name }}</span>
-                        <span><i class="bi bi-list-ol"></i> {{ novel.total_chapters }}</span>
-                        <span><i class="bi bi-eye"></i> {{ novel.views_count }}</span>
-                    </div>
-                    <div class="listing-footer">
-                        <span class="badge-soft">{% if novel.category %}{{ novel.category.name }}{% else %}Novel{% endif %}</span>
-                        <a class="btn btn-outline-primary btn-sm" href="{{ novel.get_absolute_url }}">Read novel</a>
-                    </div>
-                </div>
-            </article>
-            {% endfor %}
-        </div>
-    </section>
-    {% else %}
-    <section class="empty-state-card">
-        <i class="bi bi-book display-5"></i>
-        <h3 class="mt-3">No novels found</h3>
-        <p class="mb-0">Try adjusting your filters or publish a new novel from the dashboard.</p>
-    </section>
-    {% endif %}
-
+        {% endfor %}
+    </div>
     {% if is_paginated %}
-    <nav aria-label="Novel pagination">
-        <ul class="pagination justify-content-center">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
             {% if page_obj.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}&category={{ request.GET.category }}&sort={{ request.GET.sort }}">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
             {% endif %}
-            {% for num in page_obj.paginator.page_range %}
-            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                <a class="page-link" href="?page={{ num }}&search={{ request.GET.search }}&status={{ request.GET.status }}&category={{ request.GET.category }}&sort={{ request.GET.sort }}">{{ num }}</a>
-            </li>
-            {% endfor %}
+            <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
             {% if page_obj.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}&category={{ request.GET.category }}&sort={{ request.GET.sort }}">Next</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
             {% endif %}
         </ul>
     </nav>

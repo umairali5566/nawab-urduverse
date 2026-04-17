@@ -1,0 +1,98 @@
+{% load static %}
+
+<!-- Primary Button -->
+<button class="btn btn-primary" type="button">
+  Primary Button
+</button>
+
+<!-- Outline Button -->
+<button class="btn btn-outline" type="button">
+  Outline Button
+</button>
+
+<!-- Large Button -->
+<button class="btn btn-primary btn-lg" type="button">
+  Large Button
+</button>
+
+<!-- Small Button -->
+<button class="btn btn-outline btn-sm" type="button">
+  Small Button
+</button>
+
+<!-- Button with Icon -->
+<button class="btn btn-primary" type="button">
+  <i class="bi bi-heart"></i> Like
+</button>
+
+<!-- Action Buttons Row -->
+<div class="action-buttons">
+  <button class="btn btn-outline">
+    <i class="bi bi-heart"></i> Like
+  </button>
+  <button class="btn btn-outline">
+    <i class="bi bi-share"></i> Share
+  </button>
+  <button class="btn btn-outline">
+    <i class="bi bi-clipboard"></i> Copy
+  </button>
+</div>
+
+<style>
+.btn {
+  background-color: var(--secondary-color);
+  color: var(--card-bg);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+  background-color: #B8960C;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--secondary-color);
+}
+
+.btn-outline:hover {
+  background-color: var(--secondary-color);
+  color: var(--card-bg);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .action-buttons {
+    justify-content: center;
+  }
+}
+</style>

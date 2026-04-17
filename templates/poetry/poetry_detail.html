@@ -1,180 +1,192 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load core_tags %}
-{% block title %}{{ poem.title }} - {{ poem.author.name }} | {{ SITE_NAME }}{% endblock %}
-{% block meta_description %}{{ poem.meta_description|default:poem.excerpt }}{% endblock %}
-{% block meta_title %}{{ poem.meta_title|default:poem.title }}{% endblock %}
-{% block meta_keywords %}{{ poem.meta_keywords }}{% endblock %}
-{% block og_title %}{{ poem.meta_title|default:poem.title }}{% endblock %}
-{% block og_description %}{{ poem.meta_description|default:poem.excerpt }}{% endblock %}
-{% block og_image %}{{ poem.background_image.url|default:'' }}{% endblock %}
-{% block twitter_title %}{{ poem.meta_title|default:poem.title }}{% endblock %}
-{% block twitter_description %}{{ poem.meta_description|default:poem.excerpt }}{% endblock %}
-{% block twitter_image %}{{ poem.background_image.url|default:'' }}{% endblock %}
 
-{% block extra_css %}
-    {% if poem.background_image %}
-    <style>
-    .poetry-hero {
-        --hero-bg: url('{{ poem.background_image.url }}');
-    }
-    </style>
-    {% endif %}
-{% endblock %}
+{% block title %}{{ poem.title }} - {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<article class="poetry-detail">
-    <section class="page-header py-4 bg-light">
-        <div class="container">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{% url 'poetry_list' %}">Poetry</a></li>
-                    <li class="breadcrumb-item"><a href="{% url 'author_detail' poem.author.slug %}">{{ poem.author.name }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ poem.title }}</li>
-                </ol>
-            </nav>
-        </div>
-    </section>
-
-    {% if poem.background_image %}
-    <div class="poetry-hero">
-        <div class="hero-overlay"></div>
-        <div class="container position-relative">
-            <h1 class="poetry-title display-4">{{ poem.title }}</h1>
-            <p class="poetry-author lead">
-                <a href="{% url 'author_detail' poem.author.slug %}" class="text-white">{{ poem.author.name }}</a>
-            </p>
-        </div>
-    </div>
-    {% else %}
-    <section class="py-4">
-        <div class="container">
-            <h1 class="display-4">{{ poem.title }}</h1>
-            <p class="lead">
-                <a href="{% url 'author_detail' poem.author.slug %}">{{ poem.author.name }}</a>
-            </p>
-        </div>
-    </section>
-    {% endif %}
-
-    <section class="poetry-content py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="poetry-body card border-0 shadow-sm">
-                        <div class="card-body">
-                            <div class="poetry-text urdu-text">
-                                {{ poem.content|safe }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="poetry-meta mt-4">
-                        {% if poem.category %}
-                        <span class="badge bg-secondary me-2">
-                            <a href="{% url 'category_detail' poem.category.slug %}" class="text-white text-decoration-none">
-                                {{ poem.category.name }}
-                            </a>
-                        </span>
-                        {% endif %}
-                        <span class="badge bg-primary me-2">{{ poem.get_poetry_type_display }}</span>
-                        {% if poem.mood %}
-                        <span class="badge bg-info me-2">{{ poem.get_mood_display }}</span>
-                        {% endif %}
-                    </div>
-
-                    <div class="poetry-actions mt-4">
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-outline-primary like-btn" data-content-type="poetry" data-object-id="{{ poem.id }}">
-                                <i class="{% if is_liked %}bi bi-heart-fill{% else %}bi bi-heart{% endif %}"></i> 
-                                <span class="like-count">{{ poem.likes_count|default:0 }}</span>
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary bookmark-btn" data-content-type="poetry" data-object-id="{{ poem.id }}">
-                                <i class="{% if is_bookmarked %}bi bi-bookmark-fill{% else %}bi bi-bookmark{% endif %}"></i>
-                            </button>
-                            <button type="button" class="btn btn-outline-success share-btn" data-content-type="poetry" data-object-id="{{ poem.id }}">
-                                <i class="bi bi-share"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    {% if poem.tags %}
-                    <div class="poetry-tags mt-3">
-                        <p class="mb-1"><strong>Tags:</strong></p>
-                        {% for tag in poem.tags|split:"," %}
-                        <span class="badge bg-light text-dark">{{ tag.strip }}</span>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-                </div>
+<div class="reader-container">
+    <article class="poem-card">
+        <header class="poem-header">
+            <h1 class="poem-title urdu-text">{{ poem.title }}</h1>
+            <div class="poem-meta">
+                <span class="poem-author">by {{ poem.author.name }}</span>
+                {% if poem.category %}
+                <span class="poem-category">{{ poem.category.name }}</span>
+                {% endif %}
             </div>
-        </div>
-    </section>
+        </header>
 
-    {% if related_items %}
-    <section class="related-poetry py-4 bg-light">
-        <div class="container">
-            <h2 class="mb-4">Related Poetry</h2>
-            <div class="row g-4">
-                {% for related in related_items %}
-                <div class="col-lg-3 col-md-6 col-12">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <a href="{{ related.get_absolute_url }}" class="text-decoration-none text-dark">{{ related.title }}</a>
-                            </h5>
-                            <p class="card-text small text-muted">{{ related.author.name }}</p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
+        <div class="poem-content urdu-text">
+            {{ poem.content|linebreaks }}
         </div>
-    </section>
-    {% endif %}
 
-    {% if suggested_content %}
-    <section class="suggested-poetry py-4">
-        <div class="container">
-            <h2 class="mb-4">You May Also Like</h2>
-            <div class="row g-4">
-                {% for item in suggested_content %}
-                <div class="col-lg-3 col-md-6 col-12">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <a href="{{ item.get_absolute_url }}" class="text-decoration-none text-dark">{{ item.title }}</a>
-                            </h5>
-                            <p class="card-text small text-muted">{{ item.author.name }}</p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
+        <div class="poem-actions">
+            <button class="btn btn-outline" onclick="toggleLike()">
+                <i class="bi bi-heart"></i> Like
+            </button>
+            <button class="btn btn-outline" onclick="sharePoem()">
+                <i class="bi bi-share"></i> Share
+            </button>
+            <button class="btn btn-outline" onclick="copyToClipboard()">
+                <i class="bi bi-clipboard"></i> Copy
+            </button>
         </div>
-    </section>
-    {% endif %}
 
-    {% if comments %}
-    <section class="comments-section py-4 bg-light">
-        <div class="container">
-            <h2 class="mb-4">Comments ({{ comments.count }})</h2>
-            <div class="comments-list">
-                {% for comment in comments %}
-                <div class="comment mb-3">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body">
-                            <h6 class="comment-author">{{ comment.user.username }}</h6>
-                            <p class="comment-text mb-2">{{ comment.text }}</p>
-                            <small class="text-muted">{{ comment.created_at|timesince }} ago</small>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
+        <div class="poem-footer">
+            <a href="{% url 'poetry_list' %}" class="btn btn-outline">Back to Poetry</a>
+            {% if poem.author %}
+            <a href="{% url 'author_detail' poem.author.slug %}" class="btn btn-outline">More by {{ poem.author.name }}</a>
+            {% endif %}
         </div>
-    </section>
-    {% endif %}
-</article>
+    </article>
+</div>
+
+<script>
+function toggleLike() {
+    // Add like functionality
+    const btn = event.target.closest('.btn');
+    btn.innerHTML = '<i class="bi bi-heart-fill"></i> Liked';
+    btn.classList.add('btn-primary');
+    btn.classList.remove('btn-outline');
+}
+
+function sharePoem() {
+    if (navigator.share) {
+        navigator.share({
+            title: '{{ poem.title }}',
+            text: 'Check out this beautiful Urdu poem',
+            url: window.location.href
+        });
+    } else {
+        // Fallback: copy URL to clipboard
+        navigator.clipboard.writeText(window.location.href);
+        alert('Link copied to clipboard!');
+    }
+}
+
+function copyToClipboard() {
+    navigator.clipboard.writeText('{{ poem.title }}\n\nby {{ poem.author.name }}\n\n{{ poem.content|striptags }}');
+    alert('Poem copied to clipboard!');
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.reader-container {
+    max-width: 700px;
+    margin: 4rem auto;
+    padding: 0 20px;
+}
+
+.poem-card {
+    background: var(--card-bg);
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.poem-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.poem-title {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.poem-meta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.poem-author {
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+.poem-category {
+    background: var(--secondary-color);
+    color: var(--card-bg);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.poem-content {
+    font-family: var(--urdu-font);
+    font-size: 24px;
+    line-height: 2.2;
+    text-align: right;
+    direction: rtl;
+    color: var(--text-primary);
+    margin: 2rem 0;
+    white-space: pre-line;
+}
+
+.poem-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 3rem 0 2rem;
+    flex-wrap: wrap;
+}
+
+.poem-footer {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+}
+
+.urdu-text {
+    font-family: var(--urdu-font);
+    direction: rtl;
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    .reader-container {
+        margin: 2rem auto;
+        padding: 0 15px;
+    }
+
+    .poem-card {
+        padding: 2rem;
+    }
+
+    .poem-title {
+        font-size: 2rem;
+    }
+
+    .poem-content {
+        font-size: 20px;
+    }
+
+    .poem-actions,
+    .poem-footer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .poem-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+</style>
 {% endblock %}

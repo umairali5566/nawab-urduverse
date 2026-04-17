@@ -28,7 +28,6 @@ from .models import (
     Category,
     Comment,
     ContactMessage,
-    Content,
     ContentLike,
     NewsletterSubscriber,
     Notification,
@@ -191,18 +190,13 @@ def base_share_view(request, model, content_type, slug):
 
 def home(request):
     """Homepage for the main literary landing page."""
-    categories = Category.objects.filter(is_active=True).order_by('category_type', 'name')
-    authors = Author.objects.filter(is_active=True).order_by('-is_featured', 'name')[:25]
-    featured_authors = Author.objects.filter(is_active=True, is_featured=True).order_by('name')[:6]
+    categories = Category.objects.filter(is_active=True).order_by('name')
+    authors = Author.objects.filter(is_published=True).order_by('name')[:25]
+    featured_authors = Author.objects.filter(is_published=True).order_by('name')[:6]
 
     latest_poetry = Poetry.objects.filter(is_published=True).select_related('author', 'category').order_by('-created_at')[:6]
-    latest_stories = Story.objects.filter(is_published=True).select_related('author').prefetch_related('categories').order_by('-created_at')[:6]
+    latest_stories = Story.objects.filter(is_published=True).select_related('author', 'category').order_by('-created_at')[:6]
     latest_novels = Novel.objects.filter(is_published=True).select_related('author', 'category').order_by('-created_at')[:6]
-    featured_content = Content.objects.filter(is_published=True).order_by('-created_at')[:6]
-
-    total_poetry = Poetry.objects.filter(is_published=True).count()
-    total_authors = Author.objects.filter(is_active=True).count()
-    total_readers = User.objects.filter(is_active=True).count()
 
     context = {
         'categories': categories,
@@ -211,12 +205,6 @@ def home(request):
         'latest_poetry': latest_poetry,
         'latest_stories': latest_stories,
         'latest_novels': latest_novels,
-        'content_types': Content.CONTENT_TYPES,
-        'featured_content': featured_content,
-        'total_poetry': total_poetry,
-        'total_authors': total_authors,
-        'total_readers': total_readers,
-        'show_superuser_panel': request.user.is_authenticated and request.user.is_superuser,
         **build_seo_context(
             request,
             title=f"{settings.SITE_NAME} | A premium home for Urdu literature",
@@ -232,136 +220,78 @@ def is_admin(user):
     return user.is_superuser
 
 
-@user_passes_test(is_admin)
-def admin_upload(request):
-    categories = Category.objects.filter(category_type__in=['poetry', 'novel', 'blog'], is_active=True).order_by('name')
-    authors = Author.objects.filter(is_active=True).order_by('name')[:50]
-    error = ''
 
-    if request.method == 'POST':
-        title = request.POST.get('title', '').strip()
-        text = request.POST.get('text', '').strip()
-        author_name = request.POST.get('author', '').strip()
-        content_type = request.POST.get('content_type', 'poetry')
-        category_slug = request.POST.get('category', '')
-        bulk_text = request.POST.get('bulk_text', '').strip()
-
-        if not author_name:
-            error = 'Please provide an author name.'
-        elif bulk_text:
-            author_obj, _ = Author.objects.get_or_create(
-                name=author_name,
-                defaults={'slug': slugify(author_name, allow_unicode=True)}
-            )
-            category = Category.objects.filter(slug=category_slug, category_type=content_type).first()
-            blocks = [block.strip() for block in bulk_text.split('---') if block.strip()]
-            for idx, block in enumerate(blocks, start=1):
-                slug = slugify(f"{title or 'content'}-{idx}", allow_unicode=True)
-                if Content.objects.filter(slug=slug).exists():
-                    slug = f"{slug}-{idx}"
-                Content.objects.create(
-                    title=f"{title or 'Untitled'} {idx}",
-                    slug=slug,
-                    author=author_obj,
-                    category=category,
-                    content_type=content_type,
-                    text=block,
-                )
-            return redirect('home')
-        elif title and text:
-            author_obj, _ = Author.objects.get_or_create(
-                name=author_name,
-                defaults={'slug': slugify(author_name, allow_unicode=True)}
-            )
-            category = Category.objects.filter(slug=category_slug, category_type=content_type).first()
-            slug = slugify(title, allow_unicode=True)
-            if Content.objects.filter(slug=slug).exists():
-                slug = f"{slug}-{int(timezone.now().timestamp())}"
-            Content.objects.create(
-                title=title,
-                slug=slug,
-                author=author_obj,
-                category=category,
-                content_type=content_type,
-                text=text,
-            )
-            return redirect('home')
-        else:
-            error = 'Title, author, and text are required for upload.'
-
-    return render(request, 'core/admin_upload.html', {
-        'categories': categories,
-        'authors': authors,
-        'error': error,
-        **build_seo_context(
-            request,
-            title=f"Admin Upload | {settings.SITE_NAME}",
-            description="Upload Urdu poetry, novels, and blogs from the frontend admin panel.",
-            keywords="admin upload, urdu content, poetry upload",
-            og_type='website',
-        ),
-    })
 
 
 def search_api(request):
     query = request.GET.get('q', '').strip()
-    category = request.GET.get('category', 'all').strip().lower()
+    content_type = request.GET.get('type', 'all').strip().lower()
     author_query = request.GET.get('author', '').strip()
     sort_by = request.GET.get('sort', 'latest').strip().lower()
 
-    results = Content.objects.filter(is_published=True)
-    if category in dict(Content.CONTENT_TYPES):
-        results = results.filter(content_type=category)
+    models_to_search = []
+    if content_type == 'all':
+        models_to_search = [Poetry, Novel, Story, Quote, BlogPost, Video]
+    elif content_type == 'poetry':
+        models_to_search = [Poetry]
+    elif content_type == 'novel':
+        models_to_search = [Novel]
+    elif content_type == 'story':
+        models_to_search = [Story]
+    elif content_type == 'quote':
+        models_to_search = [Quote]
+    elif content_type == 'blog':
+        models_to_search = [BlogPost]
+    elif content_type == 'video':
+        models_to_search = [Video]
 
-    if author_query:
-        results = results.filter(author__name__icontains=author_query)
+    results = []
+    for model in models_to_search:
+        qs = model.objects.filter(is_published=True).select_related('author', 'category')
+        if author_query:
+            qs = qs.filter(author__name__icontains=author_query)
+        if query:
+            qs = qs.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(author__name__icontains=query)
+            )
+        qs = qs.order_by('-created_at')[:20]
+        for item in qs:
+            results.append({
+                'title': item.title,
+                'author': item.author.name,
+                'category': item.category.name if item.category else '',
+                'content_type': model._meta.model_name,
+                'content': item.content[:200] + '...' if len(item.content) > 200 else item.content,
+                'url': item.get_absolute_url(),
+                'created_at': item.created_at.strftime('%Y-%m-%d'),
+            })
 
-    if query:
-        results = results.filter(
-            Q(title__icontains=query) |
-            Q(text__icontains=query) |
-            Q(author__name__icontains=query)
-        )
-
+    # Sort results
     if sort_by == 'popular':
-        results = results.order_by('-created_at')
+        results.sort(key=lambda x: x.get('views', 0), reverse=True)
     else:
-        results = results.order_by('-created_at')
+        results.sort(key=lambda x: x['created_at'], reverse=True)
 
-    results = results.select_related('author', 'category')[:50]
-
-    serialized = []
-    for item in results:
-        serialized.append({
-            'title': item.title,
-            'author': item.author.name,
-            'category': item.category.name if item.category else '',
-            'content_type': item.content_type,
-            'text': item.text,
-            'created_at': item.created_at.strftime('%Y-%m-%d'),
-        })
+    results = results[:50]
 
     suggestions = []
     if query:
-        suggestion_qs = Content.objects.filter(is_published=True).filter(
-            Q(title__icontains=query) |
-            Q(text__icontains=query) |
-            Q(author__name__icontains=query)
-        ).select_related('author')[:10]
         seen = set()
-        for item in suggestion_qs:
-            if item.title not in seen:
-                seen.add(item.title)
-                suggestions.append(item.title)
-            if item.author.name not in seen:
-                seen.add(item.author.name)
-                suggestions.append(item.author.name)
+        for item in results[:10]:
+            if item['title'] not in seen:
+                seen.add(item['title'])
+                suggestions.append(item['title'])
+            if item['author'] not in seen:
+                seen.add(item['author'])
+                suggestions.append(item['author'])
             if len(suggestions) >= 10:
                 break
 
     return JsonResponse({
         'success': True,
-        'results': serialized,
+        'results': results,
         'suggestions': suggestions,
     })
 
@@ -570,7 +500,7 @@ class AuthorDetailView(DetailView):
         all_content.sort(key=lambda x: x['date'], reverse=True)
 
         context['all_content'] = all_content
-        context['published_total'] = author.published_content_total
+        context['published_total'] = len(all_content)
         context.update(
             build_seo_context(
                 self.request,

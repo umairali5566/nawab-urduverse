@@ -22,12 +22,12 @@ class StoryListView(ListView):
     paginate_by = 12
     
     def get_queryset(self):
-        queryset = Story.objects.filter(is_published=True).select_related('author').prefetch_related('categories')
+        queryset = Story.objects.filter(is_published=True).select_related('author', 'category')
         
         # Filter by category
         category = self.request.GET.get('category')
         if category:
-            queryset = queryset.filter(categories__slug=category)
+            queryset = queryset.filter(category__slug=category)
         
         # Search
         search = self.request.GET.get('search')
@@ -103,18 +103,18 @@ class StoryDetailView(DetailView):
             parent=None
         )
         
-        # Related stories - same categories, exclude current, limit 4
+        # Related stories - same category, exclude current, limit 4
         context['related_stories'] = Story.objects.filter(
-            categories__in=story.categories.all(),
+            category=story.category,
             is_published=True
-        ).exclude(id=story.id).distinct()[:4]
+        ).exclude(id=story.id)[:4]
         context['suggested_content'] = get_cross_content_suggestions(
             author=story.author,
-            categories=story.categories.all(),
+            categories=[story.category] if story.category else None,
             exclude_type='story',
             exclude_id=story.id,
             limit=4,
-            seed_text=f"{story.title} {story.excerpt or story.content}",
+            seed_text=f"{story.title} {story.content[:300]}",
         )
 
         context.update(

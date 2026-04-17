@@ -361,9 +361,10 @@ def track_content_view(request, obj, content_type, title, *, unique_per_session=
             request.session[session_key] = True
             request.session.modified = True
 
-    if should_increment:
-        obj.__class__.objects.filter(pk=obj.pk).update(views_count=F("views_count") + 1)
-        obj.views_count += 1
+    # Note: views_count field removed from models
+    # if should_increment:
+    #     obj.__class__.objects.filter(pk=obj.pk).update(views_count=F("views_count") + 1)
+    #     obj.views_count += 1
 
     if request.user.is_authenticated:
         UserActivity.objects.create(
@@ -421,19 +422,19 @@ def get_popular_content(limit=6):
 
     data = {
         "popular_novels": list(
-            Novel.objects.filter(is_published=True).order_by("-views_count", "-likes_count", "-updated_at")[:limit]
+            Novel.objects.filter(is_published=True).order_by("-created_at")[:limit]
         ),
         "popular_stories": list(
-            Story.objects.filter(is_published=True).order_by("-views_count", "-likes_count", "-updated_at")[:limit]
+            Story.objects.filter(is_published=True).order_by("-created_at")[:limit]
         ),
         "popular_poetry": list(
-            Poetry.objects.filter(is_published=True).order_by("-views_count", "-likes_count", "-updated_at")[:limit]
+            Poetry.objects.filter(is_published=True).order_by("-created_at")[:limit]
         ),
         "popular_blog_posts": list(
-            BlogPost.objects.filter(is_published=True).order_by("-views_count", "-likes_count", "-updated_at")[:limit]
+            BlogPost.objects.filter(is_published=True).order_by("-created_at")[:limit]
         ),
         "popular_videos": list(
-            Video.objects.filter(is_published=True).order_by("-views_count", "-likes_count", "-updated_at")[:limit]
+            Video.objects.filter(is_published=True).order_by("-created_at")[:limit]
         ),
     }
     cache.set(cache_key, data, POPULAR_CACHE_TIMEOUT)
@@ -459,7 +460,7 @@ def get_trending_poetry(limit=6, recent_days=14):
     return _get_trending_items(
         Poetry.objects.filter(is_published=True)
         .select_related("author")
-        .order_by("-updated_at")[:200],
+        .order_by("-created_at")[:200],
         content_type="poetry",
         limit=limit,
         recent_days=recent_days,
@@ -472,7 +473,7 @@ def get_trending_blogs(limit=6, recent_days=21):
     return _get_trending_items(
         BlogPost.objects.filter(is_published=True)
         .select_related("author")
-        .order_by("-updated_at")[:200],
+        .order_by("-created_at")[:200],
         content_type="blog",
         limit=limit,
         recent_days=recent_days,
@@ -485,7 +486,7 @@ def get_trending_videos(limit=6, recent_days=21):
     return _get_trending_items(
         Video.objects.filter(is_published=True)
         .select_related("author")
-        .order_by("-updated_at")[:200],
+        .order_by("-created_at")[:200],
         content_type="video",
         limit=limit,
         recent_days=recent_days,
@@ -498,7 +499,7 @@ def get_trending_quotes(limit=6, recent_days=21):
     return _get_trending_items(
         Quote.objects.filter(is_published=True)
         .select_related("author")
-        .order_by("-updated_at")[:200],
+        .order_by("-created_at")[:200],
         content_type="quote",
         limit=limit,
         recent_days=recent_days,
@@ -511,7 +512,7 @@ def get_trending_stories(limit=6, recent_days=21):
     return _get_trending_items(
         Story.objects.filter(is_published=True)
         .select_related("author")
-        .order_by("-updated_at")[:200],
+        .order_by("-created_at")[:200],
         content_type="story",
         limit=limit,
         recent_days=recent_days,
@@ -524,7 +525,7 @@ def get_trending_novels(limit=6, recent_days=28):
     return _get_trending_items(
         Novel.objects.filter(is_published=True)
         .select_related("author")
-        .order_by("-updated_at")[:200],
+        .order_by("-created_at")[:200],
         content_type="novel",
         limit=limit,
         recent_days=recent_days,
@@ -585,7 +586,7 @@ def get_top_authors(limit=6):
             video_count=Count("videos", distinct=True),
             story_count=Count("stories", distinct=True),
         )
-        .order_by("-is_featured", "-views_count", "name")[: max(limit * 3, 12)]
+        .order_by("-is_featured", "-created_at", "name")[: max(limit * 3, 12)]
     )
 
     for author in authors:
@@ -908,7 +909,7 @@ def get_cross_content_suggestions(
                 fallback_queryset = fallback_queryset.exclude(pk=exclude_id)
             fallback_queryset = _apply_category_related_loading(
                 fallback_queryset.select_related("author")
-            ).order_by("-views_count", "-updated_at")
+            ).order_by("-created_at")
             shortlist = list(fallback_queryset[:18])
 
         for item in shortlist:

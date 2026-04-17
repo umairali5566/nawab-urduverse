@@ -10,27 +10,20 @@ from .models import Poetry
 
 @admin.register(Poetry)
 class PoetryAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'category', 'poetry_type', 'is_featured', 'is_published', 'views_count', 'likes_count']
-    list_filter = ['category', 'poetry_type', 'mood', 'is_featured', 'is_published']
+    list_display = ['title', 'author', 'category', 'is_published', 'created_at']
+    list_filter = ['category', 'is_published']
     search_fields = ['title', 'author__name']
     prepopulated_fields = {'slug': ('title',)}
-    list_editable = ['is_published', 'is_featured']
+    list_editable = ['is_published']
     ordering = ['-created_at']
     autocomplete_fields = ['author']
 
     fieldsets = (
         ('Basic Information', {
-            'fields': ('title', 'slug', 'author', 'poetry_type', 'mood', 'category', 'content')
-        }),
-        ('Media', {
-            'fields': ('background_image',)
+            'fields': ('title', 'slug', 'author', 'category', 'content')
         }),
         ('Publishing', {
-            'fields': ('is_published', 'is_featured', 'published_at')
-        }),
-        ('SEO', {
-            'fields': ('meta_title', 'meta_description', 'meta_keywords'),
-            'classes': ('collapse',)
+            'fields': ('is_published',)
         }),
     )
 

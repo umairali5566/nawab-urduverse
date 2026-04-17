@@ -18,146 +18,176 @@
     </div>
 </section>
 
-<section class="py-3">
-    <div class="main-container">
-        <div class="reading-progress" aria-hidden="true">
-            <div class="reading-progress-bar"></div>
-        </div>
-
-        <div class="reading-area">
-            <div
-                class="reader-shell content-protected-shell"
-                data-protected-content
-                data-content-type="blog"
-                data-content-title="{{ post.title|escape }}"
-                data-content-url="{{ request.build_absolute_uri|escape }}"
-                data-content-id="blog-{{ post.id }}"
-            >
-                <div class="reader-toolbar">
-                    <div class="reader-toolset">
-                        {% include 'includes/bookmark_button.html' with content_type='blog' object_id=post.id is_bookmarked=is_bookmarked btn_class='reader-tool-btn' %}
-                        <button
-                            type="button"
-                            class="reader-tool-btn like-btn {% if is_liked %}active{% endif %}"
-                            data-url="{% url 'toggle_like' content_type='blog' object_id=post.id %}"
-                            aria-label="Like article"
-                        >
-                            <i class="bi bi-heart"></i>
-                            <span class="like-count">{{ post.likes_count }}</span>
-                        </button>
-                        <button
-                            type="button"
-                            class="reader-tool-btn"
-                            data-reader-share
-                            data-share-title="{{ post.title }}"
-                            data-share-url="{{ request.build_absolute_uri }}"
-                            data-share-track-url="{% url 'track_share' content_type='blog' object_id=post.id %}"
-                            aria-label="Share article"
-                        >
-                            <i class="bi bi-share"></i> Share
-                        </button>
-                        <button
-                            type="button"
-                            class="reader-tool-btn"
-                            data-copy-target="#blogReaderContent"
-                            aria-label="Copy article text"
-                        >
-                            <i class="bi bi-clipboard"></i> Copy
-                        </button>
-                    </div>
-
-                    <div class="reader-toolset">
-                        <div class="font-control">
-                            <span class="font-control-label">Font</span>
-                            <button type="button" class="font-control-btn" data-font-action="decrease" data-reader-target="#blogReaderContent">A-</button>
-                            <button type="button" class="font-control-btn" data-font-action="increase" data-reader-target="#blogReaderContent">A+</button>
-                        </div>
-                        <button type="button" class="reader-tool-btn" data-reader-dark-target="#blogReaderCard" aria-pressed="false">
-                            <i class="bi bi-moon-stars"></i> Night
-                        </button>
-                    </div>
-                </div>
-
-                <article class="reader-card blog-reader" id="blogReaderCard">
-                    {% if post.featured_image %}
-                    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="img-fluid mb-3" loading="lazy">
-                    {% endif %}
-
-                    <h2 class="reader-title">{{ post.title }}</h2>
-                    <div class="reader-meta">
-                        <span><i class="bi bi-person"></i> {{ post.author.name }}</span>
-                        <span><i class="bi bi-calendar"></i> {{ post.published_at|date:'d M Y' }}</span>
-                        <span><i class="bi bi-clock"></i> {{ post.reading_time }} min read</span>
-                        <span><i class="bi bi-eye"></i> {{ post.views_count }}</span>
-                        <span><i class="bi bi-heart"></i> {{ post.likes_count }}</span>
-                        <span><i class="bi bi-share"></i> {{ post.shares_count|default:0 }}</span>
-                    </div>
-
-                    <div class="reader-content" id="blogReaderContent">
-                        {{ post.content|safe }}
-                    </div>
-                </article>
-            </div>
-        </div>
-
-        <div class="row g-3 mt-3">
-            <div class="col-lg-8">
-                {% if related_posts %}
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title section-title-urdu">Related Articles</h5>
-                        {% for item in related_posts %}
-                        <p class="mb-2"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></p>
-                        {% endfor %}
-                    </div>
-                </div>
+<div class="reader-container">
+    <article class="blog-card">
+        <header class="blog-header">
+            <h1 class="blog-title">{{ post.title }}</h1>
+            <div class="blog-meta">
+                <span class="blog-author">by {{ post.author.name }}</span>
+                {% if post.category %}
+                <span class="blog-category">{{ post.category.name }}</span>
                 {% endif %}
-
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5 class="card-title section-title-urdu">Reader Conversation</h5>
-                        {% if user.is_authenticated %}
-                        <form method="post" action="{% url 'add_comment' content_type='blog' object_id=post.id %}" class="comment-form" data-comment-form>
-                            {% csrf_token %}
-                            <textarea class="form-control mb-3" name="text" rows="4" placeholder="Share your thoughts on this article"></textarea>
-                            <button class="btn btn-primary" type="submit"><i class="bi bi-send me-1"></i> Post Comment</button>
-                        </form>
-                        {% else %}
-                        <button type="button" class="btn btn-outline-primary" data-auth-required data-auth-action="comment">Log in to comment</button>
-                        {% endif %}
-
-                        <div class="mt-4">
-                            {% for comment in comments %}
-                            <div class="comment-block">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <strong>{{ comment.user.get_full_name|default:comment.user.username }}</strong>
-                                    <small class="text-muted">{{ comment.created_at|date:'d M Y' }}</small>
-                                </div>
-                                <p class="mb-0 mt-2">{{ comment.text }}</p>
-                            </div>
-                            {% empty %}
-                            <p class="text-muted mb-0">No comments yet.</p>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
+                <span class="blog-date">{{ post.published_at|date:'d M Y' }}</span>
+                <span class="blog-reading-time">{{ post.reading_time }} min read</span>
             </div>
-            <div class="col-lg-4">
-                {% include 'includes/trending_sidebar.html' %}
-                {% if suggested_content %}
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5 class="card-title section-title-urdu">You may also like</h5>
-                        {% for item in suggested_content %}
-                        {% firstof item.title item.name item.text as item_label %}
-                        <p class="mb-1"><a href="{{ item.get_absolute_url }}">{{ item_label|truncatechars:70 }}</a></p>
-                        <p class="small text-muted mb-2">{{ item.content_type_name|default:"Content" }} · {{ item.recommendation_reason|default:"matching theme" }}</p>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
-            </div>
+        </header>
+
+        {% if post.featured_image %}
+        <div class="blog-image">
+            <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" loading="lazy">
         </div>
+        {% endif %}
+
+        <div class="blog-content" id="blogContent">
+            {{ post.content|safe }}
+        </div>
+
+        <div class="blog-actions">
+            <button class="btn btn-outline like-btn {% if is_liked %}active{% endif %}"
+                    data-url="{% url 'toggle_like' content_type='blog' object_id=post.id %}">
+                <i class="bi bi-heart"></i> Like ({{ post.likes_count }})
+            </button>
+            <button class="btn btn-outline" onclick="shareBlog()">
+                <i class="bi bi-share"></i> Share
+            </button>
+            <button class="btn btn-outline" onclick="copyBlog()">
+                <i class="bi bi-clipboard"></i> Copy
+            </button>
+        </div>
+
+        <div class="blog-footer">
+            <a href="{% url 'blog_list' %}" class="btn btn-outline">Back to Blog</a>
+            {% if post.author %}
+            <a href="#" class="btn btn-outline">More by {{ post.author.name }}</a>
+        {% endif %}
     </div>
 </section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.reader-container {
+    max-width: 700px;
+    margin: 4rem auto;
+    padding: 0 20px;
+}
+
+.blog-card {
+    background: var(--card-bg);
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.blog-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.blog-title {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    font-family: 'Poppins', sans-serif;
+}
+
+.blog-meta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    color: var(--text-secondary);
+}
+
+.blog-author {
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.blog-category {
+    background: var(--secondary-color);
+    color: var(--card-bg);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.blog-date,
+.blog-reading-time {
+    font-size: 0.9rem;
+}
+
+.blog-image {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.blog-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.blog-content {
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--text-primary);
+    margin: 2rem 0;
+}
+
+.blog-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 3rem 0 2rem;
+    flex-wrap: wrap;
+}
+
+.blog-footer {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .reader-container {
+        margin: 2rem auto;
+        padding: 0 15px;
+    }
+
+    .blog-card {
+        padding: 2rem;
+    }
+
+    .blog-title {
+        font-size: 2rem;
+    }
+
+    .blog-content {
+        font-size: 16px;
+    }
+
+    .blog-actions,
+    .blog-footer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .blog-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+</style>
 {% endblock %}

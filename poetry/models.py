@@ -1,4 +1,4 @@
-﻿"""
+"""
 Poetry Models for Nawab Urdu Academy
 """
 
@@ -6,6 +6,7 @@ import re
 from html import unescape
 
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.html import escape, strip_tags
@@ -15,127 +16,36 @@ from django.utils.text import slugify
 from core.models import Author, BaseContentModel, Category
 
 
-class Poetry(BaseContentModel):
+class Poetry(models.Model):
     """Poetry model"""
 
-    POETRY_TYPES = (
-        ("ghazal", "غزل"),
-        ("nazm", "نظم"),
-        ("shayari", "شاعری"),
-        ("rubai", "رباعی"),
-        ("qata", "قطعہ"),
-        ("marsiya", "مرثیہ"),
-        ("manqabat", "منقبت"),
-        ("naat", "نعت"),
-    )
+    title = models.CharField(max_length=300, verbose_name='عنوان')
+    slug = models.SlugField(unique=True, verbose_name='سلگ')
+    content = models.TextField(verbose_name='مواد')
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='poetry', verbose_name='مصنف')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='زمرہ')
+    is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
+    published_at = models.DateTimeField(null=True, blank=True, verbose_name='شائع ہونے کی تاریخ')
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    MOOD_CHOICES = (
-        ("love", "محبت"),
-        ("sad", "اداسی"),
-        ("romantic", "رومانوی"),
-        ("inspirational", "حوصلہ افزائی"),
-        ("religious", "مذہبی"),
-        ("patriotic", "وطن دوستی"),
-        ("funny", "مزاحیہ"),
-        ("philosophical", "فلسفیانہ"),
-    )
-
-    poetry_type = models.CharField(max_length=20, choices=POETRY_TYPES, default="ghazal", verbose_name="قسم")
-    mood = models.CharField(max_length=20, choices=MOOD_CHOICES, blank=True, verbose_name="موڈ")
-    content = RichTextUploadingField(verbose_name="اشعار")
-    background_image = models.ImageField(upload_to="poetry/backgrounds/", blank=True, verbose_name="پس منظر")
-    tags = models.CharField(max_length=500, blank=True, verbose_name="ٹیگز")
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, limit_choices_to={"category_type": "poetry"}, related_name='poetry_set', verbose_name="زمرہ")
-
-    # SEO Fields
-    meta_title = models.CharField(max_length=200, blank=True, verbose_name="SEO Title")
-    meta_description = models.TextField(blank=True, verbose_name="SEO Description")
-    meta_keywords = models.CharField(max_length=500, blank=True, verbose_name="SEO Keywords")
-
-    class Meta(BaseContentModel.Meta):
+    class Meta:
         verbose_name = "شاعری"
         verbose_name_plural = "اشعار"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title, allow_unicode=True)
+        # Strip HTML tags from content
+        self.content = strip_tags(self.content)
+        # Normalize Urdu text (simple for now, can expand)
+        super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("poetry_detail", kwargs={"slug": self.slug})
-
-    @property
-    def poet_name(self):
-        return self.author.name
-
-    @property
-    def primary_category(self):
-        return self.category
-
-    @property
-    def plain_text_content(self):
-        """Return normalized plain text used by layout generator and TTS."""
-        html = self.content or ""
-        html = re.sub(r"<\s*br\s*/?\s*>", "\n", html, flags=re.IGNORECASE)
-        html = re.sub(r"</p\s*>", "\n", html, flags=re.IGNORECASE)
-        html = re.sub(r"<p[^>]*>", "", html, flags=re.IGNORECASE)
-        text = strip_tags(html)
-        text = unescape(text)
-        lines = [line.strip() for line in text.splitlines() if line.strip()]
-        return "\n".join(lines)
-
-    @property
-    def excerpt(self):
-        """Return a short excerpt of the poetry content."""
-        text = self.plain_text_content
-        if len(text) > 200:
-            return text[:200] + "..."
-        return text
-
-    def get_sher_pairs(self):
-        """Group every two lines into one sher pair."""
-        lines = self.plain_text_content.splitlines()
-        pairs = []
-        for index in range(0, len(lines), 2):
-            first = lines[index]
-            second = lines[index + 1] if index + 1 < len(lines) else ""
-            pairs.append((first, second))
-        return pairs
-
-    @property
-    def formatted_poetry_html(self):
-        """Server-side poetry layout in traditional sher structure."""
-        pairs = self.get_sher_pairs()
-        if not pairs:
-            return ""
-
-        html_chunks = []
-        for index, (first, second) in enumerate(pairs):
-            chunk = [
-                '<div class="sher-block">',
-                f'<p class="sher-line">{escape(first)}</p>',
-            ]
-            if second:
-                chunk.append(f'<p class="sher-line">{escape(second)}</p>')
-            chunk.append("</div>")
-            html_chunks.append("".join(chunk))
-
-            if index < len(pairs) - 1:
-                html_chunks.append('<div class="sher-divider" aria-hidden="true"></div>')
-
-        return mark_safe("".join(html_chunks))
-
-    def save(self, *args, **kwargs):
-        if not self.meta_title:
-            self.meta_title = f"{self.title} | Urdu Poetry"
-
-        if not self.meta_description:
-            plain_content = self.plain_text_content or ""
-            self.meta_description = plain_content[:150]
-
-        if not self.meta_keywords:
-            base_keywords = ["اردو شاعری", "poetry", "ghazal", "nazm"]
-            title_words = [word.strip() for word in self.title.split() if word.strip()]
-            all_keywords = [self.title] + base_keywords + title_words
-            unique_keywords = list(dict.fromkeys(all_keywords))
-            self.meta_keywords = ", ".join(unique_keywords)
-
-        super().save(*args, **kwargs)
 
 
 class PoetryCollection(models.Model):

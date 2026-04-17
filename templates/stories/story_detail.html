@@ -18,87 +18,71 @@
     </div>
 </section>
 
-<section class="py-3">
-    <div class="main-container">
-        <div class="reading-progress" aria-hidden="true">
-            <div class="reading-progress-bar"></div>
-        </div>
-
-        <div class="reading-area">
-            <div
-                class="reader-shell content-protected-shell"
-                data-protected-content
-                data-content-type="story"
-                data-content-title="{{ story.title|escape }}"
-                data-content-url="{{ request.build_absolute_uri|escape }}"
-                data-content-id="story-{{ story.id }}"
-            >
-                <div class="reader-toolbar">
-                    <div class="reader-toolset">
-                        {% include 'includes/bookmark_button.html' with content_type='story' object_id=story.id is_bookmarked=is_bookmarked btn_class='reader-tool-btn' %}
-                        <button
-                            type="button"
-                            class="reader-tool-btn like-btn {% if is_liked %}active{% endif %}"
-                            data-url="{% url 'toggle_like' content_type='story' object_id=story.id %}"
-                            aria-label="Like story"
-                        >
-                            <i class="bi bi-heart"></i>
-                            <span class="like-count">{{ story.likes_count }}</span>
-                        </button>
-                        <button
-                            type="button"
-                            class="reader-tool-btn"
-                            data-reader-share
-                            data-share-title="{{ story.title }}"
-                            data-share-url="{{ request.build_absolute_uri }}"
-                            data-share-track-url="{% url 'track_share' content_type='story' object_id=story.id %}"
-                            aria-label="Share story"
-                        >
-                            <i class="bi bi-share"></i> Share
-                        </button>
-                        <button
-                            type="button"
-                            class="reader-tool-btn"
-                            data-copy-target="#storyReaderContent"
-                            aria-label="Copy story text"
-                        >
-                            <i class="bi bi-clipboard"></i> Copy
-                        </button>
-                    </div>
-
-                    <div class="reader-toolset">
-                        <div class="font-control">
-                            <span class="font-control-label">Font</span>
-                            <button type="button" class="font-control-btn" data-font-action="decrease" data-reader-target="#storyReaderContent">A-</button>
-                            <button type="button" class="font-control-btn" data-font-action="increase" data-reader-target="#storyReaderContent">A+</button>
-                        </div>
-                        <button type="button" class="reader-tool-btn" data-reader-dark-target="#storyReaderCard" aria-pressed="false">
-                            <i class="bi bi-moon-stars"></i> Night
-                        </button>
-                    </div>
-                </div>
-
-                <article class="reader-card story-reader" id="storyReaderCard">
-                    {% if story.featured_image %}
-                    <img src="{{ story.featured_image.url }}" alt="{{ story.title }}" class="img-fluid mb-3" loading="lazy">
-                    {% endif %}
-
-                    <h2 class="reader-title">{{ story.title }}</h2>
-                    <div class="reader-meta">
-                        <span><i class="bi bi-person"></i> {{ story.author.name }}</span>
-                        <span><i class="bi bi-calendar"></i> {{ story.created_at|date:'d M Y' }}</span>
-                        <span><i class="bi bi-clock"></i> {{ story.reading_time }} min</span>
-                        <span><i class="bi bi-eye"></i> {{ story.views_count }}</span>
-                        <span><i class="bi bi-heart"></i> {{ story.likes_count }}</span>
-                        <span><i class="bi bi-share"></i> {{ story.shares_count|default:0 }}</span>
-                    </div>
-
-                    <div class="reader-content" id="storyReaderContent">
-                        {{ story.content|safe }}
-                    </div>
-                </article>
+<div class="reader-container">
+    <article class="story-card">
+        <header class="story-header">
+            <h1 class="story-title urdu-text">{{ story.title }}</h1>
+            <div class="story-meta">
+                <span class="story-author">by {{ story.author.name }}</span>
+                {% if story.category %}
+                <span class="story-category">{{ story.category.name }}</span>
+                {% endif %}
+                <span class="story-date">{{ story.created_at|date:'d M Y' }}</span>
             </div>
+        </header>
+
+        {% if story.featured_image %}
+        <div class="story-image">
+            <img src="{{ story.featured_image.url }}" alt="{{ story.title }}" loading="lazy">
         </div>
+        {% endif %}
+
+        <div class="story-content urdu-text" id="storyContent">
+            {{ story.content|safe }}
+        </div>
+
+        <div class="story-actions">
+            <button class="btn btn-outline like-btn {% if is_liked %}active{% endif %}"
+                    data-url="{% url 'toggle_like' content_type='story' object_id=story.id %}">
+                <i class="bi bi-heart"></i> Like ({{ story.likes_count }})
+            </button>
+            <button class="btn btn-outline" onclick="shareStory()">
+                <i class="bi bi-share"></i> Share
+            </button>
+            <button class="btn btn-outline" onclick="copyStory()">
+                <i class="bi bi-clipboard"></i> Copy
+            </button>
+        </div>
+
+        <div class="story-footer">
+            <a href="{% url 'story_list' %}" class="btn btn-outline">Back to Stories</a>
+            {% if story.author %}
+            <a href="#" class="btn btn-outline">More by {{ story.author.name }}</a>
+            {% endif %}
+        </div>
+    </article>
+</div>
+
+<script>
+function shareStory() {
+    if (navigator.share) {
+        navigator.share({
+            title: '{{ story.title }}',
+            text: 'Check out this story',
+            url: window.location.href
+        });
+    } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Link copied to clipboard!');
+    }
+}
+
+function copyStory() {
+    const content = document.getElementById('storyContent').innerText;
+    navigator.clipboard.writeText('{{ story.title }}\n\nby {{ story.author.name }}\n\n' + content);
+    alert('Story copied to clipboard!');
+}
+</script>
 
         <div class="row g-3 mt-3">
             <div class="col-lg-6">
@@ -156,4 +140,139 @@
         {% endif %}
     </div>
 </section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.reader-container {
+    max-width: 700px;
+    margin: 4rem auto;
+    padding: 0 20px;
+}
+
+.story-card {
+    background: var(--card-bg);
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.story-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.story-title {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.story-meta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    color: var(--text-secondary);
+}
+
+.story-author {
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.story-category {
+    background: var(--secondary-color);
+    color: var(--card-bg);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.story-date {
+    font-size: 0.9rem;
+}
+
+.story-image {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.story-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.story-content {
+    font-family: var(--urdu-font);
+    font-size: 18px;
+    line-height: 2;
+    text-align: right;
+    direction: rtl;
+    color: var(--text-primary);
+    margin: 2rem 0;
+}
+
+.story-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 3rem 0 2rem;
+    flex-wrap: wrap;
+}
+
+.story-footer {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+}
+
+.urdu-text {
+    font-family: var(--urdu-font);
+    direction: rtl;
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    .reader-container {
+        margin: 2rem auto;
+        padding: 0 15px;
+    }
+
+    .story-card {
+        padding: 2rem;
+    }
+
+    .story-title {
+        font-size: 2rem;
+    }
+
+    .story-content {
+        font-size: 16px;
+    }
+
+    .story-actions,
+    .story-footer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .story-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+</style>
 {% endblock %}

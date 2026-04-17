@@ -25,8 +25,7 @@ urlpatterns = [
     path('search/poetry/', views.poetry_search_api, name='poetry_search_api'),
     path('search/suggestions/', views.search_suggestions, name='search_suggestions'),
 
-    # Admin Upload
-    path('admin-upload/', views.admin_upload, name='admin_upload'),
+
 
     # SEO
     path('robots.txt', views.robots_txt, name='robots_txt'),

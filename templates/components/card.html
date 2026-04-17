@@ -1,0 +1,241 @@
+{% load static %}
+
+<!-- Basic Card -->
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Card Title</h3>
+  </div>
+  <div class="card-body">
+    <p class="card-text">Card content goes here.</p>
+  </div>
+  <div class="card-footer">
+    <a href="#" class="card-link">Read More</a>
+  </div>
+</div>
+
+<!-- Category Card -->
+<div class="category-card">
+  <div class="category-icon">
+    <i class="bi bi-book"></i>
+  </div>
+  <h3 class="category-title">Poetry</h3>
+  <p class="category-text">Explore beautiful Urdu poetry</p>
+  <a href="#" class="category-link">Browse Poetry</a>
+</div>
+
+<!-- Poetry Card -->
+<div class="poetry-card">
+  <h3 class="poetry-card-title">شعر کا عنوان</h3>
+  <p class="poetry-card-author">شاعر کا نام</p>
+  <p class="poetry-card-preview">شعر کی پہلی سطر...</p>
+  <a href="#" class="btn btn-primary">Read Poem</a>
+</div>
+
+<!-- Featured Card (Large) -->
+<div class="featured-card">
+  <div class="featured-content">
+    <h2 class="featured-title">مختار شعر</h2>
+    <p class="featured-author">شاعر کا نام</p>
+    <p class="featured-preview">شعر کی پہلی سطریں...</p>
+    <a href="#" class="btn btn-primary">Read Full Poem</a>
+  </div>
+  <div class="featured-image">
+    <img src="{% static 'images/poetry-placeholder.jpg' %}" alt="Poetry">
+  </div>
+</div>
+
+<style>
+.card {
+  background: var(--card-bg);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.card-footer {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  background: var(--bg-color);
+}
+
+.card-title {
+  color: var(--primary-color);
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.card-text {
+  color: var(--text-secondary);
+  margin: 0.5rem 0 0;
+}
+
+.card-link {
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.card-link:hover {
+  color: var(--primary-color);
+}
+
+.category-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.category-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.category-icon {
+  font-size: 3rem;
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+}
+
+.category-title {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.category-text {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.category-link {
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.category-link:hover {
+  color: var(--primary-color);
+}
+
+.poetry-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.poetry-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.poetry-card-title {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  font-family: var(--urdu-font);
+  font-size: 1.5rem;
+}
+
+.poetry-card-author {
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.poetry-card-preview {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-family: var(--urdu-font);
+}
+
+.featured-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.featured-content {
+  padding: 2rem;
+}
+
+.featured-title {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-family: var(--urdu-font);
+  font-size: 2rem;
+}
+
+.featured-author {
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.featured-preview {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-family: var(--urdu-font);
+}
+
+.featured-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .featured-card {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-content {
+    order: 2;
+  }
+
+  .featured-image {
+    order: 1;
+  }
+
+  .category-card,
+  .poetry-card {
+    padding: 1.5rem;
+  }
+
+  .featured-title {
+    font-size: 1.5rem;
+  }
+}
+</style>

@@ -36,7 +36,10 @@ def build_database_config():
                 'HOST': parsed.hostname or '',
                 'PORT': str(parsed.port or '5432'),
                 'CONN_MAX_AGE': int(os.environ.get('DB_CONN_MAX_AGE', '60')),
-                'OPTIONS': {'sslmode': os.environ.get('DB_SSLMODE', 'require')},
+                'OPTIONS': {
+                    'sslmode': os.environ.get('DB_SSLMODE', 'require'),
+                    'charset': 'utf8mb4',  # Ensure UTF-8 encoding for MySQL/PostgreSQL
+                },
             }
 
     if os.environ.get('DB_NAME'):
@@ -48,7 +51,10 @@ def build_database_config():
             'HOST': os.environ.get('DB_HOST', 'localhost'),
             'PORT': os.environ.get('DB_PORT', '5432'),
             'CONN_MAX_AGE': int(os.environ.get('DB_CONN_MAX_AGE', '60')),
-            'OPTIONS': {'sslmode': os.environ.get('DB_SSLMODE', 'prefer')},
+            'OPTIONS': {
+                'sslmode': os.environ.get('DB_SSLMODE', 'prefer'),
+                'charset': 'utf8mb4',  # Ensure UTF-8 encoding
+            },
         }
 
     return {

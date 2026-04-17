@@ -24,42 +24,27 @@ ENGAGEMENT_CONTENT_TYPES = (
 
 class Category(models.Model):
     """Category model for all content types"""
-    
-    CATEGORY_TYPES = (
-        ('novel', 'ناول'),
-        ('story', 'کہانی'),
-        ('poetry', 'شاعری'),
-        ('quote', 'اقتباس'),
-        ('blog', 'بلاگ'),
-        ('video', 'ویڈیو'),
-    )
-    
+
+    CATEGORY_TYPES = ENGAGEMENT_CONTENT_TYPES
+
     name = models.CharField(max_length=100, verbose_name='نام')
-    name_english = models.CharField(max_length=100, blank=True, verbose_name='انگریزی نام')
     slug = models.SlugField(unique=True, verbose_name='سلگ')
-    category_type = models.CharField(max_length=20, choices=CATEGORY_TYPES, verbose_name='قسم')
-    description = models.TextField(blank=True, verbose_name='تفصیل')
-    image = models.ImageField(upload_to='categories/', blank=True, verbose_name='تصویر')
-    color = models.CharField(max_length=7, default='#6c757d', verbose_name='رنگ')
     is_active = models.BooleanField(default=True, verbose_name='فعال')
+    category_type = models.CharField(max_length=20, choices=CATEGORY_TYPES, null=True, blank=True, verbose_name='قسم')
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         verbose_name = 'زمرہ'
         verbose_name_plural = 'زمرہ جات'
         ordering = ['name']
-    
+
     def __str__(self):
         return self.name
-    
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name, allow_unicode=True)
         super().save(*args, **kwargs)
-    
-    def get_absolute_url(self):
-        return reverse('category_detail', kwargs={'slug': self.slug})
 
 
 class Tag(models.Model):
@@ -88,10 +73,11 @@ class Author(models.Model):
 
     name = models.CharField(max_length=200, verbose_name='نام')
     slug = models.SlugField(unique=True, verbose_name='سلگ')
-    is_featured = models.BooleanField(default=False, verbose_name='نمایاں')
+    is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
     is_active = models.BooleanField(default=True, verbose_name='فعال')
+    is_featured = models.BooleanField(default=False, verbose_name='نمایاں')
+    bio = models.TextField(blank=True, verbose_name='تعارف')
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = 'مصنف'
@@ -103,31 +89,8 @@ class Author(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(self.name, allow_unicode=True)
         super().save(*args, **kwargs)
-
-    def get_absolute_url(self):
-        return reverse('author_detail', kwargs={'slug': self.slug})
-
-    @property
-    def published_content_total(self):
-        related_sets = (
-            getattr(self, 'poetry', None),
-            getattr(self, 'blog_posts', None),
-            getattr(self, 'videos', None),
-            getattr(self, 'novels', None),
-            getattr(self, 'quotes', None),
-            getattr(self, 'stories', None),
-        )
-        total = 0
-        for related in related_sets:
-            if related is None:
-                continue
-            queryset = related.all()
-            if hasattr(queryset.model, 'is_published'):
-                queryset = queryset.filter(is_published=True)
-            total += queryset.count()
-        return total
 
 
 class BaseContentModel(models.Model):

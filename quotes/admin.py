@@ -10,58 +10,33 @@ from .models import Quote, QuoteCollection
 
 @admin.register(Quote)
 class QuoteAdmin(admin.ModelAdmin):
-    list_display = [
-        'background_preview', 'text_preview', 'author', 'quote_type',
-        'is_published', 'is_featured', 'views_count', 'created_at'
-    ]
-    list_filter = ['quote_type', 'is_published', 'is_featured', 'created_at']
-    search_fields = ['text', 'author__name']
-    prepopulated_fields = {'slug': ('text',)}
-    list_editable = ['is_published', 'is_featured']
-    readonly_fields = ['background_preview', 'views_count', 'likes_count', 'shares_count', 'created_at', 'updated_at']
-    filter_horizontal = ['categories']
+    list_display = ['title', 'author', 'category', 'quote_type', 'is_featured', 'is_published', 'created_at']
+    list_filter = ['is_published', 'category', 'quote_type', 'is_featured', 'created_at']
+    search_fields = ['title', 'text', 'author__name']
+    prepopulated_fields = {'slug': ('title',)}
+    list_editable = ['is_published']
+    ordering = ['-created_at']
     autocomplete_fields = ['author']
+    filter_horizontal = ['categories']
 
     fieldsets = (
         ('Basic Information', {
-            'fields': ('text', 'slug', 'author', 'quote_type')
+            'fields': ('title', 'slug', 'author', 'category', 'text')
         }),
-        ('Visual Style', {
-            'fields': ('background_image', 'background_preview', 'text_color', 'background_color', 'font_size')
+        ('Classification', {
+            'fields': ('quote_type', 'categories', 'is_featured')
         }),
-        ('Categories and Tags', {
-            'fields': ('categories', 'tags')
+        ('Design & SEO', {
+            'fields': ('background_image', 'text_color', 'background_color', 'font_size', 'meta_title', 'meta_description')
         }),
         ('Publishing', {
-            'fields': ('is_published', 'is_featured')
+            'fields': ('is_published', 'published_at')
         }),
-        ('Stats', {
+        ('Engagement', {
             'fields': ('views_count', 'likes_count', 'shares_count')
         }),
-        ('SEO', {
-            'fields': ('meta_title', 'meta_description'),
-            'classes': ('collapse',)
-        }),
-        ('Dates', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
-        }),
     )
-
-    def text_preview(self, obj):
-        return obj.text[:80] + '...' if len(obj.text) > 80 else obj.text
-
-    text_preview.short_description = 'Quote'
-
-    def background_preview(self, obj):
-        if obj.background_image:
-            return format_html(
-                '<img src="{}" style="width:72px;height:72px;object-fit:cover;border-radius:14px;" />',
-                obj.background_image.url,
-            )
-        return 'No image'
-
-    background_preview.short_description = 'Preview'
+    readonly_fields = ('views_count', 'likes_count', 'shares_count')
 
 
 @admin.register(QuoteCollection)

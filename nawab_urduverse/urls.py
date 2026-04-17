@@ -9,7 +9,6 @@ from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from ai_features import views as ai_views
 from core import views as core_views
-from poetry import views as poetry_views
 from core.sitemaps import (
     NovelSitemap, ChapterSitemap, StorySitemap, PoetrySitemap,
     QuoteSitemap, BlogSitemap, VideoSitemap,
@@ -35,7 +34,6 @@ urlpatterns = [
     path('static/sw.js', core_views.service_worker, name='service_worker'),
     path('', include('core.urls')),
     path('home/', views.home, name='home_redirect'),
-    path('ai-studio/', poetry_views.ai_studio, name='ai_studio'),
     path('ai/', include('ai_features.urls')),
     path('login/', accounts_views.user_login, name='login'),
     path('accounts/', include('accounts.urls')),

@@ -15,74 +15,30 @@ from core.models import Author, Category
 
 class Novel(models.Model):
     """Novel model"""
-    
-    STATUS_CHOICES = (
-        ('ongoing', 'جاری'),
-        ('completed', 'مکمل'),
-        ('hiatus', 'تعطل'),
-    )
-    
+
     title = models.CharField(max_length=300, verbose_name='عنوان')
     slug = models.SlugField(unique=True, verbose_name='سلگ')
+    content = models.TextField(verbose_name='مواد')
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='novels', verbose_name='مصنف')
-    description = RichTextUploadingField(verbose_name='تفصیل')
-    cover_image = models.ImageField(upload_to='novels/covers/', verbose_name='سرورق کی تصویر')
-    pdf_file = models.FileField(upload_to='novels/pdfs/', blank=True, verbose_name='پی ڈی ایف فائل')
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, limit_choices_to={'category_type': 'novel'}, verbose_name='زمرہ')
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='ongoing', verbose_name='حالت')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='زمرہ')
     is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
-    is_featured = models.BooleanField(default=False, verbose_name='نمایاں')
-    is_premium = models.BooleanField(default=False, verbose_name='پریمیم')
-    views_count = models.PositiveIntegerField(default=0, verbose_name='مشاہدات')
-    likes_count = models.PositiveIntegerField(default=0, verbose_name='پسندیدگی')
-    shares_count = models.PositiveIntegerField(default=0, verbose_name='شیئرز')
-    total_chapters = models.PositiveIntegerField(default=0, verbose_name='کل ابواب')
     published_at = models.DateTimeField(null=True, blank=True, verbose_name='شائع ہونے کی تاریخ')
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    # SEO Fields
-    meta_title = models.CharField(max_length=200, blank=True, verbose_name='میٹا عنوان')
-    meta_description = models.TextField(blank=True, verbose_name='میٹا تفصیل')
-    meta_keywords = models.CharField(max_length=500, blank=True, verbose_name='میٹا کی ورڈز')
-    
+
     class Meta:
         verbose_name = 'ناول'
         verbose_name_plural = 'ناولز'
         ordering = ['-created_at']
-    
+
     def __str__(self):
         return self.title
-    
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title, allow_unicode=True)
+        # Strip HTML tags from content
+        self.content = strip_tags(self.content)
         super().save(*args, **kwargs)
-    
-    def get_absolute_url(self):
-        return reverse('novel_detail', kwargs={'slug': self.slug})
-    
-    def get_first_chapter(self):
-        return self.chapters.filter(is_published=True).order_by('chapter_number').first()
-    
-    def get_last_chapter(self):
-        return self.chapters.filter(is_published=True).order_by('-chapter_number').first()
-    
-    def update_chapter_count(self):
-        self.total_chapters = self.chapters.filter(is_published=True).count()
-        self.save(update_fields=['total_chapters'])
-
-    @property
-    def description_text(self):
-        return strip_tags(self.description or '')
-
-    @property
-    def views(self):
-        return self.views_count
-
-    @property
-    def has_readable_file(self):
-        return bool(self.pdf_file)
 
 
 class Chapter(models.Model):

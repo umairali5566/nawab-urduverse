@@ -1,71 +1,54 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ SITE_NAME }} | Home{% endblock %}
+{% block title %}Welcome to {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<section class="hero-section">
-    <div class="container">
-        <h1 class="hero-title urdu-text">اردو ادب کی خوبصورتی دریافت کریں</h1>
-        <p class="hero-subtitle">Discover the beauty of Urdu poetry, stories, and novels.</p>
-        <div class="hero-actions">
-            <a href="/poetry/" class="btn btn-primary">Explore Poetry</a>
-            <a href="/stories/" class="btn btn-outline">Start Reading</a>
-        </div>
-    </div>
-</section>
+<div class="container my-4">
+    <h1>Welcome to {{ SITE_NAME }}</h1>
+    <p>Your source for Urdu content including poetry, novels, stories, quotes, and more.</p>
 
-<section class="categories-section">
-    <div class="container">
-        <h2 class="section-title">Browse by Category</h2>
-        <p class="section-subtitle">Explore different genres of Urdu literature.</p>
-        <div class="categories-grid">
-            <div class="category-card">
-                <div class="category-icon">📖</div>
-                <h3 class="category-title">Poetry</h3>
-                <p class="category-text">Explore timeless Urdu poetry.</p>
-                <a href="/poetry/" class="category-link">Browse</a>
-            </div>
-            <div class="category-card">
-                <div class="category-icon">📚</div>
-                <h3 class="category-title">Stories</h3>
-                <p class="category-text">Dive into captivating stories.</p>
-                <a href="/stories/" class="category-link">Browse</a>
-            </div>
-            <div class="category-card">
-                <div class="category-icon">📝</div>
-                <h3 class="category-title">Novels</h3>
-                <p class="category-text">Read classic and modern novels.</p>
-                <a href="/novels/" class="category-link">Browse</a>
-            </div>
-            <div class="category-card">
-                <div class="category-icon">📰</div>
-                <h3 class="category-title">Blog</h3>
-                <p class="category-text">Stay updated with our blog.</p>
-                <a href="/blog/" class="category-link">Browse</a>
-            </div>
+    <div class="row">
+        <div class="col-md-3">
+            <a href="{% url 'poetry_list' %}" class="text-decoration-none">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Poetry</h5>
+                        <p class="card-text">Explore beautiful Urdu poetry</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'novel_list' %}" class="text-decoration-none">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Novels</h5>
+                        <p class="card-text">Read engaging Urdu novels</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'story_list' %}" class="text-decoration-none">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Stories</h5>
+                        <p class="card-text">Enjoy short Urdu stories</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'quote_list' %}" class="text-decoration-none">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Quotes</h5>
+                        <p class="card-text">Inspiring Urdu quotes</p>
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
-</section>
-
-<section class="latest-poetry-section">
-    <div class="container">
-        <h2 class="section-title">Latest Poetry</h2>
-        <p class="section-subtitle">Read the most recent additions to our poetry collection.</p>
-        <div class="poetry-grid">
-            {% for poem in latest_poetry %}
-            <div class="poetry-card">
-                <h3 class="poetry-card-title">{{ poem.title }}</h3>
-                <p class="poetry-card-author">By {{ poem.author.name }}</p>
-                <p class="poetry-card-preview urdu-text">{{ poem.plain_text_content|truncatechars:150 }}</p>
-                <a href="{{ poem.get_absolute_url }}" class="btn btn-primary">Read Poem</a>
-            </div>
-            {% empty %}
-            <div class="poetry-card">
-                <p class="card-text" style="text-align: center;">No poetry available yet.</p>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
+</div>
 {% endblock %}
