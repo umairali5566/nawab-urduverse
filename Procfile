@@ -1,1 +1,1 @@
-web: gunicorn nawab_urduverse.wsgi
+web: bash start.sh

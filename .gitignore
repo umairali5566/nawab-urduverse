@@ -1,6 +1,8 @@
 __pycache__/
 *.pyc
 db.sqlite3
+migration_autogen.sqlite3
+.render/
 .env
 media/
 staticfiles/

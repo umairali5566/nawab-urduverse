@@ -11,6 +11,7 @@ from urllib.parse import urlparse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+IS_RENDER = bool(os.environ.get('RENDER') or os.environ.get('RENDER_SERVICE_ID'))
 
 
 def add_static_headers(headers, path, url):
@@ -20,6 +21,23 @@ def add_static_headers(headers, path, url):
         headers['Cache-Control'] = 'no-cache'
     elif url.endswith('/manifest.json'):
         headers['Cache-Control'] = 'public, max-age=3600'
+
+
+def _parse_env_bool(name, default=False):
+    """Read a boolean environment variable."""
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {'1', 'true', 'yes', 'on'}
+
+
+def _default_sqlite_path():
+    """Keep Render from booting against the checked-in development DB."""
+    if IS_RENDER:
+        sqlite_path = Path(os.environ.get('SQLITE_PATH', BASE_DIR / '.render' / 'db.sqlite3'))
+        sqlite_path.parent.mkdir(parents=True, exist_ok=True)
+        return sqlite_path
+    return BASE_DIR / 'db.sqlite3'
 
 
 def build_database_config():
@@ -59,7 +77,7 @@ def build_database_config():
 
     return {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': _default_sqlite_path(),
     }
 
 # Quick-start development settings - unsuitable for production
@@ -72,7 +90,7 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = _parse_env_bool('DEBUG', default=not IS_RENDER)
 TESTING = 'test' in sys.argv
 
 ALLOWED_HOSTS = ['*']
