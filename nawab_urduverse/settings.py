@@ -90,7 +90,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'django.contrib.humanize',
-
+     
     # Third-party apps
     'ckeditor',
     'ckeditor_uploader',
