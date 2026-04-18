@@ -75,7 +75,7 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 TESTING = 'test' in sys.argv
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['nawab-urdu-academy.onrender.com']
 
 # Application definition
 
