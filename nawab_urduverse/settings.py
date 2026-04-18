@@ -4,6 +4,7 @@ A complete Urdu literature platform by Nawab
 """
 
 import os
+import sqlite3
 import sys
 from importlib.util import find_spec
 from pathlib import Path
@@ -37,7 +38,44 @@ def _default_sqlite_path():
         sqlite_path = Path(os.environ.get('SQLITE_PATH', BASE_DIR / '.render' / 'db.sqlite3'))
         sqlite_path.parent.mkdir(parents=True, exist_ok=True)
         return sqlite_path
-    return BASE_DIR / 'db.sqlite3'
+
+    sqlite_path = BASE_DIR / 'db.sqlite3'
+    if _has_inconsistent_custom_user_history(sqlite_path):
+        return Path(os.environ.get('LOCAL_SQLITE_PATH', BASE_DIR / 'db.local.sqlite3'))
+    return sqlite_path
+
+
+def _has_inconsistent_custom_user_history(sqlite_path):
+    """
+    Detect the old local SQLite file that was created before accounts migrations
+    existed, which leaves admin/auth applied but no accounts_user table.
+    """
+    if not Path(sqlite_path).exists():
+        return False
+
+    connection = None
+    try:
+        connection = sqlite3.connect(sqlite_path)
+        cursor = connection.cursor()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        tables = {row[0] for row in cursor.fetchall()}
+        if 'django_migrations' not in tables:
+            return False
+
+        cursor.execute("SELECT app, name FROM django_migrations")
+        migrations = {(row[0], row[1]) for row in cursor.fetchall()}
+        has_admin_initial = ('admin', '0001_initial') in migrations
+        has_accounts_initial = ('accounts', '0001_initial') in migrations
+        has_accounts_table = 'accounts_user' in tables
+        return has_admin_initial and (not has_accounts_initial or not has_accounts_table)
+    except sqlite3.DatabaseError:
+        return False
+    finally:
+        try:
+            if connection is not None:
+                connection.close()
+        except Exception:
+            pass
 
 
 def build_database_config():

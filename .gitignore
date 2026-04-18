@@ -1,6 +1,8 @@
 __pycache__/
 *.pyc
 db.sqlite3
+db.local.sqlite3
+db.sqlite3.inconsistent_backup_*
 migration_autogen.sqlite3
 .render/
 .env
