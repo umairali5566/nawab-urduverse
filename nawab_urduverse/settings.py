@@ -94,7 +94,6 @@ INSTALLED_APPS = [
     # Third-party apps
     'ckeditor',
     'ckeditor_uploader',
-    'django_cleanup.apps.CleanupConfig',
     'crispy_forms',
     'crispy_bootstrap5',
     
