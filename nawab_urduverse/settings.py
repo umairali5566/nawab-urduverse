@@ -123,7 +123,7 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = _parse_env_bool('DEBUG', default=False if IS_RENDER else True)
+DEBUG = os.getenv("DEBUG", "False") == "True"
 TESTING = 'test' in sys.argv
 
 ALLOWED_HOSTS = [
@@ -279,7 +279,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_BACKEND = (
     'whitenoise.storage.CompressedManifestStaticFilesStorage'
     if not DEBUG and not TESTING
@@ -300,7 +300,7 @@ WHITENOISE_MIMETYPES = {
 
 # Media files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -308,6 +308,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CKEditor Configuration
+CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 CKEDITOR_CONFIGS = {
     'default': {
