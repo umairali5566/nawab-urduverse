@@ -181,7 +181,8 @@ pip install -r requirements.txt && python manage.py migrate && python manage.py 
 bash start.sh
 ```
 
-4. The deployment automatically runs `python manage.py ensure_superuser`, so the admin account is created or updated from the environment variables above.
+4. The deployment automatically runs migrations, and a Django `post_migrate` signal creates or updates the admin account from the environment variables above.
+5. `python manage.py ensure_superuser` is available if you ever want to run the same logic manually.
 
 ## Database Models
 

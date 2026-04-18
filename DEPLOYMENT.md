@@ -37,7 +37,8 @@ bash start.sh
 ### Admin Login Notes
 
 - This project uses a custom user model, so the production admin user lives in the `accounts_user` table.
-- `python manage.py ensure_superuser` runs on startup and creates or updates the deployment superuser from the Render environment variables above.
+- A Django `post_migrate` signal automatically creates or updates the deployment superuser from the Render environment variables above whenever migrations run.
+- `python manage.py ensure_superuser` is also available as a manual fallback command if you ever want to run the same logic yourself.
 - After deploy, log in at `/admin/` with the values from:
   - `DJANGO_SUPERUSER_USERNAME`
   - `DJANGO_SUPERUSER_PASSWORD`
