@@ -10,6 +10,8 @@ from importlib.util import find_spec
 from pathlib import Path
 from urllib.parse import urlparse
 
+import dj_database_url
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 IS_RENDER = bool(os.environ.get('RENDER') or os.environ.get('RENDER_SERVICE_ID'))
@@ -82,21 +84,15 @@ def build_database_config():
     """Support sqlite locally and PostgreSQL in production."""
     database_url = os.environ.get('DATABASE_URL', '').strip()
     if database_url:
-        parsed = urlparse(database_url)
-        if parsed.scheme in {'postgres', 'postgresql'}:
-            return {
-                'ENGINE': 'django.db.backends.postgresql',
-                'NAME': parsed.path.lstrip('/'),
-                'USER': parsed.username or '',
-                'PASSWORD': parsed.password or '',
-                'HOST': parsed.hostname or '',
-                'PORT': str(parsed.port or '5432'),
-                'CONN_MAX_AGE': int(os.environ.get('DB_CONN_MAX_AGE', '60')),
-                'OPTIONS': {
-                    'sslmode': os.environ.get('DB_SSLMODE', 'require'),
-                    'charset': 'utf8mb4',  # Ensure UTF-8 encoding for MySQL/PostgreSQL
-                },
-            }
+        config = dj_database_url.parse(
+            database_url,
+            conn_max_age=int(os.environ.get('DB_CONN_MAX_AGE', '60')),
+        )
+        sslmode = os.environ.get('DB_SSLMODE', 'require')
+        if config.get('ENGINE') == 'django.db.backends.postgresql' and sslmode:
+            config.setdefault('OPTIONS', {})
+            config['OPTIONS']['sslmode'] = sslmode
+        return config
 
     if os.environ.get('DB_NAME'):
         return {
@@ -109,7 +105,6 @@ def build_database_config():
             'CONN_MAX_AGE': int(os.environ.get('DB_CONN_MAX_AGE', '60')),
             'OPTIONS': {
                 'sslmode': os.environ.get('DB_SSLMODE', 'prefer'),
-                'charset': 'utf8mb4',  # Ensure UTF-8 encoding
             },
         }
 
@@ -128,10 +123,16 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = _parse_env_bool('DEBUG', default=not IS_RENDER)
+DEBUG = _parse_env_bool('DEBUG', default=False if IS_RENDER else True)
 TESTING = 'test' in sys.argv
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get('ALLOWED_HOSTS', '').split(',')
+    if host.strip()
+]
+if not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ['*'] if IS_RENDER else ['127.0.0.1', 'localhost']
 
 # Application definition
 

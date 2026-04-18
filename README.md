@@ -158,6 +158,31 @@ EMAIL_HOST_PASSWORD=your-password
 5. Set up SSL certificate
 6. Use gunicorn or uWSGI as WSGI server
 
+### Render Quick Start
+
+1. Set these environment variables in Render:
+```env
+DJANGO_SECRET_KEY=your-secret-key
+DEBUG=False
+ALLOWED_HOSTS=nawab-urdu-academy.onrender.com
+DATABASE_URL=your-render-database-url
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@example.com
+DJANGO_SUPERUSER_PASSWORD=change-this-password
+```
+
+2. Use this build command:
+```bash
+pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput
+```
+
+3. Use this start command:
+```bash
+bash start.sh
+```
+
+4. The deployment automatically runs `python manage.py ensure_superuser`, so the admin account is created or updated from the environment variables above.
+
 ## Database Models
 
 ### Core Models

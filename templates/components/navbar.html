@@ -1,36 +1,44 @@
 {% load static %}
 <header class="navbar-sticky">
-    <div class="container">
-        <nav class="navbar">
-            <div class="navbar-logo">
-                <a href="{% url 'home' %}">{{ SITE_NAME }}</a>
-            </div>
-            <ul class="navbar-menu">
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'poetry_list' %}">Poetry</a></li>
-                <li><a href="{% url 'novel_list' %}">Novels</a></li>
-                <li><a href="{% url 'story_list' %}">Stories</a></li>
-                <li><a href="{% url 'quote_list' %}">Quotes</a></li>
-                <li><a href="{% url 'blog_list' %}">Blog</a></li>
-                <li><a href="{% url 'video_list' %}">Videos</a></li>
-                <li><a href="{% url 'all_categories' %}">Categories</a></li>
-                <li><a href="{% url 'search' %}">Search</a></li>
-            </ul>
-            <div class="navbar-auth">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'dashboard' %}">Dashboard</a>
-                    <a href="{% url 'logout' %}">Logout</a>
-                    {% if user.is_superuser %}
-                        <a href="{% url 'admin:index' %}">Admin</a>
-                    {% endif %}
-                {% else %}
-                    <a href="{% url 'login' %}">Login</a>
-                    <a href="{% url 'register' %}">Register</a>
-                {% endif %}
-            </div>
-            <button class="navbar-toggle" aria-label="Toggle navigation">
+    <div class="main-container">
+        <nav class="navbar navbar-professional">
+            <a class="navbar-brand-block" href="{% url 'home' %}">
+                <span class="navbar-brand-mark">
+                    <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }}">
+                </span>
+                <span class="navbar-brand-copy">
+                    <strong>{{ SITE_NAME }}</strong>
+                    <span>{{ SITE_TAGLINE }}</span>
+                </span>
+            </a>
+            <button class="navbar-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-menu">
                 <span></span><span></span><span></span>
             </button>
+            <div class="navbar-panel" id="primary-menu">
+                <ul class="navbar-menu">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'poetry_list' %}">Poetry</a></li>
+                    <li><a href="{% url 'novel_list' %}">Novels</a></li>
+                    <li><a href="{% url 'story_list' %}">Stories</a></li>
+                    <li><a href="{% url 'quote_list' %}">Quotes</a></li>
+                    <li><a href="{% url 'blog_list' %}">Blog</a></li>
+                    <li><a href="{% url 'video_list' %}">Videos</a></li>
+                    <li><a href="{% url 'all_categories' %}">Categories</a></li>
+                    <li><a href="{% url 'search' %}">Search</a></li>
+                </ul>
+                <div class="navbar-auth">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="nav-pill nav-pill-primary">Dashboard</a>
+                    <a href="{% url 'logout' %}" class="nav-pill nav-pill-outline">Logout</a>
+                    {% if user.is_superuser %}
+                        <a href="{% url 'admin:index' %}" class="nav-pill nav-pill-outline">Admin</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-pill nav-pill-outline">Login</a>
+                    <a href="{% url 'register' %}" class="nav-pill nav-pill-primary">Register</a>
+                {% endif %}
+                </div>
+            </div>
         </nav>
     </div>
 </header>

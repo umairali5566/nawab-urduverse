@@ -1,14 +1,27 @@
-<footer>
-    <div class="container">
+{% load static %}
+<footer class="site-footer">
+    <div class="main-container">
         <div class="footer-content">
-            <div class="footer-column">
-                <h4>About {{ SITE_NAME }}</h4>
-                <p>A digital sanctuary for Urdu literature, preserving the richness of Urdu poetry, stories, and novels for generations to come.</p>
+            <div class="footer-column footer-brand-column">
+                <a href="{% url 'home' %}" class="footer-brand-link">
+                    <span class="footer-brand-mark">
+                        <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }}">
+                    </span>
+                    <span>
+                        <strong>{{ SITE_NAME }}</strong>
+                        <small>{{ SITE_TAGLINE }}</small>
+                    </span>
+                </a>
+                <p>A professional reading home for Urdu poetry, stories, novels, quotes, editorial writing, and literary media.</p>
+                <div class="footer-badges">
+                    <span>Urdu Reading</span>
+                    <span>Editorial Design</span>
+                    <span>Literary Archive</span>
+                </div>
             </div>
             <div class="footer-column">
-                <h4>Quick Links</h4>
+                <h4>Explore</h4>
                 <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
                     <li><a href="{% url 'poetry_list' %}">Poetry</a></li>
                     <li><a href="{% url 'novel_list' %}">Novels</a></li>
                     <li><a href="{% url 'story_list' %}">Stories</a></li>
@@ -18,19 +31,27 @@
                 </ul>
             </div>
             <div class="footer-column">
-                <h4>Categories</h4>
+                <h4>Discover</h4>
                 <ul>
                     <li><a href="{% url 'all_categories' %}">All Categories</a></li>
+                    <li><a href="{% url 'author_list' %}">Authors</a></li>
                     <li><a href="{% url 'search' %}">Search</a></li>
+                    <li><a href="{% url 'membership' %}">Membership</a></li>
                 </ul>
             </div>
             <div class="footer-column">
-                <h4>Contact</h4>
-                <p>Email: <a href="mailto:info@nawaburduverse.com">info@nawaburduverse.com</a></p>
+                <h4>Information</h4>
+                <ul>
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                    <li><a href="{% url 'privacy_policy' %}">Privacy Policy</a></li>
+                    <li><a href="{% url 'terms_of_service' %}">Terms of Service</a></li>
+                </ul>
             </div>
         </div>
         <div class="footer-bottom">
             <p>&copy; {% now "Y" %} {{ SITE_NAME }}. All rights reserved.</p>
+            <p class="footer-note">Crafted for clearer reading on desktop and mobile.</p>
         </div>
     </div>
 </footer>

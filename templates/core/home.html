@@ -1,54 +1,192 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Welcome to {{ SITE_NAME }}{% endblock %}
+{% block title %}{{ SITE_NAME }} | Premium Urdu Literature{% endblock %}
 
 {% block content %}
-<div class="container my-4">
-    <h1>Welcome to {{ SITE_NAME }}</h1>
-    <p>Your source for Urdu content including poetry, novels, stories, quotes, and more.</p>
+<div class="main-container home-shell">
+    <section class="home-hero">
+        <div class="home-hero-grid">
+            <div class="home-hero-copy">
+                <span class="eyebrow">Curated Urdu Reading</span>
+                <h1 class="home-hero-title section-title-urdu">اردو ادب کی ایک پیشہ ور اور خوب صورت دنیا</h1>
+                <p class="home-hero-text">A refined digital home for Urdu poetry, novels, short stories, quotations, essays, and literary media with a cleaner reading flow and stronger editorial presentation.</p>
+                <div class="hero-chip-row">
+                    <span class="hero-chip"><i class="bi bi-feather"></i> {{ latest_poetry|length }} latest poems</span>
+                    <span class="hero-chip"><i class="bi bi-journal-text"></i> {{ latest_stories|length }} fresh stories</span>
+                    <span class="hero-chip"><i class="bi bi-book"></i> {{ latest_novels|length }} current novels</span>
+                </div>
+                <div class="hero-actions">
+                    <a href="{% url 'poetry_list' %}" class="btn btn-primary">Start Reading</a>
+                    <a href="{% url 'search' %}" class="btn btn-outline-primary">Explore Library</a>
+                </div>
+            </div>
+            <div class="home-hero-aside">
+                <div class="feature-card">
+                    <h3>Designed like a literary magazine</h3>
+                    <p>Browse categories, discover authors, and move between long-form and short-form reading without visual clutter.</p>
+                    <div class="feature-stat-grid">
+                        <div>
+                            <strong>{{ categories|length }}</strong>
+                            <span>Categories</span>
+                        </div>
+                        <div>
+                            <strong>{{ authors|length }}</strong>
+                            <span>Writers</span>
+                        </div>
+                        <div>
+                            <strong>{{ featured_authors|length }}</strong>
+                            <span>Featured voices</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <div class="row">
-        <div class="col-md-3">
-            <a href="{% url 'poetry_list' %}" class="text-decoration-none">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Poetry</h5>
-                        <p class="card-text">Explore beautiful Urdu poetry</p>
-                    </div>
-                </div>
+    <section class="section-panel">
+        <div class="section-panel-header">
+            <div>
+                <span class="eyebrow section-kicker">Categories</span>
+                <h2 class="section-heading">Browse the platform by format</h2>
+                <p class="section-subtitle mb-0">A cleaner structure for readers who want poetry, fiction, essays, quotes, or video in one place.</p>
+            </div>
+        </div>
+        <div class="home-category-grid">
+            <a href="{% url 'poetry_list' %}" class="home-category-card">
+                <span class="home-category-icon"><i class="bi bi-feather"></i></span>
+                <h3>Poetry</h3>
+                <p>Ghazal, nazm, and lyrical reading in a calmer editorial layout.</p>
+            </a>
+            <a href="{% url 'novel_list' %}" class="home-category-card">
+                <span class="home-category-icon"><i class="bi bi-book"></i></span>
+                <h3>Novels</h3>
+                <p>Long-form reading with stronger hierarchy and cleaner navigation.</p>
+            </a>
+            <a href="{% url 'story_list' %}" class="home-category-card">
+                <span class="home-category-icon"><i class="bi bi-journal-text"></i></span>
+                <h3>Stories</h3>
+                <p>Short fiction and narrative reading with sharper content cards.</p>
+            </a>
+            <a href="{% url 'quote_list' %}" class="home-category-card">
+                <span class="home-category-icon"><i class="bi bi-chat-quote"></i></span>
+                <h3>Quotes</h3>
+                <p>Memorable lines presented like a curated wall of thought.</p>
+            </a>
+            <a href="{% url 'blog_list' %}" class="home-category-card">
+                <span class="home-category-icon"><i class="bi bi-pencil-square"></i></span>
+                <h3>Blog</h3>
+                <p>Essays and commentary shaped for a magazine-style reading experience.</p>
+            </a>
+            <a href="{% url 'video_list' %}" class="home-category-card">
+                <span class="home-category-icon"><i class="bi bi-play-btn"></i></span>
+                <h3>Videos</h3>
+                <p>Literary media arranged with cleaner presentation and discovery.</p>
             </a>
         </div>
-        <div class="col-md-3">
-            <a href="{% url 'novel_list' %}" class="text-decoration-none">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Novels</h5>
-                        <p class="card-text">Read engaging Urdu novels</p>
+    </section>
+
+    <section class="section-panel">
+        <div class="section-panel-header">
+            <div>
+                <span class="eyebrow section-kicker">Latest Poetry</span>
+                <h2 class="section-heading">Fresh verses from the platform</h2>
+            </div>
+            <a href="{% url 'poetry_list' %}" class="btn btn-outline-primary btn-sm">View all poetry</a>
+        </div>
+        <div class="listing-grid">
+            {% for poem in latest_poetry %}
+            <article class="listing-card home-literary-card">
+                <div class="listing-body">
+                    <div class="listing-kicker">
+                        <span class="badge-soft">{% if poem.category %}{{ poem.category.name }}{% else %}Poetry{% endif %}</span>
+                        <span>{{ poem.created_at|date:"d M Y" }}</span>
+                    </div>
+                    <h3 class="listing-title"><a href="{% url 'poetry_detail' poem.slug %}">{{ poem.title }}</a></h3>
+                    <p class="listing-excerpt urdu-text">{{ poem.content|striptags|truncatechars:150 }}</p>
+                    <div class="listing-footer">
+                        <span class="listing-meta"><i class="bi bi-person"></i> {{ poem.author.name }}</span>
+                        <a href="{% url 'poetry_detail' poem.slug %}" class="btn btn-primary btn-sm">Read poem</a>
                     </div>
                 </div>
-            </a>
+            </article>
+            {% empty %}
+            <article class="empty-state-card">
+                <h3 class="mt-0">No poetry published yet</h3>
+                <p class="mb-0">Poetry entries will appear here once content is published.</p>
+            </article>
+            {% endfor %}
         </div>
-        <div class="col-md-3">
-            <a href="{% url 'story_list' %}" class="text-decoration-none">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Stories</h5>
-                        <p class="card-text">Enjoy short Urdu stories</p>
-                    </div>
+    </section>
+
+    <section class="home-content-split">
+        <section class="section-panel">
+            <div class="section-panel-header">
+                <div>
+                    <span class="eyebrow section-kicker">Stories</span>
+                    <h2 class="section-heading">Narrative reading</h2>
                 </div>
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a href="{% url 'quote_list' %}" class="text-decoration-none">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Quotes</h5>
-                        <p class="card-text">Inspiring Urdu quotes</p>
-                    </div>
+            </div>
+            <div class="home-mini-list">
+                {% for story in latest_stories %}
+                <a href="{% url 'story_detail' story.slug %}" class="home-mini-card">
+                    <strong>{{ story.title }}</strong>
+                    <span>{{ story.author.name }}</span>
+                </a>
+                {% empty %}
+                <div class="home-mini-card is-empty">
+                    <strong>No stories yet</strong>
+                    <span>Published stories will appear here.</span>
                 </div>
-            </a>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="section-panel">
+            <div class="section-panel-header">
+                <div>
+                    <span class="eyebrow section-kicker">Novels</span>
+                    <h2 class="section-heading">Long-form reading</h2>
+                </div>
+            </div>
+            <div class="home-mini-list">
+                {% for novel in latest_novels %}
+                <a href="{% url 'novel_detail' novel.slug %}" class="home-mini-card">
+                    <strong>{{ novel.title }}</strong>
+                    <span>{{ novel.author.name }}</span>
+                </a>
+                {% empty %}
+                <div class="home-mini-card is-empty">
+                    <strong>No novels yet</strong>
+                    <span>Published novels will appear here.</span>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </section>
+
+    <section class="section-panel">
+        <div class="section-panel-header">
+            <div>
+                <span class="eyebrow section-kicker">Authors</span>
+                <h2 class="section-heading">Featured literary voices</h2>
+            </div>
+            <a href="{% url 'author_list' %}" class="btn btn-outline-primary btn-sm">Browse authors</a>
         </div>
-    </div>
+        <div class="home-author-grid">
+            {% for author in featured_authors %}
+            <a href="{% url 'author_detail' author.slug %}" class="home-author-card">
+                <span class="home-author-badge">{{ forloop.counter|stringformat:"02d" }}</span>
+                <h3>{{ author.name }}</h3>
+                <p>{{ author.bio|default:"Author profile"|truncatechars:120 }}</p>
+            </a>
+            {% empty %}
+            <div class="empty-state-card">
+                <h3 class="mt-0">No featured authors yet</h3>
+                <p class="mb-0">Author highlights will appear here once they are added.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
 </div>
 {% endblock %}

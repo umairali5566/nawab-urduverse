@@ -10,7 +10,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}">
     <link rel="manifest" href="{% static 'manifest.json' %}">
 
@@ -20,13 +20,26 @@
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/professional-ui.css' %}">
 
     {% block extra_css %}{% endblock %}
 </head>
 <body class="site-shell">
+    <div class="site-bg" aria-hidden="true"></div>
+    <div class="site-glow site-glow-a" aria-hidden="true"></div>
+    <div class="site-glow site-glow-b" aria-hidden="true"></div>
     {% include 'components/navbar.html' %}
 
     <main class="site-main">
+        {% if messages %}
+        <div class="main-container site-flash-stack">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags|default:'info' }} site-flash-message" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         {% block content %}{% endblock %}
     </main>
 

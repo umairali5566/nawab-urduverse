@@ -1,6 +1,46 @@
 # Nawab Urdu Academy - Deployment Guide
 
-This guide covers the deployment of Nawab Urdu Academy to a production server.
+This guide covers production deployment for Nawab Urdu Academy, including Render.
+
+## Render Deployment
+
+### Required Environment Variables
+
+Set these in the Render dashboard:
+
+```env
+DJANGO_SECRET_KEY=your-secure-secret-key
+DEBUG=False
+ALLOWED_HOSTS=nawab-urdu-academy.onrender.com
+
+# Database
+DATABASE_URL=your-render-postgres-or-sqlite-url
+
+# Auto-created admin account
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@example.com
+DJANGO_SUPERUSER_PASSWORD=change-this-password
+```
+
+### Render Build Command
+
+```bash
+pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput
+```
+
+### Render Start Command
+
+```bash
+bash start.sh
+```
+
+### Admin Login Notes
+
+- This project uses a custom user model, so the production admin user lives in the `accounts_user` table.
+- `python manage.py ensure_superuser` runs on startup and creates or updates the deployment superuser from the Render environment variables above.
+- After deploy, log in at `/admin/` with the values from:
+  - `DJANGO_SUPERUSER_USERNAME`
+  - `DJANGO_SUPERUSER_PASSWORD`
 
 ## Prerequisites
 
