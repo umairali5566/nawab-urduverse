@@ -24,11 +24,8 @@
 body.site-shell,
 body.site-shell.dashboard-shell {
     min-height: 100vh;
-    background:
-        radial-gradient(circle at top left, rgba(200, 140, 59, 0.14), transparent 26%),
-        radial-gradient(circle at top right, rgba(16, 37, 66, 0.09), transparent 24%),
-        linear-gradient(180deg, #fcf9f4 0%, var(--ui-bg) 100%);
-    color: var(--ui-text);
+    background: #0f172a;
+    color: #ffffff;
     font-family: var(--ui-body);
 }
 
@@ -104,8 +101,9 @@ body.site-shell.dashboard-shell {
 footer,
 .poem-card,
 .featured-card {
-    border: 1px solid var(--ui-border);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(251, 247, 241, 0.92));
+    border: 1px solid rgba(51, 65, 85, 0.5);
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #ffffff;
     box-shadow: var(--ui-shadow);
 }
 
@@ -184,7 +182,7 @@ body.site-shell:not(.dashboard-shell) h2,
 .listing-title a,
 .brand-name,
 .side-menu-title {
-    color: var(--ui-primary) !important;
+    color: #ffffff !important;
     font-family: var(--ui-serif);
 }
 
@@ -203,7 +201,7 @@ body.site-shell:not(.dashboard-shell) h2,
 .footer-column p,
 .footer-note,
 .text-muted {
-    color: var(--ui-muted) !important;
+    color: #cbd5e1 !important;
 }
 
 .eyebrow,
@@ -248,9 +246,9 @@ body.site-shell:not(.dashboard-shell) h2,
     align-content: end;
     padding: 1.5rem;
     border-radius: var(--ui-radius-lg);
-    background: linear-gradient(160deg, rgba(16, 37, 66, 0.96), rgba(36, 62, 96, 0.92));
-    color: #eff4fa;
-    box-shadow: 0 22px 45px rgba(16, 37, 66, 0.22);
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #ffffff;
+    box-shadow: 0 22px 45px rgba(16, 24, 40, 0.1);
 }
 
 .feature-card h3,
@@ -277,7 +275,7 @@ body.site-shell:not(.dashboard-shell) h2,
 }
 
 .feature-stat-grid span {
-    color: rgba(239, 244, 250, 0.72);
+    color: #cbd5e1;
     font-size: 0.9rem;
 }
 
@@ -336,9 +334,9 @@ body.site-shell:not(.dashboard-shell) h2,
     display: block;
     text-decoration: none;
     color: inherit;
-    border: 1px solid var(--ui-border);
+    border: 1px solid rgba(51, 65, 85, 0.5);
     border-radius: 1.25rem;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(251, 247, 241, 0.9));
+    background: linear-gradient(135deg, #0f172a, #1e293b);
 }
 
 .listing-card {
@@ -416,14 +414,14 @@ body.site-shell:not(.dashboard-shell) h2,
 .home-category-card h3,
 .home-author-card h3,
 .home-mini-card strong {
-    color: var(--ui-primary);
+    color: #ffffff;
 }
 
 .home-category-card p,
 .home-author-card p,
 .home-mini-card span {
     margin: 0;
-    color: var(--ui-muted);
+    color: #cbd5e1;
 }
 
 .home-mini-list {
@@ -470,9 +468,9 @@ body.site-shell:not(.dashboard-shell) h2,
     align-items: center;
     gap: 1rem;
     padding: 1rem 1.2rem;
-    border: 1px solid var(--ui-border);
+    border: 1px solid rgba(51, 65, 85, 0.5);
     border-radius: 1.6rem;
-    background: rgba(255, 252, 246, 0.86);
+    background: linear-gradient(135deg, #0f172a, #1e293b);
     backdrop-filter: blur(18px);
     box-shadow: var(--ui-shadow-soft);
 }
@@ -510,13 +508,13 @@ body.site-shell:not(.dashboard-shell) h2,
 }
 
 .navbar-brand-copy strong {
-    color: var(--ui-primary);
+    color: #ffffff;
     font-size: 1.05rem;
     line-height: 1;
 }
 
 .navbar-brand-copy span {
-    color: var(--ui-muted);
+    color: #cbd5e1;
     font-size: 0.82rem;
     line-height: 1.2;
 }
@@ -550,15 +548,15 @@ body.site-shell:not(.dashboard-shell) h2,
     min-height: 2.6rem;
     padding: 0.55rem 0.95rem;
     border-radius: var(--ui-radius-pill);
-    color: var(--ui-primary);
+    color: #cbd5e1;
     font-size: 0.95rem;
     font-weight: 500;
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .navbar-menu a:hover {
-    background: rgba(16, 37, 66, 0.06);
-    color: var(--ui-accent);
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
 }
 
 .navbar-auth {
@@ -594,9 +592,9 @@ body.site-shell:not(.dashboard-shell) h2,
 .menu-link,
 .action-btn,
 .comment-action-btn {
-    border: 1px solid rgba(16, 37, 66, 0.14) !important;
-    background: rgba(255, 255, 255, 0.76) !important;
-    color: var(--ui-primary) !important;
+    border: 1px solid #334155 !important;
+    background: linear-gradient(135deg, #0f172a, #1e293b) !important;
+    color: #ffffff !important;
 }
 
 .nav-pill:hover,
@@ -614,9 +612,9 @@ body.site-shell:not(.dashboard-shell) h2,
 .nav-pill-outline:hover,
 .top-link:hover,
 .menu-link:hover {
-    background: var(--ui-accent-soft) !important;
-    color: var(--ui-accent) !important;
-    border-color: rgba(200, 140, 59, 0.32) !important;
+    background: #3b82f6 !important;
+    color: #ffffff !important;
+    border-color: #3b82f6 !important;
 }
 
 .navbar-toggle {
@@ -644,9 +642,9 @@ body.site-shell:not(.dashboard-shell) h2,
 
 .site-footer .main-container {
     padding: 1.4rem;
-    border: 1px solid var(--ui-border);
+    border: 1px solid rgba(51, 65, 85, 0.5);
     border-radius: 1.8rem;
-    background: rgba(255, 252, 246, 0.88);
+    background: linear-gradient(135deg, #0f172a, #1e293b);
     box-shadow: var(--ui-shadow-soft);
 }
 
@@ -661,7 +659,7 @@ body.site-shell:not(.dashboard-shell) h2,
     align-items: center;
     gap: 0.9rem;
     margin-bottom: 1rem;
-    color: var(--ui-primary);
+    color: #ffffff;
     text-decoration: none;
 }
 
@@ -676,7 +674,7 @@ body.site-shell:not(.dashboard-shell) h2,
 
 .footer-column h4 {
     margin-bottom: 0.9rem;
-    color: var(--ui-primary);
+    color: #ffffff;
     font-size: 0.98rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -691,12 +689,12 @@ body.site-shell:not(.dashboard-shell) h2,
 }
 
 .footer-column a {
-    color: var(--ui-muted);
+    color: #cbd5e1;
     text-decoration: none;
 }
 
 .footer-column a:hover {
-    color: var(--ui-accent);
+    color: #3b82f6;
 }
 
 .footer-bottom {
@@ -706,8 +704,8 @@ body.site-shell:not(.dashboard-shell) h2,
     gap: 0.75rem;
     margin-top: 1.2rem;
     padding-top: 1rem;
-    border-top: 1px solid var(--ui-border);
-    color: var(--ui-muted);
+    border-top: 1px solid rgba(51, 65, 85, 0.5);
+    color: #cbd5e1;
 }
 
 .footer-bottom p {
@@ -725,13 +723,13 @@ body.site-shell:not(.dashboard-shell) h2,
 }
 
 .dashboard-shell .top-nav-inner {
-    background: rgba(255, 252, 246, 0.86);
+    background: linear-gradient(135deg, #0f172a, #1e293b);
     backdrop-filter: blur(16px);
 }
 
 .dashboard-shell .content-panel,
 .dashboard-shell .side-menu {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(251, 247, 241, 0.92));
+    background: linear-gradient(135deg, #0f172a, #1e293b);
 }
 
 .form-control,
@@ -739,9 +737,9 @@ body.site-shell:not(.dashboard-shell) h2,
 input,
 textarea,
 select {
-    border-color: rgba(16, 37, 66, 0.14) !important;
-    background-color: rgba(255, 255, 255, 0.95) !important;
-    color: var(--ui-text) !important;
+    border: 1px solid #334155 !important;
+    background-color: #1e293b !important;
+    color: #ffffff !important;
 }
 
 .form-control:focus,
@@ -749,21 +747,21 @@ select {
 input:focus,
 textarea:focus,
 select:focus {
-    border-color: rgba(200, 140, 59, 0.5) !important;
-    box-shadow: 0 0 0 0.2rem rgba(200, 140, 59, 0.14) !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.1) !important;
 }
 
 .page-link {
-    color: var(--ui-primary) !important;
-    border-color: rgba(16, 37, 66, 0.12) !important;
-    background: rgba(255, 255, 255, 0.92) !important;
+    color: #cbd5e1 !important;
+    border-color: #334155 !important;
+    background: linear-gradient(135deg, #0f172a, #1e293b) !important;
 }
 
 .page-item.active .page-link,
 .pagination .page-link:hover {
-    background: linear-gradient(135deg, var(--ui-primary), var(--ui-primary-soft)) !important;
+    background: #3b82f6 !important;
     border-color: transparent !important;
-    color: #fff !important;
+    color: #ffffff !important;
 }
 
 .badge-soft,
