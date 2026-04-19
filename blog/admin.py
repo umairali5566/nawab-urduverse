@@ -20,10 +20,10 @@ class BlogPostAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Basic Information', {
-            'fields': ('title', 'slug', 'author', 'category', 'content')
+            'fields': ('title', 'slug', 'author', 'category', 'featured_image', 'content')
         }),
         ('Publishing', {
-            'fields': ('is_published',)
+            'fields': ('is_published', 'published_at')
         }),
     )
 

@@ -17,6 +17,7 @@ class BlogPost(models.Model):
     title = models.CharField(max_length=300, verbose_name='عنوان')
     slug = models.SlugField(unique=True, verbose_name='سلگ')
     content = models.TextField(verbose_name='مواد')
+    featured_image = models.ImageField(upload_to='blog/featured/', blank=True, null=True, verbose_name='نمایاں تصویر')
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='blog_posts', verbose_name='مصنف')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='زمرہ')
     is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
