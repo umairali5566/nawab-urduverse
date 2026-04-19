@@ -143,21 +143,13 @@ function showNotification(message, type = 'info') {
 // ============================================
 
 function setupButtonLoadingState() {
-    document.addEventListener('click', function(e) {
-        if (e.target.matches('button[type="submit"], .btn-submit')) {
-            const button = e.target;
-            const originalText = button.textContent;
-
-            button.disabled = true;
-            button.textContent = 'Loading...';
-            button.style.opacity = '0.7';
-
-            // Simulate loading for demo - remove in production
-            setTimeout(() => {
-                button.disabled = false;
-                button.textContent = originalText;
-                button.style.opacity = '';
-            }, 3000);
+    document.addEventListener('submit', function(e) {
+        const form = e.target;
+        const submitButton = form.querySelector('button[type="submit"], .btn-submit');
+        if (submitButton) {
+            submitButton.textContent = 'Logging in...';
+            submitButton.style.opacity = '0.7';
+            // Don't disable the button to allow form submission
         }
     });
 }

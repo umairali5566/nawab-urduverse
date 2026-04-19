@@ -3,6 +3,7 @@ Nawab Urdu Academy - URL Configuration
 """
 
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
@@ -16,6 +17,7 @@ from core.sitemaps import (
 )
 from nawab_urduverse import views
 from accounts import views as accounts_views
+from accounts.forms import UserLoginForm
 
 sitemaps = {
     'novels': NovelSitemap,
@@ -35,7 +37,7 @@ urlpatterns = [
     path('', include('core.urls')),
     path('home/', views.home, name='home_redirect'),
     path('ai/', include('ai_features.urls')),
-    path('login/', accounts_views.user_login, name='login'),
+    path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html', form_class=UserLoginForm), name='login'),
     path('accounts/', include('accounts.urls')),
     path('novels/', include('novels.urls')),
     path('stories/', include('stories.urls')),

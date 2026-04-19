@@ -21,8 +21,11 @@
                             <p class="text-muted">اپنے اکاؤنٹ میں لاگ ان کریں</p>
                         </div>
 
-                        <form method="post" novalidate>
-                            {% csrf_token %}
+                        <form method="post" action="{% url 'login' %}" novalidate>
+                             {% csrf_token %}
+                             {% if next %}
+                                 <input type="hidden" name="next" value="{{ next }}">
+                             {% endif %}
 
                             {% if form.errors %}
                             <div class="alert alert-premium-danger mb-3" role="alert">
