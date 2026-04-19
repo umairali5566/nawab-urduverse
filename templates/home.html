@@ -3,196 +3,312 @@
 
 {% block title %}Home - {{ SITE_NAME }}{% endblock %}
 
+{% block extra_css %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #FDFCF8 0%, #F5F3ED 100%);
+        padding: 60px 20px;
+        border-bottom: 2px solid #D4AF37;
+    }
+
+    .hero-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    .hero-divider-text {
+        color: #D4AF37;
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 40px 0;
+    }
+
+    @media (min-width: 768px) {
+        .content-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    .content-section h2 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #2D2D2D;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #D4AF37;
+    }
+
+    .card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid #E5E0D6;
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+    }
+
+    .card-image {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        background-color: #F0EFEA;
+    }
+
+    .card-content {
+        padding: 16px;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #2D2D2D;
+        margin-bottom: 8px;
+        line-height: 1.4;
+    }
+
+    .card-author {
+        font-size: 0.9rem;
+        color: #7A7A7A;
+        margin-bottom: 10px;
+    }
+
+    .card-description {
+        font-size: 0.85rem;
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 12px;
+    }
+
+    .card-link {
+        display: inline-block;
+        color: #0D5C63;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .card-link:hover {
+        color: #D4AF37;
+    }
+
+    .empty-state {
+        background-color: #F5F3ED;
+        padding: 40px 20px;
+        text-align: center;
+        border-radius: 8px;
+        border: 2px dashed #D4AF37;
+    }
+
+    .empty-state-text {
+        color: #7A7A7A;
+        font-size: 0.95rem;
+        margin-bottom: 15px;
+    }
+
+    .video-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .video-item {
+        position: relative;
+        aspect-ratio: 1 / 1;
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+        background-color: #E5E0D6;
+    }
+
+    .video-item::after {
+        content: "▶";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2rem;
+        color: #D4AF37;
+        opacity: 0.7;
+    }
+
+    .quote-box {
+        background: linear-gradient(135deg, #0D5C63 0%, #1A7F87 100%);
+        padding: 20px;
+        border-radius: 8px;
+        color: white;
+    }
+
+    .quote-text {
+        font-style: italic;
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    .quote-author {
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<!-- Hero Section: Aaj ki Muntakhib Shayari -->
-<div class="bg-gradient-to-b from-cream via-white to-cream py-16 md:py-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <!-- Inkwell Icon -->
-        <div class="flex justify-center mb-6">
-            <svg class="w-12 h-12 md:w-16 md:h-16 text-gold-500 opacity-70" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
-            </svg>
+<!-- HERO SECTION -->
+<section class="hero-section">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 style="font-size: 2.5rem; font-weight: 300; color: #2D2D2D; margin-bottom: 10px;">آج کی منتخب شاعری</h1>
+        <p style="font-size: 1.1rem; color: #7A7A7A; margin-bottom: 20px;">اردو ادب کی بہترین تخلیقات دریافت کریں</p>
+        
+        <div class="hero-divider">
+            <div class="hero-divider-text">✧</div>
         </div>
         
-        <!-- Main Title with Calligraphic Style -->
-        <h1 class="text-4xl md:text-6xl font-bold text-charcoal mb-3 font-urdu tracking-wide">آج کی منتخب شاعری</h1>
-        <p class="text-xl md:text-2xl text-gray-500 mb-2">Today's Selected Poetry</p>
-        
-        <!-- Decorative Line -->
-        <div class="flex items-center justify-center gap-4 mb-8">
-            <div class="w-12 h-0.5 bg-gradient-to-r from-gold-400 to-transparent"></div>
-            <span class="text-gold-500 text-lg">✦</span>
-            <div class="w-12 h-0.5 bg-gradient-to-l from-gold-400 to-transparent"></div>
-        </div>
-        
-        <p class="text-lg text-gray-600 max-w-3xl mx-auto">Discover the finest collection of Urdu poetry, novels, stories, and literary discourse from our growing archive.</p>
+        <p style="color: #0D5C63; font-size: 1rem; max-width: 600px;">
+            شاعری سے ناول تک، کہانیوں سے اقتباسات تک — آپ کی ہر پسند یہاں ملے گی
+        </p>
     </div>
-</div>
+</section>
 
-<!-- Main Content Grid: 3 Columns -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- MAIN CONTENT GRID (3 Columns) -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="content-grid">
+
         
-        <!-- LEFT COLUMN: Serialized Novels -->
-        <div class="md:col-span-1">
-            <div class="mb-2">
-                <h2 class="text-2xl md:text-3xl font-bold text-charcoal mb-2 font-urdu">مسلسل ناول</h2>
-                <div class="h-1 w-16 bg-gradient-gold rounded-full"></div>
-            </div>
-            <p class="text-gray-500 text-sm mb-6">Ongoing serialized novels</p>
+        <!-- LEFT COLUMN: Poetry -->
+        <div class="content-section">
+            <h2>شاعری</h2>
             
-            <div class="space-y-6">
-                {% for novel in serialized_novels %}
-                <a href="{% url 'novel_detail' novel.id %}" class="group block">
-                    <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                        <!-- Novel Cover -->
-                        <div class="relative h-48 bg-gray-200 overflow-hidden">
-                            {% if novel.cover %}
-                                <img src="{{ novel.cover.url }}" alt="{{ novel.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                            {% else %}
-                                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-gold-100 to-teal-100">
-                                    <svg class="w-16 h-16 text-gold-300" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54h2.63l2.96-3.83c.37-.48.35-1.12-.05-1.58-.4-.46-1.12-.46-1.52 0l-1.27 1.64-.94-1.2c-.37-.48-1.1-.51-1.54-.08-.44.43-.45 1.13-.02 1.58l2.96 3.83z"/>
-                                    </svg>
-                                </div>
-                            {% endif %}
-                            <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300"></div>
-                        </div>
-                        
-                        <!-- Novel Info -->
-                        <div class="p-4">
-                            <h3 class="text-lg font-bold text-charcoal mb-1 truncate">{{ novel.title }}</h3>
-                            <p class="text-sm text-gray-500 mb-3">By {{ novel.author|default:"Unknown" }}</p>
-                            <p class="text-sm text-gray-600 line-clamp-2 mb-3">{{ novel.description|truncatewords:20 }}</p>
-                            <span class="inline-block px-3 py-1 bg-gold-50 text-gold-600 text-xs font-semibold rounded-full">چلتا رہتا ہے</span>
-                        </div>
-                    </div>
-                </a>
-                {% empty %}
-                <div class="bg-white p-8 rounded-lg text-center text-gray-500">
-                    <p>No serialized novels available yet.</p>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- CENTER COLUMN: Stories & Blogs -->
-        <div class="md:col-span-1">
-            <div class="mb-2">
-                <h2 class="text-2xl md:text-3xl font-bold text-charcoal mb-2 font-urdu">کہانیاں اور بلاگ</h2>
-                <div class="h-1 w-16 bg-gradient-gold rounded-full"></div>
-            </div>
-            <p class="text-gray-500 text-sm mb-6">Latest stories and articles</p>
-            
-            <div class="space-y-6">
-                {% for item in latest_stories_and_blogs %}
-                <a href="{% url item.get_absolute_url %}" class="group block">
-                    <article class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
-                        <!-- Featured Image -->
-                        <div class="relative h-40 bg-gradient-to-br from-teal-100 to-gold-50 overflow-hidden">
-                            {% if item.image %}
-                                <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                            {% else %}
-                                <div class="w-full h-full flex items-center justify-center">
-                                    <svg class="w-12 h-12 text-teal-200" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
-                                    </svg>
-                                </div>
-                            {% endif %}
-                        </div>
-                        
-                        <!-- Content -->
-                        <div class="p-4">
-                            <h3 class="text-lg font-bold text-charcoal mb-2 group-hover:text-gold-600 transition-colors">{{ item.title }}</h3>
-                            <p class="text-xs text-gray-500 mb-3">
-                                <span>By {{ item.author|default:"Unknown" }}</span> • 
-                                <span>{{ item.created_at|date:"M d, Y"|default:"Recently" }}</span>
-                            </p>
-                            <p class="text-sm text-gray-600 line-clamp-2 mb-4">{{ item.excerpt|truncatewords:25|default:item.content|truncatewords:25 }}</p>
-                            <span class="inline-block px-2 py-1 bg-teal-50 text-teal-600 text-xs font-semibold rounded">پڑھیں</span>
-                        </div>
-                    </article>
-                </a>
-                {% empty %}
-                <div class="bg-white p-8 rounded-lg text-center text-gray-500">
-                    <p>No stories or blogs available yet.</p>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- RIGHT COLUMN: Video Gallery & Quote of the Day -->
-        <div class="md:col-span-1">
-            <!-- Video Gallery -->
-            <div class="mb-10">
-                <div class="mb-2">
-                    <h2 class="text-2xl md:text-3xl font-bold text-charcoal mb-2 font-urdu">ویڈیو گیلری</h2>
-                    <div class="h-1 w-16 bg-gradient-gold rounded-full"></div>
-                </div>
-                <p class="text-gray-500 text-sm mb-6">Latest video content</p>
-                
-                <div class="grid grid-cols-2 gap-4">
-                    {% for video in video_gallery %}
-                    <a href="{% url 'video_detail' video.id %}" class="group relative bg-gray-200 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
-                        {% if video.thumbnail %}
-                            <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="w-full h-32 object-cover group-hover:scale-110 transition-transform duration-300">
+            {% if poetry_list %}
+                {% for poem in poetry_list %}
+                    <div class="card">
+                        {% if poem.image %}
+                            <img src="{{ poem.image.url }}" alt="{{ poem.title }}" class="card-image">
                         {% else %}
-                            <div class="w-full h-32 bg-gradient-to-br from-teal-100 to-gold-50 flex items-center justify-center">
-                                <svg class="w-8 h-8 text-teal-300" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
-                                </svg>
+                            <div class="card-image" style="background: linear-gradient(135deg, #D4AF37 0%, #0D5C63 100%); display: flex; align-items: center; justify-content: center;">
+                                <span style="color: white; font-size: 2rem;">✧</span>
                             </div>
                         {% endif %}
-                        <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-300 flex items-center justify-center">
-                            <svg class="w-10 h-10 text-white opacity-80 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
-                            </svg>
+                        <div class="card-content">
+                            <div class="card-title">{{ poem.title }}</div>
+                            <div class="card-author">{{ poem.poet|default:"مصنف" }}</div>
+                            <div class="card-description">{{ poem.description|truncatewords:15 }}</div>
+                            <a href="{% url 'poetry_detail' poem.id %}" class="card-link">مکمل پڑھیں →</a>
                         </div>
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2">
-                            <p class="text-white text-xs font-semibold truncate">{{ video.title }}</p>
-                        </div>
-                    </a>
-                    {% empty %}
-                    <div class="col-span-2 bg-white p-6 rounded-lg text-center text-gray-500">
-                        <p>No videos available yet.</p>
                     </div>
-                    {% endfor %}
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-text">ابھی کوئی شاعری شامل نہیں</div>
                 </div>
+            {% endif %}
+        </div>
+
+        <!-- CENTER COLUMN: Novels & Stories -->
+        <div class="content-section">
+            <h2>ناول اور کہانیاں</h2>
+            
+            {% if novel_list %}
+                {% for novel in novel_list %}
+                    <div class="card">
+                        {% if novel.cover_image %}
+                            <img src="{{ novel.cover_image.url }}" alt="{{ novel.title }}" class="card-image">
+                        {% else %}
+                            <div class="card-image" style="background: linear-gradient(135deg, #0D5C63 0%, #D4AF37 100%); display: flex; align-items: center; justify-content: center;">
+                                <span style="color: white; font-size: 2rem;">📖</span>
+                            </div>
+                        {% endif %}
+                        <div class="card-content">
+                            <div class="card-title">{{ novel.title }}</div>
+                            <div class="card-author">{{ novel.author|default:"مصنف" }}</div>
+                            <div class="card-description">{{ novel.synopsis|truncatewords:15 }}</div>
+                            <a href="{% url 'novel_detail' novel.id %}" class="card-link">پڑھیں →</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-text">ناول جلد آئیں گے</div>
+                </div>
+            {% endif %}
+
+            {% if story_list %}
+                <h2 style="margin-top: 30px;">کہانیاں</h2>
+                {% for story in story_list %}
+                    <div class="card">
+                        {% if story.featured_image %}
+                            <img src="{{ story.featured_image.url }}" alt="{{ story.title }}" class="card-image">
+                        {% else %}
+                            <div class="card-image" style="background-color: #F0EFEA; display: flex; align-items: center; justify-content: center;">
+                                <span style="color: #D4AF37; font-size: 2rem;">✎</span>
+                            </div>
+                        {% endif %}
+                        <div class="card-content">
+                            <div class="card-title">{{ story.title }}</div>
+                            <div class="card-author">{{ story.author|default:"مصنف" }}</div>
+                            <div class="card-description">{{ story.summary|truncatewords:15 }}</div>
+                            <a href="{% url 'story_detail' story.id %}" class="card-link">پڑھیں →</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state" style="margin-top: 30px;">
+                    <div class="empty-state-text">کہانیاں جلد شامل ہوں گی</div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- RIGHT COLUMN: Videos & Quotes -->
+        <div class="content-section">
+            <h2>ویڈیوز</h2>
+            
+            <div class="video-grid">
+                <div class="video-item" style="background: linear-gradient(135deg, #D4AF37 0%, #F5A623 100%); opacity: 0.8;"></div>
+                <div class="video-item" style="background: linear-gradient(135deg, #0D5C63 0%, #1A7F87 100%); opacity: 0.8;"></div>
+                <div class="video-item" style="background: linear-gradient(135deg, #2D2D2D 0%, #5A5A5A 100%); opacity: 0.8;"></div>
+                <div class="video-item" style="background: linear-gradient(135deg, #F5A623 0%, #D4AF37 100%); opacity: 0.8;"></div>
             </div>
 
-            <!-- Quote of the Day -->
-            <div>
-                <div class="mb-2">
-                    <h2 class="text-2xl md:text-3xl font-bold text-charcoal mb-2 font-urdu">آج کا حکمت کے ریزہ</h2>
-                    <div class="h-1 w-16 bg-gradient-gold rounded-full"></div>
+            <h2 style="margin-top: 30px;">آج کا اقتباس</h2>
+            
+            {% if quote_of_day %}
+                <div class="quote-box">
+                    <div class="quote-text">{{ quote_of_day.text }}</div>
+                    <div class="quote-author">— {{ quote_of_day.author|default:"مصنف نامعلوم" }}</div>
                 </div>
-                <p class="text-gray-500 text-sm mb-6">Daily wisdom</p>
-                
-                {% if quote_of_day %}
-                <div class="bg-white rounded-lg p-6 border-l-4 border-gold-500 shadow-md hover:shadow-lg transition-shadow">
-                    <blockquote class="text-lg text-charcoal font-urdu italic mb-4 leading-relaxed">
-                        "{{ quote_of_day.text }}"
-                    </blockquote>
-                    <cite class="text-sm text-gray-600">— {{ quote_of_day.author|default:"Unknown" }}</cite>
+            {% else %}
+                <div class="quote-box">
+                    <div class="quote-text">اردو ادب ہمارے دل کی آواز ہے</div>
+                    <div class="quote-author">— {{ SITE_NAME }}</div>
                 </div>
-                {% else %}
-                <div class="bg-white rounded-lg p-6 border-l-4 border-gold-200 shadow-md">
-                    <p class="text-gray-500 text-center py-4">No quote available today.</p>
-                </div>
-                {% endif %}
-            </div>
+            {% endif %}
+
+            {% if latest_quotes %}
+                <h3 style="margin-top: 30px; margin-bottom: 15px; color: #2D2D2D; font-weight: bold;">دیگر اقتباسات</h3>
+                {% for quote in latest_quotes|slice:":3" %}
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-description" style="font-style: italic; color: #0D5C63;">{{ quote.text }}</div>
+                            <div class="card-author">{{ quote.author|default:"مصنف" }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
 
     </div>
-</div>
-
-<!-- Floating Action Button (Mobile) -->
-<div class="fixed bottom-6 right-6 md:hidden">
-    <a href="{% url 'search' %}" class="bg-gold-500 text-white rounded-full p-4 shadow-lg hover:bg-gold-600 transition-all duration-300 hover:scale-110">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-        </svg>
-    </a>
 </div>
 
 {% endblock %}
