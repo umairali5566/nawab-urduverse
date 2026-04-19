@@ -121,65 +121,57 @@ a:hover {
    ============================================================================ */
 
 nav.navbar {
-    background-color: var(--bg-white);
-    border-bottom: 1px solid var(--border-light);
-    box-shadow: var(--shadow-soft);
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #EAEAEA;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     position: sticky;
     top: 0;
     z-index: 100;
+    width: 100%;
 }
 
 .navbar-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 1.25rem 2rem;
+    padding: 15px 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: auto;
-    gap: 1rem;
+    gap: 2rem;
 }
 
-/* Logo */
-.navbar-brand {
+/* Auth Buttons (Left in RTL - displays first in flex order) */
+.nav-auth {
     display: flex;
     align-items: center;
     gap: 1rem;
     flex-shrink: 0;
+    order: 1;
 }
 
-.logo-link {
-    text-decoration: none;
-    color: inherit;
-}
-
-.logo-text {
-    font-family: 'Noto Nastaliq Urdu', serif;
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: var(--text-heading);
-    white-space: nowrap;
-}
-
-/* Nav Menu - Desktop */
+/* Nav Menu (Center) */
 .nav-menu {
     display: flex;
-    gap: 3rem;
+    gap: 2.5rem;
     align-items: center;
     margin: 0;
     padding: 0;
     flex: 1;
     justify-content: center;
     list-style: none;
+    order: 2;
 }
 
 .nav-link {
-    color: var(--text-body);
+    color: #555555;
     font-weight: 500;
     position: relative;
     transition: color 0.3s ease;
     text-decoration: none;
     white-space: nowrap;
+    font-size: 1rem;
+    padding: 8px 0;
 }
 
 .nav-link::after {
@@ -189,24 +181,83 @@ nav.navbar {
     right: 0;
     width: 0;
     height: 2px;
-    background-color: var(--accent-gold);
+    background-color: #C8A96A;
     transition: width 0.3s ease;
 }
 
 .nav-link:hover {
-    color: var(--accent-gold);
+    color: #C8A96A;
 }
 
 .nav-link:hover::after {
     width: 100%;
 }
 
-/* Auth Buttons - Desktop */
-.nav-auth {
+/* Logo Brand (Right in RTL - displays last in flex order) */
+.navbar-brand {
     display: flex;
     align-items: center;
     gap: 1rem;
     flex-shrink: 0;
+    order: 3;
+    min-width: fit-content;
+}
+
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo-image {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+}
+
+.logo-text {
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #1A1A1A;
+    white-space: nowrap;
+}
+
+/* Button Styles */
+.btn {
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 0.9rem;
+    border: none;
+}
+
+.btn-primary {
+    background-color: #C8A96A;
+    color: #FFFFFF;
+}
+
+.btn-primary:hover {
+    background-color: #B39656;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(200, 169, 106, 0.3);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #1E2A38;
+    border: 1.5px solid #1E2A38;
+}
+
+.btn-secondary:hover {
+    background-color: #1E2A38;
+    color: #FFFFFF;
 }
 
 /* Mobile Menu Button */
@@ -215,20 +266,22 @@ nav.navbar {
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--text-body);
+    color: #555555;
     font-size: 1.5rem;
     padding: 0.5rem;
+    transition: color 0.3s ease;
+    order: 4;
 }
 
 .menu-toggle:hover {
-    color: var(--accent-gold);
+    color: #C8A96A;
 }
 
 /* Mobile Menu */
 .mobile-menu {
     display: none;
-    background-color: var(--bg-white);
-    border-top: 1px solid var(--border-light);
+    background-color: #FFFFFF;
+    border-top: 1px solid #EAEAEA;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
@@ -242,43 +295,31 @@ nav.navbar {
 
 .mobile-menu-link {
     display: block;
-    padding: 1rem;
-    color: var(--text-body);
+    padding: 1rem 40px;
+    color: #555555;
     text-decoration: none;
-    border-bottom: 1px solid var(--border-light);
+    border-bottom: 1px solid #EAEAEA;
     transition: background-color 0.3s ease, color 0.3s ease;
     font-weight: 500;
 }
 
 .mobile-menu-link:hover {
     background-color: #F9F6F1;
-    color: var(--accent-gold);
+    color: #C8A96A;
 }
 
 .mobile-menu-divider {
     height: 1px;
-    background-color: var(--border-light);
+    background-color: #EAEAEA;
     margin: 0.5rem 0;
 }
 
 .mobile-menu-btn {
     display: block;
-    margin: 0.5rem 1rem;
-    padding: 0.75rem 1.5rem;
-    width: calc(100% - 2rem);
+    margin: 0.75rem 40px;
+    padding: 10px 24px;
+    width: calc(100% - 80px);
     text-align: center;
-}
-
-.mobile-menu-btn.btn-primary {
-    background-color: var(--accent-primary);
-    color: white;
-    border: none;
-}
-
-.mobile-menu-btn.btn-secondary {
-    background-color: transparent;
-    color: var(--accent-primary);
-    border: 1px solid var(--border-light);
 }
 
 /* ============================================================================
@@ -754,11 +795,11 @@ footer {
 
 @media (max-width: 1024px) {
     .navbar-container {
-        padding: 1rem 1.5rem;
+        padding: 15px 30px;
     }
 
     .nav-menu {
-        gap: 2rem;
+        gap: 1.5rem;
     }
 
     .nav-link {
@@ -767,6 +808,11 @@ footer {
 
     .nav-auth {
         gap: 0.75rem;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
     }
 
     .hero-container {
@@ -794,15 +840,22 @@ footer {
 
 @media (max-width: 768px) {
     .navbar-container {
-        padding: 1rem;
+        padding: 12px 20px;
+        gap: 1rem;
     }
 
     .navbar-brand {
         flex: 1;
+        justify-content: flex-start;
+        order: 3;
+    }
+
+    .logo-image {
+        height: 40px;
     }
 
     .logo-text {
-        font-size: 1.25rem;
+        font-size: 1.2rem;
     }
 
     .nav-menu {
@@ -817,6 +870,7 @@ footer {
     .menu-toggle {
         display: block;
         flex-shrink: 0;
+        order: 4;
     }
 
     .mobile-menu {
@@ -826,6 +880,17 @@ footer {
     .mobile-menu.active {
         display: block;
         max-height: none;
+    }
+
+    .mobile-menu-link {
+        padding: 0.75rem 20px;
+    }
+
+    .mobile-menu-btn {
+        margin: 0.5rem 20px;
+        width: calc(100% - 40px);
+        padding: 8px 16px;
+        font-size: 0.85rem;
     }
 
     h1 {
@@ -897,15 +962,37 @@ footer {
     }
 
     .navbar-container {
-        padding: 0.75rem 1rem;
+        padding: 10px 15px;
+        gap: 0.75rem;
+    }
+
+    .logo-image {
+        height: 35px;
     }
 
     .logo-text {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
 
     .menu-toggle {
         font-size: 1.3rem;
+    }
+
+    .btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+
+    .mobile-menu-link {
+        padding: 0.5rem 15px;
+        font-size: 0.9rem;
+    }
+
+    .mobile-menu-btn {
+        margin: 0.4rem 15px;
+        width: calc(100% - 30px);
+        padding: 6px 12px;
+        font-size: 0.8rem;
     }
 
     h1 {
@@ -917,7 +1004,7 @@ footer {
     }
 
     .navbar-brand .logo-text {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
 
     .hero {

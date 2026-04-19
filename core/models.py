@@ -482,3 +482,27 @@ class UserMembership(models.Model):
         if self.ends_at and self.ends_at <= timezone.now():
             return False
         return True
+
+
+class Logo(models.Model):
+    """Logo model for website branding"""
+    
+    image = models.ImageField(upload_to='logos/', verbose_name='لوگو')
+    alt_text = models.CharField(max_length=200, verbose_name='متبادل ٹیکسٹ')
+    is_active = models.BooleanField(default=True, verbose_name='فعال')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'لوگو'
+        verbose_name_plural = 'لوگوز'
+        ordering = ['-updated_at']
+    
+    def __str__(self):
+        return f'Logo - {self.alt_text}'
+    
+    def save(self, *args, **kwargs):
+        # Keep only one active logo
+        if self.is_active:
+            Logo.objects.exclude(pk=self.pk).update(is_active=False)
+        super().save(*args, **kwargs)

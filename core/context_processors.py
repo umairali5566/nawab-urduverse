@@ -1,6 +1,6 @@
 from django.db.utils import OperationalError
 
-from .models import SiteSetting, SiteTheme
+from .models import SiteSetting, SiteTheme, Logo
 from .services import get_popular_content
 
 def site_context(request):
@@ -21,13 +21,21 @@ def site_context(request):
                 font_family='Poppins, sans-serif',
                 is_active=True
             )
+        
+        # Get active logo
+        try:
+            logo = Logo.objects.get(is_active=True)
+        except Logo.DoesNotExist:
+            logo = None
     except OperationalError:
         site_settings = {}
         popular = {}
         theme = None
+        logo = None
 
     return {
         'site_settings': site_settings,
         'popular': popular,
-        'theme': theme
+        'theme': theme,
+        'logo': logo
     }

@@ -4,7 +4,7 @@ Core Admin Configuration for Nawab Urdu Academy
 
 from django.contrib import admin
 
-from .models import Category, Author, SiteTheme
+from .models import Category, Author, SiteTheme, Logo
 
 
 @admin.register(Category)
@@ -53,4 +53,15 @@ class SiteThemeAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(Logo)
+class LogoAdmin(admin.ModelAdmin):
+    list_display = ['alt_text', 'is_active', 'updated_at']
+    list_filter = ['is_active']
+    search_fields = ['alt_text']
+    list_editable = ['is_active']
 
+    fieldsets = (
+        ('Logo Details', {
+            'fields': ('image', 'alt_text', 'is_active')
+        }),
+    )
