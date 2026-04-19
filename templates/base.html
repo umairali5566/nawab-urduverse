@@ -72,11 +72,11 @@
                 
                 <!-- Auth Buttons -->
                 {% if user.is_authenticated %}
-                    <a href="{% url 'dashboard' %}" style="text-decoration: none; color: white; background-color: #C8A96A; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; transition: all 0.3s ease;">Dashboard</a>
-                    <a href="{% url 'logout' %}" style="text-decoration: none; color: #C8A96A; background-color: transparent; border: 1px solid #C8A96A; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; transition: all 0.3s ease;">Logout</a>
+                    <a href="{% url 'dashboard' %}" style="text-decoration: none; color: white; background-color: #1E2A38; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; transition: all 0.3s ease;">Dashboard</a>
+                    <a href="{% url 'logout' %}" style="text-decoration: none; color: #1E2A38; background-color: transparent; border: 1px solid #EAEAEA; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; transition: all 0.3s ease;">Logout</a>
                 {% else %}
-                    <a href="{% url 'login' %}" style="text-decoration: none; color: #C8A96A; background-color: transparent; border: 1px solid #C8A96A; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; transition: all 0.3s ease;">لاگ ان</a>
-                    <a href="{% url 'register' %}" style="text-decoration: none; color: white; background-color: #C8A96A; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; transition: all 0.3s ease;">رجسٹر</a>
+                    <a href="{% url 'login' %}" style="text-decoration: none; color: #1E2A38; background-color: transparent; border: 1px solid #EAEAEA; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; transition: all 0.3s ease;">لاگ ان</a>
+                    <a href="{% url 'register' %}" style="text-decoration: none; color: white; background-color: #1E2A38; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; transition: all 0.3s ease;">رجسٹر</a>
                 {% endif %}
                 
                 <!-- Mobile Menu Button -->
