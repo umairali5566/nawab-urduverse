@@ -8,7 +8,6 @@ from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.text import slugify
 from django.dispatch import receiver
-from ckeditor_uploader.fields import RichTextUploadingField
 
 from core.models import Author, Category
 
@@ -48,7 +47,7 @@ class Chapter(models.Model):
     chapter_number = models.PositiveIntegerField(verbose_name='باب نمبر')
     title = models.CharField(max_length=300, verbose_name='عنوان')
     slug = models.SlugField(verbose_name='سلگ')
-    content = RichTextUploadingField(verbose_name='مواد')
+    content = models.TextField(verbose_name='مواد')
     is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
     is_premium = models.BooleanField(default=False, verbose_name='پریمیم')
     views_count = models.PositiveIntegerField(default=0, verbose_name='مشاہدات')

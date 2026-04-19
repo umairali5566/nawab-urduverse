@@ -16,7 +16,7 @@ class Story(BaseContentModel):
 
     # Content fields
     content = models.TextField(verbose_name='مواد')
-    featured_image = models.ImageField(upload_to='stories/featured/', blank=True, verbose_name='نمایاں تصویر')
+    featured_image = models.ImageField(upload_to='stories/featured/', blank=True, null=True, verbose_name='نمایاں تصویر')
     excerpt = models.CharField(max_length=500, blank=True, verbose_name='خلاصہ')
     reading_time = models.PositiveIntegerField(default=0, verbose_name='پڑھنے کا وقت (منٹ)')
     

@@ -8,6 +8,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+from django.utils.html import strip_tags
 
 from core.models import Author, Category
 
@@ -46,7 +47,7 @@ class VideoPlaylist(models.Model):
     title = models.CharField(max_length=200, verbose_name='عنوان')
     slug = models.SlugField(unique=True, verbose_name='سلگ')
     description = models.TextField(blank=True, verbose_name='تفصیل')
-    cover_image = models.ImageField(upload_to='videos/playlists/', blank=True, verbose_name='سرورق')
+    cover_image = models.ImageField(upload_to='videos/playlists/', blank=True, null=True, verbose_name='سرورق')
     videos = models.ManyToManyField(Video, related_name='playlists', verbose_name='ویڈیوز')
     is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
     created_at = models.DateTimeField(auto_now_add=True)

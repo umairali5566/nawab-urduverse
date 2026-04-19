@@ -55,7 +55,7 @@ class PoetryCollection(models.Model):
     slug = models.SlugField(unique=True, verbose_name="سلگ")
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="collections", verbose_name="شاعر")
     description = models.TextField(blank=True, verbose_name="تفصیل")
-    cover_image = models.ImageField(upload_to="poetry/collections/", blank=True, verbose_name="سرورق")
+    cover_image = models.ImageField(upload_to="poetry/collections/", blank=True, null=True, verbose_name="سرورق")
     poems = models.ManyToManyField(Poetry, related_name="collections", verbose_name="اشعار")
     is_published = models.BooleanField(default=True, verbose_name="شائع شدہ")
     created_at = models.DateTimeField(auto_now_add=True)

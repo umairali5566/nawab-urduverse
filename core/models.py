@@ -9,8 +9,6 @@ from django.utils.text import slugify
 
 from django.utils.html import strip_tags
 
-from ckeditor_uploader.fields import RichTextUploadingField
-
 
 ENGAGEMENT_CONTENT_TYPES = (
     ('novel', 'ناول'),
@@ -161,8 +159,8 @@ class Story(models.Model):
     title = models.CharField(max_length=300, verbose_name='عنوان')
     slug = models.SlugField(unique=True, verbose_name='سلگ')
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='core_stories', verbose_name='مصنف')
-    content = RichTextUploadingField(verbose_name='مواد')
-    cover_image = models.ImageField(upload_to='stories/covers/', blank=True, verbose_name='سرورق کی تصویر')
+    content = models.TextField(verbose_name='مواد')
+    cover_image = models.ImageField(upload_to='stories/covers/', blank=True, null=True, verbose_name='سرورق کی تصویر')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, limit_choices_to={'category_type': 'story'}, related_name='core_story_set', verbose_name='زمرہ')
     is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
     views_count = models.PositiveIntegerField(default=0, verbose_name='مشاہدات')

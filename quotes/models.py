@@ -119,7 +119,7 @@ class QuoteCollection(models.Model):
     title = models.CharField(max_length=200, verbose_name='عنوان')
     slug = models.SlugField(unique=True, verbose_name='سلگ')
     description = models.TextField(blank=True, verbose_name='تفصیل')
-    cover_image = models.ImageField(upload_to='quotes/collections/', blank=True, verbose_name='سرورق')
+    cover_image = models.ImageField(upload_to='quotes/collections/', blank=True, null=True, verbose_name='سرورق')
     quotes = models.ManyToManyField(Quote, related_name='collections', verbose_name='اقتباسات')
     is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
     created_at = models.DateTimeField(auto_now_add=True)

@@ -123,7 +123,8 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", "False") == "True"
+# TEMPORARILY ENABLED FOR PRODUCTION ERROR DIAGNOSTICS
+DEBUG = os.environ.get("DEBUG", "True") == "True"
 TESTING = 'test' in sys.argv
 
 ALLOWED_HOSTS = [

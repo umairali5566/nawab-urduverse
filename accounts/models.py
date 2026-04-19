@@ -19,7 +19,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, verbose_name='ای میل')
     display_name = models.CharField(max_length=100, blank=True, verbose_name='ظاہری نام')
     bio = models.TextField(blank=True, verbose_name='سوانح حیات')
-    avatar = models.ImageField(upload_to='avatars/', blank=True, verbose_name='اوتار')
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True, verbose_name='اوتار')
     phone = models.CharField(max_length=20, blank=True, verbose_name='فون نمبر')
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, verbose_name='جنس')
     birth_date = models.DateField(null=True, blank=True, verbose_name='تاریخ پیدائش')
