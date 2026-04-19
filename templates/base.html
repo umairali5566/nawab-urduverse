@@ -44,51 +44,56 @@
 <body style="background-color: #F5F1EA; color: #555555;">
     
     <!-- NAVBAR -->
-    <nav class="navbar" style="background-color: white; border-bottom: 1px solid #EAEAEA; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-        <div class="navbar-container" style="max-width: 1400px; margin: 0 auto; padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; height: 80px;">
-            
+    <nav class="navbar">
+        <div class="navbar-container">
             <!-- LOGO (Right in RTL) -->
-            <div class="navbar-brand" style="display: flex; align-items: center; gap: 1rem; flex-shrink: 0;">
-                <a href="{% url 'home' %}" style="text-decoration: none; color: inherit;">
-                    <div class="logo-text" style="font-family: 'Noto Nastaliq Urdu', serif; font-size: 1.5rem; color: #1A1A1A;">{{ SITE_NAME }}</div>
+            <div class="navbar-brand">
+                <a href="{% url 'home' %}" class="logo-link">
+                    <div class="logo-text">{{ SITE_NAME }}</div>
                 </a>
             </div>
 
-            <!-- NAV MENU (Center) -->
-            <div class="nav-menu" style="display: flex; gap: 3rem; align-items: center; margin: 0; padding: 0; list-style: none;">
-                <a href="{% url 'home' %}" style="color: #555555; font-weight: 500; position: relative; transition: color 0.3s ease; text-decoration: none;">Home</a>
-                <a href="{% url 'poetry_list' %}" style="color: #555555; font-weight: 500; position: relative; transition: color 0.3s ease; text-decoration: none;">شاعری</a>
-                <a href="{% url 'novel_list' %}" style="color: #555555; font-weight: 500; position: relative; transition: color 0.3s ease; text-decoration: none;">ناول</a>
-                <a href="{% url 'story_list' %}" style="color: #555555; font-weight: 500; position: relative; transition: color 0.3s ease; text-decoration: none;">کہانیاں</a>
-                <a href="{% url 'quote_list' %}" style="color: #555555; font-weight: 500; position: relative; transition: color 0.3s ease; text-decoration: none;">اقتباسات</a>
-                <a href="{% url 'blog_list' %}" style="color: #555555; font-weight: 500; position: relative; transition: color 0.3s ease; text-decoration: none;">بلاگ</a>
+            <!-- NAV MENU (Center) - Hidden on mobile -->
+            <div class="nav-menu">
+                <a href="{% url 'home' %}" class="nav-link">Home</a>
+                <a href="{% url 'poetry_list' %}" class="nav-link">شاعری</a>
+                <a href="{% url 'novel_list' %}" class="nav-link">ناول</a>
+                <a href="{% url 'story_list' %}" class="nav-link">کہانیاں</a>
+                <a href="{% url 'quote_list' %}" class="nav-link">اقتباسات</a>
+                <a href="{% url 'blog_list' %}" class="nav-link">بلاگ</a>
             </div>
 
-            <!-- AUTH & SEARCH (Left in RTL) -->
-            <div class="nav-auth" style="display: flex; align-items: center; gap: 1.5rem;">
-                
-                <!-- Auth Buttons -->
+            <!-- AUTH BUTTONS (Left in RTL) -->
+            <div class="nav-auth">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'dashboard' %}" style="text-decoration: none; color: white; background-color: #1E2A38; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; transition: all 0.3s ease;">Dashboard</a>
-                    <a href="{% url 'logout' %}" style="text-decoration: none; color: #1E2A38; background-color: transparent; border: 1px solid #EAEAEA; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; transition: all 0.3s ease;">Logout</a>
+                    <a href="{% url 'dashboard' %}" class="btn btn-primary">Dashboard</a>
+                    <a href="{% url 'logout' %}" class="btn btn-secondary">Logout</a>
                 {% else %}
-                    <a href="{% url 'login' %}" style="text-decoration: none; color: #1E2A38; background-color: transparent; border: 1px solid #EAEAEA; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; transition: all 0.3s ease;">لاگ ان</a>
-                    <a href="{% url 'register' %}" style="text-decoration: none; color: white; background-color: #1E2A38; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; transition: all 0.3s ease;">رجسٹر</a>
+                    <a href="{% url 'login' %}" class="btn btn-secondary">لاگ ان</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">رجسٹر</a>
                 {% endif %}
-                
-                <!-- Mobile Menu Button -->
-                <button id="menu-toggle" class="menu-toggle" style="display: none; background: none; border: none; cursor: pointer; color: #555555; font-size: 1.5rem;">☰</button>
             </div>
+
+            <!-- MOBILE MENU BUTTON -->
+            <button id="menu-toggle" class="menu-toggle">☰</button>
         </div>
 
-        <!-- MOBILE MENU -->
-        <div id="mobile-menu" style="display: none; background-color: white; border-top: 1px solid #EAEAEA; padding: 1rem;">
-            <a href="{% url 'home' %}" style="display: block; padding: 0.75rem; color: #555555; text-decoration: none; border-bottom: 1px solid #EAEAEA;">Home</a>
-            <a href="{% url 'poetry_list' %}" style="display: block; padding: 0.75rem; color: #555555; text-decoration: none; border-bottom: 1px solid #EAEAEA;">شاعری</a>
-            <a href="{% url 'novel_list' %}" style="display: block; padding: 0.75rem; color: #555555; text-decoration: none; border-bottom: 1px solid #EAEAEA;">ناول</a>
-            <a href="{% url 'story_list' %}" style="display: block; padding: 0.75rem; color: #555555; text-decoration: none; border-bottom: 1px solid #EAEAEA;">کہانیاں</a>
-            <a href="{% url 'quote_list' %}" style="display: block; padding: 0.75rem; color: #555555; text-decoration: none; border-bottom: 1px solid #EAEAEA;">اقتباسات</a>
-            <a href="{% url 'blog_list' %}" style="display: block; padding: 0.75rem; color: #555555; text-decoration: none;">بلاگ</a>
+        <!-- MOBILE MENU - Hidden on desktop -->
+        <div id="mobile-menu" class="mobile-menu">
+            <a href="{% url 'home' %}" class="mobile-menu-link">Home</a>
+            <a href="{% url 'poetry_list' %}" class="mobile-menu-link">شاعری</a>
+            <a href="{% url 'novel_list' %}" class="mobile-menu-link">ناول</a>
+            <a href="{% url 'story_list' %}" class="mobile-menu-link">کہانیاں</a>
+            <a href="{% url 'quote_list' %}" class="mobile-menu-link">اقتباسات</a>
+            <a href="{% url 'blog_list' %}" class="mobile-menu-link">بلاگ</a>
+            <div class="mobile-menu-divider"></div>
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="mobile-menu-btn btn btn-primary">Dashboard</a>
+                <a href="{% url 'logout' %}" class="mobile-menu-btn btn btn-secondary">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="mobile-menu-btn btn btn-secondary">لاگ ان</a>
+                <a href="{% url 'register' %}" class="mobile-menu-btn btn btn-primary">رجسٹر</a>
+            {% endif %}
         </div>
     </nav>
 
@@ -150,39 +155,31 @@
         // Mobile Menu Toggle
         const menuToggle = document.getElementById('menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
-        const navMenu = document.querySelector('.nav-menu');
         
-        if (menuToggle) {
-            menuToggle.addEventListener('click', function() {
-                if (navMenu.style.display === 'none' || navMenu.style.display === '') {
-                    navMenu.style.display = 'flex';
-                    navMenu.classList.add('active');
-                } else {
-                    navMenu.style.display = 'none';
-                    navMenu.classList.remove('active');
-                }
+        if (menuToggle && mobileMenu) {
+            menuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                mobileMenu.classList.toggle('active');
             });
         }
 
-        // Responsive Menu Toggle
-        function handleResponsive() {
-            const width = window.innerWidth;
-            if (width < 768) {
-                menuToggle.style.display = 'block';
-                navMenu.style.display = 'none';
-            } else {
-                menuToggle.style.display = 'none';
-                navMenu.style.display = 'flex';
-            }
+        // Close menu when clicking on a link
+        if (mobileMenu) {
+            const mobileLinks = mobileMenu.querySelectorAll('a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.remove('active');
+                });
+            });
         }
-
-        window.addEventListener('resize', handleResponsive);
-        handleResponsive();
 
         // Close menu when clicking outside
         document.addEventListener('click', function(e) {
-            if (!e.target.closest('.navbar-container')) {
-                if (navMenu) navMenu.style.display = 'none';
+            if (mobileMenu && !e.target.closest('.navbar') && mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
             }
         });
     </script>
