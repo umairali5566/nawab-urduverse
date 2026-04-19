@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initFollowButtons();
     initNotificationActions();
     initPwaSupport();
+    initDashboardMobileMenu();
 });
 
 function getCsrfToken() {
@@ -988,6 +989,44 @@ function initPwaSupport() {
             .catch((error) => {
                 console.error("Service worker registration failed:", error);
             });
+    });
+}
+
+function initDashboardMobileMenu() {
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sideMenu = document.getElementById('sideMenu');
+    const menuBackdrop = document.getElementById('menuBackdrop');
+
+    if (!sidebarToggle || !sideMenu) return;
+
+    function toggleSidebar() {
+        const isOpen = sideMenu.classList.contains('show');
+        sideMenu.classList.toggle('show');
+        sidebarToggle.setAttribute('aria-expanded', !isOpen);
+
+        if (menuBackdrop) {
+            menuBackdrop.classList.toggle('show');
+        }
+    }
+
+    sidebarToggle.addEventListener('click', toggleSidebar);
+
+    if (menuBackdrop) {
+        menuBackdrop.addEventListener('click', toggleSidebar);
+    }
+
+    // Close on escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sideMenu.classList.contains('show')) {
+            toggleSidebar();
+        }
+    });
+
+    // Close on window resize to desktop
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && sideMenu.classList.contains('show')) {
+            toggleSidebar();
+        }
     });
 }
 
