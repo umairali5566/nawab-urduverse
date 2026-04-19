@@ -2,37 +2,188 @@
 {% load static %}
 
 {% block title %}لاگ ان - {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Sign in to access your {{ SITE_NAME }} dashboard.{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title mb-0">لاگ ان</h3>
-                </div>
-                <div class="card-body">
-                    {% if messages %}
-                    <div class="mb-3">
-                        {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
+<!-- Premium Login Section -->
+<section class="min-vh-100 d-flex align-items-center justify-content-center bg-premium-gradient p-20">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <!-- Glassmorphism Card -->
+                <div class="card border-0 shadow-lg premium-glass-card">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="text-center mb-4">
+                            <div class="mb-3">
+                                <i class="bi bi-box-arrow-in-right display-4 text-premium-gold"></i>
+                            </div>
+                            <h2 class="mb-2 text-premium">لاگ ان</h2>
+                            <p class="text-muted">اپنے اکاؤنٹ میں لاگ ان کریں</p>
+                        </div>
 
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit" class="btn btn-primary">لاگ ان</button>
-                    </form>
-                </div>
-                <div class="card-footer">
-                    <a href="{% url 'password_reset' %}">پاس ورڈ بھول گئے؟</a>
-                    <br>
-                    <a href="{% url 'register' %}">رجسٹر کریں</a>
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+
+                            {% if form.errors %}
+                            <div class="alert alert-premium-danger mb-3" role="alert">
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <div class="mb-1">
+                                            <i class="bi bi-exclamation-triangle me-1"></i>
+                                            <strong>{{ field.label }}:</strong> {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                    <div class="mb-1">
+                                        <i class="bi bi-exclamation-triangle me-1"></i>{{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+                            {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label fw-bold text-premium-secondary">
+                                    {{ field.label }}
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 bg-premium-glass-strong text-premium-gold">
+                                        {% if field.name == 'username' %}
+                                            <i class="bi bi-person"></i>
+                                        {% elif field.name == 'password' %}
+                                            <i class="bi bi-lock"></i>
+                                        {% endif %}
+                                    </span>
+                                    {{ field }}
+                                    {% if field.name == 'password' %}
+                                    <button class="btn border-0 toggle-password bg-premium-glass-strong text-premium-secondary" type="button" data-target="{{ field.id_for_label }}">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    {% endif %}
+                                </div>
+                                {% if field.help_text %}
+                                <small class="form-text text-premium-muted">{{ field.help_text }}</small>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                                <label class="form-check-label text-premium-secondary" for="remember">
+                                    مجھے یاد رکھیں
+                                </label>
+                            </div>
+
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-lg fw-bold btn-premium">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i> لاگ ان
+                                </button>
+                            </div>
+                        </form>
+
+                        <hr class="hr-premium">
+
+                        <div class="text-center">
+                            <p class="mb-2">
+                                <a href="{% url 'password_reset' %}" class="text-decoration-none fw-bold text-premium-primary">
+                                    پاس ورڈ بھول گئے؟
+                                </a>
+                            </p>
+                            <p class="mb-0">
+                                اکاؤنٹ نہیں ہے؟
+                                <a href="{% url 'register' %}" class="text-decoration-none fw-bold text-premium-primary">
+                                    رجسٹر کریں
+                                </a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<style>
+/* Custom input styling for glassmorphism */
+#id_username, #id_password {
+    background: var(--premium-card-glass-strong) !important;
+    border: var(--premium-border-gold) !important;
+    color: var(--premium-text) !important;
+}
+
+#id_username:focus, #id_password:focus {
+    background: var(--premium-card-glass) !important;
+    border-color: var(--premium-gold) !important;
+    box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25) !important;
+    color: var(--premium-text) !important;
+}
+
+#id_username::placeholder, #id_password::placeholder {
+    color: var(--premium-text-muted) !important;
+}
+
+/* Mobile Responsive Fixes */
+@media (max-width: 768px) {
+    .min-vh-100 {
+        min-height: auto;
+        padding: 30px 15px;
+    }
+
+    .card-body {
+        padding: 20px !important;
+    }
+
+    .display-4 {
+        font-size: 3rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .btn-lg {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+
+    .input-group-text {
+        display: none;
+    }
+
+    .form-check {
+        text-align: center;
+    }
+
+    .mb-3 {
+        margin-bottom: 15px !important;
+    }
+}
+</style>
+
+{% block extra_js %}
+<script>
+document.querySelectorAll('.toggle-password').forEach(button => {
+    button.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        const passwordInput = document.getElementById(targetId);
+        const icon = this.querySelector('i');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
+    });
+});
+</script>
+{% endblock %}
 {% endblock %}
