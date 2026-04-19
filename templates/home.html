@@ -1,314 +1,498 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 
-{% block title %}Home - {{ SITE_NAME }}{% endblock %}
+{% block title %}Discover the Beauty of Urdu Poetry{% endblock %}
+{% block meta_description %}Discover the beauty of Urdu poetry, novels, stories, and quotes. A modern platform celebrating the rich heritage of Urdu literature.{% endblock %}
 
 {% block extra_css %}
 <style>
-    .hero-section {
-        background: linear-gradient(135deg, #FDFCF8 0%, #F5F3ED 100%);
-        padding: 60px 20px;
-        border-bottom: 2px solid #D4AF37;
-    }
+/* Hero Section */
+.hero-section {
+    position: relative;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--bg-main) 0%, var(--bg-card) 100%);
+    overflow: hidden;
+}
 
-    .hero-divider {
-        display: flex;
+.hero-content {
+    text-align: center;
+    max-width: 800px;
+    z-index: 2;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: var(--weight-bold);
+    line-height: 1.1;
+    margin-bottom: var(--space-4);
+    background: linear-gradient(135deg, var(--text-main) 0%, var(--primary-gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+.hero-subtitle {
+    font-size: var(--text-h2);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-8);
+    font-family: var(--font-urdu);
+}
+
+.hero-search {
+    max-width: 500px;
+    margin: 0 auto var(--space-6);
+}
+
+.hero-search-bar {
+    position: relative;
+    width: 100%;
+}
+
+.hero-search-input {
+    width: 100%;
+    padding: var(--space-4) var(--space-6);
+    padding-right: 60px;
+    background: var(--glass);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-xl);
+    color: var(--text-main);
+    font-size: var(--text-body);
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-base);
+}
+
+.hero-search-input:focus {
+    outline: none;
+    border-color: var(--primary-gold);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+.hero-search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.hero-search-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    background: var(--primary-gold);
+    border: none;
+    border-radius: var(--radius-lg);
+    color: var(--bg-main);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.hero-search-btn:hover {
+    transform: translateY(-50%) scale(1.05);
+}
+
+.hero-buttons {
+    display: flex;
+    gap: var(--space-4);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.hero-btn-primary {
+    padding: var(--space-3) var(--space-6);
+    background: linear-gradient(135deg, var(--primary-gold) 0%, var(--primary-gold-light) 100%);
+    color: var(--bg-main);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-base);
+}
+
+.hero-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.hero-btn-outline {
+    padding: var(--space-3) var(--space-6);
+    background: transparent;
+    color: var(--text-main);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+    transition: var(--transition-base);
+}
+
+.hero-btn-outline:hover {
+    background: var(--glass);
+    border-color: var(--primary-gold);
+    color: var(--primary-gold);
+}
+
+/* Featured Section */
+.featured-section {
+    padding: var(--space-12) 0;
+    background: var(--bg-main);
+}
+
+.featured-card {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-base);
+}
+
+.featured-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.featured-title {
+    font-size: var(--text-h3);
+    color: var(--text-main);
+    margin-bottom: var(--space-4);
+    text-align: center;
+}
+
+.featured-text {
+    color: var(--text-secondary);
+    font-size: var(--text-body);
+    line-height: 1.6;
+    margin-bottom: var(--space-6);
+    text-align: center;
+}
+
+.featured-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    background: var(--primary-gold);
+    color: var(--bg-main);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+    margin: 0 auto;
+    transition: var(--transition-fast);
+}
+
+.featured-btn:hover {
+    transform: translateX(4px);
+}
+
+/* Stats Section */
+.stats-section {
+    padding: var(--space-12) 0;
+    background: var(--bg-card-soft);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-8);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.stat-card {
+    text-align: center;
+    padding: var(--space-6);
+    background: var(--glass);
+    border-radius: var(--radius-lg);
+    transition: var(--transition-base);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-number {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: var(--weight-bold);
+    background: linear-gradient(135deg, var(--primary-gold) 0%, var(--primary-gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--space-2);
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: var(--text-body);
+    font-weight: var(--weight-medium);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto var(--space-3);
+    background: var(--glass);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-gold);
+    font-size: 1.5rem;
+}
+
+/* Categories Section - Light Section (Default) */
+.categories-section {
+    padding: var(--space-12) 0;
+    background: var(--bg-section-light);
+}
+
+.categories-title {
+    text-align: center;
+    font-size: var(--text-h2);
+    color: var(--text-main);
+    margin-bottom: var(--space-8);
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-6);
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.category-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-main);
+    transition: var(--transition-base);
+    box-shadow: var(--shadow-soft);
+}
+
+.category-card:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-card);
+    border-color: var(--primary-gold);
+}
+
+.category-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--space-4);
+    background: var(--glass);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-gold);
+    font-size: 2rem;
+    transition: var(--transition-fast);
+}
+
+.category-card:hover .category-icon {
+    background: var(--primary-gold);
+    color: var(--bg-main);
+}
+
+.category-title {
+    font-size: var(--text-h3);
+    font-weight: var(--weight-semibold);
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-buttons {
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
-        margin: 20px 0;
     }
 
-    .hero-divider-text {
-        color: #D4AF37;
-        font-weight: bold;
-        font-size: 1.5rem;
+    .hero-btn-primary,
+    .hero-btn-outline {
+        width: 200px;
     }
 
-    .content-grid {
-        display: grid;
+    .stats-grid {
         grid-template-columns: 1fr;
-        gap: 32px;
-        padding: 40px 0;
+        gap: var(--space-4);
     }
 
-    @media (min-width: 768px) {
-        .content-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
+    .categories-grid {
+        grid-template-columns: 1fr;
     }
 
-    .content-section h2 {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #2D2D2D;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #D4AF37;
+    .hero-title {
+        font-size: clamp(2rem, 8vw, 3rem);
     }
+}
 
-    .card {
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        transition: all 0.3s ease;
-        border: 1px solid #E5E0D6;
+@keyframes glow {
+    from {
+        text-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
     }
-
-    .card:hover {
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-        transform: translateY(-2px);
+    to {
+        text-shadow: 0 0 30px rgba(245, 158, 11, 0.5), 0 0 40px rgba(245, 158, 11, 0.3);
     }
-
-    .card-image {
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
-        background-color: #F0EFEA;
-    }
-
-    .card-content {
-        padding: 16px;
-    }
-
-    .card-title {
-        font-size: 1.1rem;
-        font-weight: bold;
-        color: #2D2D2D;
-        margin-bottom: 8px;
-        line-height: 1.4;
-    }
-
-    .card-author {
-        font-size: 0.9rem;
-        color: #7A7A7A;
-        margin-bottom: 10px;
-    }
-
-    .card-description {
-        font-size: 0.85rem;
-        color: #555;
-        line-height: 1.6;
-        margin-bottom: 12px;
-    }
-
-    .card-link {
-        display: inline-block;
-        color: #0D5C63;
-        font-weight: 600;
-        text-decoration: none;
-        transition: color 0.3s;
-    }
-
-    .card-link:hover {
-        color: #D4AF37;
-    }
-
-    .empty-state {
-        background-color: #F5F3ED;
-        padding: 40px 20px;
-        text-align: center;
-        border-radius: 8px;
-        border: 2px dashed #D4AF37;
-    }
-
-    .empty-state-text {
-        color: #7A7A7A;
-        font-size: 0.95rem;
-        margin-bottom: 15px;
-    }
-
-    .video-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        margin-bottom: 20px;
-    }
-
-    .video-item {
-        position: relative;
-        aspect-ratio: 1 / 1;
-        border-radius: 8px;
-        overflow: hidden;
-        cursor: pointer;
-        background-color: #E5E0D6;
-    }
-
-    .video-item::after {
-        content: "▶";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 2rem;
-        color: #D4AF37;
-        opacity: 0.7;
-    }
-
-    .quote-box {
-        background: linear-gradient(135deg, #0D5C63 0%, #1A7F87 100%);
-        padding: 20px;
-        border-radius: 8px;
-        color: white;
-    }
-
-    .quote-text {
-        font-style: italic;
-        margin-bottom: 12px;
-        line-height: 1.8;
-    }
-
-    .quote-author {
-        font-weight: bold;
-        font-size: 0.9rem;
-    }
+}
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- HERO SECTION -->
-<section class="hero-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 style="font-size: 2.5rem; font-weight: 300; color: #2D2D2D; margin-bottom: 10px;">آج کی منتخب شاعری</h1>
-        <p style="font-size: 1.1rem; color: #7A7A7A; margin-bottom: 20px;">اردو ادب کی بہترین تخلیقات دریافت کریں</p>
-        
-        <div class="hero-divider">
-            <div class="hero-divider-text">✧</div>
+<!-- Hero Section - Light Section -->
+<section class="hero-section section section-light scroll-animate">
+    <div class="main-container">
+        <div class="hero-content">
+            <h1 class="hero-title">Discover the Beauty of Urdu Poetry</h1>
+            <p class="hero-subtitle">خوبصورت اردو شاعری کی دنیا میں خوش آمدید</p>
+
+            <div class="hero-search">
+                <div class="hero-search-bar">
+                    <input type="text" class="hero-search-input" placeholder="Search for poetry, stories, and more..." id="heroSearch">
+                    <button class="hero-search-btn" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="hero-buttons">
+                <a href="/poetry/" class="btn btn-primary">
+                    <i class="bi bi-feather"></i>
+                    Explore Poetry
+                </a>
+                <a href="/" class="btn btn-outline">
+                    <i class="bi bi-book"></i>
+                    Start Reading
+                </a>
+            </div>
         </div>
-        
-        <p style="color: #0D5C63; font-size: 1rem; max-width: 600px;">
-            شاعری سے ناول تک، کہانیوں سے اقتباسات تک — آپ کی ہر پسند یہاں ملے گی
-        </p>
     </div>
 </section>
 
-<!-- MAIN CONTENT GRID (3 Columns) -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="content-grid">
-
-        
-        <!-- LEFT COLUMN: Poetry -->
-        <div class="content-section">
-            <h2>شاعری</h2>
-            
-            {% if poetry_list %}
-                {% for poem in poetry_list %}
-                    <div class="card">
-                        {% if poem.image %}
-                            <img src="{{ poem.image.url }}" alt="{{ poem.title }}" class="card-image">
-                        {% else %}
-                            <div class="card-image" style="background: linear-gradient(135deg, #D4AF37 0%, #0D5C63 100%); display: flex; align-items: center; justify-content: center;">
-                                <span style="color: white; font-size: 2rem;">✧</span>
-                            </div>
-                        {% endif %}
-                        <div class="card-content">
-                            <div class="card-title">{{ poem.title }}</div>
-                            <div class="card-author">{{ poem.poet|default:"مصنف" }}</div>
-                            <div class="card-description">{{ poem.description|truncatewords:15 }}</div>
-                            <a href="{% url 'poetry_detail' poem.id %}" class="card-link">مکمل پڑھیں →</a>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="empty-state">
-                    <div class="empty-state-text">ابھی کوئی شاعری شامل نہیں</div>
-                </div>
-            {% endif %}
+<!-- Featured Section - Dark Section -->
+<section class="featured-section section section-dark scroll-animate">
+    <div class="main-container">
+        <div class="featured-card card">
+            <h2 class="featured-title">Featured Poem</h2>
+            <p class="featured-text urdu-text">
+                "دل کی بات دل ہی کو سنانی چاہیے<br>
+                زبان سے نکل کر بھی رسوائی ہوتی ہے"
+            </p>
+            <a href="/poetry/" class="btn btn-accent">
+                <span>Read Now</span>
+                <i class="bi bi-arrow-right"></i>
+            </a>
         </div>
-
-        <!-- CENTER COLUMN: Novels & Stories -->
-        <div class="content-section">
-            <h2>ناول اور کہانیاں</h2>
-            
-            {% if novel_list %}
-                {% for novel in novel_list %}
-                    <div class="card">
-                        {% if novel.cover_image %}
-                            <img src="{{ novel.cover_image.url }}" alt="{{ novel.title }}" class="card-image">
-                        {% else %}
-                            <div class="card-image" style="background: linear-gradient(135deg, #0D5C63 0%, #D4AF37 100%); display: flex; align-items: center; justify-content: center;">
-                                <span style="color: white; font-size: 2rem;">📖</span>
-                            </div>
-                        {% endif %}
-                        <div class="card-content">
-                            <div class="card-title">{{ novel.title }}</div>
-                            <div class="card-author">{{ novel.author|default:"مصنف" }}</div>
-                            <div class="card-description">{{ novel.synopsis|truncatewords:15 }}</div>
-                            <a href="{% url 'novel_detail' novel.id %}" class="card-link">پڑھیں →</a>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="empty-state">
-                    <div class="empty-state-text">ناول جلد آئیں گے</div>
-                </div>
-            {% endif %}
-
-            {% if story_list %}
-                <h2 style="margin-top: 30px;">کہانیاں</h2>
-                {% for story in story_list %}
-                    <div class="card">
-                        {% if story.featured_image %}
-                            <img src="{{ story.featured_image.url }}" alt="{{ story.title }}" class="card-image">
-                        {% else %}
-                            <div class="card-image" style="background-color: #F0EFEA; display: flex; align-items: center; justify-content: center;">
-                                <span style="color: #D4AF37; font-size: 2rem;">✎</span>
-                            </div>
-                        {% endif %}
-                        <div class="card-content">
-                            <div class="card-title">{{ story.title }}</div>
-                            <div class="card-author">{{ story.author|default:"مصنف" }}</div>
-                            <div class="card-description">{{ story.summary|truncatewords:15 }}</div>
-                            <a href="{% url 'story_detail' story.id %}" class="card-link">پڑھیں →</a>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="empty-state" style="margin-top: 30px;">
-                    <div class="empty-state-text">کہانیاں جلد شامل ہوں گی</div>
-                </div>
-            {% endif %}
-        </div>
-
-        <!-- RIGHT COLUMN: Videos & Quotes -->
-        <div class="content-section">
-            <h2>ویڈیوز</h2>
-            
-            <div class="video-grid">
-                <div class="video-item" style="background: linear-gradient(135deg, #D4AF37 0%, #F5A623 100%); opacity: 0.8;"></div>
-                <div class="video-item" style="background: linear-gradient(135deg, #0D5C63 0%, #1A7F87 100%); opacity: 0.8;"></div>
-                <div class="video-item" style="background: linear-gradient(135deg, #2D2D2D 0%, #5A5A5A 100%); opacity: 0.8;"></div>
-                <div class="video-item" style="background: linear-gradient(135deg, #F5A623 0%, #D4AF37 100%); opacity: 0.8;"></div>
-            </div>
-
-            <h2 style="margin-top: 30px;">آج کا اقتباس</h2>
-            
-            {% if quote_of_day %}
-                <div class="quote-box">
-                    <div class="quote-text">{{ quote_of_day.text }}</div>
-                    <div class="quote-author">— {{ quote_of_day.author|default:"مصنف نامعلوم" }}</div>
-                </div>
-            {% else %}
-                <div class="quote-box">
-                    <div class="quote-text">اردو ادب ہمارے دل کی آواز ہے</div>
-                    <div class="quote-author">— {{ SITE_NAME }}</div>
-                </div>
-            {% endif %}
-
-            {% if latest_quotes %}
-                <h3 style="margin-top: 30px; margin-bottom: 15px; color: #2D2D2D; font-weight: bold;">دیگر اقتباسات</h3>
-                {% for quote in latest_quotes|slice:":3" %}
-                    <div class="card">
-                        <div class="card-content">
-                            <div class="card-description" style="font-style: italic; color: #0D5C63;">{{ quote.text }}</div>
-                            <div class="card-author">{{ quote.author|default:"مصنف" }}</div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
-
     </div>
-</div>
+</section>
 
+<!-- Stats Section - Light Section -->
+<section class="stats-section section section-light scroll-animate">
+    <div class="main-container">
+        <div class="stats-grid">
+            <div class="stat-card card">
+                <div class="stat-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div class="stat-number">50K+</div>
+                <div class="stat-label">Readers</div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-icon">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Authors</div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-icon">
+                    <i class="bi bi-book"></i>
+                </div>
+                <div class="stat-number">5K+</div>
+                <div class="stat-label">Poems</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section - Dark Section -->
+<section class="categories-section section section-dark scroll-animate">
+    <div class="main-container">
+        <h2 class="categories-title">Explore by Category</h2>
+        <div class="categories-grid">
+            <a href="/poetry/" class="category-card">
+                <div class="category-icon">
+                    <i class="bi bi-feather"></i>
+                </div>
+                <h3 class="category-title">Poetry</h3>
+            </a>
+            <a href="/" class="category-card">
+                <div class="category-icon">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+                <h3 class="category-title">Stories</h3>
+            </a>
+            <a href="/novels/" class="category-card">
+                <div class="category-icon">
+                    <i class="bi bi-book"></i>
+                </div>
+                <h3 class="category-title">Novels</h3>
+            </a>
+            <a href="/blog/" class="category-card">
+                <div class="category-icon">
+                    <i class="bi bi-newspaper"></i>
+                </div>
+                <h3 class="category-title">Blog</h3>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Hero search functionality
+document.getElementById('heroSearch').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        const query = this.value.trim();
+        if (query) {
+            window.location.href = `/search/?q=${encodeURIComponent(query)}`;
+        }
+    }
+});
+
+// Intersection Observer for scroll animations
+document.addEventListener('DOMContentLoaded', function() {
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.scroll-animate').forEach(section => {
+        observer.observe(section);
+    });
+});
+</script>
 {% endblock %}

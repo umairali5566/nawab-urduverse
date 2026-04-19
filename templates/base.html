@@ -1,188 +1,106 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}{{ SITE_DESCRIPTION }}{% endblock %}">
-
+    <meta name="description" content="Premium Urdu Literature Platform - Poetry, Novels, Stories, Quotes & Blog">
+    
+    <title>{% block title %}{{ SITE_NAME }} - اردو ادب کی خوبصورت دنیا{% endblock %}</title>
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Favicon & Manifest -->
-    <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}">
-    <link rel="manifest" href="{% static 'manifest.json' %}">
-
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'cream': '#FDFCF8',
-                        'charcoal': '#2D2D2D',
-                        'gold': {
-                            50: '#FEF9E7',
-                            100: '#FDF3CF',
-                            200: '#FBE79F',
-                            300: '#F9DB6F',
-                            400: '#F7CF3F',
-                            500: '#D4AF37',
-                            600: '#B8960C',
-                            700: '#957A0B',
-                            800: '#725E09',
-                            900: '#4F4207',
-                        },
-                        'teal': {
-                            50: '#E7F5F6',
-                            100: '#CEEBED',
-                            200: '#A1D7DD',
-                            300: '#6FC3CF',
-                            400: '#3DAFBF',
-                            500: '#0D5C63',
-                            600: '#0A4A50',
-                            700: '#08383D',
-                            800: '#05262A',
-                            900: '#031416',
-                        },
-                    },
-                    fontFamily: {
-                        'urdu': ['Noto Nastaliq Urdu', 'serif'],
-                        'inter': ['Inter', 'sans-serif'],
-                    },
-                    backdropBlur: {
-                        'xl': '20px',
-                    },
-                    backgroundImage: {
-                        'gradient-gold': 'linear-gradient(135deg, #D4AF37 0%, #F7CF3F 100%)',
-                        'gradient-dark': 'linear-gradient(135deg, #2D2D2D 0%, #1a1a1a 100%)',
-                    },
-                }
-            }
-        }
-    </script>
-
-    <!-- Custom Styles -->
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     
-    <!-- Critical RTL & Urdu Typography Fixes -->
+    <!-- Critical RTL & Typography Fixes -->
     <style>
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            direction: rtl;
+            text-align: right;
         }
         
         html, body {
             direction: rtl;
             text-align: right;
+            font-family: 'Inter', 'Poppins', sans-serif;
+        }
+        
+        h1, h2, h3, h4, h5, h6, .urdu-text, [lang="ur"] {
             font-family: 'Noto Nastaliq Urdu', serif;
-        }
-        
-        body {
-            background-color: #FDFCF8;
-            color: #2D2D2D;
-            line-height: 1.8;
-        }
-        
-        h1, h2, h3, h4, h5, h6, p, a, li, span {
-            direction: rtl;
-            text-align: right;
-            font-family: 'Noto Nastaliq Urdu', serif;
-        }
-        
-        a { color: #0D5C63; }
-        a:hover { color: #D4AF37; }
-        
-        input, textarea, select {
             direction: rtl;
             text-align: right;
         }
     </style>
+    
     {% block extra_css %}{% endblock %}
 </head>
-<body class="bg-cream text-charcoal antialiased" dir="rtl">
-    <!-- NAVBAR: Fixed Alignment -->
-    <nav class="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
+<body style="background-color: #F5F1EA; color: #555555;">
+    
+    <!-- NAVBAR -->
+    <nav class="navbar" style="background-color: white; border-bottom: 1px solid #EAEAEA; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+        <div class="navbar-container" style="max-width: 1400px; margin: 0 auto; padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; height: 80px;">
+            
+            <!-- LOGO (Right in RTL) -->
+            <div class="navbar-brand" style="display: flex; align-items: center; gap: 1rem; flex-shrink: 0;">
+                <a href="{% url 'home' %}" style="text-decoration: none; color: inherit;">
+                    <div class="logo-text" style="font-family: 'Noto Nastaliq Urdu', serif; font-size: 1.5rem; color: #1A1A1A;">{{ SITE_NAME }}</div>
+                    <div class="logo-subtitle" style="font-size: 0.75rem; color: #888888;">اردو ادب</div>
+                </a>
+            </div>
+
+            <!-- NAV MENU (Center) -->
+            <div class="nav-menu" style="display: flex; gap: 3rem; align-items: center; margin: 0; padding: 0; list-style: none;">
+                <a href="{% url 'home' %}" style="color: #555555; font-weight: 500; position: relative; transition: color 0.3s ease; text-decoration: none;">Home</a>
+                <a href="{% url 'poetry_list' %}" style="color: #555555; font-weight: 500; position: relative; transition: color 0.3s ease; text-decoration: none;">شاعری</a>
+                <a href="{% url 'novel_list' %}" style="color: #555555; font-weight: 500; position: relative; transition: color 0.3s ease; text-decoration: none;">ناول</a>
+                <a href="{% url 'story_list' %}" style="color: #555555; font-weight: 500; position: relative; transition: color 0.3s ease; text-decoration: none;">کہانیاں</a>
+                <a href="{% url 'quote_list' %}" style="color: #555555; font-weight: 500; position: relative; transition: color 0.3s ease; text-decoration: none;">اقتباسات</a>
+                <a href="{% url 'blog_list' %}" style="color: #555555; font-weight: 500; position: relative; transition: color 0.3s ease; text-decoration: none;">بلاگ</a>
+            </div>
+
+            <!-- AUTH & SEARCH (Left in RTL) -->
+            <div class="nav-auth" style="display: flex; align-items: center; gap: 1.5rem;">
+                <!-- Search -->
+                <a href="#" style="cursor: pointer; color: #555555; transition: color 0.3s ease; text-decoration: none; font-size: 1.2rem;">🔍</a>
                 
-                <!-- Logo & Brand (Right side in RTL) -->
-                <div class="flex items-center gap-2">
-                    <a href="{% url 'home' %}" class="flex items-center gap-2 hover:opacity-80 transition">
-                        <div>
-                            <div class="text-lg font-bold text-charcoal">{{ SITE_NAME }}</div>
-                            <div class="text-xs text-gray-500">اردو ادب</div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Desktop Navigation (Center) -->
-                <div class="hidden md:flex items-center gap-8">
-                    <a href="{% url 'home' %}" class="text-charcoal hover:text-gold transition font-medium">Home</a>
-                    <a href="{% url 'poetry_list' %}" class="text-charcoal hover:text-gold transition font-medium">Poetry</a>
-                    <a href="{% url 'novel_list' %}" class="text-charcoal hover:text-gold transition font-medium">Novels</a>
-                    <a href="{% url 'story_list' %}" class="text-charcoal hover:text-gold transition font-medium">Stories</a>
-                    <a href="{% url 'quote_list' %}" class="text-charcoal hover:text-gold transition font-medium">Quotes</a>
-                    <a href="{% url 'blog_list' %}" class="text-charcoal hover:text-gold transition font-medium">Blog</a>
-                </div>
-
-                <!-- Auth Buttons (Left side in RTL) -->
-                <div class="flex items-center gap-4">
-                    <!-- Mobile Menu Button -->
-                    <button id="menu-toggle" class="md:hidden p-2 text-charcoal hover:text-gold transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'dashboard' %}" class="px-4 py-2 bg-teal text-white rounded-full font-medium hover:opacity-90 transition">Dashboard</a>
-                        <a href="{% url 'logout' %}" class="px-4 py-2 border-2 border-teal text-teal rounded-full font-medium hover:bg-teal hover:text-white transition">Logout</a>
-                    {% else %}
-                        <a href="{% url 'login' %}" class="px-4 py-2 border-2 border-teal text-teal rounded-full font-medium hover:bg-teal hover:text-white transition">لاگ ان</a>
-                        <a href="{% url 'register' %}" class="px-4 py-2 bg-teal text-white rounded-full font-medium hover:opacity-90 transition">رجسٹر</a>
-                    {% endif %}
-
-                    <!-- Mobile Menu Button -->
-                    <button id="mobile-menu-btn" class="md:hidden text-charcoal hover:text-gold-500 transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div>
+                <!-- Auth Buttons -->
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" style="text-decoration: none; color: white; background-color: #C8A96A; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; transition: all 0.3s ease;">Dashboard</a>
+                    <a href="{% url 'logout' %}" style="text-decoration: none; color: #C8A96A; background-color: transparent; border: 1px solid #C8A96A; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; transition: all 0.3s ease;">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" style="text-decoration: none; color: #C8A96A; background-color: transparent; border: 1px solid #C8A96A; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; transition: all 0.3s ease;">لاگ ان</a>
+                    <a href="{% url 'register' %}" style="text-decoration: none; color: white; background-color: #C8A96A; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; transition: all 0.3s ease;">رجسٹر</a>
+                {% endif %}
+                
+                <!-- Mobile Menu Button -->
+                <button id="menu-toggle" class="menu-toggle" style="display: none; background: none; border: none; cursor: pointer; color: #555555; font-size: 1.5rem;">☰</button>
             </div>
+        </div>
 
-            <!-- Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden bg-cream border-t border-gray-100 py-4">
-                <a href="{% url 'home' %}" class="block px-4 py-2 text-charcoal hover:bg-gold hover:text-white rounded">Home</a>
-                <a href="{% url 'poetry_list' %}" class="block px-4 py-2 text-charcoal hover:bg-gold hover:text-white rounded">Poetry</a>
-                <a href="{% url 'novel_list' %}" class="block px-4 py-2 text-charcoal hover:bg-gold hover:text-white rounded">Novels</a>
-                <a href="{% url 'story_list' %}" class="block px-4 py-2 text-charcoal hover:bg-gold hover:text-white rounded">Stories</a>
-                <a href="{% url 'quote_list' %}" class="block px-4 py-2 text-charcoal hover:bg-gold hover:text-white rounded">Quotes</a>
-                <a href="{% url 'blog_list' %}" class="block px-4 py-2 text-charcoal hover:bg-gold hover:text-white rounded">Blog</a>
-                <div class="border-t border-gray-200 mt-4 pt-4">
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'dashboard' %}" class="block px-4 py-2 bg-teal text-white rounded font-medium mb-2">Dashboard</a>
-                        <a href="{% url 'logout' %}" class="block px-4 py-2 border-2 border-teal text-teal rounded font-medium">Logout</a>
-                    {% else %}
-                        <a href="{% url 'login' %}" class="block px-4 py-2 border-2 border-teal text-teal rounded font-medium mb-2">لاگ ان</a>
-                        <a href="{% url 'register' %}" class="block px-4 py-2 bg-teal text-white rounded font-medium">رجسٹر</a>
-                    {% endif %}
-                </div>
-            </div>
+        <!-- MOBILE MENU -->
+        <div id="mobile-menu" style="display: none; background-color: white; border-top: 1px solid #EAEAEA; padding: 1rem;">
+            <a href="{% url 'home' %}" style="display: block; padding: 0.75rem; color: #555555; text-decoration: none; border-bottom: 1px solid #EAEAEA;">Home</a>
+            <a href="{% url 'poetry_list' %}" style="display: block; padding: 0.75rem; color: #555555; text-decoration: none; border-bottom: 1px solid #EAEAEA;">شاعری</a>
+            <a href="{% url 'novel_list' %}" style="display: block; padding: 0.75rem; color: #555555; text-decoration: none; border-bottom: 1px solid #EAEAEA;">ناول</a>
+            <a href="{% url 'story_list' %}" style="display: block; padding: 0.75rem; color: #555555; text-decoration: none; border-bottom: 1px solid #EAEAEA;">کہانیاں</a>
+            <a href="{% url 'quote_list' %}" style="display: block; padding: 0.75rem; color: #555555; text-decoration: none; border-bottom: 1px solid #EAEAEA;">اقتباسات</a>
+            <a href="{% url 'blog_list' %}" style="display: block; padding: 0.75rem; color: #555555; text-decoration: none;">بلاگ</a>
         </div>
     </nav>
 
+    <!-- MAIN CONTENT -->
     <main>
         {% if messages %}
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div style="max-width: 1400px; margin: 0 auto; padding: 1rem 2rem;">
                 {% for message in messages %}
-                    <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-4" role="alert">
+                    <div style="background-color: #e3f2fd; border: 1px solid #90caf9; color: #1565c0; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
                         {{ message }}
                     </div>
                 {% endfor %}
@@ -191,42 +109,88 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- FOOTER -->\n    <footer class="bg-charcoal text-white mt-16\">\n        <div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12\">\n            <!-- 4-Column Grid Footer -->\n            <div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8\">\n                <!-- Column 1: About -->\n                <div>\n                    <h3 class=\"text-lg font-bold text-gold mb-4\">{{ SITE_NAME }}</h3>\n                    <p class=\"text-gray-300 text-sm leading-relaxed\">اردو ادب کے راستوں میں آپ کا سرمایہ لگائیں، شاعری سے لے کر رومانس تک</p>\n                </div>\n\n                <!-- Column 2: Resources -->\n                <div>\n                    <h3 class=\"text-lg font-bold text-gold mb-4\">Resources</h3>\n                    <ul class=\"space-y-2 text-sm\">\n                        <li><a href=\"{% url 'poetry_list' %}\" class=\"text-gray-300 hover:text-gold transition\">شاعری</a></li>\n                        <li><a href=\"{% url 'novel_list' %}\" class=\"text-gray-300 hover:text-gold transition\">ناول</a></li>\n                        <li><a href=\"{% url 'story_list' %}\" class=\"text-gray-300 hover:text-gold transition\">کہانیاں</a></li>\n                        <li><a href=\"{% url 'quote_list' %}\" class=\"text-gray-300 hover:text-gold transition\">اقتباسات</a></li>\n                    </ul>\n                </div>\n\n                <!-- Column 3: Community -->\n                <div>\n                    <h3 class=\"text-lg font-bold text-gold mb-4\">Community</h3>\n                    <ul class=\"space-y-2 text-sm\">\n                        <li><a href=\"{% url 'blog_list' %}\" class=\"text-gray-300 hover:text-gold transition\">Blog</a></li>\n                        {% if user.is_authenticated %}\n                            <li><a href=\"{% url 'dashboard' %}\" class=\"text-gray-300 hover:text-gold transition\">Dashboard</a></li>\n                        {% endif %}\n                        <li><a href=\"#\" class=\"text-gray-300 hover:text-gold transition\">Contact</a></li>\n                        <li><a href=\"#\" class=\"text-gray-300 hover:text-gold transition\">About Us</a></li>\n                    </ul>\n                </div>\n\n                <!-- Column 4: Follow -->\n                <div>\n                    <h3 class=\"text-lg font-bold text-gold mb-4\">Follow</h3>\n                    <div class=\"flex gap-4\">\n                        <a href=\"#\" class=\"text-gray-300 hover:text-gold transition text-2xl\">f</a>\n                        <a href=\"#\" class=\"text-gray-300 hover:text-gold transition text-2xl\">t</a>\n                        <a href=\"#\" class=\"text-gray-300 hover:text-gold transition text-2xl\">ig</a>\n                        <a href=\"#\" class=\"text-gray-300 hover:text-gold transition text-2xl\">yt</a>\n                    </div>\n                </div>\n            </div>\n\n            <!-- Footer Divider & Copyright -->\n            <div class=\"border-t border-gray-700 pt-8\">\n                <p class=\"text-center text-gray-400 text-sm\">&copy; {% now \"Y\" %} {{ SITE_NAME }}. اردو ادب کا رستاء</p>\n            </div>\n        </div>\n    </footer>
+    <!-- FOOTER -->
+    <footer style="background-color: #1E2A38; color: white; padding: 4rem 2rem; margin-top: 6rem;">
+        <div class="footer-container" style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem; text-align: center;">
+            
+            <!-- About -->
+            <div class="footer-section">
+                <h4 style="color: #C8A96A; margin-bottom: 1rem; font-weight: 600;">درباره ہمارے</h4>
+                <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.8;">اردو ادب کو جدید دنیا میں زندہ رکھنے کا ہمارا منشور ہے۔ شاعری، ناول، کہانیاں - سب کچھ ایک جگہ۔</p>
+            </div>
 
+            <!-- Quick Links -->
+            <div class="footer-section">
+                <h4 style="color: #C8A96A; margin-bottom: 1rem; font-weight: 600;">مفید لنکز</h4>
+                <a href="{% url 'home' %}" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none; transition: color 0.3s ease;">Home</a><br>
+                <a href="{% url 'poetry_list' %}" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none; transition: color 0.3s ease;">شاعری</a><br>
+                <a href="{% url 'blog_list' %}" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none; transition: color 0.3s ease;">بلاگ</a>
+            </div>
+
+            <!-- Social -->
+            <div class="footer-section">
+                <h4 style="color: #C8A96A; margin-bottom: 1rem; font-weight: 600;">سوشل میڈیا</h4>
+                <a href="#" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none;">Facebook</a><br>
+                <a href="#" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none;">Twitter</a><br>
+                <a href="#" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none;">Instagram</a>
+            </div>
+
+            <!-- Legal -->
+            <div class="footer-section">
+                <h4 style="color: #C8A96A; margin-bottom: 1rem; font-weight: 600;">قانونی</h4>
+                <a href="#" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none;">Privacy Policy</a><br>
+                <a href="#" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none;">Terms of Service</a>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom" style="border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 2rem; text-align: center; color: rgba(255, 255, 255, 0.7);">
+            <p style="margin: 0;">&copy; {% now "Y" %} {{ SITE_NAME }}. اردو ادب کا رستاء</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
     <script>
-        // Mobile menu toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        mobileMenuBtn?.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // Close mobile menu when clicking a link
-        const mobileMenuLinks = mobileMenu?.querySelectorAll('a');
-        mobileMenuLinks?.forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-            });
-        });
-
         // Mobile Menu Toggle
         const menuToggle = document.getElementById('menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.querySelector('.nav-menu');
         
-        if (menuToggle && mobileMenu) {
-            menuToggle.addEventListener('click', function(e) {
-                e.stopPropagation();
-                mobileMenu.classList.toggle('hidden');
-            });
-            
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('#mobile-menu') && !e.target.closest('#menu-toggle')) {
-                    mobileMenu.classList.add('hidden');
+        if (menuToggle) {
+            menuToggle.addEventListener('click', function() {
+                if (navMenu.style.display === 'none' || navMenu.style.display === '') {
+                    navMenu.style.display = 'flex';
+                    navMenu.classList.add('active');
+                } else {
+                    navMenu.style.display = 'none';
+                    navMenu.classList.remove('active');
                 }
             });
         }
+
+        // Responsive Menu Toggle
+        function handleResponsive() {
+            const width = window.innerWidth;
+            if (width < 768) {
+                menuToggle.style.display = 'block';
+                navMenu.style.display = 'none';
+            } else {
+                menuToggle.style.display = 'none';
+                navMenu.style.display = 'flex';
+            }
+        }
+
+        window.addEventListener('resize', handleResponsive);
+        handleResponsive();
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.navbar-container')) {
+                if (navMenu) navMenu.style.display = 'none';
+            }
+        });
     </script>
+    
     {% block extra_js %}{% endblock %}
 </body>
 </html>
