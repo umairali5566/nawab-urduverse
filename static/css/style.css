@@ -121,7 +121,7 @@ a:hover {
    ============================================================================ */
 
 nav.navbar {
-    background-color: #FFFFFF;
+    background-color: #F8F5F0;
     border-bottom: 1px solid #EAEAEA;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     position: sticky;
@@ -131,23 +131,47 @@ nav.navbar {
 }
 
 .navbar-container {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 15px 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: auto;
+    height: 70px;
     gap: 2rem;
 }
 
-/* Auth Buttons (Left in RTL - displays first in flex order) */
-.nav-auth {
+/* Logo Brand (Right side) */
+.navbar-brand {
     display: flex;
     align-items: center;
     gap: 1rem;
     flex-shrink: 0;
     order: 1;
+    min-width: fit-content;
+}
+
+/* Nav Menu (Center) */
+.nav-menu {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    justify-content: center;
+    list-style: none;
+    order: 2;
+    direction: rtl;
+}
+
+/* Auth Buttons (Left side) */
+.nav-auth {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+    order: 3;
 }
 
 /* Nav Menu (Center) */
@@ -241,6 +265,7 @@ nav.navbar {
 .btn-primary {
     background-color: #C8A96A;
     color: #FFFFFF;
+    border-radius: 10px;
 }
 
 .btn-primary:hover {
@@ -252,7 +277,8 @@ nav.navbar {
 .btn-secondary {
     background-color: transparent;
     color: #1E2A38;
-    border: 1.5px solid #1E2A38;
+    border: 2px solid #1E2A38;
+    border-radius: 10px;
 }
 
 .btn-secondary:hover {
@@ -277,25 +303,48 @@ nav.navbar {
     color: #C8A96A;
 }
 
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 70px);
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 999;
+}
+
+.mobile-menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
 /* Mobile Menu */
 .mobile-menu {
-    display: none;
+    position: fixed;
+    top: 70px;
+    right: -100%;
+    width: 300px;
+    height: calc(100vh - 70px);
     background-color: #FFFFFF;
-    border-top: 1px solid #EAEAEA;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-    width: 100%;
+    border-left: 1px solid #EAEAEA;
+    box-shadow: -2px 0 12px rgba(0, 0, 0, 0.08);
+    overflow-y: auto;
+    transition: right 0.3s ease;
+    z-index: 1000;
+    padding: 1rem 0;
 }
 
 .mobile-menu.active {
-    display: block;
-    max-height: 500px;
+    right: 0;
 }
 
 .mobile-menu-link {
     display: block;
-    padding: 1rem 40px;
+    padding: 1rem 2rem;
     color: #555555;
     text-decoration: none;
     border-bottom: 1px solid #EAEAEA;
@@ -316,9 +365,9 @@ nav.navbar {
 
 .mobile-menu-btn {
     display: block;
-    margin: 0.75rem 40px;
+    margin: 0.75rem 2rem;
     padding: 10px 24px;
-    width: calc(100% - 80px);
+    width: calc(100% - 4rem);
     text-align: center;
 }
 
@@ -847,7 +896,7 @@ footer {
     .navbar-brand {
         flex: 1;
         justify-content: flex-start;
-        order: 3;
+        order: 1;
     }
 
     .logo-image {

@@ -46,28 +46,7 @@
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="navbar-container">
-            <!-- AUTH BUTTONS (Left in RTL) -->
-            <div class="nav-auth">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'dashboard' %}" class="btn btn-primary">Dashboard</a>
-                    <a href="{% url 'logout' %}" class="btn btn-secondary">Logout</a>
-                {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-secondary">لاگ ان</a>
-                    <a href="{% url 'register' %}" class="btn btn-primary">رجسٹر</a>
-                {% endif %}
-            </div>
-
-            <!-- NAV MENU (Center) - Hidden on mobile -->
-            <div class="nav-menu">
-                <a href="{% url 'home' %}" class="nav-link">Home</a>
-                <a href="{% url 'poetry_list' %}" class="nav-link">شاعری</a>
-                <a href="{% url 'novel_list' %}" class="nav-link">ناول</a>
-                <a href="{% url 'story_list' %}" class="nav-link">کہانیاں</a>
-                <a href="{% url 'quote_list' %}" class="nav-link">اقتباسات</a>
-                <a href="{% url 'blog_list' %}" class="nav-link">بلاگ</a>
-            </div>
-
-            <!-- LOGO (Right in RTL) -->
+            <!-- LOGO (Right side) -->
             <div class="navbar-brand">
                 <a href="{% url 'home' %}" class="logo-link">
                     {% if logo and logo.image %}
@@ -78,9 +57,33 @@
                 </a>
             </div>
 
+            <!-- NAV MENU (Center) - RTL aligned -->
+            <div class="nav-menu">
+                <a href="{% url 'home' %}" class="nav-link">Home</a>
+                <a href="{% url 'poetry_list' %}" class="nav-link">شاعری</a>
+                <a href="{% url 'novel_list' %}" class="nav-link">ناول</a>
+                <a href="{% url 'story_list' %}" class="nav-link">کہانیاں</a>
+                <a href="{% url 'quote_list' %}" class="nav-link">اقتباسات</a>
+                <a href="{% url 'blog_list' %}" class="nav-link">بلاگ</a>
+            </div>
+
+            <!-- AUTH BUTTONS (Left side) -->
+            <div class="nav-auth">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-primary">Dashboard</a>
+                    <a href="{% url 'logout' %}" class="btn btn-secondary">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-secondary">لاگ ان</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">رجسٹر</a>
+                {% endif %}
+            </div>
+
             <!-- MOBILE MENU BUTTON -->
             <button id="menu-toggle" class="menu-toggle">☰</button>
         </div>
+
+        <!-- MOBILE MENU OVERLAY -->
+        <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
 
         <!-- MOBILE MENU - Hidden on desktop -->
         <div id="mobile-menu" class="mobile-menu">
@@ -159,11 +162,13 @@
         // Mobile Menu Toggle
         const menuToggle = document.getElementById('menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
-        
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+
         if (menuToggle && mobileMenu) {
             menuToggle.addEventListener('click', function(e) {
                 e.stopPropagation();
                 mobileMenu.classList.toggle('active');
+                mobileMenuOverlay.classList.toggle('active');
             });
         }
 
@@ -173,7 +178,16 @@
             mobileLinks.forEach(link => {
                 link.addEventListener('click', function() {
                     mobileMenu.classList.remove('active');
+                    mobileMenuOverlay.classList.remove('active');
                 });
+            });
+        }
+
+        // Close menu when clicking overlay
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', function() {
+                mobileMenu.classList.remove('active');
+                mobileMenuOverlay.classList.remove('active');
             });
         }
 
@@ -181,6 +195,7 @@
         document.addEventListener('click', function(e) {
             if (mobileMenu && !e.target.closest('.navbar') && mobileMenu.classList.contains('active')) {
                 mobileMenu.classList.remove('active');
+                mobileMenuOverlay.classList.remove('active');
             }
         });
 

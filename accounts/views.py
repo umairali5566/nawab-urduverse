@@ -120,10 +120,18 @@ def register(request):
 
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, "Your account has been created.")
-            return redirect("home")
+            try:
+                user = User.objects.create_user(
+                    username=form.cleaned_data['username'],
+                    email=form.cleaned_data['email'],
+                    password=form.cleaned_data['password1']
+                )
+                login(request, user)
+                messages.success(request, "Your account has been created.")
+                return redirect("home")
+            except Exception as e:
+                messages.error(request, "An error occurred while creating your account. Please try again.")
+                return redirect("register")
     else:
         form = UserRegistrationForm()
 
