@@ -7,18 +7,20 @@
 
 :root {
     --urdu-font: 'Noto Nastaliq Urdu', 'Poppins', sans-serif;
-    --primary-color: #0B1E3C;
+    --primary-color: #3b82f6;
     --secondary-color: #D4AF37;
-    --bg-color: #F8F9FB;
-    --card-bg: #FFFFFF;
-    --text-primary: #1A1A1A;
-    --text-secondary: #6B7280;
+    --bg-color: #0f172a;
+    --card-bg: linear-gradient(135deg, #0f172a, #1e293b);
+    --text-primary: #ffffff;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --border-color: #334155;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    background: #0f172a;
+    color: #ffffff;
     line-height: 1.7;
     margin: 0;
     -webkit-font-smoothing: antialiased;

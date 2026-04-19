@@ -5,35 +5,35 @@
 
 :root {
     /* Color Palette */
-    --bg-main: #f8fafc;
-    --bg-card: #ffffff;
+    --bg-main: #0f172a;
+    --bg-card: linear-gradient(135deg, #0f172a, #1e293b);
     --bg-sidebar: #0f172a;
-    --bg-light: #f1f5f9;
-    
+    --bg-light: #1e293b;
+
     /* Text Colors */
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --text-muted: #64748b;
+    --text-primary: #ffffff;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
     --text-white: #ffffff;
-    
+
     /* Accent Colors */
-    --accent: #2563eb;
-    --accent-hover: #1d4ed8;
+    --accent: #3b82f6;
+    --accent-hover: #2563eb;
     --accent-light: #3b82f6;
     --accent-pale: #dbeafe;
-    
+
     /* Status Colors */
     --success: #10b981;
     --warning: #f59e0b;
     --danger: #ef4444;
     --info: #0ea5e9;
-    
+
     /* Borders & Shadows */
-    --border: #e2e8f0;
-    --border-light: #f1f5f9;
-    --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.1);
+    --border: #334155;
+    --border-light: #475569;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.3);
     
     /* Spacing */
     --spacing-xs: 0.25rem;
@@ -68,9 +68,9 @@ html {
 }
 
 body {
-    background-color: var(--bg-main);
-    color: var(--text-secondary);
-    font-family: 'Inter', 'Poppins', 'Noto Nastaliq Urdu', sans-serif;
+    background: #0f172a;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     line-height: 1.6;
     direction: rtl;
@@ -83,7 +83,7 @@ body {
    ============================================ */
 
 h1, h2, h3, h4, h5, h6 {
-    color: var(--text-primary);
+    color: #ffffff;
     font-weight: 700;
     line-height: 1.3;
     margin-bottom: 1rem;
@@ -113,9 +113,9 @@ h6 {
     font-size: 1rem;
 }
 
-p {
+p, span {
     margin-bottom: 1rem;
-    color: var(--text-secondary);
+    color: #cbd5e1;
 }
 
 a {
@@ -174,23 +174,22 @@ a:hover {
 .panel,
 .feature-card,
 .listing-card {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    border-radius: 20px;
     padding: 20px;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
+    color: #ffffff;
+    transition: all 0.3s ease;
     overflow-wrap: break-word;
     word-break: normal;
+    transform-style: preserve-3d;
 }
 
 .card:hover,
 .panel:hover,
 .feature-card:hover,
 .listing-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--border-light);
+    transform: translateY(-5px) rotateX(3deg) rotateY(3deg);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
 
 .card-header {
@@ -227,31 +226,31 @@ a:hover {
    ============================================ */
 
 .sidebar {
-    background-color: var(--bg-sidebar);
-    color: var(--text-white);
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #ffffff;
     padding: 25px;
-    border-radius: var(--radius-xl);
+    border-radius: 20px;
     position: sticky;
     top: 20px;
-    box-shadow: var(--shadow);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
 
 .sidebar h3,
 .sidebar h4 {
-    color: var(--text-white);
+    color: #ffffff;
     margin-bottom: 15px;
 }
 
 .sidebar p {
-    color: rgba(255, 255, 255, 0.8);
+    color: #cbd5e1;
 }
 
 .sidebar a {
-    color: var(--accent-light);
+    color: #3b82f6;
 }
 
 .sidebar a:hover {
-    color: var(--text-white);
+    color: #ffffff;
 }
 
 .sidebar-item {
@@ -287,11 +286,11 @@ input,
 textarea,
 select {
     width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    background-color: var(--bg-card);
-    color: var(--text-primary);
+    padding: 10px;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    background: #1e293b;
+    color: #fff;
     font-family: inherit;
     font-size: 0.95rem;
     transition: var(--transition);
@@ -302,9 +301,8 @@ select {
 input:focus,
 textarea:focus,
 select:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    background-color: var(--bg-card);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 textarea {
@@ -314,7 +312,7 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-    color: var(--text-muted);
+    color: #94a3b8;
 }
 
 /* ============================================
@@ -328,18 +326,18 @@ button,
 [type="reset"] {
     display: inline-block;
     width: auto;
-    padding: 12px 24px;
-    background-color: var(--accent);
-    color: var(--text-white);
+    padding: 10px 20px;
+    background: #3b82f6;
+    color: #fff;
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: 12px;
     font-family: inherit;
     font-size: 0.95rem;
     font-weight: 600;
     text-align: center;
     text-decoration: none;
     cursor: pointer;
-    transition: var(--transition);
+    transition: 0.3s;
     white-space: nowrap;
     user-select: none;
 }
@@ -349,8 +347,8 @@ button:hover,
 [type="button"]:hover,
 [type="submit"]:hover,
 [type="reset"]:hover {
-    background-color: var(--accent-hover);
-    transform: translateY(-2px);
+    background: #2563eb;
+    transform: scale(1.05);
     box-shadow: var(--shadow-md);
 }
 
@@ -439,9 +437,11 @@ button:disabled,
    ============================================ */
 
 .navbar {
-    background-color: var(--bg-card);
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid #334155;
+    border-radius: 16px;
     padding: 15px 20px;
-    border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
     display: flex;
     justify-content: space-between;
@@ -452,7 +452,7 @@ button:disabled,
 .navbar-brand {
     font-size: 1.2rem;
     font-weight: 700;
-    color: var(--text-primary);
+    color: #ffffff;
     text-decoration: none;
     display: flex;
     align-items: center;
@@ -466,15 +466,15 @@ button:disabled,
 }
 
 .navbar-menu a {
-    color: var(--text-secondary);
+    color: #cbd5e1;
     text-decoration: none;
     font-weight: 500;
-    transition: var(--transition);
+    transition: 0.3s;
 }
 
 .navbar-menu a:hover,
 .navbar-menu a.active {
-    color: var(--accent);
+    color: #3b82f6;
 }
 
 .navbar-actions {
