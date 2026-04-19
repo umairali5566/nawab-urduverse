@@ -45,6 +45,9 @@ class Novel(models.Model):
         self.total_chapters = self.chapters.filter(is_published=True).count()
         self.save(update_fields=['total_chapters'])
 
+    def get_absolute_url(self):
+        return reverse('novel_detail', kwargs={'slug': self.slug})
+
 
 class Chapter(models.Model):
     """Chapter model for novels"""

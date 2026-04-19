@@ -14,9 +14,6 @@ class HomePageRenderingTests(TestCase):
             author=author,
             content="<p>لب پہ آتی ہے دعا بن کے تمنا میری</p><p>زندگی شمع کی صورت ہو خدایا میری</p>",
             is_published=True,
-            views_count=120,
-            likes_count=45,
-            shares_count=12,
         )
 
         response = self.client.get(reverse("home"))

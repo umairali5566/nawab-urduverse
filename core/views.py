@@ -18,6 +18,7 @@ from django.utils.text import slugify
 from accounts.models import User
 from novels.models import Novel, Chapter
 from stories.models import Story
+from .utils import get_author_published_content
 from poetry.models import Poetry
 from quotes.models import Quote
 from blog.models import BlogPost
@@ -473,26 +474,21 @@ class AuthorDetailView(DetailView):
         author = self.get_object()
 
         # Get all content by this author
-        novels = Novel.objects.filter(author=author, is_published=True).order_by('-published_at', '-created_at')
-        stories = Story.objects.filter(author=author, is_published=True).order_by('-published_at', '-created_at')
-        poetry = Poetry.objects.filter(author=author, is_published=True).order_by('-published_at', '-created_at')
-        quotes = Quote.objects.filter(author=author, is_published=True).order_by('-created_at')
-        blogs = BlogPost.objects.filter(author=author, is_published=True).order_by('-published_at', '-created_at')
-        videos = Video.objects.filter(author=author, is_published=True).order_by('-published_at', '-created_at')
+        author_content = get_author_published_content(author)
 
         # Combine all content for a unified list
         all_content = []
-        for item in novels:
+        for item in author_content['novels']:
             all_content.append({'type': 'novel', 'item': item, 'date': item.published_at or item.created_at})
-        for item in stories:
+        for item in author_content['stories']:
             all_content.append({'type': 'story', 'item': item, 'date': item.created_at})
-        for item in poetry:
+        for item in author_content['poetry']:
             all_content.append({'type': 'poetry', 'item': item, 'date': item.published_at or item.created_at})
-        for item in quotes:
+        for item in author_content['quotes']:
             all_content.append({'type': 'quote', 'item': item, 'date': item.created_at})
-        for item in blogs:
+        for item in author_content['blogs']:
             all_content.append({'type': 'blog', 'item': item, 'date': item.published_at or item.created_at})
-        for item in videos:
+        for item in author_content['videos']:
             all_content.append({'type': 'video', 'item': item, 'date': item.published_at or item.created_at})
 
         # Sort by date descending

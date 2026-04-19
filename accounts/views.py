@@ -368,21 +368,15 @@ def public_profile(request, username):
     """Public profile view."""
     user = get_object_or_404(User, username=username, is_active=True)
 
-    from novels.models import Novel
-    from poetry.models import Poetry
-    from stories.models import Story
+    from core.utils import get_author_published_content_by_name
+
+    author_content = get_author_published_content_by_name(user.display_name) if user.is_author else {}
 
     context = {
         "profile_user": user,
-        "novels": Novel.objects.filter(author__name=user.display_name, is_published=True)[:6]
-        if user.is_author
-        else [],
-        "stories": Story.objects.filter(author__name=user.display_name, is_published=True)[:6]
-        if user.is_author
-        else [],
-        "poetry": Poetry.objects.filter(author__name=user.display_name, is_published=True)[:6]
-        if user.is_author
-        else [],
+        "novels": author_content.get('novels', []),
+        "stories": author_content.get('stories', []),
+        "poetry": author_content.get('poetry', []),
         "liked_items": _resolve_user_likes(user, limit=6),
         "likes_count": user.get_likes_count(),
         **build_seo_context(

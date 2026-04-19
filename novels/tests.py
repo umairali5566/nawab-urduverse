@@ -18,9 +18,8 @@ class NovelChapterFlowTests(TestCase):
         self.novel = Novel.objects.create(
             title="Test Novel",
             slug="test-novel",
+            content="<p>Novel description</p>",
             author=self.author,
-            description="<p>Novel description</p>",
-            cover_image="novels/covers/test.jpg",
             category=self.category,
             is_published=True,
         )
