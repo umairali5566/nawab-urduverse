@@ -7587,10 +7587,10 @@ body.dashboard-shell{
         box-shadow: none;
         border: none;
         background: white;
-        color: black;
+        color: #333;
     }
     
     .poetry-text {
-        color: black;
+        color: #333;
     }
 }
