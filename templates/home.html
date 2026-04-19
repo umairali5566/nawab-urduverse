@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Hero Section (optional, if needed) -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-charcoal mb-4">Welcome to {{ SITE_NAME }}</h1>
+        <p class="text-xl text-gray-600">Discover the finest Urdu literature</p>
+    </div>
+
+    <!-- Main Grid Layout -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Left Sidebar: Trending Poetry & Quote of the Day -->
+        <div class="md:col-span-1">
+            <!-- Trending Poetry -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-semibold text-charcoal mb-6">Trending Poetry</h2>
+                <div class="space-y-4">
+                    {% for poem in trending_poetry %}
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow">
+                        <h3 class="text-lg font-medium text-charcoal mb-2">{{ poem.title }}</h3>
+                        <p class="text-gray-600 text-sm mb-2">By {{ poem.author }}</p>
+                        <p class="text-charcoal text-base md:text-sm">{{ poem.excerpt|truncatewords:20 }}</p>
+                        <a href="{% url 'poetry_detail' poem.id %}" class="text-gold hover:text-deep-teal transition mt-2 inline-block">Read More</a>
+                    </div>
+                    {% empty %}
+                    <p class="text-gray-500">No trending poetry available.</p>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Quote of the Day -->
+            <section>
+                <h2 class="text-2xl font-semibold text-charcoal mb-6">Quote of the Day</h2>
+                {% if quote_of_day %}
+                <div class="bg-gold/10 p-6 rounded-lg border border-gold/20">
+                    <blockquote class="text-charcoal text-lg md:text-base italic mb-4">"{{ quote_of_day.text }}"</blockquote>
+                    <cite class="text-gray-600">— {{ quote_of_day.author }}</cite>
+                </div>
+                {% else %}
+                <p class="text-gray-500">No quote available today.</p>
+                {% endif %}
+            </section>
+        </div>
+
+        <!-- Center: Main Feed - Latest Stories & Blogs -->
+        <div class="md:col-span-1">
+            <section>
+                <h2 class="text-2xl font-semibold text-charcoal mb-6">Latest Stories & Blogs</h2>
+                <div class="space-y-6">
+                    {% for item in latest_stories_and_blogs %}
+                    <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                        <img src="{{ item.image.url|default:'placeholder.jpg' }}" alt="{{ item.title }}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h3 class="text-xl font-semibold text-charcoal mb-2">{{ item.title }}</h3>
+                            <p class="text-gray-600 text-sm mb-2">By {{ item.author }} • {{ item.created_at|date:"M d, Y" }}</p>
+                            <p class="text-charcoal text-base md:text-sm mb-4">{{ item.excerpt|truncatewords:30 }}</p>
+                            <a href="{% url item.get_absolute_url %}" class="text-gold hover:text-deep-teal transition">Read Full Article</a>
+                        </div>
+                    </article>
+                    {% empty %}
+                    <p class="text-gray-500">No stories or blogs available.</p>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+
+        <!-- Right Sidebar: Serialized Novels & Video Gallery -->
+        <div class="md:col-span-1">
+            <!-- Serialized Novels -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-semibold text-charcoal mb-6">Serialized Novels</h2>
+                <div class="space-y-4">
+                    {% for novel in serialized_novels %}
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-gray-200 hover:scale-105 transition-transform cursor-pointer">
+                        <img src="{{ novel.cover.url|default:'placeholder.jpg' }}" alt="{{ novel.title }}" class="w-full h-32 object-cover rounded mb-3">
+                        <h3 class="text-lg font-medium text-charcoal mb-2">{{ novel.title }}</h3>
+                        <p class="text-gray-600 text-sm mb-2">By {{ novel.author }}</p>
+                        <p class="text-charcoal text-sm">{{ novel.description|truncatewords:15 }}</p>
+                        <a href="{% url 'novel_detail' novel.id %}" class="text-gold hover:text-deep-teal transition mt-2 inline-block">Continue Reading</a>
+                    </div>
+                    {% empty %}
+                    <p class="text-gray-500">No serialized novels available.</p>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Video Gallery -->
+            <section>
+                <h2 class="text-2xl font-semibold text-charcoal mb-6">Video Gallery</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    {% for video in video_gallery %}
+                    <div class="relative bg-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                        <img src="{{ video.thumbnail.url|default:'placeholder.jpg' }}" alt="{{ video.title }}" class="w-full h-24 object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <a href="{% url 'video_detail' video.id %}" class="absolute inset-0"></a>
+                    </div>
+                    {% empty %}
+                    <p class="text-gray-500 col-span-2">No videos available.</p>
+                    {% endfor %}
+                </div>
+                <a href="{% url 'video_list' %}" class="text-gold hover:text-deep-teal transition mt-4 inline-block">View All Videos</a>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}
