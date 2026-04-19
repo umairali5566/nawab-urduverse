@@ -22,12 +22,12 @@ class BlogListView(ListView):
     paginate_by = 12
     
     def get_queryset(self):
-        queryset = BlogPost.objects.filter(is_published=True).select_related('author').prefetch_related('categories')
+        queryset = BlogPost.objects.filter(is_published=True).select_related('author')
         
         # Filter by category
         category = self.request.GET.get('category')
         if category:
-            queryset = queryset.filter(categories__slug=category)
+            queryset = queryset.filter(category__slug=category)
         
         # Search
         search = self.request.GET.get('search')
@@ -51,9 +51,19 @@ class BlogListView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.filter(category_type='blog', is_active=True)
-        context['featured_posts'] = BlogPost.objects.filter(is_featured=True, is_published=True).select_related('author')[:4]
-        context['popular_posts'] = BlogPost.objects.filter(is_published=True).select_related('author').order_by('-views_count')[:6]
+        try:
+            context['categories'] = Category.objects.filter(category_type='blog', is_active=True)
+            context['featured_posts'] = BlogPost.objects.filter(is_featured=True, is_published=True).select_related('author')[:4]
+            context['popular_posts'] = BlogPost.objects.filter(is_published=True).select_related('author').order_by('-views_count')[:6]
+        except Exception as e:
+            # Log error in production but don't crash
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error loading blog context data: {e}")
+            context['categories'] = Category.objects.none()
+            context['featured_posts'] = []
+            context['popular_posts'] = []
+        
         context.update(
             build_seo_context(
                 self.request,
@@ -74,63 +84,74 @@ class BlogDetailView(DetailView):
     slug_url_kwarg = 'slug'
 
     def get_queryset(self):
-        return BlogPost.objects.filter(is_published=True).select_related('author').prefetch_related('categories')
+        return BlogPost.objects.filter(is_published=True).select_related('author')
     
     def get_context_data(self, **kwargs):
+        import logging
         context = super().get_context_data(**kwargs)
-        post = self.get_object()
+        logger = logging.getLogger(__name__)
         
-        track_content_view(self.request, post, 'blog', post.title)
-        
-        # Check if bookmarked
-        if self.request.user.is_authenticated:
-            context['is_bookmarked'] = Bookmark.objects.filter(
-                user=self.request.user,
+        try:
+            post = self.get_object()
+            track_content_view(self.request, post, 'blog', post.title)
+            
+            # Check if bookmarked
+            if self.request.user.is_authenticated:
+                context['is_bookmarked'] = Bookmark.objects.filter(
+                    user=self.request.user,
+                    content_type='blog',
+                    object_id=post.id
+                ).exists()
+                context['is_liked'] = ContentLike.objects.filter(
+                    user=self.request.user,
+                    content_type='blog',
+                    object_id=post.id
+                ).exists()
+            else:
+                context['is_bookmarked'] = False
+                context['is_liked'] = False
+            
+            # Get comments
+            context['comments'] = Comment.objects.filter(
                 content_type='blog',
-                object_id=post.id
-            ).exists()
-            context['is_liked'] = ContentLike.objects.filter(
-                user=self.request.user,
-                content_type='blog',
-                object_id=post.id
-            ).exists()
-        else:
+                object_id=post.id,
+                is_approved=True,
+                parent=None
+            )
+            
+            # Related posts - same categories, exclude current, limit 4
+            context['related_posts'] = BlogPost.objects.filter(
+                category=post.category,
+                is_published=True
+            ).exclude(id=post.id).distinct()[:4] if post.category else []
+            
+            context['suggested_content'] = get_cross_content_suggestions(
+                author=post.author,
+                categories=post.categories,
+                exclude_type='blog',
+                exclude_id=post.id,
+                limit=4,
+                seed_text=f"{post.title} {post.excerpt or post.content}",
+            ) or []
+
+            context.update(
+                build_seo_context(
+                    self.request,
+                    title=post.meta_title or f"{post.title} | {settings.SITE_NAME}",
+                    description=post.meta_description or (post.excerpt[:160] if post.excerpt else settings.SITE_DESCRIPTION),
+                    keywords=post.meta_keywords or settings.SITE_KEYWORDS,
+                    og_type='article',
+                    og_image=post.featured_image.url if post.featured_image else None,
+                    canonical_url=post.canonical_url or None,
+                )
+            )
+        except Exception as e:
+            logger.error(f"Error loading blog detail context: {e}", exc_info=True)
+            context['comments'] = []
+            context['related_posts'] = []
+            context['suggested_content'] = []
             context['is_bookmarked'] = False
             context['is_liked'] = False
-        
-        # Get comments
-        context['comments'] = Comment.objects.filter(
-            content_type='blog',
-            object_id=post.id,
-            is_approved=True,
-            parent=None
-        )
-        
-        # Related posts - same categories, exclude current, limit 4
-        context['related_posts'] = BlogPost.objects.filter(
-            categories__in=post.categories.all(),
-            is_published=True
-        ).exclude(id=post.id).distinct()[:4]
-        context['suggested_content'] = get_cross_content_suggestions(
-            author=post.author,
-            categories=post.categories.all(),
-            exclude_type='blog',
-            exclude_id=post.id,
-            limit=4,
-            seed_text=f"{post.title} {post.excerpt or post.content}",
-        )
-
-        context.update(
-            build_seo_context(
-                self.request,
-                title=post.meta_title or f"{post.title} | {settings.SITE_NAME}",
-                description=post.meta_description or (post.excerpt[:160] if post.excerpt else settings.SITE_DESCRIPTION),
-                keywords=post.meta_keywords or settings.SITE_KEYWORDS,
-                og_type='article',
-                og_image=post.featured_image.url if post.featured_image else None,
-                canonical_url=post.canonical_url or None,
-            )
-        )
         
         return context
 
@@ -138,9 +159,16 @@ class BlogDetailView(DetailView):
 @login_required
 def like_post(request, slug):
     """Like blog post"""
-    post = get_object_or_404(BlogPost, slug=slug, is_published=True)
+    import logging
+    logger = logging.getLogger(__name__)
     
-    if request.method in {'POST', 'GET'}:
-        return JsonResponse(toggle_content_like(request.user, 'blog', post.id))
+    try:
+        post = get_object_or_404(BlogPost, slug=slug, is_published=True)
+        
+        if request.method in {'POST', 'GET'}:
+            return JsonResponse(toggle_content_like(request.user, 'blog', post.id))
+    except Exception as e:
+        logger.error(f"Error liking blog post: {e}")
+        return JsonResponse({'success': False, 'message': 'خرابی واقع ہوئی'})
     
     return JsonResponse({'success': False, 'message': 'غلط درخواست'})

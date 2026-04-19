@@ -17,12 +17,20 @@ class BlogPost(models.Model):
     title = models.CharField(max_length=300, verbose_name='عنوان')
     slug = models.SlugField(unique=True, verbose_name='سلگ')
     content = models.TextField(verbose_name='مواد')
+    excerpt = models.CharField(max_length=500, blank=True, verbose_name='خلاصہ')
     featured_image = models.ImageField(upload_to='blog/featured/', blank=True, null=True, verbose_name='نمایاں تصویر')
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='blog_posts', verbose_name='مصنف')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='زمرہ')
     is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
+    is_featured = models.BooleanField(default=False, verbose_name='نمایاں')
     published_at = models.DateTimeField(null=True, blank=True, verbose_name='شائع ہونے کی تاریخ')
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    views_count = models.PositiveIntegerField(default=0, verbose_name='مشاہدات')
+    likes_count = models.PositiveIntegerField(default=0, verbose_name='پسندیدگی')
+    meta_title = models.CharField(max_length=200, blank=True, verbose_name='میٹا عنوان')
+    meta_description = models.TextField(blank=True, verbose_name='میٹا تفصیل')
+    meta_keywords = models.CharField(max_length=500, blank=True, verbose_name='میٹا کیورڈز')
 
     class Meta:
         verbose_name = 'بلاگ پوسٹ'
@@ -41,6 +49,16 @@ class BlogPost(models.Model):
 
     def get_absolute_url(self):
         return reverse("blog_detail", kwargs={"slug": self.slug})
+    
+    @property
+    def canonical_url(self):
+        """Return canonical URL for SEO"""
+        return self.get_absolute_url()
+    
+    @property
+    def categories(self):
+        """Return category as a list for template compatibility"""
+        return [self.category] if self.category else []
 
 
 class BlogCategory(models.Model):
