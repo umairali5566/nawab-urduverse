@@ -11,43 +11,49 @@
     --heading-font: 'Poppins', 'Inter', sans-serif;
     --body-font: 'Inter', 'Poppins', sans-serif;
 
-    /* Modern Dark Theme - Premium */
-    --primary-dark: #0a0f1a;
-    --secondary-dark: #111827;
-    --accent-dark: #1e293b;
-    --surface-dark: rgba(15, 23, 42, 0.8);
+    /* ===== PREMIUM LIGHT + DARK MIXED THEME ===== */
 
-    /* Gold Accent Colors */
-    --gold-primary: #D4AF37;
-    --gold-light: #F5D67B;
-    --gold-dark: #B8960C;
-    --gold-gradient: linear-gradient(135deg, #D4AF37, #F5D67B);
+    /* Background System */
+    --bg-main: #f8f9fb;           /* Main body background */
+    --bg-section-light: #ffffff; /* Light section background */
+    --bg-section-dark: #f1f3f4;  /* Dark section background */
+    --bg-card: #ffffff;          /* Card backgrounds */
 
-    /* Glass Effects */
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-bg-strong: rgba(255, 255, 255, 0.08);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-border-gold: rgba(212, 175, 55, 0.2);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    --glass-shadow-gold: 0 8px 32px rgba(212, 175, 55, 0.1);
+    /* Primary Colors - Deep Navy */
+    --primary-navy: #1e293b;
+    --primary-navy-light: #334155;
+    --primary-navy-dark: #0f172a;
 
-    /* Text Colors - High Contrast */
-    --text-primary: #F8FAFC;
-    --text-secondary: #CBD5E1;
-    --text-muted: #94A3B8;
-    --text-on-gold: #0F172A;
+    /* Secondary/Accent Colors - Soft Gold */
+    --accent-gold: #d4af37;
+    --accent-gold-light: #f5d67b;
+    --accent-gold-dark: #b8960c;
 
-    /* Legacy support */
-    --primary-color: #7C3AED;
-    --secondary-color: #D4AF37;
-    --bg-color: #0a0f1a;
-    --card-bg: rgba(15, 23, 42, 0.8);
-    --border-color: rgba(255, 255, 255, 0.1);
+    /* Text Colors */
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --text-on-dark: #ffffff;
+    --text-on-dark-secondary: #cbd5e1;
+
+    /* Border & Shadows */
+    --border-light: #e2e8f0;
+    --border-medium: #cbd5e1;
+    --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --shadow-large: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+
+    /* Legacy support - Updated to new colors */
+    --primary-color: #1e293b;     /* Deep navy instead of purple */
+    --secondary-color: #d4af37;   /* Soft gold */
+    --bg-color: #f8f9fb;          /* Light background */
+    --card-bg: #ffffff;           /* White cards */
+    --border-color: #e2e8f0;      /* Light borders */
 }
 
 body {
     font-family: var(--body-font);
-    background: linear-gradient(135deg, #0a0f1a 0%, #111827 50%, #0a0f1a 100%);
+    background: var(--bg-main);
     color: var(--text-primary);
     line-height: 1.7;
     margin: 0;
@@ -179,7 +185,7 @@ p {
     }
 }
 
-/* Navbar - Modern Premium Design */
+/* Navbar - Clean Modern Design */
 .navbar-sticky {
     position: sticky;
     top: 0;
@@ -191,12 +197,12 @@ p {
     justify-content: space-between;
     align-items: center;
     padding: 1rem 0;
-    background: rgba(15, 23, 42, 0.95);
-    backdrop-filter: blur(20px);
-    color: #F8FAFC;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    border-radius: 0 0 24px 24px;
-    border: 1px solid rgba(212, 175, 55, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-soft);
+    border-radius: 0 0 1.5rem 1.5rem;
+    border: 1px solid var(--border-light);
     border-top: none;
     transition: all 0.3s ease;
 }
@@ -241,13 +247,13 @@ p {
     display: block;
     font-size: 1.25rem;
     font-weight: 700;
-    color: #F8FAFC;
+    color: var(--text-primary);
     line-height: 1.2;
 }
 
 .navbar-brand-copy span {
     font-size: 0.875rem;
-    color: rgba(248, 250, 252, 0.8);
+    color: var(--text-secondary);
 }
 
 /* Desktop Menu */
@@ -266,7 +272,7 @@ p {
 }
 
 .navbar-menu a {
-    color: rgba(248, 250, 252, 0.9);
+    color: var(--text-secondary);
     text-decoration: none;
     padding: 0.75rem 1rem;
     border-radius: 12px;
@@ -276,8 +282,8 @@ p {
 }
 
 .navbar-menu a:hover {
-    color: #F5D67B;
-    background: rgba(212, 175, 55, 0.1);
+    color: var(--primary-navy);
+    background: rgba(30, 41, 59, 0.05);
     transform: translateY(-2px);
 }
 
@@ -288,7 +294,7 @@ p {
     left: 50%;
     width: 0;
     height: 2px;
-    background: linear-gradient(90deg, #D4AF37, #F5D67B);
+    background: var(--primary-navy);
     border-radius: 1px;
     transition: all 0.3s ease;
     transform: translateX(-50%);
@@ -308,41 +314,44 @@ p {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: rgba(248, 250, 252, 0.9);
+    color: var(--text-secondary);
     text-decoration: none;
     padding: 0.75rem 1.25rem;
     border-radius: 12px;
     transition: all 0.3s ease;
     font-weight: 500;
     border: 1px solid transparent;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.8);
 }
 
 .nav-pill:hover {
     transform: translateY(-2px);
-    color: #F8FAFC;
+    color: var(--text-primary);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-soft);
 }
 
 .nav-pill-primary {
-    background: linear-gradient(135deg, #D4AF37, #F5D67B);
-    color: #0F172A !important;
-    border-color: rgba(212, 175, 55, 0.3);
-    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+    background: var(--primary-navy);
+    color: white !important;
+    border-color: var(--primary-navy);
+    box-shadow: var(--shadow-soft);
 }
 
 .nav-pill-primary:hover {
-    background: linear-gradient(135deg, #F5D67B, #D4AF37);
-    box-shadow: 0 6px 16px rgba(212, 175, 55, 0.3);
+    background: var(--primary-navy-dark);
+    box-shadow: var(--shadow-medium);
 }
 
 .nav-pill-outline {
-    border-color: rgba(212, 175, 55, 0.3);
+    border-color: var(--primary-navy);
     background: transparent;
+    color: var(--primary-navy);
 }
 
 .nav-pill-outline:hover {
-    background: rgba(212, 175, 55, 0.1);
-    border-color: rgba(212, 175, 55, 0.5);
+    background: var(--primary-navy);
+    color: white;
 }
 
 /* Mobile Menu Toggle */
@@ -486,26 +495,15 @@ p {
     padding: 0.875rem 1.5rem;
 }
 
-/* Footer - Modern Glassmorphism */
+/* Footer - Clean Modern Design */
 footer.site-footer {
-    background: linear-gradient(135deg, #0a0f1a 0%, #111827 100%);
-    color: var(--text-primary);
+    background: var(--bg-section-dark);
+    color: var(--text-on-dark);
     padding: 4rem 0 2rem;
     margin-top: 4rem;
-    border-radius: 32px 32px 0 0;
-    border-top: 1px solid var(--glass-border-gold);
+    border-radius: 2rem 2rem 0 0;
+    border-top: 1px solid var(--border-light);
     position: relative;
-    overflow: hidden;
-}
-
-footer.site-footer::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-        radial-gradient(circle at 30% 20%, rgba(212, 175, 55, 0.08), transparent 40%),
-        radial-gradient(circle at 70% 80%, rgba(124, 58, 237, 0.06), transparent 45%);
-    pointer-events: none;
 }
 
 .footer-content {
@@ -594,7 +592,7 @@ footer.site-footer::before {
     margin-bottom: 1.5rem;
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--text-on-dark);
     font-family: var(--heading-font);
 }
 
@@ -609,14 +607,14 @@ footer.site-footer::before {
 }
 
 .footer-column a {
-    color: var(--text-secondary);
+    color: var(--text-on-dark-secondary);
     text-decoration: none;
     transition: all 0.3s ease;
     font-weight: 400;
 }
 
 .footer-column a:hover {
-    color: var(--gold-primary);
+    color: var(--accent-gold);
     transform: translateX(4px);
 }
 
@@ -712,44 +710,29 @@ main {
     padding: 2rem 0;
 }
 
-/* Buttons - Modern Glassmorphism */
+/* Buttons - Premium Clean Design */
 .btn {
-    background: var(--gold-gradient);
-    color: var(--text-on-gold);
-    border: none;
-    padding: 0.875rem 1.75rem;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
     font-weight: 600;
     font-size: 1rem;
     font-family: var(--heading-font);
-    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.2);
+    box-shadow: var(--shadow-soft);
+    border: 2px solid transparent;
     position: relative;
     overflow: hidden;
 }
 
-.btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent 50%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
 .btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
-}
-
-.btn:hover::before {
-    opacity: 1;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
 }
 
 .btn:active {
@@ -757,48 +740,50 @@ main {
 }
 
 .btn-primary {
-    background: var(--gold-gradient);
-    color: var(--text-on-gold);
-    border: 1px solid rgba(212, 175, 55, 0.3);
+    background: var(--primary-navy);
+    color: white;
+    border-color: var(--primary-navy);
+}
+
+.btn-primary:hover {
+    background: var(--primary-navy-dark);
+    border-color: var(--primary-navy-dark);
+    box-shadow: var(--shadow-medium);
 }
 
 .btn-outline {
-    background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    color: var(--gold-primary);
-    border: 1px solid var(--glass-border-gold);
-    box-shadow: var(--glass-shadow);
+    background: transparent;
+    color: var(--primary-navy);
+    border-color: var(--primary-navy);
 }
 
 .btn-outline:hover {
-    background: rgba(212, 175, 55, 0.1);
-    color: var(--gold-light);
-    border-color: rgba(212, 175, 55, 0.4);
-    box-shadow: var(--glass-shadow-gold);
+    background: var(--primary-navy);
+    color: white;
 }
 
-/* Hero Section - Modern Glassmorphism */
+.btn-accent {
+    background: var(--accent-gold);
+    color: var(--text-primary);
+    border-color: var(--accent-gold);
+}
+
+.btn-accent:hover {
+    background: var(--accent-gold-dark);
+    border-color: var(--accent-gold-dark);
+}
+
+/* Hero Section - Clean Modern Design */
 .hero-section {
     min-height: 80vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #0a0f1a 0%, #111827 50%, #0a0f1a 100%);
+    background: var(--bg-section-light);
     padding: 4rem 0;
-    border-radius: 0 0 32px 32px;
+    border-radius: 0 0 2rem 2rem;
     position: relative;
     overflow: hidden;
-}
-
-.hero-section::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-        radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.15), transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(124, 58, 237, 0.12), transparent 45%),
-        radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.08), transparent 50%);
-    animation: float 20s ease-in-out infinite;
 }
 
 .hero-content {
@@ -812,17 +797,16 @@ main {
 .hero-title {
     font-size: clamp(3rem, 8vw, 5rem);
     font-weight: 700;
-    color: #F8FAFC;
+    color: var(--text-primary);
     margin-bottom: 1.5rem;
     text-align: center;
     font-family: var(--urdu-font);
     line-height: 1.1;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .hero-subtitle {
     font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-    color: rgba(248, 250, 252, 0.9);
+    color: var(--text-secondary);
     margin-bottom: 2.5rem;
     text-align: center;
     font-family: var(--heading-font);
@@ -843,17 +827,9 @@ main {
     min-height: 500px;
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, #0a0f1a 0%, #111827 100%);
-    border-radius: 0 0 32px 32px;
+    background: var(--bg-section-light);
+    border-radius: 0 0 2rem 2rem;
     overflow: hidden;
-}
-
-.poetry-hero::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(212,175,55,0.03)"/><circle cx="75" cy="75" r="1" fill="rgba(212,175,55,0.03)"/><circle cx="50" cy="10" r="0.5" fill="rgba(212,175,55,0.02)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-    opacity: 0.5;
 }
 
 /* Sections */
@@ -875,9 +851,9 @@ main {
     margin-bottom: 3rem;
 }
 
-/* Categories - Glassmorphism */
+/* Categories - Clean White Cards */
 .categories-section {
-    background: linear-gradient(135deg, #0a0f1a 0%, #111827 100%);
+    background: var(--bg-section-light);
     padding: 5rem 0;
 }
 
@@ -890,42 +866,27 @@ main {
 }
 
 .category-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 1.5rem;
     padding: 2.5rem 2rem;
     text-align: center;
-    transition: all 0.4s ease;
-    box-shadow: var(--glass-shadow);
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-soft);
     position: relative;
     overflow: hidden;
 }
 
-.category-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), transparent 70%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-}
-
 .category-card:hover {
-    transform: translateY(-12px) scale(1.02);
-    box-shadow: var(--glass-shadow-gold);
-    border-color: var(--glass-border-gold);
-}
-
-.category-card:hover::before {
-    opacity: 1;
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-medium);
+    border-color: var(--border-medium);
 }
 
 .category-icon {
     font-size: 3.5rem;
     margin-bottom: 1.5rem;
-    color: var(--gold-primary);
+    color: var(--accent-gold);
     transition: transform 0.3s ease;
 }
 
@@ -949,7 +910,7 @@ main {
 }
 
 .category-link {
-    color: var(--gold-primary);
+    color: var(--accent-gold);
     text-decoration: none;
     font-weight: 600;
     font-size: 1.1rem;
@@ -964,12 +925,12 @@ main {
     left: 0;
     width: 0;
     height: 2px;
-    background: var(--gold-gradient);
+    background: var(--accent-gold);
     transition: width 0.3s ease;
 }
 
 .category-link:hover {
-    color: var(--gold-light);
+    color: var(--accent-gold-dark);
     transform: translateX(4px);
 }
 
@@ -977,9 +938,9 @@ main {
     width: 100%;
 }
 
-/* Latest Poetry - Glassmorphism */
+/* Latest Poetry - Clean Design */
 .latest-poetry-section {
-    background: linear-gradient(135deg, #111827 0%, #0a0f1a 100%);
+    background: var(--bg-section-dark);
     padding: 5rem 0;
 }
 
@@ -992,14 +953,13 @@ main {
 }
 
 .poetry-card {
-    background: var(--glass-bg-strong);
-    backdrop-filter: blur(24px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 1.5rem;
     padding: 2.5rem;
     text-align: center;
-    transition: all 0.4s ease;
-    box-shadow: var(--glass-shadow);
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-soft);
     position: relative;
     overflow: hidden;
 }
@@ -1011,14 +971,14 @@ main {
     left: 0;
     right: 0;
     height: 4px;
-    background: var(--gold-gradient);
+    background: var(--accent-gold);
     opacity: 0.8;
 }
 
 .poetry-card:hover {
-    transform: translateY(-12px) scale(1.02);
-    box-shadow: var(--glass-shadow-gold);
-    border-color: var(--glass-border-gold);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-medium);
+    border-color: var(--border-medium);
 }
 
 .poetry-card-title {
@@ -1031,7 +991,7 @@ main {
 }
 
 .poetry-card-author {
-    color: var(--gold-primary);
+    color: var(--accent-gold);
     margin-bottom: 1.25rem;
     font-weight: 600;
     font-size: 1rem;

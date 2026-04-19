@@ -249,10 +249,10 @@
     font-size: 1.5rem;
 }
 
-/* Categories Section */
+/* Categories Section - Light Section (Default) */
 .categories-section {
     padding: var(--space-12) 0;
-    background: var(--bg-main);
+    background: var(--bg-section-light);
 }
 
 .categories-title {
@@ -351,8 +351,8 @@
 {% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section scroll-animate">
+<!-- Hero Section - Light Section -->
+<section class="hero-section section section-light scroll-animate">
     <div class="main-container">
         <div class="hero-content">
             <h1 class="hero-title">Discover the Beauty of Urdu Poetry</h1>
@@ -368,11 +368,11 @@
             </div>
 
             <div class="hero-buttons">
-                <a href="/poetry/" class="hero-btn-primary">
+                <a href="/poetry/" class="btn btn-primary">
                     <i class="bi bi-feather"></i>
                     Explore Poetry
                 </a>
-                <a href="/" class="hero-btn-outline">
+                <a href="/" class="btn btn-outline">
                     <i class="bi bi-book"></i>
                     Start Reading
                 </a>
@@ -381,16 +381,16 @@
     </div>
 </section>
 
-<!-- Featured Section -->
-<section class="featured-section scroll-animate">
+<!-- Featured Section - Dark Section -->
+<section class="featured-section section section-dark scroll-animate">
     <div class="main-container">
-        <div class="featured-card">
+        <div class="featured-card card">
             <h2 class="featured-title">Featured Poem</h2>
-            <p class="featured-text">
+            <p class="featured-text urdu-text">
                 "دل کی بات دل ہی کو سنانی چاہیے<br>
                 زبان سے نکل کر بھی رسوائی ہوتی ہے"
             </p>
-            <a href="/poetry/" class="featured-btn">
+            <a href="/poetry/" class="btn btn-accent">
                 <span>Read Now</span>
                 <i class="bi bi-arrow-right"></i>
             </a>
@@ -398,25 +398,25 @@
     </div>
 </section>
 
-<!-- Stats Section -->
-<section class="stats-section scroll-animate">
+<!-- Stats Section - Light Section -->
+<section class="stats-section section section-light scroll-animate">
     <div class="main-container">
         <div class="stats-grid">
-            <div class="stat-card">
+            <div class="stat-card card">
                 <div class="stat-icon">
                     <i class="bi bi-people"></i>
                 </div>
                 <div class="stat-number">50K+</div>
                 <div class="stat-label">Readers</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card card">
                 <div class="stat-icon">
                     <i class="bi bi-person-badge"></i>
                 </div>
                 <div class="stat-number">500+</div>
                 <div class="stat-label">Authors</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card card">
                 <div class="stat-icon">
                     <i class="bi bi-book"></i>
                 </div>
@@ -427,8 +427,8 @@
     </div>
 </section>
 
-<!-- Categories Section -->
-<section class="categories-section scroll-animate">
+<!-- Categories Section - Dark Section -->
+<section class="categories-section section section-dark scroll-animate">
     <div class="main-container">
         <h2 class="categories-title">Explore by Category</h2>
         <div class="categories-grid">
