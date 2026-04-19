@@ -404,100 +404,104 @@
 
 {% block content %}
 <div class="section-spacing dashboard-overview">
-    <div class="dashboard-overview__hero d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-        <div>
-            <span class="dashboard-overview__eyebrow">Control Center</span>
-            <h2 class="section-title mb-1">Dashboard Overview</h2>
-            <p class="text-muted mb-0">Quick snapshot of content across the platform.</p>
-            <div class="dashboard-overview__snapshot">
-                <span><strong>{{ total_users }}</strong> registered members</span>
-                <span><strong>{{ total_authors }}</strong> active authors</span>
-                <span><strong>{{ active_memberships }}</strong> premium memberships</span>
-            </div>
-        </div>
-        <a class="btn btn-outline-primary" href="{% url 'home' %}" target="_blank" rel="noopener">
-            <i class="bi bi-box-arrow-up-left me-1"></i> Open Website
-        </a>
-    </div>
-
-    <div class="dashboard-stats mb-4">
-        <div class="dashboard-stat dashboard-stat-featured">
-            <div class="label">Total Users</div>
-            <div class="value">{{ total_users }}</div>
-        </div>
-        <div class="dashboard-stat tone-authors">
-            <div class="label">Total Authors</div>
-            <div class="value">{{ total_authors }}</div>
-        </div>
-        <div class="dashboard-stat tone-novels">
-            <div class="label">Total Novels</div>
-            <div class="value">{{ total_novels }}</div>
-        </div>
-        <div class="dashboard-stat tone-stories">
-            <div class="label">Total Stories</div>
-            <div class="value">{{ total_stories }}</div>
-        </div>
-        <div class="dashboard-stat tone-poetry">
-            <div class="label">Total Poetry</div>
-            <div class="value">{{ total_poetry }}</div>
-        </div>
-        <div class="dashboard-stat tone-blog">
-            <div class="label">Total Blog Posts</div>
-            <div class="value">{{ total_blog }}</div>
-        </div>
-        <div class="dashboard-stat tone-quotes">
-            <div class="label">Total Quotes</div>
-            <div class="value">{{ total_quotes }}</div>
-        </div>
-        <div class="dashboard-stat tone-videos">
-            <div class="label">Total Videos</div>
-            <div class="value">{{ total_videos }}</div>
-        </div>
-        <div class="dashboard-stat tone-memberships">
-            <div class="label">Active Memberships</div>
-            <div class="value">{{ active_memberships }}</div>
-        </div>
-        <div class="dashboard-stat tone-plans">
-            <div class="label">Premium Plans</div>
-            <div class="value">{{ premium_plans_count }}</div>
-        </div>
-        <div class="dashboard-stat tone-messages">
-            <div class="label">Unread Messages</div>
-            <div class="value">{{ pending_messages }}</div>
-        </div>
-    </div>
-
-    <div class="row g-3">
-        <div class="col-lg-4">
-            <div class="card glass-card analytics-panel dashboard-panel panel-navy h-100">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">Daily Activity</h5>
-                    <div class="activity-bar-list">
-                        {% for point in daily_activity %}
-                        <div class="activity-bar-row">
-                            <div class="d-flex justify-content-between small mb-1">
-                                <span>{{ point.date|date:'D' }}</span>
-                                <span>{{ point.count }}</span>
-                            </div>
-                            <div class="activity-bar-track">
-                                <span class="activity-bar-fill" style="width: {% if point.count %}{{ point.count|add:1 }}0{% else %}6{% endif %}%"></span>
-                            </div>
-                        </div>
-                        {% endfor %}
+    <!-- DASHBOARD GRID LAYOUT: 70% Main, 30% Sidebar -->
+    <div class="dashboard-grid">
+        <!-- MAIN CONTENT (70%) -->
+        <div class="dashboard-main">
+            <div class="dashboard-overview__hero d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                <div>
+                    <span class="dashboard-overview__eyebrow">Control Center</span>
+                    <h2 class="section-title mb-1">Dashboard Overview</h2>
+                    <p class="text-muted mb-0">Quick snapshot of content across the platform.</p>
+                    <div class="dashboard-overview__snapshot">
+                        <span><strong>{{ total_users }}</strong> registered members</span>
+                        <span><strong>{{ total_authors }}</strong> active authors</span>
+                        <span><strong>{{ active_memberships }}</strong> premium memberships</span>
                     </div>
                 </div>
+                <a class="btn btn-outline-primary" href="{% url 'home' %}" target="_blank" rel="noopener">
+                    <i class="bi bi-box-arrow-up-left me-1"></i> Open Website
+                </a>
             </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card glass-card analytics-panel dashboard-panel panel-gold h-100">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">Latest Novels</h5>
-                    {% if latest_novels %}
-                    <ul class="list-group list-group-flush">
-                        {% for item in latest_novels %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <a href="{{ item.get_absolute_url }}" target="_blank" rel="noopener">{{ item.title|truncatechars:36 }}</a>
-                            <small class="text-muted">{{ item.created_at|date:'d M Y' }}</small>
+
+            <div class="dashboard-stats mb-4">
+                <div class="dashboard-stat dashboard-stat-featured">
+                    <div class="label">Total Users</div>
+                    <div class="value">{{ total_users }}</div>
+                </div>
+                <div class="dashboard-stat tone-authors">
+                    <div class="label">Total Authors</div>
+                    <div class="value">{{ total_authors }}</div>
+                </div>
+                <div class="dashboard-stat tone-novels">
+                    <div class="label">Total Novels</div>
+                    <div class="value">{{ total_novels }}</div>
+                </div>
+                <div class="dashboard-stat tone-stories">
+                    <div class="label">Total Stories</div>
+                    <div class="value">{{ total_stories }}</div>
+                </div>
+                <div class="dashboard-stat tone-poetry">
+                    <div class="label">Total Poetry</div>
+                    <div class="value">{{ total_poetry }}</div>
+                </div>
+                <div class="dashboard-stat tone-blog">
+                    <div class="label">Total Blog Posts</div>
+                    <div class="value">{{ total_blog }}</div>
+                </div>
+                <div class="dashboard-stat tone-quotes">
+                    <div class="label">Total Quotes</div>
+                    <div class="value">{{ total_quotes }}</div>
+                </div>
+                <div class="dashboard-stat tone-videos">
+                    <div class="label">Total Videos</div>
+                    <div class="value">{{ total_videos }}</div>
+                </div>
+                <div class="dashboard-stat tone-memberships">
+                    <div class="label">Active Memberships</div>
+                    <div class="value">{{ active_memberships }}</div>
+                </div>
+                <div class="dashboard-stat tone-plans">
+                    <div class="label">Premium Plans</div>
+                    <div class="value">{{ premium_plans_count }}</div>
+                </div>
+                <div class="dashboard-stat tone-messages">
+                    <div class="label">Unread Messages</div>
+                    <div class="value">{{ pending_messages }}</div>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-lg-4">
+                    <div class="card glass-card analytics-panel dashboard-panel panel-navy h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Daily Activity</h5>
+                            <div class="activity-bar-list">
+                                {% for point in daily_activity %}
+                                <div class="activity-bar-row">
+                                    <div class="d-flex justify-content-between small mb-1">
+                                        <span>{{ point.date|date:'D' }}</span>
+                                        <span>{{ point.count }}</span>
+                                    </div>
+                                    <div class="activity-bar-track">
+                                        <span class="activity-bar-fill" style="width: {% if point.count %}{{ point.count|add:1 }}0{% else %}6{% endif %}%"></span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card glass-card analytics-panel dashboard-panel panel-gold h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Latest Novels</h5>
+                            {% if latest_novels %}
+                            <ul class="list-group list-group-flush">
+                                {% for item in latest_novels %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <a href="{{ item.get_absolute_url }}" target="_blank" rel="noopener">{{ item.title|truncatechars:36 }}</a>
+                                    <small class="text-muted">{{ item.created_at|date:'d M Y' }}</small>
                         </li>
                         {% endfor %}
                     </ul>
@@ -548,8 +552,100 @@
             </div>
         </div>
     </div>
+        </div>
+        <!-- END MAIN CONTENT -->
 
-    <div class="row g-3 mt-1">
+        <!-- SIDEBAR (30%) -->
+        <aside class="dashboard-sidebar">
+            <!-- User Profile Card -->
+            <div class="card glass-card dashboard-panel">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Profile</h5>
+                    <div class="text-center mb-3">
+                        {% if request.user.avatar %}
+                            <img src="{{ request.user.avatar.url }}" alt="{{ request.user.get_full_name }}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem;">
+                        {% else %}
+                            <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #1d4ed8); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-weight: bold; font-size: 2rem;">
+                                {{ request.user.get_full_name|first|upper }}
+                            </div>
+                        {% endif %}
+                        <h6 class="mb-1">{{ request.user.get_full_name|default:request.user.username }}</h6>
+                        <p class="text-muted mb-2" style="font-size: 0.85rem;">{{ request.user.email }}</p>
+                        {% if request.user.is_superuser %}
+                            <span style="display: inline-block; background: rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1rem;">Admin</span>
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'dashboard_user_list' %}" class="btn btn-outline-primary" style="width: 100%; margin-bottom: 0.5rem;">
+                        <i class="bi bi-person"></i> Edit Profile
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn" style="width: 100%; background-color: #ef4444;">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </a>
+                </div>
+            </div>
+
+            <!-- Notifications Card -->
+            <div class="card glass-card dashboard-panel mt-3">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="bi bi-bell"></i> Notifications
+                    </h5>
+                    {% if pending_messages %}
+                        <div class="alert alert-info mb-2">
+                            <strong>{{ pending_messages }}</strong> new messages
+                        </div>
+                    {% endif %}
+                    
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item px-0">
+                            <strong>{{ total_users }}</strong> Total Users
+                        </div>
+                        <div class="list-group-item px-0">
+                            <strong>{{ total_authors }}</strong> Active Authors
+                        </div>
+                        <div class="list-group-item px-0">
+                            <strong>{{ notifications_count }}</strong> Notifications Sent
+                        </div>
+                        <div class="list-group-item px-0">
+                            <strong>{{ subscribers_count }}</strong> Subscribers
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links Card -->
+            <div class="card glass-card dashboard-panel mt-3">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Quick Links</h5>
+                    <div class="list-group list-group-flush">
+                        <a href="{% url 'dashboard_home' %}" class="list-group-item px-0">
+                            <i class="bi bi-speedometer2"></i> Overview
+                        </a>
+                        <a href="{% url 'dashboard_add_novel' %}" class="list-group-item px-0">
+                            <i class="bi bi-plus-circle"></i> Add Novel
+                        </a>
+                        <a href="{% url 'dashboard_add_story' %}" class="list-group-item px-0">
+                            <i class="bi bi-plus-circle"></i> Add Story
+                        </a>
+                        <a href="{% url 'dashboard_add_poetry' %}" class="list-group-item px-0">
+                            <i class="bi bi-plus-circle"></i> Add Poetry
+                        </a>
+                        <a href="{% url 'dashboard_add_blog' %}" class="list-group-item px-0">
+                            <i class="bi bi-plus-circle"></i> Add Blog
+                        </a>
+                        <a href="{% url 'home' %}" class="list-group-item px-0">
+                            <i class="bi bi-globe2"></i> Visit Site
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- END SIDEBAR -->
+    </div>
+    <!-- END DASHBOARD GRID -->
+
+    <!-- FULL-WIDTH SECTIONS BELOW -->
+    <div class="row g-3 mt-4">
         <div class="col-lg-4">
             <div class="card glass-card analytics-panel dashboard-panel panel-violet h-100">
                 <div class="card-body">
