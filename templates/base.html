@@ -51,7 +51,6 @@
             <div class="navbar-brand" style="display: flex; align-items: center; gap: 1rem; flex-shrink: 0;">
                 <a href="{% url 'home' %}" style="text-decoration: none; color: inherit;">
                     <div class="logo-text" style="font-family: 'Noto Nastaliq Urdu', serif; font-size: 1.5rem; color: #1A1A1A;">{{ SITE_NAME }}</div>
-                    <div class="logo-subtitle" style="font-size: 0.75rem; color: #888888;">اردو ادب</div>
                 </a>
             </div>
 
@@ -67,8 +66,6 @@
 
             <!-- AUTH & SEARCH (Left in RTL) -->
             <div class="nav-auth" style="display: flex; align-items: center; gap: 1.5rem;">
-                <!-- Search -->
-                <a href="#" style="cursor: pointer; color: #555555; transition: color 0.3s ease; text-decoration: none; font-size: 1.2rem;">🔍</a>
                 
                 <!-- Auth Buttons -->
                 {% if user.is_authenticated %}
@@ -116,7 +113,6 @@
             <!-- About -->
             <div class="footer-section">
                 <h4 style="color: #C8A96A; margin-bottom: 1rem; font-weight: 600;">درباره ہمارے</h4>
-                <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.8;">اردو ادب کو جدید دنیا میں زندہ رکھنے کا ہمارا منشور ہے۔ شاعری، ناول، کہانیاں - سب کچھ ایک جگہ۔</p>
             </div>
 
             <!-- Quick Links -->
@@ -145,7 +141,7 @@
 
         <!-- Footer Bottom -->
         <div class="footer-bottom" style="border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 2rem; text-align: center; color: rgba(255, 255, 255, 0.7);">
-            <p style="margin: 0;">&copy; {% now "Y" %} {{ SITE_NAME }}. اردو ادب کا رستاء</p>
+            <p style="margin: 0;">&copy; {% now "Y" %} {{ SITE_NAME }}</p>
         </div>
     </footer>
 
