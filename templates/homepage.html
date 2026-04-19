@@ -5,14 +5,20 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="hero-section">
+<section class="hero-section fade-in">
     <div class="container">
         <div class="hero-content">
             <h1 class="hero-title urdu-text">نوا ب اردو ورسے</h1>
             <p class="hero-subtitle">Your gateway to beautiful Urdu literature - Poetry, Novels, Stories, Quotes & More</p>
             <div class="hero-actions">
-                <a href="{% url 'poetry_list' %}" class="btn btn-primary">Start Reading</a>
-                <a href="#poetry" class="btn btn-outline">Explore Poetry</a>
+                <a href="{% url 'poetry_list' %}" class="btn btn-primary">
+                    <i class="bi bi-book"></i>
+                    <span>Start Reading</span>
+                </a>
+                <a href="#poetry" class="btn btn-outline">
+                    <i class="bi bi-chevron-down"></i>
+                    <span>Explore Poetry</span>
+                </a>
             </div>
         </div>
     </div>
@@ -21,52 +27,58 @@
 <!-- Categories Section -->
 <section class="section categories-section">
     <div class="container">
-        <div class="section-header">
+        <div class="section-header slide-in-up">
             <h2 class="section-title">Explore Categories</h2>
             <p class="section-subtitle">Discover the rich world of Urdu literature</p>
         </div>
         <div class="categories-grid">
-            <a href="{% url 'poetry_list' %}" class="category-card">
+            <a href="{% url 'poetry_list' %}" class="category-card fade-in">
                 <div class="category-icon">
                     <i class="bi bi-feather"></i>
                 </div>
                 <h3 class="category-title">Poetry</h3>
                 <p class="category-text">Immerse yourself in the soulful verses of Urdu poetry</p>
+                <span class="category-link">Explore <i class="bi bi-arrow-right"></i></span>
             </a>
-            <a href="{% url 'novel_list' %}" class="category-card">
+            <a href="{% url 'novel_list' %}" class="category-card fade-in">
                 <div class="category-icon">
                     <i class="bi bi-book"></i>
                 </div>
                 <h3 class="category-title">Novels</h3>
                 <p class="category-text">Journey through captivating Urdu novels</p>
+                <span class="category-link">Explore <i class="bi bi-arrow-right"></i></span>
             </a>
-            <a href="{% url 'story_list' %}" class="category-card">
+            <a href="{% url 'story_list' %}" class="category-card fade-in">
                 <div class="category-icon">
                     <i class="bi bi-file-text"></i>
                 </div>
                 <h3 class="category-title">Stories</h3>
                 <p class="category-text">Enjoy heartwarming Urdu short stories</p>
+                <span class="category-link">Explore <i class="bi bi-arrow-right"></i></span>
             </a>
-            <a href="{% url 'quote_list' %}" class="category-card">
+            <a href="{% url 'quote_list' %}" class="category-card fade-in">
                 <div class="category-icon">
                     <i class="bi bi-chat-quote"></i>
                 </div>
                 <h3 class="category-title">Quotes</h3>
                 <p class="category-text">Find inspiration in timeless Urdu wisdom</p>
+                <span class="category-link">Explore <i class="bi bi-arrow-right"></i></span>
             </a>
-            <a href="{% url 'blog_list' %}" class="category-card">
+            <a href="{% url 'blog_list' %}" class="category-card fade-in">
                 <div class="category-icon">
                     <i class="bi bi-pencil-square"></i>
                 </div>
                 <h3 class="category-title">Blog</h3>
                 <p class="category-text">Read insightful articles on Urdu literature</p>
+                <span class="category-link">Explore <i class="bi bi-arrow-right"></i></span>
             </a>
-            <a href="{% url 'video_list' %}" class="category-card">
+            <a href="{% url 'video_list' %}" class="category-card fade-in">
                 <div class="category-icon">
                     <i class="bi bi-play-circle"></i>
                 </div>
                 <h3 class="category-title">Videos</h3>
                 <p class="category-text">Watch engaging Urdu literary content</p>
+                <span class="category-link">Explore <i class="bi bi-arrow-right"></i></span>
             </a>
         </div>
     </div>
@@ -75,24 +87,36 @@
 <!-- Latest Poetry Section -->
 <section id="poetry" class="section latest-poetry-section">
     <div class="container">
-        <div class="section-header">
+        <div class="section-header slide-in-up">
             <h2 class="section-title">Latest Poetry</h2>
             <p class="section-subtitle">Fresh verses from talented Urdu poets</p>
         </div>
         <div class="poetry-grid">
             {% for poetry in latest_poetry %}
-            <div class="poetry-card">
+            <div class="poetry-card fade-in">
                 <h3 class="poetry-card-title urdu-text">{{ poetry.title }}</h3>
-                <p class="poetry-card-author">by {{ poetry.author.name }}</p>
-                <p class="poetry-card-preview urdu-text">{{ poetry.content|truncatechars:100 }}</p>
-                <a href="{% url 'poetry_detail' poetry.slug %}" class="btn btn-primary">Read Poem</a>
+                <p class="poetry-card-author">
+                    <i class="bi bi-person"></i>
+                    {{ poetry.author.name }}
+                </p>
+                <p class="poetry-card-preview urdu-text">{{ poetry.content|truncatechars:120 }}</p>
+                <a href="{% url 'poetry_detail' poetry.slug %}" class="btn btn-primary">
+                    <i class="bi bi-book-open"></i>
+                    <span>Read Poem</span>
+                </a>
             </div>
             {% empty %}
-            <div class="poetry-card">
-                <h3 class="poetry-card-title">Sample Poem</h3>
-                <p class="poetry-card-author">by Poet Name</p>
-                <p class="poetry-card-preview urdu-text">یہ ایک نمونہ شعر ہے...</p>
-                <a href="#" class="btn btn-primary">Read Poem</a>
+            <div class="poetry-card fade-in">
+                <h3 class="poetry-card-title urdu-text">مشہور غزل</h3>
+                <p class="poetry-card-author">
+                    <i class="bi bi-person"></i>
+                    میر تقی میر
+                </p>
+                <p class="poetry-card-preview urdu-text">ہم کو معلوم ہے جنت کی حقیقت لیکن...</p>
+                <a href="#" class="btn btn-primary">
+                    <i class="bi bi-book-open"></i>
+                    <span>Read Poem</span>
+                </a>
             </div>
             {% endfor %}
         </div>

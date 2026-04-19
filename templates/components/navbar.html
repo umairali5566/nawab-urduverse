@@ -4,17 +4,16 @@
         <nav class="navbar navbar-professional">
             <a class="navbar-brand-block" href="{% url 'home' %}">
                 <span class="navbar-brand-mark">
-                    <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }}">
+                    <img src="{% static 'images/nawab-logo.png' %}" alt="{{ SITE_NAME }}" loading="lazy">
                 </span>
                 <span class="navbar-brand-copy">
                     <strong>{{ SITE_NAME }}</strong>
                     <span>{{ SITE_TAGLINE }}</span>
                 </span>
             </a>
-            <button class="navbar-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-menu">
-                <span></span><span></span><span></span>
-            </button>
-            <div class="navbar-panel" id="primary-menu">
+
+            <!-- Desktop Menu -->
+            <div class="navbar-desktop-menu">
                 <ul class="navbar-menu">
                     <li><a href="{% url 'home' %}">Home</a></li>
                     <li><a href="{% url 'poetry_list' %}">Poetry</a></li>
@@ -28,17 +27,89 @@
                 </ul>
                 <div class="navbar-auth">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'dashboard' %}" class="nav-pill nav-pill-primary">Dashboard</a>
-                    <a href="{% url 'logout' %}" class="nav-pill nav-pill-outline">Logout</a>
+                    <a href="{% url 'dashboard' %}" class="nav-pill nav-pill-primary">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="{% url 'logout' %}" class="nav-pill nav-pill-outline">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </a>
                     {% if user.is_superuser %}
-                        <a href="{% url 'admin:index' %}" class="nav-pill nav-pill-outline">Admin</a>
+                        <a href="{% url 'admin:index' %}" class="nav-pill nav-pill-outline">
+                            <i class="bi bi-gear"></i>
+                            <span>Admin</span>
+                        </a>
                     {% endif %}
                 {% else %}
-                    <a href="{% url 'login' %}" class="nav-pill nav-pill-outline">Login</a>
-                    <a href="{% url 'register' %}" class="nav-pill nav-pill-primary">Register</a>
+                    <a href="{% url 'login' %}" class="nav-pill nav-pill-outline">
+                        <i class="bi bi-person"></i>
+                        <span>Login</span>
+                    </a>
+                    <a href="{% url 'register' %}" class="nav-pill nav-pill-primary">
+                        <i class="bi bi-person-plus"></i>
+                        <span>Register</span>
+                    </a>
                 {% endif %}
                 </div>
             </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="navbar-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-menu">
+                <span class="navbar-toggle-line"></span>
+                <span class="navbar-toggle-line"></span>
+                <span class="navbar-toggle-line"></span>
+            </button>
         </nav>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="navbar-mobile-overlay" id="navbar-overlay">
+            <nav class="navbar-mobile-menu" id="primary-menu">
+                <div class="navbar-mobile-header">
+                    <span class="navbar-mobile-brand">{{ SITE_NAME }}</span>
+                    <button class="navbar-mobile-close" aria-label="Close menu">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <ul class="navbar-menu">
+                    <li><a href="{% url 'home' %}"><i class="bi bi-house"></i> Home</a></li>
+                    <li><a href="{% url 'poetry_list' %}"><i class="bi bi-feather"></i> Poetry</a></li>
+                    <li><a href="{% url 'novel_list' %}"><i class="bi bi-book"></i> Novels</a></li>
+                    <li><a href="{% url 'story_list' %}"><i class="bi bi-file-text"></i> Stories</a></li>
+                    <li><a href="{% url 'quote_list' %}"><i class="bi bi-chat-quote"></i> Quotes</a></li>
+                    <li><a href="{% url 'blog_list' %}"><i class="bi bi-pencil-square"></i> Blog</a></li>
+                    <li><a href="{% url 'video_list' %}"><i class="bi bi-play-circle"></i> Videos</a></li>
+                    <li><a href="{% url 'all_categories' %}"><i class="bi bi-grid"></i> Categories</a></li>
+                    <li><a href="{% url 'search' %}"><i class="bi bi-search"></i> Search</a></li>
+                </ul>
+                <div class="navbar-mobile-auth">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-primary btn-full">
+                        <i class="bi bi-speedometer2"></i>
+                        Dashboard
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn btn-outline btn-full">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Logout
+                    </a>
+                    {% if user.is_superuser %}
+                        <a href="{% url 'admin:index' %}" class="btn btn-outline btn-full">
+                            <i class="bi bi-gear"></i>
+                            Admin
+                        </a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline btn-full">
+                        <i class="bi bi-person"></i>
+                        Login
+                    </a>
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-full">
+                        <i class="bi bi-person-plus"></i>
+                        Register
+                    </a>
+                {% endif %}
+                </div>
+            </nav>
+        </div>
     </div>
 </header>
