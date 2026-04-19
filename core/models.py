@@ -261,17 +261,42 @@ class ReadingProgress(models.Model):
 
 class SiteSetting(models.Model):
     """Site settings model"""
-    
+
     key = models.CharField(max_length=100, unique=True, verbose_name='کلید')
     value = models.TextField(verbose_name='قدر')
     description = models.CharField(max_length=255, blank=True, verbose_name='تفصیل')
-    
+
     class Meta:
         verbose_name = 'سائٹ سیٹنگ'
         verbose_name_plural = 'سائٹ سیٹنگز'
-    
+
     def __str__(self):
         return self.key
+
+
+class SiteTheme(models.Model):
+    """Site theme customization model"""
+
+    name = models.CharField(max_length=100, unique=True, verbose_name='نام')
+    primary_color = models.CharField(max_length=7, default='#007bff', verbose_name='پرائمری رنگ')
+    background_color = models.CharField(max_length=7, default='#ffffff', verbose_name='پس منظر رنگ')
+    text_color = models.CharField(max_length=7, default='#333333', verbose_name='ٹیکسٹ رنگ')
+    font_family = models.CharField(max_length=100, default='Poppins, sans-serif', verbose_name='فونٹ فیملی')
+    is_active = models.BooleanField(default=False, verbose_name='فعال')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'سائٹ تھیم'
+        verbose_name_plural = 'سائٹ تھیمز'
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.is_active:
+            # Deactivate all other active themes
+            SiteTheme.objects.filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
+        super().save(*args, **kwargs)
 
 
 class NewsletterSubscriber(models.Model):

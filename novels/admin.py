@@ -9,7 +9,7 @@ from .models import Novel
 
 @admin.register(Novel)
 class NovelAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'category', 'created_at', 'is_published']
+    list_display = ['title', 'author', 'category', 'total_chapters', 'created_at', 'is_published']
     list_filter = ['category', 'is_published']
     search_fields = ['title']
     prepopulated_fields = {'slug': ('title',)}

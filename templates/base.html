@@ -21,9 +21,23 @@
     <!-- Main CSS - Modern UI System -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/professional-ui.css' %}">
-    <link rel="stylesheet" href="{% static 'css/modern-ui.css' %}"
+    <link rel="stylesheet" href="{% static 'css/modern-ui.css' %}">
 
     {% block extra_css %}{% endblock %}
+
+    {% if theme %}
+    <style>
+      body {
+        background: {{ theme.background_color }};
+        color: {{ theme.text_color }};
+        font-family: {{ theme.font_family }};
+      }
+
+      .btn {
+        background: {{ theme.primary_color }};
+      }
+    </style>
+    {% endif %}
 </head>
 <body class="site-shell">
     <div class="site-bg" aria-hidden="true"></div>

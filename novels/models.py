@@ -20,6 +20,7 @@ class Novel(models.Model):
     content = models.TextField(verbose_name='مواد')
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='novels', verbose_name='مصنف')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='زمرہ')
+    total_chapters = models.PositiveIntegerField(default=0, verbose_name='کل ابواب')
     is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
     published_at = models.DateTimeField(null=True, blank=True, verbose_name='شائع ہونے کی تاریخ')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -38,6 +39,11 @@ class Novel(models.Model):
         # Strip HTML tags from content
         self.content = strip_tags(self.content)
         super().save(*args, **kwargs)
+
+    def update_chapter_count(self):
+        """Update the total chapters count."""
+        self.total_chapters = self.chapters.filter(is_published=True).count()
+        self.save(update_fields=['total_chapters'])
 
 
 class Chapter(models.Model):
