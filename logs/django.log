@@ -1,0 +1,8 @@
+ERROR 2026-04-19 17:45:13,388 basehttp 3604 10708 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-19 17:45:13,399 basehttp 3604 16712 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-19 17:45:44,780 basehttp 3604 18852 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-19 17:45:44,786 basehttp 3604 10556 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-19 17:47:05,079 basehttp 3604 14656 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-19 17:47:05,329 basehttp 3604 21688 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-19 17:47:05,390 basehttp 3604 12148 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-19 17:47:05,639 basehttp 3604 17420 You're accessing the development server over HTTPS, but it only supports HTTP.
