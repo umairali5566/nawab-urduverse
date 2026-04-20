@@ -7,9 +7,12 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
+    # New Combined Authentication Page
+    path('auth/', views.auth_page, name='auth'),
+    
     # Authentication
-    path('register/', views.register, name='register'),
-    path('login/', views.user_login, name='login'),
+    path('register/', views.auth_page, name='register'),  # Redirect to combined auth page
+    path('login/', views.auth_page, name='login'),        # Redirect to combined auth page
     path('logout/', views.user_logout, name='logout'),
 
     # Password Reset
