@@ -4,189 +4,314 @@
 {% block title %}{{ poem.title }} - {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<div class="reader-container">
+
+<style>
+    /* Poetry Detail Page Styles */
+    .poetry-container {
+        max-width: 850px;
+        margin: 4rem auto;
+        padding: 0 1.5rem;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .poem-card {
+        background: white;
+        padding: 3.5rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border: 1px solid #f0f0f0;
+        margin-bottom: 2rem;
+    }
+
+    .poem-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding-bottom: 2.5rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .poem-title {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 1.5rem 0;
+        line-height: 1.3;
+        letter-spacing: -0.5px;
+    }
+
+    .poem-meta {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        font-family: 'Noto Nastaliq Urdu', serif;
+    }
+
+    .poem-author {
+        font-size: 1.25rem;
+        color: #64748b;
+        font-weight: 600;
+    }
+
+    .poem-category {
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 24px;
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
+
+    .poem-content {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.7rem;
+        line-height: 2.6;
+        color: #334155;
+        margin: 3rem 0;
+        direction: rtl;
+        text-align: right;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    /* Action Buttons */
+    .poem-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin: 3.5rem 0;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 0.7rem 1.5rem;
+        border: 2px solid #cbd5e1;
+        background: white;
+        color: #1e293b;
+        border-radius: 8px;
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        white-space: nowrap;
+    }
+
+    .btn:hover {
+        border-color: #0ea5e9;
+        color: #0ea5e9;
+        background: #f0f9ff;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        border: 2px solid transparent;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(14, 165, 233, 0.3);
+    }
+
+    .btn-outline {
+        border: 2px solid #cbd5e1;
+        background: white;
+        color: #1e293b;
+    }
+
+    .btn-outline:hover {
+        border-color: #0ea5e9;
+        color: #0ea5e9;
+        background: #f0f9ff;
+    }
+
+    .btn.active {
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        border-color: transparent;
+        color: white;
+    }
+
+    /* Footer Navigation */
+    .poem-footer {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 4rem;
+        padding-top: 2.5rem;
+        border-top: 1px solid #e5e7eb;
+        flex-wrap: wrap;
+    }
+
+    .poem-footer .btn {
+        min-width: 200px;
+        justify-content: center;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .poetry-container {
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .poem-card {
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .poem-title {
+            font-size: 2rem;
+        }
+
+        .poem-content {
+            font-size: 1.5rem;
+            line-height: 2.4;
+            margin: 2rem 0;
+        }
+
+        .poem-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+        }
+
+        .poem-meta {
+            gap: 1rem;
+            flex-direction: column;
+        }
+
+        .poem-author {
+            font-size: 1.1rem;
+        }
+
+        .poem-actions,
+        .poem-footer {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.75rem;
+        }
+
+        .poem-actions .btn,
+        .poem-footer .btn {
+            width: 100%;
+            justify-content: center;
+            min-width: auto;
+        }
+
+        .btn {
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .poem-card {
+            padding: 1.5rem;
+        }
+
+        .poem-title {
+            font-size: 1.6rem;
+        }
+
+        .poem-content {
+            font-size: 1.3rem;
+            line-height: 2.2;
+        }
+
+        .poem-author {
+            font-size: 1rem;
+        }
+
+        .poem-category {
+            font-size: 0.85rem;
+            padding: 0.3rem 0.75rem;
+        }
+    }
+</style>
+
+<div class="poetry-container">
     <article class="poem-card">
+        <!-- Poem Header -->
         <header class="poem-header">
-            <h1 class="poem-title urdu-text">{{ poem.title }}</h1>
+            <h1 class="poem-title">{{ poem.title }}</h1>
             <div class="poem-meta">
-                <span class="poem-author">by {{ poem.author.name }}</span>
+                <span class="poem-author">{{ poem.author.name }}</span>
                 {% if poem.category %}
                 <span class="poem-category">{{ poem.category.name }}</span>
                 {% endif %}
             </div>
         </header>
 
-        <div class="poem-content urdu-text">
-            {{ poem.content|linebreaks }}
-        </div>
+        <!-- Poem Content -->
+        <div class="poem-content">{{ poem.content|linebreaks }}</div>
 
+        <!-- Action Buttons -->
         <div class="poem-actions">
-            <button class="btn btn-outline" onclick="toggleLike()">
-                <i class="bi bi-heart"></i> Like
+            <button class="btn btn-outline" onclick="toggleLike(this)" title="Like this poem">
+                <span>♡</span>
+                <span>پسند</span>
             </button>
-            <button class="btn btn-outline" onclick="sharePoem()">
-                <i class="bi bi-share"></i> Share
+            <button class="btn btn-outline" onclick="sharePoem()" title="Share this poem">
+                <span>📤</span>
+                <span>شیئر کریں</span>
             </button>
-            <button class="btn btn-outline" onclick="copyToClipboard()">
-                <i class="bi bi-clipboard"></i> Copy
+            <button class="btn btn-outline" onclick="copyToClipboard()" title="Copy poem text">
+                <span>📋</span>
+                <span>کاپی کریں</span>
             </button>
         </div>
 
+        <!-- Navigation Buttons -->
         <div class="poem-footer">
-            <a href="{% url 'poetry_list' %}" class="btn btn-outline">Back to Poetry</a>
+            <a href="{% url 'poetry_list' %}" class="btn btn-outline">← شاعری پر واپس</a>
             {% if poem.author %}
-            <a href="{% url 'author_detail' poem.author.slug %}" class="btn btn-outline">More by {{ poem.author.name }}</a>
+            <a href="{% url 'author_detail' poem.author.slug %}" class="btn btn-outline">{{ poem.author.name }} کی مزید شاعری</a>
             {% endif %}
         </div>
     </article>
 </div>
 
 <script>
-function toggleLike() {
-    // Add like functionality
-    const btn = event.target.closest('.btn');
-    btn.innerHTML = '<i class="bi bi-heart-fill"></i> Liked';
-    btn.classList.add('btn-primary');
-    btn.classList.remove('btn-outline');
-}
+    function toggleLike(btn) {
+        const isLiked = btn.classList.contains('active');
+        
+        if (isLiked) {
+            btn.classList.remove('active');
+            btn.innerHTML = '<span>♡</span><span>پسند</span>';
+        } else {
+            btn.classList.add('active');
+            btn.innerHTML = '<span>♥</span><span>پسند کیا گیا</span>';
+        }
+    }
 
-function sharePoem() {
-    if (navigator.share) {
-        navigator.share({
-            title: '{{ poem.title }}',
-            text: 'Check out this beautiful Urdu poem',
-            url: window.location.href
+    function sharePoem() {
+        if (navigator.share) {
+            navigator.share({
+                title: '{{ poem.title }}',
+                text: 'اس خوبصورت اردو شاعری کو دیکھیں',
+                url: window.location.href
+            }).catch(err => console.log('Share cancelled'));
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert('شاعری کا ربط کاپی ہو گیا!');
+        }
+    }
+
+    function copyToClipboard() {
+        const poemText = '{{ poem.title }}\n\n{{ poem.author.name }} کی شاعری\n\n{{ poem.content|striptags }}';
+        navigator.clipboard.writeText(poemText).then(() => {
+            alert('شاعری کاپی ہو گئی!');
+        }).catch(err => {
+            alert('کاپی میں مسئلہ ہوا۔ براہ کرم دوبارہ کوشش کریں۔');
         });
-    } else {
-        // Fallback: copy URL to clipboard
-        navigator.clipboard.writeText(window.location.href);
-        alert('Link copied to clipboard!');
     }
-}
-
-function copyToClipboard() {
-    navigator.clipboard.writeText('{{ poem.title }}\n\nby {{ poem.author.name }}\n\n{{ poem.content|striptags }}');
-    alert('Poem copied to clipboard!');
-}
 </script>
-{% endblock %}
 
-{% block extra_css %}
-<style>
-.reader-container {
-    max-width: 700px;
-    margin: 4rem auto;
-    padding: 0 20px;
-}
-
-.poem-card {
-    background: var(--card-bg);
-    padding: 3rem;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.poem-header {
-    text-align: center;
-    margin-bottom: 3rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.poem-title {
-    font-size: 2.5rem;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-    line-height: 1.2;
-}
-
-.poem-meta {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.poem-author {
-    font-size: 1.2rem;
-    color: var(--secondary-color);
-    font-weight: 600;
-}
-
-.poem-category {
-    background: var(--secondary-color);
-    color: var(--card-bg);
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.poem-content {
-    font-family: var(--urdu-font);
-    font-size: 24px;
-    line-height: 2.2;
-    text-align: right;
-    direction: rtl;
-    color: var(--text-primary);
-    margin: 2rem 0;
-    white-space: pre-line;
-}
-
-.poem-actions {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin: 3rem 0 2rem;
-    flex-wrap: wrap;
-}
-
-.poem-footer {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    flex-wrap: wrap;
-}
-
-.urdu-text {
-    font-family: var(--urdu-font);
-    direction: rtl;
-    text-align: right;
-}
-
-@media (max-width: 768px) {
-    .reader-container {
-        margin: 2rem auto;
-        padding: 0 15px;
-    }
-
-    .poem-card {
-        padding: 2rem;
-    }
-
-    .poem-title {
-        font-size: 2rem;
-    }
-
-    .poem-content {
-        font-size: 20px;
-    }
-
-    .poem-actions,
-    .poem-footer {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .poem-meta {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-}
-</style>
 {% endblock %}
