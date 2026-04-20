@@ -3,48 +3,55 @@
 {% block title %}اقتباسات - {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<section class="section">
-    <h1 class="page-title">مقبول اقتباسات</h1>
+<section class="section" style="padding: 3rem 1rem;">
+    <div style="max-width: 1400px; margin: 0 auto;">
+        <div style="margin-bottom: 3rem;">
+            <h1 class="page-title" style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">مقبول اقتباسات</h1>
+            <p style="color: #64748b; font-size: 1.1rem; margin: 0.5rem 0 0 0;">ہماری کتب خانہ سے اہم اور الہام انگیز اقتباسات</p>
+        </div>
 
-    <!-- Search & Filter -->
-    <form method="get" class="search-filter" style="margin-bottom: 3rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-        <input type="search" name="search" class="form-control" value="{{ request.GET.search }}" placeholder="تلاش کریں..." style="flex: 1; min-width: 200px;">
-        <select name="type" class="form-select" style="min-width: 120px;">
-            <option value="">تمام اقسام</option>
-            {% for value, label in quote_types %}
-            <option value="{{ value }}" {% if request.GET.type == value %}selected{% endif %}>{{ label }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit" class="btn btn-primary">تلاش</button>
-    </form>
+        <!-- Enhanced Search & Filter -->
+        <form method="get" class="search-filter" style="margin-bottom: 3rem; display: grid; grid-template-columns: 1fr auto auto; gap: 1rem; padding: 1.5rem; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid rgba(15, 165, 233, 0.1); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);">
+            <input type="search" name="search" class="form-control" value="{{ request.GET.search }}" placeholder="اقتباس یا مصنف کی تلاش..." style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; font-size: 1rem;">
+            <select name="type" class="form-select" style="min-width: 140px; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem;">
+                <option value="">تمام اقسام</option>
+                {% for value, label in quote_types %}
+                <option value="{{ value }}" {% if request.GET.type == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary" style="border-radius: 8px; padding: 0.75rem 1.5rem; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 12px rgba(6, 182, 212, 0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px rgba(0, 0, 0, 0.1)';">🔍 تلاش</button>
+        </form>
+    </div>
 
     {% if quotes %}
-    <div class="cards-grid-3">
+    <div class="cards-grid-3" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; max-width: 1400px; margin: 0 auto;">
         {% for quote in quotes %}
-        <div class="card">
-            <p class="featured-quote" style="margin-bottom: 1.5rem;">{{ quote.text }}</p>
-            <p class="featured-author">— {{ quote.author|default:"نامعلوم" }}</p>
+        <div class="card" style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); border: 1px solid #f1f5f9; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-right: 4px solid #0ea5e9;" onmouseover="this.style.boxShadow='0 12px 24px rgba(6, 182, 212, 0.15)'; this.style.transform='translateY(-4px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.08)'; this.style.transform='translateY(0)';">
+            <p class="featured-quote" style="margin: 0 0 1.5rem 0; font-size: 1.1rem; color: #1e293b; line-height: 1.7; font-style: italic; font-weight: 500;">{{ quote.text }}</p>
+            <p class="featured-author" style="margin: 0; color: #64748b; font-size: 0.95rem; text-align: right;">— {{ quote.author|default:"نامعلوم" }}</p>
         </div>
         {% endfor %}
     </div>
 
     {% if is_paginated %}
-    <div class="pagination" style="margin-top: 3rem;">
+    <div class="pagination" style="margin-top: 4rem; display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap;">
         {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">← پچھلا</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(6, 182, 212, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">← پچھلا</a>
         {% endif %}
-        <span>صفحہ {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        <span style="color: #64748b; font-weight: 600; padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 8px;">صفحہ {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">اگلا →</a>
+            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(6, 182, 212, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">اگلا →</a>
         {% endif %}
     </div>
     {% endif %}
     {% else %}
-    <div class="empty-state">
-        <div class="empty-state-icon">💬</div>
-        <h3>کوئی اقتباس نہیں ملا</h3>
-        <p>براہ کرم دوبارہ تلاش کریں</p>
+    <div class="empty-state" style="text-align: center; padding: 4rem 2rem; max-width: 1400px; margin: 0 auto;">
+        <div class="empty-state-icon" style="font-size: 4rem; margin-bottom: 1rem;">💬</div>
+        <h3 style="font-size: 1.5rem; font-weight: 700; color: #1e293b; margin: 1rem 0;">کوئی اقتباس نہیں ملا</h3>
+        <p style="color: #64748b; font-size: 1.1rem; margin: 0.5rem 0 1.5rem 0;">براہ کرم دوبارہ تلاش کریں یا ہماری دیگر اقتباسات دیکھیں</p>
+        <a href="/quotes/" style="display: inline-block; padding: 0.75rem 2rem; background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(6, 182, 212, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">تمام اقتباسات دیکھیں</a>
     </div>
     {% endif %}
+    </div>
 </section>
 {% endblock %}
