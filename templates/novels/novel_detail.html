@@ -4,12 +4,345 @@
 {% block title %}{{ novel.title }} - {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<div class="container my-4">
-    <h1>{{ novel.title }}</h1>
-    <p class="text-muted">By {{ novel.author.name }}</p>
-    <div class="content">
-        {{ novel.content|linebreaks }}
-    </div>
-    <a href="{% url 'novel_list' %}" class="btn btn-secondary">Back to Novels</a>
+
+<style>
+    /* Novel Detail Page Styles */
+    .novel-container {
+        max-width: 850px;
+        margin: 4rem auto;
+        padding: 0 1.5rem;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .novel-card {
+        background: white;
+        padding: 3.5rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border: 1px solid #f0f0f0;
+        margin-bottom: 2rem;
+    }
+
+    .novel-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding-bottom: 2.5rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .novel-title {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 1.5rem 0;
+        line-height: 1.3;
+        letter-spacing: -0.5px;
+    }
+
+    .novel-meta {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        font-family: 'Noto Nastaliq Urdu', serif;
+    }
+
+    .novel-author {
+        font-size: 1.25rem;
+        color: #64748b;
+        font-weight: 600;
+    }
+
+    .novel-category {
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 24px;
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
+
+    .novel-date {
+        font-size: 0.95rem;
+        color: #94a3b8;
+    }
+
+    .novel-featured-image {
+        margin: 2rem 0 3rem 0;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .novel-featured-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .novel-content {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.5rem;
+        line-height: 2.4;
+        color: #334155;
+        margin: 3rem 0;
+        direction: rtl;
+        text-align: right;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .novel-content p {
+        margin-bottom: 1.5rem;
+        line-height: 2.4;
+    }
+
+    /* Action Buttons */
+    .novel-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin: 3.5rem 0;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 0.7rem 1.5rem;
+        border: 2px solid #cbd5e1;
+        background: white;
+        color: #1e293b;
+        border-radius: 8px;
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        white-space: nowrap;
+    }
+
+    .btn:hover {
+        border-color: #0ea5e9;
+        color: #0ea5e9;
+        background: #f0f9ff;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        border: 2px solid transparent;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(14, 165, 233, 0.3);
+    }
+
+    .btn-outline {
+        border: 2px solid #cbd5e1;
+        background: white;
+        color: #1e293b;
+    }
+
+    .btn-outline:hover {
+        border-color: #0ea5e9;
+        color: #0ea5e9;
+        background: #f0f9ff;
+    }
+
+    .btn.active {
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        border-color: transparent;
+        color: white;
+    }
+
+    /* Footer Navigation */
+    .novel-footer {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 4rem;
+        padding-top: 2.5rem;
+        border-top: 1px solid #e5e7eb;
+        flex-wrap: wrap;
+    }
+
+    .novel-footer .btn {
+        min-width: 200px;
+        justify-content: center;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .novel-container {
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .novel-card {
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .novel-title {
+            font-size: 2rem;
+        }
+
+        .novel-content {
+            font-size: 1.3rem;
+            line-height: 2.2;
+            margin: 2rem 0;
+        }
+
+        .novel-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+        }
+
+        .novel-meta {
+            gap: 1rem;
+            flex-direction: column;
+        }
+
+        .novel-author {
+            font-size: 1.1rem;
+        }
+
+        .novel-actions,
+        .novel-footer {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.75rem;
+        }
+
+        .novel-actions .btn,
+        .novel-footer .btn {
+            width: 100%;
+            justify-content: center;
+            min-width: auto;
+        }
+
+        .btn {
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .novel-card {
+            padding: 1.5rem;
+        }
+
+        .novel-title {
+            font-size: 1.6rem;
+        }
+
+        .novel-content {
+            font-size: 1.2rem;
+            line-height: 2.1;
+        }
+
+        .novel-author {
+            font-size: 1rem;
+        }
+
+        .novel-category {
+            font-size: 0.85rem;
+            padding: 0.3rem 0.75rem;
+        }
+    }
+</style>
+
+<div class="novel-container">
+    <article class="novel-card">
+        <!-- Novel Header -->
+        <header class="novel-header">
+            <h1 class="novel-title">{{ novel.title }}</h1>
+            <div class="novel-meta">
+                <span class="novel-author">{{ novel.author.name }}</span>
+                {% if novel.category %}
+                <span class="novel-category">{{ novel.category.name }}</span>
+                {% endif %}
+                <span class="novel-date">{{ novel.created_at|date:'d M Y' }}</span>
+            </div>
+        </header>
+
+        <!-- Novel Featured Image -->
+        {% if novel.featured_image %}
+        <div class="novel-featured-image">
+            <img src="{{ novel.featured_image.url }}" alt="{{ novel.title }}" loading="lazy">
+        </div>
+        {% endif %}
+
+        <!-- Novel Content -->
+        <div class="novel-content" id="novelContent">{{ novel.content|linebreaks }}</div>
+
+        <!-- Action Buttons -->
+        <div class="novel-actions">
+            <button class="btn btn-outline like-btn" onclick="toggleLike(this)" title="Like this novel">
+                <span>♡</span>
+                <span>پسند</span>
+            </button>
+            <button class="btn btn-outline" onclick="shareNovel()" title="Share this novel">
+                <span>📤</span>
+                <span>شیئر کریں</span>
+            </button>
+            <button class="btn btn-outline" onclick="copyNovel()" title="Copy novel text">
+                <span>📋</span>
+                <span>کاپی کریں</span>
+            </button>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="novel-footer">
+            <a href="{% url 'novel_list' %}" class="btn btn-outline">← ناولوں پر واپس</a>
+            {% if novel.author %}
+            <a href="{% url 'author_detail' novel.author.slug %}" class="btn btn-outline">{{ novel.author.name }} کے مزید ناول</a>
+            {% endif %}
+        </div>
+    </article>
 </div>
+
+<script>
+    function toggleLike(btn) {
+        const isLiked = btn.classList.contains('active');
+        
+        if (isLiked) {
+            btn.classList.remove('active');
+            btn.innerHTML = '<span>♡</span><span>پسند</span>';
+        } else {
+            btn.classList.add('active');
+            btn.innerHTML = '<span>♥</span><span>پسند کیا گیا</span>';
+        }
+    }
+
+    function shareNovel() {
+        if (navigator.share) {
+            navigator.share({
+                title: '{{ novel.title }}',
+                text: 'اس خوبصورت اردو ناول کو دیکھیں',
+                url: window.location.href
+            }).catch(err => console.log('Share cancelled'));
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert('ناول کا ربط کاپی ہو گیا!');
+        }
+    }
+
+    function copyNovel() {
+        const content = document.getElementById('novelContent').innerText;
+        const novelText = '{{ novel.title }}\n\n{{ novel.author.name }} کا ناول\n\n' + content;
+        navigator.clipboard.writeText(novelText).then(() => {
+            alert('ناول کاپی ہو گیا!');
+        }).catch(err => {
+            alert('کاپی میں مسئلہ ہوا۔ براہ کرم دوبارہ کوشش کریں۔');
+        });
+    }
+</script>
+
 {% endblock %}
