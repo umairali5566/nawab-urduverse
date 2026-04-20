@@ -37,7 +37,6 @@ urlpatterns = [
     path('', include('core.urls')),
     path('home/', views.home, name='home_redirect'),
     path('ai/', include('ai_features.urls')),
-    path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html', form_class=UserLoginForm), name='login'),
     path('accounts/', include('accounts.urls')),
     path('novels/', include('novels.urls')),
     path('stories/', include('stories.urls')),
