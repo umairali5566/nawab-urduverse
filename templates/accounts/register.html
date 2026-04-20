@@ -2,315 +2,866 @@
 {% load static %}
 
 {% block title %}رجسٹر - {{ SITE_NAME }}{% endblock %}
-{% block meta_description %}Create a new account to access {{ SITE_NAME }} features.{% endblock %}
+{% block meta_description %}{{ SITE_NAME }} میں نیا اکاؤنٹ بنائیں۔{% endblock %}
 
 {% block content %}
-<!-- Modern Register Section -->
-<section class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-    <!-- Animated Background Elements -->
-    <div class="absolute inset-0">
-        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-pink-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
-    </div>
+<div class="register-page-wrapper">
+    <!-- Premium Register Page -->
+    <div class="auth-page">
+        <!-- Background Elements -->
+        <div class="background-layer">
+            <div class="gradient-blob blob-1"></div>
+            <div class="gradient-blob blob-2"></div>
+            <div class="gradient-blob blob-3"></div>
+        </div>
 
-    <div class="w-full max-w-lg relative z-10">
-        <!-- Floating Card Container -->
-        <div class="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 overflow-hidden transform hover:scale-105 transition-all duration-500">
-            <!-- Header with Elegant Gradient -->
-            <div class="bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-800 py-10 px-8 text-center relative">
-                <!-- Decorative Pattern -->
-                <div class="absolute inset-0 opacity-10">
-                    <svg class="w-full h-full" viewBox="0 0 400 200" fill="none">
-                        <defs>
-                            <pattern id="pattern-register" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                                <circle cx="20" cy="20" r="1" fill="white"/>
-                            </pattern>
-                        </defs>
-                        <rect width="100%" height="100%" fill="url(#pattern-register)"/>
-                    </svg>
-                </div>
-
-                <!-- Icon with Glow Effect -->
-                <div class="flex justify-center mb-6 relative">
-                    <div class="absolute inset-0 bg-white/20 rounded-full blur-xl scale-150"></div>
-                    <div class="relative bg-white/20 p-4 rounded-full backdrop-blur-sm">
-                        <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V21C3 22.11 3.89 23 5 23H19C20.11 23 21 22.11 21 21V9M19 9H14V4H19V9Z"/>
+        <!-- Main Container -->
+        <div class="auth-container">
+            <!-- Left Side - Visual Content -->
+            <div class="auth-left-visual">
+                <div class="content-visual">
+                    <div class="feature">
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                         </svg>
+                        <h3 class="urdu-text">آزاد رجسٹریشن</h3>
+                        <p class="urdu-text">منٹوں میں اکاؤنٹ بنائیں</p>
+                    </div>
+                    <div class="feature">
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                        <h3 class="urdu-text">پریمیم رسائی</h3>
+                        <p class="urdu-text">تمام خصوصیات فوری استعمال کریں</p>
+                    </div>
+                    <div class="feature">
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                        <h3 class="urdu-text">مکمل حفاظت</h3>
+                        <p class="urdu-text">آپ کی رازداری ہمارا اولویت</p>
                     </div>
                 </div>
-                <h1 class="text-4xl font-bold text-white mb-2 urdu-text">اکاؤنٹ بنائیں</h1>
-                <p class="text-purple-100 text-lg urdu-text">اپنا نیا اکاؤنٹ رجسٹر کریں</p>
             </div>
 
-            <!-- Form Content -->
-            <div class="px-8 py-10 sm:px-10">
-                {% if form.errors %}
-                <div class="mb-8 p-4 bg-red-500/20 border border-red-400/30 rounded-xl backdrop-blur-sm">
-                    <div class="flex items-center mb-3">
-                        <svg class="w-5 h-5 text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            <!-- Right Side - Form -->
+            <div class="auth-right">
+                <div class="form-card">
+                    <!-- Header -->
+                    <div class="card-header">
+                        <h1 class="card-title urdu-text">اکاؤنٹ بنائیں</h1>
+                        <p class="card-subtitle urdu-text">آپ کا نیا سفر یہاں شروع ہوتا ہے</p>
+                    </div>
+
+                    <!-- Error Messages -->
+                    {% if form.non_field_errors or form.errors %}
+                    <div class="error-alert">
+                        <svg class="alert-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                         </svg>
-                        <p class="text-red-300 font-semibold urdu-text">خرابی</p>
-                    </div>
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <p class="text-red-200 text-sm mb-1">• {{ field.label }}: {{ error }}</p>
-                        {% endfor %}
-                    {% endfor %}
-                    {% for error in form.non_field_errors %}
-                        <p class="text-red-200 text-sm mb-1">• {{ error }}</p>
-                    {% endfor %}
-                </div>
-                {% endif %}
-
-                <form method="post" class="space-y-6">
-                    {% csrf_token %}
-
-                    <!-- Username Field -->
-                    <div class="group">
-                        <label for="{{ form.username.id_for_label }}" class="block text-sm font-semibold text-white/90 mb-3 urdu-text">صارف نام</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 right-0 flex items-center pr-4 text-purple-300">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path>
-                                </svg>
-                            </div>
-                            {{ form.username }}
-                            <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-indigo-400 group-focus-within:w-full transition-all duration-500"></div>
-                        </div>
-                        {% if form.username.help_text %}
-                            <p class="mt-2 text-xs text-purple-200">{{ form.username.help_text|safe }}</p>
-                        {% endif %}
-                    </div>
-
-                    <!-- Email Field -->
-                    <div class="group">
-                        <label for="{{ form.email.id_for_label }}" class="block text-sm font-semibold text-white/90 mb-3 urdu-text">ای میل</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 right-0 flex items-center pr-4 text-purple-300">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-                                </svg>
-                            </div>
-                            {{ form.email }}
-                            <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-indigo-400 group-focus-within:w-full transition-all duration-500"></div>
+                        <div class="alert-messages">
+                            {% for error in form.non_field_errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            {% endfor %}
                         </div>
                     </div>
+                    {% endif %}
 
-                    <!-- Password Field -->
-                    <div class="group">
-                        <label for="{{ form.password1.id_for_label }}" class="block text-sm font-semibold text-white/90 mb-3 urdu-text">پاس ورڈ</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 right-0 flex items-center pr-4 text-purple-300">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                    <!-- Register Form -->
+                    <form method="post" class="auth-form" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Username Field -->
+                        <div class="form-field">
+                            <label for="{{ form.username.id_for_label }}" class="field-label urdu-text">
+                                صارف نام
+                            </label>
+                            <div class="input-wrapper">
+                                {{ form.username }}
+                                <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
                                 </svg>
                             </div>
-                            {{ form.password1 }}
-                            <button type="button" class="absolute inset-y-0 left-0 flex items-center pl-4 text-white/60 hover:text-white toggle-password transition-colors duration-200" data-target="{{ form.password1.id_for_label }}">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
-                                </svg>
-                            </button>
-                            <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-indigo-400 group-focus-within:w-full transition-all duration-500"></div>
+                            {% if form.username.help_text %}
+                                <small class="field-help urdu-text">{{ form.username.help_text|safe }}</small>
+                            {% endif %}
                         </div>
-                        {% if form.password1.help_text %}
-                            <p class="mt-2 text-xs text-purple-200">{{ form.password1.help_text|safe }}</p>
-                        {% endif %}
-                    </div>
 
-                    <!-- Confirm Password Field -->
-                    <div class="group">
-                        <label for="{{ form.password2.id_for_label }}" class="block text-sm font-semibold text-white/90 mb-3 urdu-text">پاس ورڈ کی تصدیق</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 right-0 flex items-center pr-4 text-purple-300">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+                        <!-- Email Field -->
+                        <div class="form-field">
+                            <label for="{{ form.email.id_for_label }}" class="field-label urdu-text">
+                                ای میل
+                            </label>
+                            <div class="input-wrapper">
+                                {{ form.email }}
+                                <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                                 </svg>
                             </div>
-                            {{ form.password2 }}
-                            <button type="button" class="absolute inset-y-0 left-0 flex items-center pl-4 text-white/60 hover:text-white toggle-password transition-colors duration-200" data-target="{{ form.password2.id_for_label }}">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
-                                </svg>
-                            </button>
-                            <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-indigo-400 group-focus-within:w-full transition-all duration-500"></div>
                         </div>
-                    </div>
 
-                    <!-- Terms & Conditions Checkbox -->
-                    <div class="flex items-start">
-                        <input type="checkbox" id="terms" name="terms" class="mt-1 h-4 w-4 text-purple-400 focus:ring-purple-400 border-white/30 rounded cursor-pointer bg-white/10">
-                        <label for="terms" class="mr-3 block text-sm text-white/80 cursor-pointer urdu-text">
-                            میں قبول کرتا/کرتی ہوں
-                            <a href="#" class="text-purple-300 hover:text-purple-200 font-semibold transition-colors duration-200">شرائط و ضوابط</a>
+                        <!-- Password Field -->
+                        <div class="form-field">
+                            <label for="{{ form.password1.id_for_label }}" class="field-label urdu-text">
+                                پاس ورڈ
+                            </label>
+                            <div class="input-wrapper password-wrapper">
+                                {{ form.password1 }}
+                                <button type="button" class="pwd-toggle" title="پاس ورڈ دیکھیں">
+                                    <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                    <svg class="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                            {% if form.password1.help_text %}
+                                <small class="field-help urdu-text">{{ form.password1.help_text|safe }}</small>
+                            {% endif %}
+                        </div>
+
+                        <!-- Confirm Password Field -->
+                        <div class="form-field">
+                            <label for="{{ form.password2.id_for_label }}" class="field-label urdu-text">
+                                پاس ورڈ کی تصدیق
+                            </label>
+                            <div class="input-wrapper password-wrapper">
+                                {{ form.password2 }}
+                                <button type="button" class="pwd-toggle" title="پاس ورڈ دیکھیں">
+                                    <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                    <svg class="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Terms & Conditions -->
+                        <label class="checkbox-field checkbox-terms">
+                            <input type="checkbox" name="terms" class="checkbox-input" required>
+                            <span class="checkbox-label urdu-text">
+                                میں قبول کرتا/کرتی ہوں 
+                                <a href="#" class="terms-link">شرائط و ضوابط</a>
+                            </span>
                         </label>
-                    </div>
 
-                    <!-- Submit Button -->
-                    <button type="submit" class="w-full bg-gradient-to-r from-purple-500 via-indigo-500 to-purple-600 text-white font-bold py-4 px-6 rounded-xl hover:from-purple-600 hover:via-indigo-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-purple-500/25 transform hover:scale-105 hover:-translate-y-0.5 mt-8">
-                        <span class="flex items-center justify-center">
-                            <svg class="w-5 h-5 ml-3 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path>
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn-submit urdu-text">
+                            <span>اکاؤنٹ بنائیں</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 5v14M5 12h14"></path>
                             </svg>
-                            اکاؤنٹ بنائیں
-                        </span>
-                    </button>
-                </form>
+                        </button>
+                    </form>
 
-                <!-- Footer Links -->
-                <div class="mt-8 text-center">
-                    <p class="text-white/70 urdu-text">
+                    <!-- Login Link -->
+                    <div class="card-footer urdu-text">
                         پہلے سے اکاؤنٹ ہے؟
-                        <a href="{% url 'login' %}" class="text-purple-300 hover:text-purple-200 font-semibold transition-colors duration-200 ml-2">لاگ ان کریں →</a>
-                    </p>
+                        <a href="{% url 'login' %}" class="link">لاگ ان کریں</a>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- Elegant Tagline -->
-        <div class="mt-8 text-center">
-            <p class="text-white/60 text-sm urdu-text animate-pulse">آپ کی معلومات محفوظ ہے</p>
-        </div>
     </div>
-</section>
+</div>
 
 <style>
-/* Modern Form Field Styling */
-#id_username,
-#id_email,
-#id_password1,
-#id_password2 {
+/* ================================================
+   PREMIUM REGISTER PAGE - MODERN SAAS DESIGN
+   ================================================ */
+
+/* Root Styles */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Hide navbar on register page */
+nav.navbar {
+    display: none !important;
+}
+
+main {
+    padding: 0 !important;
+}
+
+footer {
+    display: none !important;
+}
+
+/* Register Page Wrapper */
+.register-page-wrapper {
     width: 100%;
-    padding: 1rem 1rem;
-    padding-right: 3rem;
-    padding-left: 3rem;
-    border: 2px solid transparent;
-    border-radius: 0.75rem;
-    font-size: 1rem;
-    color: white;
-    background: rgba(255, 255, 255, 0.1);
+    min-height: 100vh;
+}
+
+.auth-page {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 25%, #cffafe 50%, #a5f3fc 75%, #7dd3fc 100%);
+    overflow: hidden;
+}
+
+/* Background Elements */
+.background-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.gradient-blob {
+    position: absolute;
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    opacity: 0.3;
+    animation: blob-float 8s infinite;
+}
+
+.blob-1 {
+    width: 400px;
+    height: 400px;
+    top: 10%;
+    left: 5%;
+    background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+}
+
+.blob-2 {
+    width: 350px;
+    height: 350px;
+    bottom: 10%;
+    right: 10%;
+    background: linear-gradient(135deg, #22d3ee, #0891b2);
+    animation-delay: 2s;
+}
+
+.blob-3 {
+    width: 300px;
+    height: 300px;
+    top: 50%;
+    right: 5%;
+    background: linear-gradient(135deg, #06b6d4, #14b8a6);
+    animation-delay: 4s;
+}
+
+@keyframes blob-float {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+    33% {
+        transform: translate(30px, -50px) scale(1.05);
+    }
+    66% {
+        transform: translate(-20px, 20px) scale(0.95);
+    }
+}
+
+/* Auth Container */
+.auth-container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+/* Left Side - Visual Content */
+.auth-left-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: slideInLeft 0.7s ease-out;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.content-visual {
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.feature {
+    padding: 28px;
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    text-align: center;
     transition: all 0.3s ease;
+    cursor: default;
+}
+
+.feature:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 40px rgba(14, 165, 233, 0.12);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.feature-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    color: #0ea5e9;
+    stroke-width: 2.5;
+}
+
+.feature h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+}
+
+.feature p {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+/* Right Side - Form */
+.auth-right {
+    display: flex;
+    justify-content: center;
+    animation: slideInRight 0.7s ease-out 0.2s both;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.form-card {
+    width: 100%;
+    max-width: 440px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 50px 45px;
+    box-shadow: 0 20px 60px rgba(14, 165, 233, 0.15),
+                0 0 1px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Card Header */
+.card-header {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.card-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.5px;
+}
+
+.card-subtitle {
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Error Alert */
+.error-alert {
+    padding: 14px 16px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 12px;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: #ef4444;
+    margin-top: 2px;
+}
+
+.alert-messages {
+    flex: 1;
+}
+
+.alert-messages p {
+    margin: 4px 0;
+    font-size: 13px;
+    color: #dc2626;
+    line-height: 1.4;
+}
+
+/* Form */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Form Field */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1e293b;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.field-help {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: -4px;
+}
+
+/* Input Wrapper */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+input[type="email"],
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 16px 12px 45px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 15px;
+    color: #1e293b;
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: inherit;
     outline: none;
 }
 
-#id_username::placeholder,
-#id_email::placeholder,
-#id_password1::placeholder,
-#id_password2::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+input::placeholder {
+    color: #cbd5e1;
 }
 
-#id_username:focus,
-#id_email:focus,
-#id_password1:focus,
-#id_password2:focus {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(147, 51, 234, 0.5);
-    box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2);
+input:focus {
+    border-color: #0ea5e9;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
     transform: translateY(-2px);
 }
 
-input[type="checkbox"] {
+.field-icon {
+    position: absolute;
+    left: 14px;
+    width: 18px;
+    height: 18px;
+    color: #94a3b8;
+    pointer-events: none;
+}
+
+.password-wrapper .field-icon {
+    display: none;
+}
+
+/* Password Toggle */
+.pwd-toggle {
+    position: absolute;
+    right: 14px;
+    background: none;
+    border: none;
     cursor: pointer;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: #94a3b8;
+    transition: all 0.2s ease;
+    padding: 0;
 }
 
-/* Animation for the card entrance */
-@keyframes floatIn {
-    from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.95);
+.pwd-toggle:hover {
+    color: #0ea5e9;
+}
+
+.eye-off-icon {
+    display: none;
+}
+
+.pwd-toggle.show .eye-icon {
+    display: none;
+}
+
+.pwd-toggle.show .eye-off-icon {
+    display: block;
+}
+
+/* Checkbox Terms */
+.checkbox-terms {
+    margin-top: 12px;
+}
+
+.checkbox-field {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #0ea5e9;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.checkbox-label {
+    color: #475569;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.terms-link {
+    color: #0ea5e9;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.terms-link:hover {
+    color: #0284c7;
+}
+
+/* Submit Button */
+.btn-submit {
+    padding: 13px 24px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+    background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
+    overflow: hidden;
+    position: relative;
+}
+
+.btn-submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    transition: left 0.6s ease;
+}
+
+.btn-submit:hover::before {
+    left: 100%;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(14, 165, 233, 0.4);
+    background: linear-gradient(135deg, #0284c7 0%, #0891b2 100%);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+.btn-submit svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+}
+
+/* Card Footer */
+.card-footer {
+    text-align: center;
+    font-size: 14px;
+    color: #64748b;
+    margin-top: 24px;
+}
+
+.link {
+    color: #0ea5e9;
+    text-decoration: none;
+    font-weight: 700;
+    margin-left: 4px;
+    transition: color 0.2s ease;
+}
+
+.link:hover {
+    color: #0284c7;
+}
+
+/* Urdu Text */
+.urdu-text {
+    font-family: 'Noto Naskh Arabic', 'Traditional Arabic', 'Jameel Noori Nastaliq', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    direction: rtl;
+    text-align: right;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .auth-container {
+        gap: 40px;
+        grid-template-columns: 1fr;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
+
+    .auth-left-visual {
+        display: none;
+    }
+
+    .form-card {
+        max-width: 100%;
     }
 }
 
-.bg-white\/10 {
-    animation: floatIn 0.8s ease-out;
-}
-
-/* Pulse animation for background elements */
-@keyframes gentlePulse {
-    0%, 100% {
-        opacity: 0.1;
+@media (max-width: 768px) {
+    .auth-page {
+        padding-bottom: 40px;
     }
-    50% {
-        opacity: 0.2;
+
+    .auth-container {
+        padding: 24px;
+        gap: 30px;
+    }
+
+    .form-card {
+        padding: 36px 28px;
+    }
+
+    .card-title {
+        font-size: 28px;
+    }
+
+    .card-subtitle {
+        font-size: 13px;
+    }
+
+    .blob-1, .blob-2, .blob-3 {
+        opacity: 0.15;
     }
 }
 
-.animate-pulse {
-    animation: gentlePulse 3s ease-in-out infinite;
+@media (max-width: 480px) {
+    .auth-page {
+        padding-top: 60px;
+    }
+
+    .auth-container {
+        padding: 16px;
+        gap: 20px;
+    }
+
+    .form-card {
+        padding: 28px 20px;
+        border-radius: 16px;
+    }
+
+    .card-title {
+        font-size: 24px;
+    }
+
+    .card-header {
+        margin-bottom: 24px;
+    }
+
+    input[type="email"],
+    input[type="text"],
+    input[type="password"] {
+        padding: 14px 16px 14px 45px;
+        font-size: 16px;
+    }
+
+    .btn-submit {
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+
+    .auth-form {
+        gap: 16px;
+    }
+
+    .checkbox-terms {
+        margin-top: 8px;
+    }
 }
 
-.delay-500 {
-    animation-delay: 0.5s;
-}
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .auth-page {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    }
 
-.delay-1000 {
-    animation-delay: 1s;
-}
+    .form-card {
+        background: rgba(15, 23, 42, 0.9);
+    }
 
-/* Hover effects */
-.hover\:scale-105:hover {
-    transform: scale(1.05);
-}
+    .card-title {
+        color: #f1f5f9;
+    }
 
-.hover\:-translate-y-0\.5:hover {
-    transform: translateY(-0.125rem);
+    .card-subtitle {
+        color: #cbd5e1;
+    }
+
+    input[type="email"],
+    input[type="text"],
+    input[type="password"] {
+        background: rgba(30, 41, 59, 0.8);
+        border-color: rgba(71, 85, 105, 0.5);
+        color: #f1f5f9;
+    }
+
+    input[type="email"]:focus,
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+        background: rgba(30, 41, 59, 0.95);
+    }
+
+    input::placeholder {
+        color: #475569;
+    }
+
+    .field-label {
+        color: #f1f5f9;
+    }
+
+    .checkbox-label,
+    .card-footer,
+    .field-help {
+        color: #cbd5e1;
+    }
+
+    .feature {
+        background: rgba(30, 41, 59, 0.8);
+    }
+
+    .feature h3 {
+        color: #f1f5f9;
+    }
+
+    .feature p {
+        color: #cbd5e1;
+    }
 }
 </style>
 
-{% block extra_js %}
+<!-- Password Toggle & Form Handling -->
 <script>
-// Toggle password visibility with smooth animation
-document.querySelectorAll('.toggle-password').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const input = document.getElementById(this.dataset.target);
-        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-        input.setAttribute('type', type);
-
-        // Animate the icon
-        const icon = this.querySelector('svg');
-        if (type === 'text') {
-            icon.style.transform = 'scale(1.1)';
-            icon.style.color = '#c084fc';
-        } else {
-            icon.style.transform = 'scale(1)';
-            icon.style.color = '';
-        }
-
-        // Add a subtle shake animation to the input
-        input.style.transform = 'translateX(2px)';
-        setTimeout(() => {
-            input.style.transform = '';
-        }, 100);
-    });
-});
-
-// Add entrance animations
 document.addEventListener('DOMContentLoaded', function() {
-    const formGroups = document.querySelectorAll('.group');
-    formGroups.forEach((group, index) => {
-        group.style.opacity = '0';
-        group.style.transform = 'translateY(20px)';
-        setTimeout(() => {
-            group.style.transition = 'all 0.5s ease';
-            group.style.opacity = '1';
-            group.style.transform = 'translateY(0)';
-        }, index * 100);
+    // Password visibility toggle
+    const pwdToggles = document.querySelectorAll('.pwd-toggle');
+    
+    pwdToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            const input = this.previousElementSibling;
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                this.classList.add('show');
+            } else {
+                input.type = 'password';
+                this.classList.remove('show');
+            }
+        });
     });
+
+    // Form submission
+    const form = document.querySelector('.auth-form');
+    if (form) {
+        form.addEventListener('submit', function() {
+            const btn = this.querySelector('.btn-submit');
+            btn.disabled = true;
+            btn.innerHTML = '<span>بنایا جا رہا ہے...</span>';
+        });
+    }
 });
 </script>
+
 {% endblock %}
