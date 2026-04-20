@@ -5,91 +5,120 @@
 {% block meta_description %}Sign in to access your {{ SITE_NAME }} dashboard.{% endblock %}
 
 {% block content %}
-<!-- Premium Login Section -->
-<section class="min-h-screen flex items-center justify-center bg-gradient-to-br from-cream via-white to-cream py-12 px-4 sm:px-6 lg:px-8">
-    <div class="w-full max-w-md">
-        <!-- Centered Card Container -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden backdrop-blur-md">
-            <!-- Header with Gold Accent -->
-            <div class="bg-gradient-to-r from-gold-400 to-gold-500 py-8 px-6 text-center">
-                <!-- Icon -->
-                <div class="flex justify-center mb-4">
-                    <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.72-7 8.77V12H5V6.3l7-3.11v8.8z"/>
+<!-- Modern Login Section -->
+<section class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0">
+        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-pink-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
+    </div>
+
+    <div class="w-full max-w-md relative z-10">
+        <!-- Floating Card Container -->
+        <div class="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 overflow-hidden transform hover:scale-105 transition-all duration-500">
+            <!-- Header with Elegant Gradient -->
+            <div class="bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-800 py-10 px-8 text-center relative">
+                <!-- Decorative Pattern -->
+                <div class="absolute inset-0 opacity-10">
+                    <svg class="w-full h-full" viewBox="0 0 400 200" fill="none">
+                        <defs>
+                            <pattern id="pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                                <circle cx="20" cy="20" r="1" fill="white"/>
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#pattern)"/>
                     </svg>
                 </div>
-                <h1 class="text-3xl font-bold text-white mb-1">خوش آمدید</h1>
-                <p class="text-gold-100">اپنے اکاؤنٹ میں لاگ ان کریں</p>
+
+                <!-- Icon with Glow Effect -->
+                <div class="flex justify-center mb-6 relative">
+                    <div class="absolute inset-0 bg-white/20 rounded-full blur-xl scale-150"></div>
+                    <div class="relative bg-white/20 p-4 rounded-full backdrop-blur-sm">
+                        <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V21C3 22.11 3.89 23 5 23H19C20.11 23 21 22.11 21 21V9M19 9H14V4H19V9Z"/>
+                        </svg>
+                    </div>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-2 urdu-text">خوش آمدید</h1>
+                <p class="text-purple-100 text-lg">اپنے اکاؤنٹ میں لاگ ان کریں</p>
             </div>
 
             <!-- Form Content -->
-            <div class="px-6 py-8 sm:px-8">
+            <div class="px-8 py-10 sm:px-10">
                 {% if form.errors %}
-                <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                    <p class="text-red-800 font-semibold mb-2">خرابی:</p>
+                <div class="mb-8 p-4 bg-red-500/20 border border-red-400/30 rounded-xl backdrop-blur-sm">
+                    <div class="flex items-center mb-3">
+                        <svg class="w-5 h-5 text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                        <p class="text-red-300 font-semibold">خرابی</p>
+                    </div>
                     {% for field in form %}
                         {% for error in field.errors %}
-                            <p class="text-red-700 text-sm">• {{ field.label }}: {{ error }}</p>
+                            <p class="text-red-200 text-sm mb-1">• {{ field.label }}: {{ error }}</p>
                         {% endfor %}
                     {% endfor %}
                     {% for error in form.non_field_errors %}
-                        <p class="text-red-700 text-sm">• {{ error }}</p>
+                        <p class="text-red-200 text-sm mb-1">• {{ error }}</p>
                     {% endfor %}
                 </div>
                 {% endif %}
 
-                <form method="post" action="{% url 'login' %}" class="space-y-5">
+                <form method="post" action="{% url 'login' %}" class="space-y-6">
                     {% csrf_token %}
-                    
+
                     {% if next %}
                         <input type="hidden" name="next" value="{{ next }}">
                     {% endif %}
 
                     <!-- Username Field -->
-                    <div>
-                        <label for="{{ form.username.id_for_label }}" class="block text-sm font-semibold text-charcoal mb-2">صارف نام (Shanakht)</label>
+                    <div class="group">
+                        <label for="{{ form.username.id_for_label }}" class="block text-sm font-semibold text-white/90 mb-3 urdu-text">صارف نام</label>
                         <div class="relative">
-                            <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-teal-500">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-4 text-purple-300">
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path>
                                 </svg>
-                            </span>
+                            </div>
                             {{ form.username }}
+                            <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-indigo-400 group-focus-within:w-full transition-all duration-500"></div>
                         </div>
-                        {% if form.username.help_text %}
-                            <p class="mt-1 text-xs text-gray-500">{{ form.username.help_text|safe }}</p>
-                        {% endif %}
                     </div>
 
                     <!-- Password Field -->
-                    <div>
-                        <label for="{{ form.password.id_for_label }}" class="block text-sm font-semibold text-charcoal mb-2">پاس ورڈ (Ramz)</label>
+                    <div class="group">
+                        <label for="{{ form.password.id_for_label }}" class="block text-sm font-semibold text-white/90 mb-3 urdu-text">پاس ورڈ</label>
                         <div class="relative">
-                            <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-teal-500">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-4 text-purple-300">
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+                                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
                                 </svg>
-                            </span>
+                            </div>
                             {{ form.password }}
-                            <button type="button" class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 hover:text-gray-600 toggle-password" data-target="{{ form.password.id_for_label }}">
+                            <button type="button" class="absolute inset-y-0 left-0 flex items-center pl-4 text-white/60 hover:text-white toggle-password transition-colors duration-200" data-target="{{ form.password.id_for_label }}">
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                                     <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                                 </svg>
                             </button>
+                            <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-indigo-400 group-focus-within:w-full transition-all duration-500"></div>
                         </div>
                     </div>
 
-                    <!-- Remember Me -->
-                    <div class="flex items-center">
-                        <input type="checkbox" id="remember" name="remember" class="h-4 w-4 text-gold-500 focus:ring-gold-500 border-gray-300 rounded cursor-pointer">
-                        <label for="remember" class="me-2 block text-sm text-gray-700 cursor-pointer">مجھے یاد رکھیں</label>
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="remember" name="remember" class="h-4 w-4 text-purple-400 focus:ring-purple-400 border-white/30 rounded cursor-pointer bg-white/10">
+                            <label for="remember" class="mr-3 block text-sm text-white/80 cursor-pointer urdu-text">مجھے یاد رکھیں</label>
+                        </div>
+                        <a href="{% url 'password_reset' %}" class="text-sm text-purple-300 hover:text-purple-200 transition-colors duration-200 urdu-text">بھول گئے؟</a>
                     </div>
 
                     <!-- Submit Button -->
-                    <button type="submit" class="w-full bg-gradient-to-r from-gold-500 to-gold-600 text-white font-bold py-3 px-4 rounded-lg hover:from-gold-600 hover:to-gold-700 transition-all duration-300 shadow-md hover:shadow-lg">
+                    <button type="submit" class="w-full bg-gradient-to-r from-purple-500 via-indigo-500 to-purple-600 text-white font-bold py-4 px-6 rounded-xl hover:from-purple-600 hover:via-indigo-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-purple-500/25 transform hover:scale-105 hover:-translate-y-0.5">
                         <span class="flex items-center justify-center">
-                            <svg class="w-5 h-5 ms-2" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-5 h-5 ml-3 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M3 1a1 1 0 011-1h12a1 1 0 011 1H3zm0 4h14v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm2 3a1 1 0 000 2h8a1 1 0 100-2H5z" clip-rule="evenodd"></path>
                             </svg>
                             لاگ ان کریں
@@ -97,98 +126,135 @@
                     </button>
                 </form>
 
-                <!-- Divider -->
-                <div class="mt-6 relative">
+                <!-- Elegant Divider -->
+                <div class="mt-8 relative">
                     <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-300"></div>
+                        <div class="w-full border-t border-white/20"></div>
                     </div>
                     <div class="relative flex justify-center text-sm">
-                        <span class="px-2 bg-white text-gray-500">یا</span>
+                        <span class="px-4 bg-gradient-to-r from-purple-900/50 to-indigo-900/50 text-white/70 rounded-full py-1 backdrop-blur-sm urdu-text">یا</span>
                     </div>
                 </div>
 
                 <!-- Social Login Options -->
-                <div class="mt-6 grid grid-cols-2 gap-3">
-                    <button type="button" class="w-full border border-gray-300 rounded-lg py-2.5 px-3 hover:bg-gray-50 transition flex items-center justify-center space-x-2">
+                <div class="mt-8 grid grid-cols-2 gap-4">
+                    <button type="button" class="w-full bg-white/10 border border-white/20 rounded-xl py-3 px-4 hover:bg-white/20 transition-all duration-300 flex items-center justify-center space-x-3 backdrop-blur-sm hover:scale-105">
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                             <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                         </svg>
-                        <span class="text-sm font-medium">Google</span>
+                        <span class="text-sm font-medium text-white">گوگل</span>
                     </button>
-                    <button type="button" class="w-full border border-gray-300 rounded-lg py-2.5 px-3 hover:bg-gray-50 transition flex items-center justify-center space-x-2">
+                    <button type="button" class="w-full bg-white/10 border border-white/20 rounded-xl py-3 px-4 hover:bg-white/20 transition-all duration-300 flex items-center justify-center space-x-3 backdrop-blur-sm hover:scale-105">
                         <svg class="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
                             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                         </svg>
-                        <span class="text-sm font-medium">Facebook</span>
+                        <span class="text-sm font-medium text-white">فیس بک</span>
                     </button>
                 </div>
 
                 <!-- Footer Links -->
-                <div class="mt-6 space-y-3 text-center text-sm">
-                    <p>
-                        <a href="{% url 'password_reset' %}" class="text-gold-600 hover:text-gold-700 font-semibold">پاس ورڈ بھول گئے ہیں؟</a>
-                    </p>
-                    <p class="text-gray-600">
-                        اکاؤنٹ نہیں ہے؟ 
-                        <a href="{% url 'register' %}" class="text-gold-600 hover:text-gold-700 font-semibold">اب رجسٹر کریں</a>
+                <div class="mt-8 text-center">
+                    <p class="text-white/70 urdu-text">
+                        اکاؤنٹ نہیں ہے؟
+                        <a href="{% url 'register' %}" class="text-purple-300 hover:text-purple-200 font-semibold transition-colors duration-200 ml-2">رجسٹر کریں ←</a>
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Decorative Background -->
-        <div class="mt-8 text-center text-gray-500 text-sm">
-            <p>محفوظ اور رازدارانہ لاگ ان</p>
+        <!-- Elegant Tagline -->
+        <div class="mt-8 text-center">
+            <p class="text-white/60 text-sm urdu-text animate-pulse">محفوظ اور رازدارانہ لاگ ان</p>
         </div>
     </div>
 </section>
 
 <style>
-/* Form field styling */
+/* Modern Form Field Styling */
 #id_username,
 #id_password {
     width: 100%;
-    padding: 0.75rem 1rem;
-    padding-right: 2.5rem;
-    border: 1px solid #E5E7EB;
-    border-radius: 0.5rem;
+    padding: 1rem 1rem;
+    padding-right: 3rem;
+    padding-left: 3rem;
+    border: 2px solid transparent;
+    border-radius: 0.75rem;
     font-size: 1rem;
-    color: #2D2D2D;
-    background: white;
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
     transition: all 0.3s ease;
     font-family: inherit;
+    outline: none;
+}
+
+#id_username::placeholder,
+#id_password::placeholder {
+    color: rgba(255, 255, 255, 0.6);
 }
 
 #id_username:focus,
 #id_password:focus {
-    outline: none;
-    border-color: #D4AF37;
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(147, 51, 234, 0.5);
+    box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2);
+    transform: translateY(-2px);
 }
 
 input[type="checkbox"] {
     cursor: pointer;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Custom input styling for glassmorphism */
-#id_username, #id_password {
-    background: var(--premium-card-glass-strong) !important;
-    border: var(--premium-border-gold) !important;
-    color: var(--premium-text) !important;
+/* Animation for the card entrance */
+@keyframes floatIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
-#id_username:focus, #id_password:focus {
-    background: var(--premium-card-glass) !important;
-    border-color: var(--premium-gold) !important;
-    box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25) !important;
-    color: var(--premium-text) !important;
+.bg-white\/10 {
+    animation: floatIn 0.8s ease-out;
 }
 
-#id_username::placeholder, #id_password::placeholder {
-    color: var(--premium-text-muted) !important;
+/* Pulse animation for background elements */
+@keyframes gentlePulse {
+    0%, 100% {
+        opacity: 0.1;
+    }
+    50% {
+        opacity: 0.2;
+    }
+}
+
+.animate-pulse {
+    animation: gentlePulse 3s ease-in-out infinite;
+}
+
+.delay-500 {
+    animation-delay: 0.5s;
+}
+
+.delay-1000 {
+    animation-delay: 1s;
+}
+
+/* Hover effects */
+.hover\:scale-105:hover {
+    transform: scale(1.05);
+}
+
+.hover\:-translate-y-0\.5:hover {
+    transform: translateY(-0.125rem);
 }
 </style>
 
@@ -196,13 +262,42 @@ input[type="checkbox"] {
 
 {% block extra_js %}
 <script>
-// Toggle password visibility
+// Toggle password visibility with smooth animation
 document.querySelectorAll('.toggle-password').forEach(btn => {
     btn.addEventListener('click', function() {
         const input = document.getElementById(this.dataset.target);
         const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
         input.setAttribute('type', type);
-        this.querySelector('svg').style.opacity = type === 'password' ? '0.4' : '1';
+
+        // Animate the icon
+        const icon = this.querySelector('svg');
+        if (type === 'text') {
+            icon.style.transform = 'scale(1.1)';
+            icon.style.color = '#c084fc';
+        } else {
+            icon.style.transform = 'scale(1)';
+            icon.style.color = '';
+        }
+
+        // Add a subtle shake animation to the input
+        input.style.transform = 'translateX(2px)';
+        setTimeout(() => {
+            input.style.transform = '';
+        }, 100);
+    });
+});
+
+// Add entrance animations
+document.addEventListener('DOMContentLoaded', function() {
+    const formGroups = document.querySelectorAll('.group');
+    formGroups.forEach((group, index) => {
+        group.style.opacity = '0';
+        group.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            group.style.transition = 'all 0.5s ease';
+            group.style.opacity = '1';
+            group.style.transform = 'translateY(0)';
+        }, index * 100);
     });
 });
 </script>
