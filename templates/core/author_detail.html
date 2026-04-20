@@ -1,129 +1,218 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Content by {{ author.name }} - {{ SITE_NAME }}{% endblock %}
+{% block title %}{{ author.name }} - {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<section class="page-header py-4">
-    <div class="main-container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'author_list' %}">Authors</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ author.name }}</li>
-            </ol>
-        </nav>
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
-            <div>
-                <span class="eyebrow-soft d-inline-flex align-items-center gap-2 mb-2"><i class="bi bi-collection"></i> Author Content</span>
-                <h1 class="mb-1">Content by {{ author.name }}</h1>
-                <p class="section-subtitle mb-0">{{ published_total }} published works by this author.</p>
-            </div>
-        </div>
-    </div>
-</section>
 
-<section class="page-section section-spacing">
-    <div class="main-container">
-        {% if all_content %}
-            <div class="content-grid">
-                {% for item in all_content %}
-                    <div class="content-card">
-                        <div class="content-card-header">
-                            <span class="content-type-badge">{{ item.type|title }}</span>
-                            <time class="content-date">{{ item.date|date:"M j, Y" }}</time>
-                        </div>
-                        <h3 class="content-card-title">
-                            <a href="{{ item.item.get_absolute_url }}">{{ item.item.title }}</a>
-                        </h3>
-                        <p class="content-card-excerpt">
-                            {% if item.type == 'quote' %}
-                                {{ item.item.text|striptags|truncatechars:150 }}
-                            {% elif item.item.content %}
-                                {{ item.item.content|striptags|truncatechars:150 }}
-                            {% else %}
-                                {{ item.item.description|default:""|striptags|truncatechars:150 }}
-                            {% endif %}
-                        </p>
-                    </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="text-center py-5">
-                <i class="bi bi-collection display-1 text-muted mb-3"></i>
-                <h3>No content available</h3>
-                <p class="text-muted">This author hasn't published any content yet.</p>
-            </div>
-        {% endif %}
-    </div>
-</section>
-{% endblock %}
-
-{% block extra_css %}
 <style>
-.content-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 1.5rem;
-}
+    .author-header {
+        padding: 4rem 1.5rem;
+        text-align: center;
+        background: linear-gradient(135deg, #f0f9ff 0%, #ecf9ff 100%);
+        border-bottom: 1px solid #e5e7eb;
+    }
 
-.content-card {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    border: 1px solid #f0f0f0;
-    transition: all 0.2s ease;
-}
+    .author-name {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 1rem 0;
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
 
-.content-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
-}
+    .author-subtitle {
+        font-size: 1.1rem;
+        color: #64748b;
+        margin: 0;
+    }
 
-.content-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
+    .content-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem;
+    }
 
-.content-type-badge {
-    background: #e3f2fd;
-    color: #1976d2;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
+    .content-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #f1f5f9;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-.content-date {
-    color: #666;
-    font-size: 0.875rem;
-}
+    .content-card:hover {
+        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.15);
+        transform: translateY(-4px);
+    }
 
-.content-card-title {
-    margin-bottom: 0.75rem;
-}
+    .content-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
 
-.content-card-title a {
-    color: #333;
-    text-decoration: none;
-    font-size: 1.125rem;
-    font-weight: 600;
-    line-height: 1.4;
-}
+    .content-type-badge {
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        color: white;
+        padding: 0.35rem 0.85rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
 
-.content-card-title a:hover {
-    color: #1976d2;
-}
+    .content-date {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
 
-.content-card-excerpt {
-    color: #666;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    margin: 0;
-}
+    .content-card-title {
+        margin: 0 0 0.75rem 0;
+    }
+
+    .content-card-title a {
+        color: #1e293b;
+        text-decoration: none;
+        font-size: 1.15rem;
+        font-weight: 700;
+        line-height: 1.4;
+        transition: color 0.3s;
+    }
+
+    .content-card-title a:hover {
+        color: #0ea5e9;
+    }
+
+    .content-card-excerpt {
+        color: #64748b;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .empty-state-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 1rem 0;
+    }
+
+    .empty-state p {
+        color: #64748b;
+        font-size: 1rem;
+        margin: 0.5rem 0 1.5rem 0;
+    }
+
+    @media (max-width: 768px) {
+        .author-header {
+            padding: 2.5rem 1rem;
+        }
+
+        .author-name {
+            font-size: 1.8rem;
+        }
+
+        .author-subtitle {
+            font-size: 1rem;
+        }
+
+        .content-grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            padding: 2rem 1rem;
+            gap: 1rem;
+        }
+
+        .content-card {
+            padding: 1.25rem;
+        }
+
+        .content-card-title a {
+            font-size: 1rem;
+        }
+
+        .content-card-excerpt {
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .author-name {
+            font-size: 1.5rem;
+        }
+
+        .content-grid {
+            grid-template-columns: 1fr;
+            padding: 1.5rem 1rem;
+        }
+
+        .content-card {
+            padding: 1rem;
+        }
+    }
 </style>
+
+<section class="author-header">
+    <h1 class="author-name">{{ author.name }}</h1>
+    <p class="author-subtitle">{{ published_total }} شائع شدہ کام</p>
+</section>
+
+<section>
+    {% if all_content %}
+        <div class="content-grid">
+            {% for item in all_content %}
+                <div class="content-card">
+                    <div class="content-card-header">
+                        <span class="content-type-badge">
+                            {% if item.type == 'poetry' %}شاعری{% elif item.type == 'story' %}کہانی{% elif item.type == 'novel' %}ناول{% elif item.type == 'quote' %}اقتباس{% elif item.type == 'blog' %}بلاگ{% else %}{{ item.type }}{% endif %}
+                        </span>
+                        <time class="content-date">{{ item.date|date:"d M Y" }}</time>
+                    </div>
+                    <h3 class="content-card-title">
+                        <a href="{{ item.item.get_absolute_url }}">{{ item.item.title }}</a>
+                    </h3>
+                    <p class="content-card-excerpt">
+                        {% if item.type == 'quote' %}
+                            {{ item.item.text|striptags|truncatechars:150 }}
+                        {% elif item.item.content %}
+                            {{ item.item.content|striptags|truncatechars:150 }}
+                        {% else %}
+                            {{ item.item.description|default:""|striptags|truncatechars:150 }}
+                        {% endif %}
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon">📚</div>
+            <h3>کوئی مواد دستیاب نہیں</h3>
+            <p>یہ مصنف ابھی کوئی مواد شائع نہیں کیا ہے</p>
+        </div>
+    {% endif %}
+</section>
+
 {% endblock %}
