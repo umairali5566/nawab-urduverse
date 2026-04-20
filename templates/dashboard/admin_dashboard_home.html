@@ -1,0 +1,398 @@
+{% extends 'base.html' %}
+
+{% block title %}ایڈمن ڈیش بورڈ - {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+
+<style>
+    .dashboard-header {
+        padding: 3rem 1.5rem;
+        background: linear-gradient(135deg, #f0f9ff 0%, #ecf9ff 100%);
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .dashboard-header h1 {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0;
+    }
+
+    .dashboard-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #f1f5f9;
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.15);
+    }
+
+    .stat-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #0ea5e9;
+        margin: 0.5rem 0;
+    }
+
+    .stat-label {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        color: #64748b;
+        font-size: 0.95rem;
+        margin: 0;
+    }
+
+    .section-title {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 2rem 0 1rem 0;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #0ea5e9;
+    }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .content-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #f1f5f9;
+        transition: all 0.3s;
+    }
+
+    .content-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.15);
+    }
+
+    .content-card-header {
+        height: 100px;
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+    }
+
+    .content-card-body {
+        padding: 1rem;
+    }
+
+    .content-title {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0.5rem 0;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .content-author {
+        color: #64748b;
+        font-size: 0.85rem;
+        margin: 0;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .admin-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .action-btn {
+        padding: 1rem;
+        background: white;
+        border: 2px solid #0ea5e9;
+        border-radius: 8px;
+        text-decoration: none;
+        text-align: center;
+        color: #0ea5e9;
+        font-weight: 600;
+        transition: all 0.3s;
+        cursor: pointer;
+        font-family: 'Noto Nastaliq Urdu', serif;
+    }
+
+    .action-btn:hover {
+        background: #0ea5e9;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .activity-item {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .activity-icon {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .activity-content {
+        flex: 1;
+    }
+
+    .activity-type {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .activity-time {
+        color: #94a3b8;
+        font-size: 0.85rem;
+        margin: 0.25rem 0 0 0;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .activities-list {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #f1f5f9;
+        margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-header {
+            padding: 2rem 1rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .dashboard-container {
+            padding: 1.5rem 1rem;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .content-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .admin-actions {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .dashboard-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .content-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<section class="dashboard-header">
+    <h1>ایڈمن ڈیش بورڈ</h1>
+</section>
+
+<section class="dashboard-container">
+    <!-- Key Statistics -->
+    <h2 class="section-title">کلیدی اعدادوشمار</h2>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-number">{{ total_users }}</div>
+            <p class="stat-label">کل صارفین</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✍️</div>
+            <div class="stat-number">{{ total_poetry }}</div>
+            <p class="stat-label">شاعری</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📖</div>
+            <div class="stat-number">{{ total_novels }}</div>
+            <p class="stat-label">ناول</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-number">{{ total_stories }}</div>
+            <p class="stat-label">کہانیاں</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💬</div>
+            <div class="stat-number">{{ total_quotes }}</div>
+            <p class="stat-label">اقتباسات</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📝</div>
+            <div class="stat-number">{{ total_blog }}</div>
+            <p class="stat-label">بلاگ</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🎬</div>
+            <div class="stat-number">{{ total_videos }}</div>
+            <p class="stat-label">ویڈیوز</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">👤</div>
+            <div class="stat-number">{{ total_authors }}</div>
+            <p class="stat-label">مصنفین</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🔔</div>
+            <div class="stat-number">{{ notifications_count }}</div>
+            <p class="stat-label">اطلاعات</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💌</div>
+            <div class="stat-number">{{ pending_messages }}</div>
+            <p class="stat-label">زیرِ التوا پیغامات</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📧</div>
+            <div class="stat-number">{{ subscribers_count }}</div>
+            <p class="stat-label">رسالہ مشتہری</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-number">{{ active_memberships }}</div>
+            <p class="stat-label">فعال ممبرشپ</p>
+        </div>
+    </div>
+
+    <!-- Admin Actions -->
+    <h2 class="section-title">انتظامی اقدامات</h2>
+    <div class="admin-actions">
+        <a href="{% url 'dashboard_add_poetry' %}" class="action-btn">✍️ شاعری شامل کریں</a>
+        <a href="{% url 'dashboard_add_novel' %}" class="action-btn">📖 ناول شامل کریں</a>
+        <a href="{% url 'dashboard_add_story' %}" class="action-btn">📚 کہانی شامل کریں</a>
+        <a href="{% url 'dashboard_add_quote' %}" class="action-btn">💬 اقتباس شامل کریں</a>
+        <a href="{% url 'dashboard_add_blog' %}" class="action-btn">📝 بلاگ شامل کریں</a>
+        <a href="{% url 'dashboard_add_video' %}" class="action-btn">🎬 ویڈیو شامل کریں</a>
+        <a href="{% url 'dashboard_bulk_upload' %}" class="action-btn">📤 اجتماعی اپ لوڈ</a>
+        <a href="{% url 'dashboard_user_list' %}" class="action-btn">👥 صارفین کی فہرست</a>
+    </div>
+
+    <!-- Latest Content -->
+    <h2 class="section-title">حالیہ شاعری</h2>
+    {% if trending_poetry %}
+    <div class="content-grid">
+        {% for poem in trending_poetry %}
+        <div class="content-card">
+            <div class="content-card-header">✍️</div>
+            <div class="content-card-body">
+                <p class="content-title">{{ poem.title }}</p>
+                <p class="content-author">{{ poem.author.name }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <h2 class="section-title">حالیہ بلاگز</h2>
+    {% if latest_blog_posts %}
+    <div class="content-grid">
+        {% for post in latest_blog_posts %}
+        <div class="content-card">
+            <div class="content-card-header">📝</div>
+            <div class="content-card-body">
+                <p class="content-title">{{ post.title }}</p>
+                <p class="content-author">{{ post.author.name }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <h2 class="section-title">حالیہ ناول</h2>
+    {% if latest_novels %}
+    <div class="content-grid">
+        {% for novel in latest_novels %}
+        <div class="content-card">
+            <div class="content-card-header">📖</div>
+            <div class="content-card-body">
+                <p class="content-title">{{ novel.title }}</p>
+                <p class="content-author">{{ novel.author.name }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <h2 class="section-title">حالیہ کہانیاں</h2>
+    {% if latest_stories %}
+    <div class="content-grid">
+        {% for story in latest_stories %}
+        <div class="content-card">
+            <div class="content-card-header">📚</div>
+            <div class="content-card-body">
+                <p class="content-title">{{ story.title }}</p>
+                <p class="content-author">{{ story.author.name }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+
+{% endblock %}

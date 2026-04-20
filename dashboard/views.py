@@ -144,7 +144,7 @@ def dashboard_home(request):
         'latest_stories': Story.objects.select_related('author').order_by('-created_at')[:5],
         'latest_blog_posts': BlogPost.objects.select_related('author').order_by('-created_at')[:5],
     }
-    return render(request, 'dashboard/dashboard_home.html', stats)
+    return render(request, 'dashboard/admin_dashboard_home.html', stats)
 
 
 @admin_required
@@ -487,4 +487,36 @@ def bulk_upload(request):
     return render(request, 'dashboard/bulk_upload.html')
 
 
+@login_required
+def user_dashboard(request):
+    """User dashboard for regular users"""
+    from core.models import Bookmark, Comment, ContentLike
+    
+    user = request.user
+    
+    # Get user stats
+    bookmarks_count = Bookmark.objects.filter(user=user).count()
+    comments_count = Comment.objects.filter(user=user).count()
+    likes_count = ContentLike.objects.filter(user=user).count()
+    unread_notifications = Notification.objects.filter(user=user, is_read=False).count()
+    
+    # Get user activities
+    recent_activities = UserActivity.objects.filter(user=user).order_by('-created_at')[:10]
+    
+    # Get bookmarked content
+    bookmarks = Bookmark.objects.filter(user=user).select_related(
+        'poetry__author', 'story__author', 'novel__author', 'quote__author', 'blog__author'
+    ).order_by('-created_at')[:6]
+    
+    context = {
+        'user': user,
+        'bookmarks_count': bookmarks_count,
+        'comments_count': comments_count,
+        'likes_count': likes_count,
+        'unread_notifications': unread_notifications,
+        'recent_activities': recent_activities,
+        'bookmarks': bookmarks,
+    }
+    
+    return render(request, 'dashboard/user_dashboard.html', context)
 

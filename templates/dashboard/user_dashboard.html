@@ -1,0 +1,511 @@
+{% extends 'base.html' %}
+
+{% block title %}میرا ڈیش بورڈ - {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+
+<style>
+    .dashboard-header {
+        padding: 3rem 1.5rem;
+        background: linear-gradient(135deg, #f0f9ff 0%, #ecf9ff 100%);
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .dashboard-header h1 {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0;
+    }
+
+    .dashboard-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+    }
+
+    .user-profile-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #f1f5f9;
+        margin-bottom: 2rem;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 2rem;
+        align-items: center;
+    }
+
+    .user-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3rem;
+        overflow: hidden;
+    }
+
+    .user-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .user-info h2 {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 0.5rem 0;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .user-info p {
+        color: #64748b;
+        margin: 0.25rem 0;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .user-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #f1f5f9;
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.15);
+    }
+
+    .stat-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #0ea5e9;
+        margin: 0.5rem 0;
+    }
+
+    .stat-label {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        color: #64748b;
+        font-size: 0.95rem;
+        margin: 0;
+    }
+
+    .section-title {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 2rem 0 1rem 0;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #0ea5e9;
+    }
+
+    .activities-list {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #f1f5f9;
+        margin-bottom: 2rem;
+    }
+
+    .activity-item {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .activity-icon {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .activity-content {
+        flex: 1;
+    }
+
+    .activity-type {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .activity-time {
+        color: #94a3b8;
+        font-size: 0.85rem;
+        margin: 0.25rem 0 0 0;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .bookmarks-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .bookmark-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #f1f5f9;
+        transition: all 0.3s;
+    }
+
+    .bookmark-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.15);
+    }
+
+    .bookmark-header {
+        height: 120px;
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+    }
+
+    .bookmark-body {
+        padding: 1rem;
+    }
+
+    .bookmark-type {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        background: #f0f9ff;
+        color: #0ea5e9;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .bookmark-title {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0.5rem 0;
+        direction: rtl;
+        text-align: right;
+        line-height: 1.4;
+    }
+
+    .bookmark-author {
+        color: #64748b;
+        font-size: 0.9rem;
+        margin: 0;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #f1f5f9;
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .empty-title {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 1rem 0;
+    }
+
+    .empty-text {
+        color: #64748b;
+        margin: 0;
+    }
+
+    .btn-primary {
+        display: inline-block;
+        padding: 0.75rem 2rem;
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+        margin-top: 1rem;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.4);
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-header {
+            padding: 2rem 1rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .dashboard-container {
+            padding: 1.5rem 1rem;
+        }
+
+        .user-profile-card {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+
+        .user-info h2,
+        .user-info p {
+            direction: ltr;
+            text-align: center;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .bookmarks-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .dashboard-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            font-size: 2rem;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<section class="dashboard-header">
+    <h1>میرا ڈیش بورڈ</h1>
+</section>
+
+<section class="dashboard-container">
+    <!-- User Profile Card -->
+    <div class="user-profile-card">
+        <div class="user-avatar">
+            {% if user.avatar %}
+                <img src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}">
+            {% else %}
+                👤
+            {% endif %}
+        </div>
+        <div class="user-info">
+            <h2>{{ user.get_full_name }}</h2>
+            <p>📧 {{ user.email }}</p>
+            {% if user.city %}
+                <p>📍 {{ user.city }}{% if user.country %}, {{ user.country }}{% endif %}</p>
+            {% endif %}
+            {% if user.is_author %}
+                <p>✍️ مصنف</p>
+            {% endif %}
+        </div>
+        <div class="user-stats">
+            <div class="stat-card">
+                <div class="stat-icon">❤️</div>
+                <div class="stat-number">{{ likes_count }}</div>
+                <p class="stat-label">پسندیدہ</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📚</div>
+                <div class="stat-number">{{ bookmarks_count }}</div>
+                <p class="stat-label">بک مارک</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💬</div>
+                <div class="stat-number">{{ comments_count }}</div>
+                <p class="stat-label">تبصرے</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔔</div>
+                <div class="stat-number">{{ unread_notifications }}</div>
+                <p class="stat-label">نئے اطلاعات</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">❤️</div>
+            <div class="stat-number">{{ likes_count }}</div>
+            <p class="stat-label">کل پسندیدہ</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-number">{{ bookmarks_count }}</div>
+            <p class="stat-label">کل بک مارک</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💬</div>
+            <div class="stat-number">{{ comments_count }}</div>
+            <p class="stat-label">کل تبصرے</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🔔</div>
+            <div class="stat-number">{{ unread_notifications }}</div>
+            <p class="stat-label">نئی اطلاعات</p>
+        </div>
+    </div>
+
+    <!-- Recent Activities -->
+    <h2 class="section-title">حالیہ سرگرمیاں</h2>
+    {% if recent_activities %}
+    <div class="activities-list">
+        {% for activity in recent_activities %}
+        <div class="activity-item">
+            <div class="activity-icon">
+                {% if activity.activity_type == 'login' %}👤
+                {% elif activity.activity_type == 'logout' %}👋
+                {% elif activity.activity_type == 'view' %}👁️
+                {% elif activity.activity_type == 'bookmark' %}🔖
+                {% elif activity.activity_type == 'comment' %}💬
+                {% elif activity.activity_type == 'share' %}📤
+                {% else %}📌{% endif %}
+            </div>
+            <div class="activity-content">
+                <p class="activity-type">
+                    {% if activity.activity_type == 'login' %}لاگ ان
+                    {% elif activity.activity_type == 'logout' %}لاگ آؤٹ
+                    {% elif activity.activity_type == 'view' %}مشاہدہ
+                    {% elif activity.activity_type == 'bookmark' %}بک مارک
+                    {% elif activity.activity_type == 'comment' %}تبصرہ
+                    {% elif activity.activity_type == 'share' %}شیئر
+                    {% else %}{{ activity.activity_type }}{% endif %}
+                </p>
+                {% if activity.description %}<p class="activity-type" style="font-weight: 500; font-size: 0.9rem;">{{ activity.description }}</p>{% endif %}
+                <p class="activity-time">{{ activity.created_at|date:"d M Y, H:i" }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h3 class="empty-title">کوئی سرگرمی نہیں</h3>
+        <p class="empty-text">ابھی کوئی سرگرمی نہیں ہوئی ہے</p>
+    </div>
+    {% endif %}
+
+    <!-- Bookmarked Content -->
+    <h2 class="section-title">بک مارک شدہ مواد</h2>
+    {% if bookmarks %}
+    <div class="bookmarks-grid">
+        {% for bookmark in bookmarks %}
+        <div class="bookmark-card">
+            <div class="bookmark-header">
+                {% if bookmark.poetry %}✍️
+                {% elif bookmark.story %}📚
+                {% elif bookmark.novel %}📖
+                {% elif bookmark.quote %}💬
+                {% elif bookmark.blog %}📝
+                {% else %}📌{% endif %}
+            </div>
+            <div class="bookmark-body">
+                <span class="bookmark-type">
+                    {% if bookmark.poetry %}شاعری
+                    {% elif bookmark.story %}کہانی
+                    {% elif bookmark.novel %}ناول
+                    {% elif bookmark.quote %}اقتباس
+                    {% elif bookmark.blog %}بلاگ
+                    {% else %}مواد{% endif %}
+                </span>
+                <h3 class="bookmark-title">
+                    {% if bookmark.poetry %}{{ bookmark.poetry.title }}
+                    {% elif bookmark.story %}{{ bookmark.story.title }}
+                    {% elif bookmark.novel %}{{ bookmark.novel.title }}
+                    {% elif bookmark.quote %}{{ bookmark.quote.text|truncatewords:5 }}
+                    {% elif bookmark.blog %}{{ bookmark.blog.title }}
+                    {% endif %}
+                </h3>
+                <p class="bookmark-author">
+                    {% if bookmark.poetry %}{{ bookmark.poetry.author.name }}
+                    {% elif bookmark.story %}{{ bookmark.story.author.name }}
+                    {% elif bookmark.novel %}{{ bookmark.novel.author.name }}
+                    {% elif bookmark.quote %}{{ bookmark.quote.author.name }}
+                    {% elif bookmark.blog %}{{ bookmark.blog.author.name }}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">📕</div>
+        <h3 class="empty-title">کوئی بک مارک نہیں</h3>
+        <p class="empty-text">اپنی پسندیدہ شاعری، کہانیاں اور مواد کو بک مارک کریں</p>
+        <a href="{% url 'home' %}" class="btn-primary">لائبریری میں جائیں</a>
+    </div>
+    {% endif %}
+</section>
+
+{% endblock %}
