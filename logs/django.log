@@ -252,3 +252,9 @@ Traceback (most recent call last):
     duplicate.dicts = self.dicts[:]
     ^^^^^^^^^^^^^^^
 AttributeError: 'super' object has no attribute 'dicts' and no __dict__ for setting new attributes
+ERROR 2026-04-20 17:29:09,449 log 20936 20228 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-20 17:29:09,453 log 20936 24404 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-20 17:30:18,901 log 23256 13924 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-20 17:30:18,905 log 23256 14576 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-20 17:30:30,073 log 23256 12996 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-20 17:30:30,095 log 23256 12608 You're accessing the development server over HTTPS, but it only supports HTTP.
