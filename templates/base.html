@@ -36,21 +36,21 @@
 
             <!-- NAV MENU -->
             <div class="nav-menu">
-                <a href="{% url 'home' %}" class="nav-link">ہوم</a>
-                <a href="{% url 'poetry_list' %}" class="nav-link">شاعری</a>
-                <a href="{% url 'novel_list' %}" class="nav-link">ناول</a>
-                <a href="{% url 'story_list' %}" class="nav-link">کہانیاں</a>
-                <a href="{% url 'quote_list' %}" class="nav-link">اقتباسات</a>
-                <a href="{% url 'blog_list' %}" class="nav-link">بلاگ</a>
+                <a href="{% url 'home' %}" class="nav-link">{{ NAV_LABELS.home }}</a>
+                <a href="{% url 'poetry_list' %}" class="nav-link">{{ NAV_LABELS.poetry }}</a>
+                <a href="{% url 'novel_list' %}" class="nav-link">{{ NAV_LABELS.novel }}</a>
+                <a href="{% url 'story_list' %}" class="nav-link">{{ NAV_LABELS.story }}</a>
+                <a href="{% url 'quote_list' %}" class="nav-link">{{ NAV_LABELS.quote }}</a>
+                <a href="{% url 'blog_list' %}" class="nav-link">{{ NAV_LABELS.blog }}</a>
             </div>
 
             <!-- AUTH BUTTONS -->
             <div class="nav-auth">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'logout' %}" class="btn btn-secondary">لاگ آؤٹ</a>
+                    <a href="{% url 'logout' %}" class="btn btn-secondary">{{ NAV_LABELS.logout }}</a>
                 {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-secondary">لاگ ان</a>
-                    <a href="{% url 'register' %}" class="btn btn-primary">رجسٹر</a>
+                    <a href="{% url 'login' %}" class="btn btn-secondary">{{ NAV_LABELS.login }}</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">{{ NAV_LABELS.register }}</a>
                 {% endif %}
             </div>
 
@@ -67,18 +67,18 @@
 
         <!-- MOBILE MENU -->
         <div id="mobile-menu" class="mobile-menu">
-            <a href="{% url 'home' %}" class="mobile-menu-link">ہوم</a>
-            <a href="{% url 'poetry_list' %}" class="mobile-menu-link">شاعری</a>
-            <a href="{% url 'novel_list' %}" class="mobile-menu-link">ناول</a>
-            <a href="{% url 'story_list' %}" class="mobile-menu-link">کہانیاں</a>
-            <a href="{% url 'quote_list' %}" class="mobile-menu-link">اقتباسات</a>
-            <a href="{% url 'blog_list' %}" class="mobile-menu-link">بلاگ</a>
+            <a href="{% url 'home' %}" class="mobile-menu-link">{{ NAV_LABELS.home }}</a>
+            <a href="{% url 'poetry_list' %}" class="mobile-menu-link">{{ NAV_LABELS.poetry }}</a>
+            <a href="{% url 'novel_list' %}" class="mobile-menu-link">{{ NAV_LABELS.novel }}</a>
+            <a href="{% url 'story_list' %}" class="mobile-menu-link">{{ NAV_LABELS.story }}</a>
+            <a href="{% url 'quote_list' %}" class="mobile-menu-link">{{ NAV_LABELS.quote }}</a>
+            <a href="{% url 'blog_list' %}" class="mobile-menu-link">{{ NAV_LABELS.blog }}</a>
             <div class="mobile-menu-divider"></div>
             {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}" class="mobile-menu-link">لاگ آؤٹ</a>
+                <a href="{% url 'logout' %}" class="mobile-menu-link">{{ NAV_LABELS.logout }}</a>
             {% else %}
-                <a href="{% url 'login' %}" class="mobile-menu-link">لاگ ان</a>
-                <a href="{% url 'register' %}" class="mobile-menu-link">رجسٹر</a>
+                <a href="{% url 'login' %}" class="mobile-menu-link">{{ NAV_LABELS.login }}</a>
+                <a href="{% url 'register' %}" class="mobile-menu-link">{{ NAV_LABELS.register }}</a>
             {% endif %}
         </div>
     </nav>

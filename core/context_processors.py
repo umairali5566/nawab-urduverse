@@ -2,6 +2,7 @@ from django.db.utils import OperationalError
 
 from .models import SiteSetting, SiteTheme, Logo
 from .services import get_popular_content
+from nawab_urduverse.constants import NAV_LABELS, CONTENT_TYPES, DASHBOARD_LABELS
 
 def site_context(request):
     try:
@@ -37,5 +38,8 @@ def site_context(request):
         'site_settings': site_settings,
         'popular': popular,
         'theme': theme,
-        'logo': logo
+        'logo': logo,
+        'NAV_LABELS': NAV_LABELS,
+        'CONTENT_TYPES': CONTENT_TYPES,
+        'DASHBOARD_LABELS': DASHBOARD_LABELS,
     }
