@@ -37,7 +37,9 @@
                             <a href="{{ item.item.get_absolute_url }}">{{ item.item.title }}</a>
                         </h3>
                         <p class="content-card-excerpt">
-                            {% if item.item.content %}
+                            {% if item.type == 'quote' %}
+                                {{ item.item.text|striptags|truncatechars:150 }}
+                            {% elif item.item.content %}
                                 {{ item.item.content|striptags|truncatechars:150 }}
                             {% else %}
                                 {{ item.item.description|default:""|striptags|truncatechars:150 }}

@@ -69,7 +69,6 @@
                             <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
                             <p class="text-muted small">{{ item.created_at|date:"d M Y" }}</p>
                             <div class="d-flex gap-2">
-                                <a href="{% url 'poetry:poetry_edit' item.id %}" class="btn btn-sm btn-outline-primary">{% trans "ترمیم" %}</a>
                                 <a href="{{ item.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">{% trans "دیکھیں" %}</a>
                             </div>
                         </div>
@@ -92,7 +91,6 @@
                             <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
                             <p class="text-muted small">{{ item.created_at|date:"d M Y" }}</p>
                             <div class="d-flex gap-2">
-                                <a href="{% url 'blog:blog_edit' item.id %}" class="btn btn-sm btn-outline-primary">{% trans "ترمیم" %}</a>
                                 <a href="{{ item.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">{% trans "دیکھیں" %}</a>
                             </div>
                         </div>
@@ -115,7 +113,6 @@
                             <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
                             <p class="text-muted small">{{ item.created_at|date:"d M Y" }}</p>
                             <div class="d-flex gap-2">
-                                <a href="{% url 'stories:story_edit' item.id %}" class="btn btn-sm btn-outline-primary">{% trans "ترمیم" %}</a>
                                 <a href="{{ item.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">{% trans "دیکھیں" %}</a>
                             </div>
                         </div>
@@ -138,7 +135,6 @@
                             <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
                             <p class="text-muted small">{{ item.created_at|date:"d M Y" }}</p>
                             <div class="d-flex gap-2">
-                                <a href="{% url 'novels:novel_edit' item.id %}" class="btn btn-sm btn-outline-primary">{% trans "ترمیم" %}</a>
                                 <a href="{{ item.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">{% trans "دیکھیں" %}</a>
                             </div>
                         </div>
@@ -161,7 +157,6 @@
                             <p class="quote-text">{{ item.text|truncatechars:100 }}</p>
                             <p class="text-muted small">{{ item.created_at|date:"d M Y" }}</p>
                             <div class="d-flex gap-2">
-                                <a href="{% url 'quotes:quote_edit' item.id %}" class="btn btn-sm btn-outline-primary">{% trans "ترمیم" %}</a>
                                 <a href="{{ item.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">{% trans "دیکھیں" %}</a>
                             </div>
                         </div>
@@ -184,7 +179,6 @@
                             <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
                             <p class="text-muted small">{{ item.created_at|date:"d M Y" }}</p>
                             <div class="d-flex gap-2">
-                                <a href="{% url 'videos:video_edit' item.id %}" class="btn btn-sm btn-outline-primary">{% trans "ترمیم" %}</a>
                                 <a href="{{ item.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">{% trans "دیکھیں" %}</a>
                             </div>
                         </div>
