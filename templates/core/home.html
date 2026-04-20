@@ -4,189 +4,187 @@
 {% block title %}{{ SITE_NAME }} | Premium Urdu Literature{% endblock %}
 
 {% block content %}
-<div class="main-container home-shell">
-    <section class="home-hero">
-        <div class="home-hero-grid">
-            <div class="home-hero-copy">
-                <span class="eyebrow">Curated Urdu Reading</span>
-                <h1 class="home-hero-title section-title-urdu">اردو ادب کی ایک پیشہ ور اور خوب صورت دنیا</h1>
-                <p class="home-hero-text">A refined digital home for Urdu poetry, novels, short stories, quotations, essays, and literary media with a cleaner reading flow and stronger editorial presentation.</p>
-                <div class="hero-chip-row">
-                    <span class="hero-chip"><i class="bi bi-feather"></i> {{ latest_poetry|length }} latest poems</span>
-                    <span class="hero-chip"><i class="bi bi-journal-text"></i> {{ latest_stories|length }} fresh stories</span>
-                    <span class="hero-chip"><i class="bi bi-book"></i> {{ latest_novels|length }} current novels</span>
-                </div>
-                <div class="hero-actions">
-                    <a href="{% url 'poetry_list' %}" class="btn btn-primary">Start Reading</a>
-                    <a href="{% url 'search' %}" class="btn btn-outline-primary">Explore Library</a>
-                </div>
-            </div>
-            <div class="home-hero-aside">
-                <div class="feature-card">
-                    <h3>Designed like a literary magazine</h3>
-                    <p>Browse categories, discover authors, and move between long-form and short-form reading without visual clutter.</p>
-                    <div class="feature-stat-grid">
-                        <div>
-                            <strong>{{ categories|length }}</strong>
-                            <span>Categories</span>
-                        </div>
-                        <div>
-                            <strong>{{ authors|length }}</strong>
-                            <span>Writers</span>
-                        </div>
-                        <div>
-                            <strong>{{ featured_authors|length }}</strong>
-                            <span>Featured voices</span>
-                        </div>
-                    </div>
-                </div>
+<div class="main-container home-shell" style="direction: rtl; text-align: right;">
+    
+    <!-- HERO SECTION -->
+    <section class="hero-section" style="padding: 80px 2rem; text-align: center;">
+        <div class="hero-content">
+            <h1 class="hero-title" style="font-size: 3rem; font-family: 'Noto Nastaliq Urdu', serif; color: #1e293b; margin-bottom: 2rem;">اردو ادب کی ایک پیشہ ور اور خوبصورت دنیا</h1>
+            <div class="hero-buttons" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="{% url 'poetry_list' %}" class="btn btn-primary" style="padding: 0.75rem 2rem; font-family: 'Noto Nastaliq Urdu', serif; font-size: 1.1rem;">شاعری دریافت کریں</a>
+                <a href="{% url 'search' %}" class="btn btn-secondary" style="padding: 0.75rem 2rem; font-family: 'Noto Nastaliq Urdu', serif; font-size: 1.1rem;">لائبریری تلاش کریں</a>
             </div>
         </div>
     </section>
 
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <div>
-                <span class="eyebrow section-kicker">Categories</span>
-                <h2 class="section-heading">Browse the platform by format</h2>
-                <p class="section-subtitle mb-0">A cleaner structure for readers who want poetry, fiction, essays, quotes, or video in one place.</p>
-            </div>
-        </div>
-        <div class="home-category-grid">
-            <a href="{% url 'poetry_list' %}" class="home-category-card">
-                <span class="home-category-icon"><i class="bi bi-feather"></i></span>
-                <h3>Poetry</h3>
-                <p>Ghazal, nazm, and lyrical reading in a calmer editorial layout.</p>
+    <!-- CATEGORIES SECTION -->
+    <section class="section" style="padding: 60px 2rem;">
+        <h2 class="section-title" style="font-size: 2rem; text-align: center; font-family: 'Noto Nastaliq Urdu', serif; margin-bottom: 3rem; color: #1e293b;">زمرے</h2>
+        <div class="cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 1400px; margin: 0 auto;">
+            
+            <!-- Poetry Card -->
+            <a href="{% url 'poetry_list' %}" class="card" style="background: white; border-radius: 12px; padding: 2rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease; text-decoration: none; cursor: pointer;">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">✍️</div>
+                <h3 style="font-size: 1.3rem; font-family: 'Noto Nastaliq Urdu', serif; color: #1e293b; margin: 0;">شاعری</h3>
             </a>
-            <a href="{% url 'novel_list' %}" class="home-category-card">
-                <span class="home-category-icon"><i class="bi bi-book"></i></span>
-                <h3>Novels</h3>
-                <p>Long-form reading with stronger hierarchy and cleaner navigation.</p>
+
+            <!-- Novels Card -->
+            <a href="{% url 'novel_list' %}" class="card" style="background: white; border-radius: 12px; padding: 2rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease; text-decoration: none; cursor: pointer;">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">📖</div>
+                <h3 style="font-size: 1.3rem; font-family: 'Noto Nastaliq Urdu', serif; color: #1e293b; margin: 0;">ناول</h3>
             </a>
-            <a href="{% url 'story_list' %}" class="home-category-card">
-                <span class="home-category-icon"><i class="bi bi-journal-text"></i></span>
-                <h3>Stories</h3>
-                <p>Short fiction and narrative reading with sharper content cards.</p>
+
+            <!-- Stories Card -->
+            <a href="{% url 'story_list' %}" class="card" style="background: white; border-radius: 12px; padding: 2rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease; text-decoration: none; cursor: pointer;">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">📚</div>
+                <h3 style="font-size: 1.3rem; font-family: 'Noto Nastaliq Urdu', serif; color: #1e293b; margin: 0;">کہانیاں</h3>
             </a>
-            <a href="{% url 'quote_list' %}" class="home-category-card">
-                <span class="home-category-icon"><i class="bi bi-chat-quote"></i></span>
-                <h3>Quotes</h3>
-                <p>Memorable lines presented like a curated wall of thought.</p>
+
+            <!-- Quotes Card -->
+            <a href="{% url 'quote_list' %}" class="card" style="background: white; border-radius: 12px; padding: 2rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease; text-decoration: none; cursor: pointer;">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">💬</div>
+                <h3 style="font-size: 1.3rem; font-family: 'Noto Nastaliq Urdu', serif; color: #1e293b; margin: 0;">اقتباسات</h3>
             </a>
-            <a href="{% url 'blog_list' %}" class="home-category-card">
-                <span class="home-category-icon"><i class="bi bi-pencil-square"></i></span>
-                <h3>Blog</h3>
-                <p>Essays and commentary shaped for a magazine-style reading experience.</p>
+
+            <!-- Blog Card -->
+            <a href="{% url 'blog_list' %}" class="card" style="background: white; border-radius: 12px; padding: 2rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease; text-decoration: none; cursor: pointer;">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">📝</div>
+                <h3 style="font-size: 1.3rem; font-family: 'Noto Nastaliq Urdu', serif; color: #1e293b; margin: 0;">بلاگ</h3>
             </a>
-            <a href="{% url 'video_list' %}" class="home-category-card">
-                <span class="home-category-icon"><i class="bi bi-play-btn"></i></span>
-                <h3>Videos</h3>
-                <p>Literary media arranged with cleaner presentation and discovery.</p>
+
+            <!-- Videos Card -->
+            <a href="{% url 'video_list' %}" class="card" style="background: white; border-radius: 12px; padding: 2rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease; text-decoration: none; cursor: pointer;">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎬</div>
+                <h3 style="font-size: 1.3rem; font-family: 'Noto Nastaliq Urdu', serif; color: #1e293b; margin: 0;">ویڈیوز</h3>
             </a>
+
         </div>
     </section>
 
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <div>
-                <span class="eyebrow section-kicker">Latest Poetry</span>
-                <h2 class="section-heading">Fresh verses from the platform</h2>
+    <!-- LATEST POETRY SECTION -->
+    {% if latest_poetry %}
+    <section class="section" style="padding: 60px 2rem; background-color: #f8fafc;">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <h2 class="section-title" style="font-size: 2rem; font-family: 'Noto Nastaliq Urdu', serif; color: #1e293b; margin-bottom: 3rem; text-align: center;">تازہ ترین شاعری</h2>
+            <div class="listing-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem;">
+                {% for poem in latest_poetry %}
+                <a href="{% url 'poetry_detail' poem.slug %}" style="text-decoration: none; color: inherit;">
+                    <article class="listing-card" style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease; height: 100%;">
+                        <div style="margin-bottom: 1rem;">
+                            {% if poem.category %}
+                            <span style="display: inline-block; background-color: #e0f2fe; color: #0369a1; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">{{ poem.category.name }}</span>
+                            {% endif %}
+                        </div>
+                        <h3 style="font-size: 1.2rem; font-family: 'Noto Nastaliq Urdu', serif; color: #1e293b; margin: 0.5rem 0;">{{ poem.title }}</h3>
+                        <p style="color: #64748b; font-size: 0.95rem; margin: 1rem 0;">{{ poem.author.name }}</p>
+                    </article>
+                </a>
+                {% endfor %}
             </div>
-            <a href="{% url 'poetry_list' %}" class="btn btn-outline-primary btn-sm">View all poetry</a>
-        </div>
-        <div class="listing-grid">
-            {% for poem in latest_poetry %}
-            <article class="listing-card home-literary-card">
-                <div class="listing-body">
-                    <div class="listing-kicker">
-                        <span class="badge-soft">{% if poem.category %}{{ poem.category.name }}{% else %}Poetry{% endif %}</span>
-                        <span>{{ poem.created_at|date:"d M Y" }}</span>
-                    </div>
-                    <h3 class="listing-title"><a href="{% url 'poetry_detail' poem.slug %}">{{ poem.title }}</a></h3>
-                    <p class="listing-excerpt urdu-text">{{ poem.content|striptags|truncatechars:150 }}</p>
-                    <div class="listing-footer">
-                        <span class="listing-meta"><i class="bi bi-person"></i> {{ poem.author.name }}</span>
-                        <a href="{% url 'poetry_detail' poem.slug %}" class="btn btn-primary btn-sm">Read poem</a>
-                    </div>
-                </div>
-            </article>
-            {% empty %}
-            <article class="empty-state-card">
-                <h3 class="mt-0">No poetry published yet</h3>
-                <p class="mb-0">Poetry entries will appear here once content is published.</p>
-            </article>
-            {% endfor %}
         </div>
     </section>
+    {% endif %}
 
-    <section class="home-content-split">
-        <section class="section-panel">
-            <div class="section-panel-header">
-                <div>
-                    <span class="eyebrow section-kicker">Stories</span>
-                    <h2 class="section-heading">Narrative reading</h2>
-                </div>
-            </div>
-            <div class="home-mini-list">
+    <!-- LATEST STORIES SECTION -->
+    {% if latest_stories %}
+    <section class="section" style="padding: 60px 2rem;">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <h2 class="section-title" style="font-size: 2rem; font-family: 'Noto Nastaliq Urdu', serif; color: #1e293b; margin-bottom: 3rem; text-align: center;">تازہ ترین کہانیاں</h2>
+            <div class="listing-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem;">
                 {% for story in latest_stories %}
-                <a href="{% url 'story_detail' story.slug %}" class="home-mini-card">
-                    <strong>{{ story.title }}</strong>
-                    <span>{{ story.author.name }}</span>
+                <a href="{% url 'story_detail' story.slug %}" style="text-decoration: none; color: inherit;">
+                    <article class="listing-card" style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease; height: 100%;">
+                        <div style="margin-bottom: 1rem;">
+                            {% if story.category %}
+                            <span style="display: inline-block; background-color: #fce7f3; color: #be185d; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">{{ story.category.name }}</span>
+                            {% endif %}
+                        </div>
+                        <h3 style="font-size: 1.2rem; font-family: 'Noto Nastaliq Urdu', serif; color: #1e293b; margin: 0.5rem 0;">{{ story.title }}</h3>
+                        <p style="color: #64748b; font-size: 0.95rem; margin: 1rem 0;">{{ story.author.name }}</p>
+                    </article>
                 </a>
-                {% empty %}
-                <div class="home-mini-card is-empty">
-                    <strong>No stories yet</strong>
-                    <span>Published stories will appear here.</span>
-                </div>
                 {% endfor %}
             </div>
-        </section>
+        </div>
+    </section>
+    {% endif %}
 
-        <section class="section-panel">
-            <div class="section-panel-header">
-                <div>
-                    <span class="eyebrow section-kicker">Novels</span>
-                    <h2 class="section-heading">Long-form reading</h2>
-                </div>
-            </div>
-            <div class="home-mini-list">
+    <!-- LATEST NOVELS SECTION -->
+    {% if latest_novels %}
+    <section class="section" style="padding: 60px 2rem; background-color: #f8fafc;">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <h2 class="section-title" style="font-size: 2rem; font-family: 'Noto Nastaliq Urdu', serif; color: #1e293b; margin-bottom: 3rem; text-align: center;">تازہ ترین ناول</h2>
+            <div class="listing-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem;">
                 {% for novel in latest_novels %}
-                <a href="{% url 'novel_detail' novel.slug %}" class="home-mini-card">
-                    <strong>{{ novel.title }}</strong>
-                    <span>{{ novel.author.name }}</span>
+                <a href="{% url 'novel_detail' novel.slug %}" style="text-decoration: none; color: inherit;">
+                    <article class="listing-card" style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease; height: 100%;">
+                        <div style="margin-bottom: 1rem;">
+                            {% if novel.category %}
+                            <span style="display: inline-block; background-color: #dcfce7; color: #166534; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">{{ novel.category.name }}</span>
+                            {% endif %}
+                        </div>
+                        <h3 style="font-size: 1.2rem; font-family: 'Noto Nastaliq Urdu', serif; color: #1e293b; margin: 0.5rem 0;">{{ novel.title }}</h3>
+                        <p style="color: #64748b; font-size: 0.95rem; margin: 1rem 0;">{{ novel.author.name }}</p>
+                    </article>
                 </a>
-                {% empty %}
-                <div class="home-mini-card is-empty">
-                    <strong>No novels yet</strong>
-                    <span>Published novels will appear here.</span>
-                </div>
                 {% endfor %}
             </div>
-        </section>
+        </div>
     </section>
+    {% endif %}
 
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <div>
-                <span class="eyebrow section-kicker">Authors</span>
-                <h2 class="section-heading">Featured literary voices</h2>
+    <!-- AUTHORS SECTION -->
+    {% if featured_authors %}
+    <section class="section" style="padding: 60px 2rem;">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <h2 class="section-title" style="font-size: 2rem; font-family: 'Noto Nastaliq Urdu', serif; color: #1e293b; margin-bottom: 3rem; text-align: center;">نمایاں مصنفین</h2>
+            <div class="home-author-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                {% for author in featured_authors %}
+                <a href="{% url 'author_detail' author.slug %}" style="text-decoration: none; color: inherit;">
+                    <div style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease; text-align: center;">
+                        <h3 style="font-size: 1.3rem; font-family: 'Noto Nastaliq Urdu', serif; color: #1e293b; margin: 0;">{{ author.name }}</h3>
+                    </div>
+                </a>
+                {% endfor %}
             </div>
-            <a href="{% url 'author_list' %}" class="btn btn-outline-primary btn-sm">Browse authors</a>
-        </div>
-        <div class="home-author-grid">
-            {% for author in featured_authors %}
-            <a href="{% url 'author_detail' author.slug %}" class="home-author-card">
-                <span class="home-author-badge">{{ forloop.counter|stringformat:"02d" }}</span>
-                <h3>{{ author.name }}</h3>
-                <p>{{ author.bio|default:"Author profile"|truncatechars:120 }}</p>
-            </a>
-            {% empty %}
-            <div class="empty-state-card">
-                <h3 class="mt-0">No featured authors yet</h3>
-                <p class="mb-0">Author highlights will appear here once they are added.</p>
-            </div>
-            {% endfor %}
         </div>
     </section>
+    {% endif %}
+
 </div>
+
+<style>
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12) !important;
+}
+
+.listing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12) !important;
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 40px 1rem !important;
+    }
+    
+    .hero-title {
+        font-size: 1.8rem !important;
+    }
+    
+    .section {
+        padding: 40px 1rem !important;
+    }
+    
+    .hero-buttons {
+        flex-direction: column !important;
+    }
+    
+    .btn {
+        width: 100% !important;
+    }
+}
+</style>
+
 {% endblock %}
