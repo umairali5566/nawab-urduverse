@@ -1,36 +1,276 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Novels - {{ SITE_NAME }}{% endblock %}
+{% block title %}ناول - {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<div class="container my-4">
-    <h1 class="mb-4">Novels</h1>
-    <div class="row">
+
+<style>
+    .page-header {
+        padding: 3rem 1.5rem;
+        text-align: center;
+        background: linear-gradient(135deg, #f0f9ff 0%, #ecf9ff 100%);
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .page-header h1 {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0;
+    }
+
+    .content-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+    }
+
+    .listing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .listing-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #f1f5f9;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .listing-card:hover {
+        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.15);
+        transform: translateY(-4px);
+    }
+
+    .listing-media {
+        display: block;
+        height: 200px;
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3rem;
+        transition: transform 0.3s ease;
+    }
+
+    .listing-card:hover .listing-media {
+        transform: scale(1.05);
+    }
+
+    .listing-body {
+        padding: 1.5rem;
+    }
+
+    .listing-title {
+        margin: 0 0 0.75rem 0;
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        line-height: 1.4;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .listing-title a {
+        color: #1e293b;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .listing-title a:hover {
+        color: #0ea5e9;
+    }
+
+    .listing-excerpt {
+        margin: 0 0 1rem 0;
+        color: #64748b;
+        font-size: 0.95rem;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .btn-outline {
+        display: inline-block;
+        padding: 0.65rem 1.5rem;
+        border: 2px solid #0ea5e9;
+        color: #0ea5e9;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+        background: transparent;
+        cursor: pointer;
+    }
+
+    .btn-outline:hover {
+        background: #0ea5e9;
+        color: white;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 3rem;
+    }
+
+    .pagination a {
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .pagination a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.4);
+    }
+
+    .pagination-info {
+        color: #64748b;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        background: #f1f5f9;
+        border-radius: 8px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #f1f5f9;
+    }
+
+    .empty-state-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 1rem 0;
+    }
+
+    .empty-state p {
+        color: #64748b;
+        font-size: 1.1rem;
+        margin: 0.5rem 0 1.5rem 0;
+    }
+
+    @media (max-width: 768px) {
+        .page-header {
+            padding: 2rem 1rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .content-container {
+            padding: 1.5rem 1rem;
+        }
+
+        .listing-grid {
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .listing-body {
+            padding: 1.25rem;
+        }
+
+        .listing-title {
+            font-size: 1.1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .page-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .listing-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .listing-media {
+            height: 150px;
+            font-size: 2rem;
+        }
+
+        .pagination {
+            gap: 0.5rem;
+        }
+
+        .pagination a,
+        .pagination-info {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
+<section class="page-header">
+    <h1>ناول</h1>
+</section>
+
+<section class="content-container">
+    {% if novels %}
+    <div class="listing-grid">
         {% for novel in novels %}
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ novel.title }}</h5>
-                    <p class="card-text">By {{ novel.author.name }}</p>
-                    <a href="{% url 'novel_detail' novel.slug %}" class="btn btn-primary">Read</a>
-                </div>
+        <article class="listing-card">
+            <a href="{% url 'novel_detail' novel.slug %}" class="listing-media">📖</a>
+            <div class="listing-body">
+                <h2 class="listing-title"><a href="{% url 'novel_detail' novel.slug %}">{{ novel.title }}</a></h2>
+                {% if novel.author %}
+                <p class="listing-excerpt">{{ novel.author.name }}</p>
+                {% endif %}
+                <a href="{% url 'novel_detail' novel.slug %}" class="btn-outline">پڑھیں</a>
             </div>
-        </div>
+        </article>
         {% endfor %}
     </div>
+
     {% if is_paginated %}
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-            {% if page_obj.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-            {% endif %}
-            <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
-            {% if page_obj.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-            {% endif %}
-        </ul>
-    </nav>
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">← پچھلا</a>
+        {% endif %}
+        
+        <span class="pagination-info">صفحہ {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">اگلا →</a>
+        {% endif %}
+    </div>
     {% endif %}
-</div>
+
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">📚</div>
+        <h3>کوئی ناول نہیں ملا</h3>
+        <p>براہ کرم بعد میں دوبارہ کوشش کریں</p>
+    </div>
+    {% endif %}
+</section>
+
 {% endblock %}
