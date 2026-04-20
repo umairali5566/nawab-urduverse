@@ -275,26 +275,32 @@ a:hover {
 
 /* Mobile Menu */
 .mobile-menu {
-    display: none;
+    display: none !important;
     position: fixed;
     top: 70px;
     left: 0;
     right: 0;
-    bottom: 0;
+    width: 100%;
+    max-height: calc(100vh - 70px);
     background: white;
     flex-direction: column;
     padding: 2rem;
     gap: 1rem;
     z-index: 999;
     overflow-y: auto;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .mobile-menu.active {
-    display: flex;
+    display: flex !important;
+    visibility: visible;
+    opacity: 1;
 }
 
 .mobile-menu-overlay {
-    display: none;
+    display: none !important;
     position: fixed;
     top: 0;
     left: 0;
@@ -302,10 +308,15 @@ a:hover {
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
     z-index: 998;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .mobile-menu-overlay.active {
-    display: block;
+    display: block !important;
+    visibility: visible;
+    opacity: 1;
 }
 
 .mobile-menu-link {
@@ -970,11 +981,12 @@ footer {
     .nav-auth {
         order: 2;
         gap: 0.5rem;
+        display: none;
     }
 
     .menu-toggle {
-        display: flex;
-        order: 2;
+        display: flex !important;
+        order: 1;
     }
 
     .nav-link::after {

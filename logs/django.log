@@ -260,3 +260,9 @@ ERROR 2026-04-20 17:30:30,073 log 23256 12996 You're accessing the development s
 ERROR 2026-04-20 17:30:30,095 log 23256 12608 You're accessing the development server over HTTPS, but it only supports HTTP.
 ERROR 2026-04-20 17:46:39,047 log 23256 6780 You're accessing the development server over HTTPS, but it only supports HTTP.
 ERROR 2026-04-20 17:46:39,049 log 23256 15244 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-20 20:44:11,230 log 23256 14132 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-20 20:44:11,238 log 23256 22804 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-20 20:44:14,482 log 23256 9100 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-20 20:44:14,744 log 23256 23180 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-20 20:44:14,795 log 23256 980 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-20 20:44:15,053 log 23256 11484 You're accessing the development server over HTTPS, but it only supports HTTP.
