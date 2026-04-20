@@ -12,36 +12,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS -->
-    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
-    
-    <!-- Custom CSS -->
+    <!-- Custom CSS - Premium Design System -->
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    
-    <!-- Critical RTL & Typography Fixes -->
-    <style>
-        * {
-            direction: rtl;
-            text-align: right;
-        }
-        
-        html, body {
-            direction: rtl;
-            text-align: right;
-            font-family: 'Inter', 'Poppins', sans-serif;
-        }
-        
-        h1, h2, h3, h4, h5, h6, .urdu-text, [lang="ur"] {
-            font-family: 'Noto Nastaliq Urdu', serif;
-            direction: rtl;
-            text-align: right;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/premium.css' %}"
     
     {% block extra_css %}{% endblock %}
 </head>
-<body style="background-color: #F5F1EA; color: #555555;">
+<body>
     
     <!-- NAVBAR -->
     <nav class="navbar">
@@ -57,9 +34,8 @@
                 </a>
             </div>
 
-            <!-- NAV MENU (Center) - RTL aligned -->
+            <!-- NAV MENU -->
             <div class="nav-menu">
-                <a href="{% url 'home' %}" class="nav-link">Home</a>
                 <a href="{% url 'poetry_list' %}" class="nav-link">شاعری</a>
                 <a href="{% url 'novel_list' %}" class="nav-link">ناول</a>
                 <a href="{% url 'story_list' %}" class="nav-link">کہانیاں</a>
@@ -67,11 +43,10 @@
                 <a href="{% url 'blog_list' %}" class="nav-link">بلاگ</a>
             </div>
 
-            <!-- AUTH BUTTONS (Left side) -->
+            <!-- AUTH BUTTONS -->
             <div class="nav-auth">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'dashboard' %}" class="btn btn-primary">Dashboard</a>
-                    <a href="{% url 'logout' %}" class="btn btn-secondary">Logout</a>
+                    <a href="{% url 'logout' %}" class="btn btn-secondary">لاگ آؤٹ</a>
                 {% else %}
                     <a href="{% url 'login' %}" class="btn btn-secondary">لاگ ان</a>
                     <a href="{% url 'register' %}" class="btn btn-primary">رجسٹر</a>
@@ -79,15 +54,18 @@
             </div>
 
             <!-- MOBILE MENU BUTTON -->
-            <button id="menu-toggle" class="menu-toggle">☰</button>
+            <button id="menu-toggle" class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
 
         <!-- MOBILE MENU OVERLAY -->
         <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
 
-        <!-- MOBILE MENU - Hidden on desktop -->
+        <!-- MOBILE MENU -->
         <div id="mobile-menu" class="mobile-menu">
-            <a href="{% url 'home' %}" class="mobile-menu-link">Home</a>
             <a href="{% url 'poetry_list' %}" class="mobile-menu-link">شاعری</a>
             <a href="{% url 'novel_list' %}" class="mobile-menu-link">ناول</a>
             <a href="{% url 'story_list' %}" class="mobile-menu-link">کہانیاں</a>
@@ -95,11 +73,10 @@
             <a href="{% url 'blog_list' %}" class="mobile-menu-link">بلاگ</a>
             <div class="mobile-menu-divider"></div>
             {% if user.is_authenticated %}
-                <a href="{% url 'dashboard' %}" class="mobile-menu-btn btn btn-primary">Dashboard</a>
-                <a href="{% url 'logout' %}" class="mobile-menu-btn btn btn-secondary">Logout</a>
+                <a href="{% url 'logout' %}" class="mobile-menu-link">لاگ آؤٹ</a>
             {% else %}
-                <a href="{% url 'login' %}" class="mobile-menu-btn btn btn-secondary">لاگ ان</a>
-                <a href="{% url 'register' %}" class="mobile-menu-btn btn btn-primary">رجسٹر</a>
+                <a href="{% url 'login' %}" class="mobile-menu-link">لاگ ان</a>
+                <a href="{% url 'register' %}" class="mobile-menu-link">رجسٹر</a>
             {% endif %}
         </div>
     </nav>
@@ -119,41 +96,35 @@
     </main>
 
     <!-- FOOTER -->
-    <footer style="background-color: #1E2A38; color: white; padding: 4rem 2rem; margin-top: 6rem;">
-        <div class="footer-container" style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem; text-align: center;">
-            
-            <!-- About -->
+    <footer>
+        <div class="footer-container">
+            <!-- Links -->
             <div class="footer-section">
-                <h4 style="color: #C8A96A; margin-bottom: 1rem; font-weight: 600;">درباره ہمارے</h4>
-            </div>
-
-            <!-- Quick Links -->
-            <div class="footer-section">
-                <h4 style="color: #C8A96A; margin-bottom: 1rem; font-weight: 600;">مفید لنکز</h4>
-                <a href="{% url 'home' %}" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none; transition: color 0.3s ease;">Home</a><br>
-                <a href="{% url 'poetry_list' %}" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none; transition: color 0.3s ease;">شاعری</a><br>
-                <a href="{% url 'blog_list' %}" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none; transition: color 0.3s ease;">بلاگ</a>
+                <h4>مفید لنکز</h4>
+                <a href="{% url 'poetry_list' %}">شاعری</a>
+                <a href="{% url 'novel_list' %}">ناول</a>
+                <a href="{% url 'blog_list' %}">بلاگ</a>
             </div>
 
             <!-- Social -->
             <div class="footer-section">
-                <h4 style="color: #C8A96A; margin-bottom: 1rem; font-weight: 600;">سوشل میڈیا</h4>
-                <a href="#" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none;">Facebook</a><br>
-                <a href="#" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none;">Twitter</a><br>
-                <a href="#" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none;">Instagram</a>
+                <h4>سوشل میڈیا</h4>
+                <a href="#">Facebook</a>
+                <a href="#">Twitter</a>
+                <a href="#">Instagram</a>
             </div>
 
             <!-- Legal -->
             <div class="footer-section">
-                <h4 style="color: #C8A96A; margin-bottom: 1rem; font-weight: 600;">قانونی</h4>
-                <a href="#" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none;">Privacy Policy</a><br>
-                <a href="#" style="display: inline-block; color: rgba(255, 255, 255, 0.8); margin: 0.5rem; text-decoration: none;">Terms of Service</a>
+                <h4>شرائط</h4>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
             </div>
         </div>
 
         <!-- Footer Bottom -->
-        <div class="footer-bottom" style="border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 2rem; text-align: center; color: rgba(255, 255, 255, 0.7);">
-            <p style="margin: 0;">&copy; {% now "Y" %} {{ SITE_NAME }}</p>
+        <div class="footer-bottom">
+            <p>&copy; {% now "Y" %} {{ SITE_NAME }} — تمام حقوق محفوظ ہیں</p>
         </div>
     </footer>
 
@@ -196,9 +167,6 @@
             if (mobileMenu && !e.target.closest('.navbar') && mobileMenu.classList.contains('active')) {
                 mobileMenu.classList.remove('active');
                 mobileMenuOverlay.classList.remove('active');
-            }
-        });
-
             }
         });
     </script>

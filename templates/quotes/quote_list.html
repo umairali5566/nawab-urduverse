@@ -1,10 +1,53 @@
 {% extends 'base.html' %}
 
-{% block title %}Urdu Quotes | {{ SITE_NAME }}{% endblock %}
-{% block meta_description %}Read and share Urdu quotes from literature, poetry, and famous personalities on {{ SITE_NAME }}.{% endblock %}
+{% block title %}اقتباسات - {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<div class="main-container section-stack">
+<section class="section">
+    <h1 class="page-title">مقبول اقتباسات</h1>
+
+    <!-- Search & Filter -->
+    <form method="get" class="search-filter" style="margin-bottom: 3rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+        <input type="search" name="search" class="form-control" value="{{ request.GET.search }}" placeholder="تلاش کریں..." style="flex: 1; min-width: 200px;">
+        <select name="type" class="form-select" style="min-width: 120px;">
+            <option value="">تمام اقسام</option>
+            {% for value, label in quote_types %}
+            <option value="{{ value }}" {% if request.GET.type == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary">تلاش</button>
+    </form>
+
+    {% if quotes %}
+    <div class="cards-grid-3">
+        {% for quote in quotes %}
+        <div class="card">
+            <p class="featured-quote" style="margin-bottom: 1.5rem;">{{ quote.text }}</p>
+            <p class="featured-author">— {{ quote.author|default:"نامعلوم" }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+    <div class="pagination" style="margin-top: 3rem;">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">← پچھلا</a>
+        {% endif %}
+        <span>صفحہ {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">اگلا →</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">💬</div>
+        <h3>کوئی اقتباس نہیں ملا</h3>
+        <p>براہ کرم دوبارہ تلاش کریں</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
     <section class="page-hero">
         <div class="page-hero-grid">
             <div class="page-hero-copy">

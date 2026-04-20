@@ -1,11 +1,66 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Urdu Stories | {{ SITE_NAME }}{% endblock %}
-{% block meta_description %}Browse Urdu stories, short fiction, and narrative writing on {{ SITE_NAME }}.{% endblock %}
+{% block title %}کہانیاں - {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<div class="main-container section-stack">
+<section class="section">
+    <h1 class="page-title">تازہ کہانیاں</h1>
+
+    <!-- Search & Filter -->
+    <form method="get" class="search-filter" style="margin-bottom: 3rem; display: flex; gap: 1rem; flex-wrap: wrap; max-width: 1400px;">
+        <div class="search-box" style="flex: 1; min-width: 200px;">
+            <input type="search" name="search" class="form-control" value="{{ request.GET.search }}" placeholder="تلاش کریں...">
+        </div>
+        <select name="category" class="form-select" style="min-width: 150px;">
+            <option value="">تمام زمرے</option>
+            {% for category in categories %}
+            <option value="{{ category.slug }}" {% if request.GET.category == category.slug %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary">تلاش</button>
+    </form>
+
+    {% if stories %}
+    <div class="listing-grid">
+        {% for story in stories %}
+        <article class="listing-card">
+            <a href="{{ story.get_absolute_url }}" class="listing-media">
+                <span style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%); color: white; font-size: 2rem;">📚</span>
+            </a>
+            <div class="listing-body">
+                <h2 class="listing-title"><a href="{{ story.get_absolute_url }}">{{ story.title }}</a></h2>
+                {% if story.author %}
+                <p class="listing-excerpt">{{ story.author.name }}</p>
+                {% endif %}
+                <a href="{{ story.get_absolute_url }}" class="btn btn-outline">پڑھیں</a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+    <div class="pagination" style="margin-top: 3rem;">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">← پچھلا</a>
+        {% endif %}
+        
+        <span>صفحہ {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">اگلا →</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">📚</div>
+        <h3>کوئی کہانی نہیں ملی</h3>
+        <p>براہ کرم دوبارہ تلاش کریں</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
     <section class="page-hero">
         <div class="page-hero-grid">
             <div class="page-hero-copy">
