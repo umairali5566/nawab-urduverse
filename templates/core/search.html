@@ -1,204 +1,447 @@
 {% extends 'base.html' %}
 
-{% block title %}Search | {{ SITE_NAME }}{% endblock %}
-{% block meta_description %}Search poets, poetry, novels, stories, quotes, blogs, and videos on {{ SITE_NAME }}.{% endblock %}
+{% block title %}تلاش | {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}اردو ادب میں شاعری، ناول، کہانیاں، اقتباسات اور بلاگ تلاش کریں۔{% endblock %}
 
 {% block content %}
-<div class="main-container section-stack">
-    <section class="page-hero">
-        <div class="page-hero-grid">
-            <div class="page-hero-copy">
-                <span class="eyebrow">Search</span>
-                <h1 class="page-hero-title">Find the right poem, writer, or story faster.</h1>
-                <p class="page-hero-text">Use live suggestions and a content-type filter to move through the full Urdu literature library with less friction.</p>
-                <div class="hero-chip-row">
-                    <span class="hero-chip"><i class="bi bi-search"></i> Smart suggestions</span>
-                    <span class="hero-chip"><i class="bi bi-funnel"></i> Content filters</span>
-                </div>
-            </div>
-            <div class="page-hero-panel">
-                <div class="feature-card">
-                    <h3 class="h3">Search across the whole platform</h3>
-                    <p class="mb-0">Poetry, authors, novels, stories, quotes, blogs, and videos are grouped into cleaner result sections.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="filter-panel">
-        <form class="search-shell-page" method="get" action="{% url 'search' %}">
-            <div class="search-input-wrap search-input-wrap-page" data-search-autocomplete>
-                <input class="form-control" type="search" name="q" value="{{ query }}" placeholder="Try: Iqbal, محبت, classical ghazal" autocomplete="off" data-search-input>
-                <div class="search-suggestions" data-search-suggestions></div>
-            </div>
-            <div class="filter-chip-row" role="radiogroup" aria-label="Search filters">
-                {% for item in content_filters %}
-                <label class="filter-chip">
-                    <input type="radio" name="type" value="{{ item }}" {% if content_filter == item %}checked{% endif %}>
-                    <span>{{ item|title }}</span>
-                </label>
-                {% endfor %}
-            </div>
-            <div>
-                <button class="btn btn-primary" type="submit">Search library</button>
-            </div>
-        </form>
-    </section>
+<style>
+    .search-header {
+        text-align: center;
+        padding: 3rem 1.5rem;
+        background: linear-gradient(135deg, #f0f9ff 0%, #ecf9ff 100%);
+        border-bottom: 1px solid #e5e7eb;
+    }
 
-    {% if not query %}
-    <section class="empty-state-card">
-        <i class="bi bi-search-heart display-5"></i>
-        <h3 class="mt-3">Start with a title, poet, mood, or keyword</h3>
-        <p class="mb-0">Try searching for Faiz, محبت, video, nazm, or the title of a story.</p>
-    </section>
-    {% else %}
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <div>
-                <span class="eyebrow section-kicker">Results</span>
-                <h2 class="section-heading">Results for "{{ query }}"</h2>
-                <p class="section-subtitle mb-0">{{ total_results }} result{{ total_results|pluralize }} found{% if content_filter != 'all' %} in {{ content_filter|title }}{% endif %}.</p>
-            </div>
-        </div>
+    .search-header h1 {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 0.5rem 0;
+    }
 
-        {% if ai_intent %}
-        <div class="hero-chip-row mb-3">
-            <span class="hero-chip"><i class="bi bi-stars"></i> Intent: {{ ai_intent.content_type|default:"all"|title }}</span>
-            {% if ai_intent.author %}
-            <span class="hero-chip"><i class="bi bi-person"></i> {{ ai_intent.author }}</span>
-            {% endif %}
-            {% if ai_intent.keywords %}
-                {% for keyword in ai_intent.keywords %}
-                <span class="hero-chip">{{ keyword }}</span>
-                {% endfor %}
-            {% endif %}
-        </div>
-        {% endif %}
+    .search-header p {
+        color: #64748b;
+        font-size: 1rem;
+        margin: 0;
+    }
 
-        {% if total_results == 0 %}
-        <div class="empty-state-card">
-            <i class="bi bi-inbox display-5"></i>
-            <h3 class="mt-3">No results found</h3>
-            <p class="mb-0">Try a broader keyword, a poet name, or switch the filter back to All.</p>
-        </div>
-        {% endif %}
-    </section>
+    .search-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+    }
 
-    {% if authors %}
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <h2 class="section-heading">Authors</h2>
+    .search-shell-page {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #f1f5f9;
+    }
+
+    .search-input-wrap {
+        margin-bottom: 1.5rem;
+    }
+
+    .search-input-wrap input {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 1rem;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .search-input-wrap input:focus {
+        outline: none;
+        border-color: #0ea5e9;
+        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+    }
+
+    .filter-chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        justify-content: center;
+    }
+
+    .filter-chip {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .filter-chip input {
+        margin-right: 0.5rem;
+        cursor: pointer;
+    }
+
+    .filter-chip span {
+        padding: 0.5rem 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        background: white;
+        transition: all 0.3s;
+        user-select: none;
+    }
+
+    .filter-chip input:checked + span {
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        color: white;
+        border-color: #0ea5e9;
+    }
+
+    .filter-chip span:hover {
+        border-color: #0ea5e9;
+    }
+
+    .btn-search {
+        width: 100%;
+        padding: 0.875rem 1.5rem;
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-search:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+    }
+
+    .empty-state-card {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #f1f5f9;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .empty-state-card .icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state-card h3 {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 1rem 0;
+    }
+
+    .empty-state-card p {
+        color: #64748b;
+        margin: 0.5rem 0;
+    }
+
+    .results-header {
+        padding: 2rem 1.5rem;
+        text-align: center;
+    }
+
+    .results-header h2 {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .results-header p {
+        color: #64748b;
+        margin: 0;
+    }
+
+    .section-heading {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 1.5rem 0;
+    }
+
+    .listing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .search-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #f1f5f9;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .search-card:hover {
+        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.15);
+        transform: translateY(-4px);
+    }
+
+    .search-card h3 {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 0.75rem 0;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .search-card p {
+        color: #64748b;
+        font-size: 0.9rem;
+        margin: 0.5rem 0;
+        direction: rtl;
+        text-align: right;
+        line-height: 1.6;
+    }
+
+    .author-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .quote-card {
+        background: linear-gradient(135deg, #f0f9ff 0%, #ecf9ff 100%);
+        border-radius: 12px;
+        padding: 2rem;
+        border: 1px solid #cffafe;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s;
+    }
+
+    .quote-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.15);
+    }
+
+    .quote-card-text {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin: 0 0 1rem 0;
+        direction: rtl;
+        text-align: right;
+        line-height: 1.8;
+    }
+
+    .section-panel {
+        padding: 2rem 1.5rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .section-panel-header {
+        margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .search-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .listing-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .author-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .filter-chip-row {
+            justify-content: flex-start;
+        }
+    }
+</style>
+
+<section class="search-header">
+    <h1>تلاش کریں</h1>
+    <p>اردو ادب کی مکمل لائبریری میں شاعری، ناول، کہانیاں اور بہت کچھ تلاش کریں</p>
+</section>
+
+<section class="search-container">
+    <form class="search-shell-page" method="get" action="{% url 'search' %}">
+        <div class="search-input-wrap" data-search-autocomplete>
+            <input class="search-input" type="search" name="q" value="{{ query }}" placeholder="شاعر، عنوان یا کلیدی لفظ تلاش کریں" autocomplete="off" data-search-input>
+            <div class="search-suggestions" data-search-suggestions></div>
         </div>
-        <div class="author-grid">
-            {% for author in authors %}
-            <a class="search-card" href="{{ author.get_absolute_url }}">
-                <h3 class="h4 mb-2">{{ author.name }}</h3>
-                <p class="mb-0">{{ author.bio|default:"Writer profile" }}</p>
-            </a>
+        <div class="filter-chip-row" role="radiogroup" aria-label="تلاش کے فلٹر">
+            {% for item in content_filters %}
+            <label class="filter-chip">
+                <input type="radio" name="type" value="{{ item }}" {% if content_filter == item %}checked{% endif %}>
+                <span>
+                    {% if item == 'all' %}تمام{% elif item == 'poetry' %}شاعری{% elif item == 'story' %}کہانی{% elif item == 'novel' %}ناول{% elif item == 'quote' %}اقتباس{% elif item == 'blog' %}بلاگ{% elif item == 'video' %}ویڈیو{% elif item == 'author' %}مصنف{% else %}{{ item }}{% endif %}
+                </span>
+            </label>
             {% endfor %}
         </div>
-    </section>
-    {% endif %}
+        <div>
+            <button class="btn-search" type="submit">تلاش کریں</button>
+        </div>
+    </form>
+</section>
 
-    {% if poetry %}
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <h2 class="section-heading">Poetry</h2>
-        </div>
-        <div class="listing-grid">
-            {% for item in poetry %}
-            <a class="search-card" href="{{ item.get_absolute_url }}">
-                <h3 class="h4 mb-2">{{ item.title }}</h3>
-                <p class="text-muted mb-2">{{ item.author.name }}</p>
-                <p class="urdu-text mb-0">{{ item.plain_text_content|truncatechars:180 }}</p>
-            </a>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
+{% if not query %}
+<section class="section-panel">
+    <div class="empty-state-card">
+        <div class="icon">📚</div>
+        <h3>شروع کریں</h3>
+        <p>شاعر، عنوان، مزاج یا کلیدی لفظ سے تلاش کریں</p>
+    </div>
+</section>
+{% else %}
+<section class="results-header">
+    <h2>"{{ query }}" کے لیے نتائج</h2>
+    <p>{{ total_results }} نتیجہ{% if content_filter != 'all' %} {{ content_filter|title }} میں{% endif %}</p>
+</section>
 
-    {% if novels %}
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <h2 class="section-heading">Novels</h2>
-        </div>
-        <div class="listing-grid">
-            {% for item in novels %}
-            <a class="search-card" href="{{ item.get_absolute_url }}">
-                <h3 class="h4 mb-2">{{ item.title }}</h3>
-                <p class="text-muted mb-2">{{ item.author.name }}</p>
-                <p class="mb-0">{{ item.description_text|default:item.description|striptags|truncatechars:170 }}</p>
-            </a>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
+{% if total_results == 0 %}
+<section class="section-panel">
+    <div class="empty-state-card">
+        <div class="icon">🔍</div>
+        <h3>کوئی نتیجہ نہیں ملا</h3>
+        <p>براہ کرم مختلف الفاظ استعمال کریں یا فلٹر کو تبدیل کریں</p>
+    </div>
+</section>
+{% endif %}
+{% endif %}
 
-    {% if stories %}
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <h2 class="section-heading">Stories</h2>
-        </div>
-        <div class="listing-grid">
-            {% for item in stories %}
-            <a class="search-card" href="{{ item.get_absolute_url }}">
-                <h3 class="h4 mb-2">{{ item.title }}</h3>
-                <p class="text-muted mb-2">{{ item.author.name }}</p>
-                <p class="mb-0">{{ item.excerpt|default:item.content|striptags|truncatechars:170 }}</p>
-            </a>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
+{% if authors %}
+<section class="section-panel">
+    <div class="section-panel-header">
+        <h2 class="section-heading">مصنفین</h2>
+    </div>
+    <div class="author-grid">
+        {% for author in authors %}
+        <a class="search-card" href="{{ author.get_absolute_url }}">
+            <h3>{{ author.name }}</h3>
+            <p>{{ author.bio|default:"مصنف کا پروفائل" }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
 
-    {% if blogs %}
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <h2 class="section-heading">Blogs</h2>
-        </div>
-        <div class="listing-grid">
-            {% for item in blogs %}
-            <a class="search-card" href="{{ item.get_absolute_url }}">
-                <h3 class="h4 mb-2">{{ item.title }}</h3>
-                <p class="text-muted mb-2">{{ item.author.name }}</p>
-                <p class="mb-0">{{ item.excerpt|default:item.content|striptags|truncatechars:170 }}</p>
-            </a>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
+{% if poetry %}
+<section class="section-panel">
+    <div class="section-panel-header">
+        <h2 class="section-heading">شاعری</h2>
+    </div>
+    <div class="listing-grid">
+        {% for item in poetry %}
+        <a class="search-card" href="{{ item.get_absolute_url }}">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.author.name }}</p>
+            <p>{{ item.plain_text_content|truncatechars:180 }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
 
-    {% if quotes %}
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <h2 class="section-heading">Quotes</h2>
-        </div>
-        <div class="listing-grid">
-            {% for item in quotes %}
-            <a class="quote-card" href="{{ item.get_absolute_url }}">
-                <p class="quote-card-text">{{ item.text|truncatechars:180 }}</p>
-                <p class="mb-0 text-muted">{{ item.author.name }}</p>
-            </a>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
+{% if novels %}
+<section class="section-panel">
+    <div class="section-panel-header">
+        <h2 class="section-heading">ناول</h2>
+    </div>
+    <div class="listing-grid">
+        {% for item in novels %}
+        <a class="search-card" href="{{ item.get_absolute_url }}">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.author.name }}</p>
+            <p>{{ item.description_text|default:item.description|striptags|truncatechars:170 }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
 
-    {% if videos %}
-    <section class="section-panel">
-        <div class="section-panel-header">
-            <h2 class="section-heading">Videos</h2>
-        </div>
-        <div class="listing-grid">
-            {% for item in videos %}
-            <a class="search-card" href="{{ item.get_absolute_url }}">
-                <h3 class="h4 mb-2">{{ item.title }}</h3>
-                <p class="mb-0">{{ item.description|default:"Watch this Urdu literature video." }}</p>
-            </a>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
-    {% endif %}
-</div>
+{% if stories %}
+<section class="section-panel">
+    <div class="section-panel-header">
+        <h2 class="section-heading">کہانیاں</h2>
+    </div>
+    <div class="listing-grid">
+        {% for item in stories %}
+        <a class="search-card" href="{{ item.get_absolute_url }}">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.author.name }}</p>
+            <p>{{ item.excerpt|default:item.content|striptags|truncatechars:170 }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if blogs %}
+<section class="section-panel">
+    <div class="section-panel-header">
+        <h2 class="section-heading">بلاگ</h2>
+    </div>
+    <div class="listing-grid">
+        {% for item in blogs %}
+        <a class="search-card" href="{{ item.get_absolute_url }}">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.author.name }}</p>
+            <p>{{ item.excerpt|default:item.content|striptags|truncatechars:170 }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if quotes %}
+<section class="section-panel">
+    <div class="section-panel-header">
+        <h2 class="section-heading">اقتباسات</h2>
+    </div>
+    <div class="listing-grid">
+        {% for item in quotes %}
+        <a class="quote-card" href="{{ item.get_absolute_url }}">
+            <p class="quote-card-text">{{ item.text|truncatechars:180 }}</p>
+            <p>{{ item.author.name }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if videos %}
+<section class="section-panel">
+    <div class="section-panel-header">
+        <h2 class="section-heading">ویڈیوز</h2>
+    </div>
+    <div class="listing-grid">
+        {% for item in videos %}
+        <a class="search-card" href="{{ item.get_absolute_url }}">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.description|default:"اردو ادب کی یہ ویڈیو دیکھیں" }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
 {% endblock %}
