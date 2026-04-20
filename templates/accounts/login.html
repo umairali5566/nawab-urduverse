@@ -146,48 +146,33 @@
     </div>
 </section>
 
-<script>
-    // Toggle password visibility
-    document.querySelectorAll('.toggle-password').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const input = document.getElementById(this.dataset.target);
-            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-            input.setAttribute('type', type);
-            this.querySelector('svg').style.opacity = type === 'password' ? '0.4' : '1';
-        });
-    });
-</script>
-
-<!-- Custom filter for adding classes to form fields -->
 <style>
-    /* Form field styling for Tailwind compatibility */
-    #id_username,
-    #id_password {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        padding-right: 2.5rem;
-        border: 1px solid #E5E7EB;
-        border-radius: 0.5rem;
-        font-size: 1rem;
-        color: #2D2D2D;
-        background: white;
-        transition: all 0.3s ease;
-        font-family: inherit;
-    }
+/* Form field styling */
+#id_username,
+#id_password {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    padding-right: 2.5rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    color: #2D2D2D;
+    background: white;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
 
-    #id_username:focus,
-    #id_password:focus {
-        outline: none;
-        border-color: #D4AF37;
-        box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
-    }
+#id_username:focus,
+#id_password:focus {
+    outline: none;
+    border-color: #D4AF37;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
 
-    input[type="checkbox"] {
-        cursor: pointer;
-    }
-</style>
+input[type="checkbox"] {
+    cursor: pointer;
+}
 
-<style>
 /* Custom input styling for glassmorphism */
 #id_username, #id_password {
     background: var(--premium-card-glass-strong) !important;
@@ -205,68 +190,19 @@
 #id_username::placeholder, #id_password::placeholder {
     color: var(--premium-text-muted) !important;
 }
-
-/* Mobile Responsive Fixes */
-@media (max-width: 768px) {
-    .min-vh-100 {
-        min-height: auto;
-        padding: 30px 15px;
-    }
-
-    .card-body {
-        padding: 20px !important;
-    }
-
-    .display-4 {
-        font-size: 3rem;
-    }
-
-    h2 {
-        font-size: 1.5rem;
-    }
-
-    .btn-lg {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    .input-group {
-        flex-direction: column;
-    }
-
-    .input-group-text {
-        display: none;
-    }
-
-    .form-check {
-        text-align: center;
-    }
-
-    .mb-3 {
-        margin-bottom: 15px !important;
-    }
-}
 </style>
 
 {% endblock %}
 
 {% block extra_js %}
 <script>
-document.querySelectorAll('.toggle-password').forEach(button => {
-    button.addEventListener('click', function() {
-        const targetId = this.getAttribute('data-target');
-        const passwordInput = document.getElementById(targetId);
-        const icon = this.querySelector('i');
-
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            icon.classList.remove('bi-eye');
-            icon.classList.add('bi-eye-slash');
-        } else {
-            passwordInput.type = 'password';
-            icon.classList.remove('bi-eye-slash');
-            icon.classList.add('bi-eye');
-        }
+// Toggle password visibility
+document.querySelectorAll('.toggle-password').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const input = document.getElementById(this.dataset.target);
+        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+        input.setAttribute('type', type);
+        this.querySelector('svg').style.opacity = type === 'password' ? '0.4' : '1';
     });
 });
 </script>
