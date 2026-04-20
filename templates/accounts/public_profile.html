@@ -10,9 +10,9 @@
             <div class="profile-hero-main">
                 <div class="profile-avatar-shell">
                     {% if profile_user.avatar %}
-                    <img src="{{ profile_user.avatar.url }}" alt="{{ profile_user.username }}" class="profile-avatar-lg">
+                     <img src="{{ profile_user.avatar.url }}" alt="{{ profile_user.username }}" class="profile-avatar-md">
                     {% else %}
-                    <img src="{% static 'images/default-avatar.svg' %}" alt="{{ profile_user.username }}" class="profile-avatar-lg">
+                     <img src="{% static 'images/default-avatar.svg' %}" alt="{{ profile_user.username }}" class="profile-avatar-md">
                     {% endif %}
                 </div>
                 <div>
@@ -114,4 +114,24 @@
         </div>
     </div>
 </section>
+
+{% block extra_js %}
+<style>
+.profile-avatar-md {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.fallback-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-surface-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+}
+</style>
 {% endblock %}
