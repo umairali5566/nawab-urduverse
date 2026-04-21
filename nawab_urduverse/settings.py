@@ -386,8 +386,8 @@ ADSENSE_ENABLED = bool(ADSENSE_CLIENT_ID)
 SEARCH_SUGGESTION_LIMIT = int(os.environ.get('SEARCH_SUGGESTION_LIMIT', '8'))
 AI_SEARCH_RESULT_LIMIT = int(os.environ.get('AI_SEARCH_RESULT_LIMIT', '18'))
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
-OPENAI_POETRY_MODEL = os.environ.get('OPENAI_POETRY_MODEL', 'gpt-5-mini')
-OPENAI_SEARCH_MODEL = os.environ.get('OPENAI_SEARCH_MODEL', 'gpt-5-mini')
+OPENAI_POETRY_MODEL = os.environ.get('OPENAI_POETRY_MODEL', 'gpt-4o-mini')
+OPENAI_SEARCH_MODEL = os.environ.get('OPENAI_SEARCH_MODEL', 'gpt-4o-mini')
 OPENAI_REASONING_EFFORT = os.environ.get('OPENAI_REASONING_EFFORT', 'low')
 
 # Production-friendly security defaults
@@ -496,3 +496,13 @@ LOGGING = {
 # Create logs directory if it doesn't exist
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 os.makedirs(LOGS_DIR, exist_ok=True)
+
+# Fix for Django Context.__copy__ issue in Python 3.14
+from django.template import Context
+
+def context_copy_fix(self):
+    duplicate = dict(self)
+    duplicate.dicts = self.dicts[:]
+    return duplicate
+
+Context.__copy__ = context_copy_fix
