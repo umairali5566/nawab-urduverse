@@ -2,5 +2,5 @@ services:
   - type: web
     name: nawab-urdu-academy
     env: python
-    buildCommand: pip install -r requirements.txt && rm -f poetry/migrations/0002_alter_poetrycollection_cover_image.py poetry/migrations/0002_auto_20260421_2326.py poetry/migrations/0002_poetry_likes_count_poetry_views_count.py && python manage.py migrate --fake-initial && python manage.py collectstatic --noinput
+    buildCommand: pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput
     startCommand: bash start.sh

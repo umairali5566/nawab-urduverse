@@ -17,7 +17,7 @@ class PoetryAdmin(admin.ModelAdmin):
     list_editable = ['is_published']
     ordering = ['-created_at']
     autocomplete_fields = ['author']
-    readonly_fields = ['created_at']
+    readonly_fields = ['views_count', 'likes_count', 'created_at']
 
     fieldsets = (
         ('Basic Information', {
@@ -31,7 +31,7 @@ class PoetryAdmin(admin.ModelAdmin):
             'fields': ('is_published', 'published_at')
         }),
         ('Statistics', {
-            'fields': ('views_count', 'created_at', 'updated_at'),
+            'fields': ('views_count', 'likes_count', 'created_at'),
             'classes': ('collapse',)
         }),
     )
