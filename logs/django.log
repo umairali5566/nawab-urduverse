@@ -288,3 +288,9 @@ ERROR 2026-04-21 00:37:45,873 log 21756 29320 You're accessing the development s
 ERROR 2026-04-21 00:37:45,875 log 21756 26244 You're accessing the development server over HTTPS, but it only supports HTTP.
 ERROR 2026-04-21 00:38:00,927 log 21756 27040 You're accessing the development server over HTTPS, but it only supports HTTP.
 ERROR 2026-04-21 00:38:00,941 log 21756 2452 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-21 15:53:19,293 log 13712 21484 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-21 15:53:19,297 log 13712 29008 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-21 15:53:23,605 log 13712 13608 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-21 15:53:23,863 log 13712 31236 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-21 15:53:23,919 log 13712 17024 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-21 15:53:24,177 log 13712 25736 You're accessing the development server over HTTPS, but it only supports HTTP.

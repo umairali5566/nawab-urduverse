@@ -47,7 +47,43 @@
             <!-- AUTH BUTTONS -->
             <div class="nav-auth">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'logout' %}" class="btn btn-secondary">{{ NAV_LABELS.logout }}</a>
+                    <div class="nav-user-menu">
+                        <button class="nav-user-btn" aria-label="User menu" aria-expanded="false" aria-controls="userDropdown">
+                            {% if user.avatar %}
+                                <img src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}" class="user-avatar-small">
+                            {% else %}
+                                <div class="user-avatar-small">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                            {% endif %}
+                            <span class="user-name">{{ user.get_full_name|default:user.username }}</span>
+                            <i class="bi bi-chevron-down"></i>
+                        </button>
+                        
+                        <div class="nav-user-dropdown" id="userDropdown" role="menu">
+                            {% if user.is_superuser %}
+                            <a href="{% url 'dashboard_home' %}" class="dropdown-item" role="menuitem">
+                                <i class="bi bi-speedometer2"></i> Admin Dashboard
+                            </a>
+                            {% else %}
+                            <a href="{% url 'dashboard' %}" class="dropdown-item" role="menuitem">
+                                <i class="bi bi-speedometer2"></i> My Dashboard
+                            </a>
+                            {% endif %}
+                            <a href="{% url 'profile' %}" class="dropdown-item" role="menuitem">
+                                <i class="bi bi-person-circle"></i> Profile
+                            </a>
+                            {% if not user.is_superuser %}
+                            <a href="{% url 'my_content' %}" class="dropdown-item" role="menuitem">
+                                <i class="bi bi-file-text"></i> My Content
+                            </a>
+                            {% endif %}
+                            <div class="dropdown-divider"></div>
+                            <a href="{% url 'logout' %}" class="dropdown-item" role="menuitem">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </a>
+                        </div>
+                    </div>
                 {% else %}
                     <a href="{% url 'login' %}" class="btn btn-secondary">{{ NAV_LABELS.login }}</a>
                     <a href="{% url 'register' %}" class="btn btn-primary">{{ NAV_LABELS.register }}</a>
@@ -75,7 +111,26 @@
             <a href="{% url 'blog_list' %}" class="mobile-menu-link">{{ NAV_LABELS.blog }}</a>
             <div class="mobile-menu-divider"></div>
             {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}" class="mobile-menu-link">{{ NAV_LABELS.logout }}</a>
+                {% if user.is_superuser %}
+                <a href="{% url 'dashboard_home' %}" class="mobile-menu-link">
+                    <i class="bi bi-speedometer2"></i> Admin Dashboard
+                </a>
+                {% else %}
+                <a href="{% url 'dashboard' %}" class="mobile-menu-link">
+                    <i class="bi bi-speedometer2"></i> My Dashboard
+                </a>
+                {% endif %}
+                <a href="{% url 'profile' %}" class="mobile-menu-link">
+                    <i class="bi bi-person-circle"></i> Profile
+                </a>
+                {% if not user.is_superuser %}
+                <a href="{% url 'my_content' %}" class="mobile-menu-link">
+                    <i class="bi bi-file-text"></i> My Content
+                </a>
+                {% endif %}
+                <a href="{% url 'logout' %}" class="mobile-menu-link">
+                    <i class="bi bi-box-arrow-right"></i> {{ NAV_LABELS.logout }}
+                </a>
             {% else %}
                 <a href="{% url 'login' %}" class="mobile-menu-link">{{ NAV_LABELS.login }}</a>
                 <a href="{% url 'register' %}" class="mobile-menu-link">{{ NAV_LABELS.register }}</a>
@@ -132,6 +187,35 @@
 
     <!-- SCRIPTS -->
     <script>
+        // User Dropdown Menu Toggle
+        const userBtn = document.querySelector('.nav-user-btn');
+        const userDropdown = document.getElementById('userDropdown');
+
+        if (userBtn && userDropdown) {
+            userBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                userDropdown.classList.toggle('active');
+                this.setAttribute('aria-expanded', userDropdown.classList.contains('active'));
+            });
+
+            // Close dropdown when clicking a link
+            const dropdownItems = userDropdown.querySelectorAll('a');
+            dropdownItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    userDropdown.classList.remove('active');
+                    userBtn.setAttribute('aria-expanded', 'false');
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.nav-user-menu') && userDropdown.classList.contains('active')) {
+                    userDropdown.classList.remove('active');
+                    userBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
         // Mobile Menu Toggle
         const menuToggle = document.getElementById('menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
