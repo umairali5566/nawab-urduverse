@@ -17,18 +17,27 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ['name', 'is_published', 'created_at']
-    list_filter = ['is_published']
+    list_display = ['name', 'author_type', 'is_featured', 'is_published', 'created_at']
+    list_filter = ['author_type', 'is_featured', 'is_published']
     search_fields = ['name']
     prepopulated_fields = {'slug': ('name',)}
-    list_editable = ['is_published']
+    list_editable = ['is_published', 'is_featured']
 
     fieldsets = (
         ('Basic Information', {
-            'fields': ('name', 'slug')
+            'fields': ('name', 'slug', 'author_type', 'bio')
+        }),
+        ('Content Counts', {
+            'fields': (
+                ('ghazal_count', 'nazm_count', 'sher_count'),
+                ('ebook_count', 'top20_poetry_count', 'pictorial_poetry_count'),
+                ('quotes_count', 'videos_count', 'qita_count'),
+                ('rubai_count', 'qissa_count', 'gallery_count', 'blog_count'),
+            ),
+            'classes': ('collapse',)
         }),
         ('Settings', {
-            'fields': ('is_published',)
+            'fields': ('is_published', 'is_featured')
         }),
     )
 

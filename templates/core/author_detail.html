@@ -6,16 +6,26 @@
 {% block content %}
 
 <style>
+    .author-profile {
+        direction: rtl;
+        text-align: right;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
     .author-header {
-        padding: 4rem 1.5rem;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        padding: 3rem 2rem;
+        border-radius: 16px;
+        margin-bottom: 3rem;
         text-align: center;
-        background: linear-gradient(135deg, #f0f9ff 0%, #ecf9ff 100%);
-        border-bottom: 1px solid #e5e7eb;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
 
     .author-name {
         font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 2.5rem;
+        font-size: 3rem;
         font-weight: 700;
         color: #1e293b;
         margin: 0 0 1rem 0;
@@ -25,194 +35,312 @@
         background-clip: text;
     }
 
-    .author-subtitle {
+    .author-bio {
         font-size: 1.1rem;
+        color: #64748b;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    .content-sections {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .section-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        border: 1px solid #e5e7eb;
+    }
+
+    .section-title {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 1.5rem 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #e5e7eb;
+    }
+
+    .content-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-item {
+        background: #f8fafc;
+        padding: 1.5rem;
+        border-radius: 8px;
+        text-align: center;
+        border: 1px solid #e5e7eb;
+        transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+        background: #f1f5f9;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #0ea5e9;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1rem;
         color: #64748b;
         margin: 0;
     }
 
-    .content-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: 1.5rem;
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 3rem 1.5rem;
+    .content-list {
+        margin-top: 2rem;
     }
 
-    .content-card {
-        background: white;
-        border-radius: 12px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        border: 1px solid #f1f5f9;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    .content-item {
+        padding: 1rem 0;
+        border-bottom: 1px solid #f1f5f9;
+        transition: background-color 0.2s ease;
     }
 
-    .content-card:hover {
-        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.15);
-        transform: translateY(-4px);
+    .content-item:hover {
+        background-color: #f8fafc;
     }
 
-    .content-card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
+    .content-item:last-child {
+        border-bottom: none;
     }
 
-    .content-type-badge {
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        color: white;
-        padding: 0.35rem 0.85rem;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-
-    .content-date {
-        color: #94a3b8;
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
-
-    .content-card-title {
-        margin: 0 0 0.75rem 0;
-    }
-
-    .content-card-title a {
+    .content-title {
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: 1.1rem;
         color: #1e293b;
         text-decoration: none;
-        font-size: 1.15rem;
-        font-weight: 700;
-        line-height: 1.4;
-        transition: color 0.3s;
+        margin-bottom: 0.5rem;
+        display: block;
+        transition: color 0.3s ease;
     }
 
-    .content-card-title a:hover {
+    .content-title:hover {
         color: #0ea5e9;
     }
 
-    .content-card-excerpt {
-        color: #64748b;
-        font-size: 0.95rem;
-        line-height: 1.6;
-        margin: 0;
+    .content-meta {
+        font-size: 0.9rem;
+        color: #94a3b8;
     }
 
-    .empty-state {
+    .empty-section {
         text-align: center;
-        padding: 4rem 2rem;
-        max-width: 600px;
-        margin: 0 auto;
-    }
-
-    .empty-state-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-    }
-
-    .empty-state h3 {
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #1e293b;
-        margin: 1rem 0;
-    }
-
-    .empty-state p {
-        color: #64748b;
-        font-size: 1rem;
-        margin: 0.5rem 0 1.5rem 0;
+        padding: 2rem;
+        color: #94a3b8;
+        font-style: italic;
     }
 
     @media (max-width: 768px) {
+        .author-profile {
+            padding: 1rem 0.5rem;
+        }
+
         .author-header {
-            padding: 2.5rem 1rem;
+            padding: 2rem 1rem;
         }
 
         .author-name {
-            font-size: 1.8rem;
+            font-size: 2rem;
         }
 
-        .author-subtitle {
+        .author-bio {
             font-size: 1rem;
         }
 
-        .content-grid {
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            padding: 2rem 1rem;
+        .section-card {
+            padding: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+        }
+
+        .content-stats {
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
         }
 
-        .content-card {
-            padding: 1.25rem;
+        .stat-item {
+            padding: 1rem;
         }
 
-        .content-card-title a {
-            font-size: 1rem;
-        }
-
-        .content-card-excerpt {
-            font-size: 0.9rem;
+        .stat-number {
+            font-size: 1.5rem;
         }
     }
 
     @media (max-width: 480px) {
-        .author-name {
-            font-size: 1.5rem;
+        .content-stats {
+            grid-template-columns: repeat(2, 1fr);
         }
 
-        .content-grid {
-            grid-template-columns: 1fr;
-            padding: 1.5rem 1rem;
+        .stat-item {
+            padding: 0.75rem;
         }
 
-        .content-card {
-            padding: 1rem;
+        .stat-number {
+            font-size: 1.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
         }
     }
 </style>
 
-<section class="author-header">
-    <h1 class="author-name">{{ author.name }}</h1>
-    <p class="author-subtitle">{{ published_total }} شائع شدہ کام</p>
-</section>
+<div class="author-profile">
+    <section class="author-header">
+        <h1 class="author-name">{{ author.name }}</h1>
+        {% if author.bio %}
+            <p class="author-bio">{{ author.bio }}</p>
+        {% endif %}
+    </section>
 
-<section>
-    {% if all_content %}
-        <div class="content-grid">
-            {% for item in all_content %}
-                <div class="content-card">
-                    <div class="content-card-header">
-                        <span class="content-type-badge">
-                            {% if item.type == 'poetry' %}شاعری{% elif item.type == 'story' %}کہانی{% elif item.type == 'novel' %}ناول{% elif item.type == 'quote' %}اقتباس{% elif item.type == 'blog' %}بلاگ{% else %}{{ item.type }}{% endif %}
-                        </span>
-                        <time class="content-date">{{ item.date|date:"d M Y" }}</time>
-                    </div>
-                    <h3 class="content-card-title">
-                        <a href="{{ item.item.get_absolute_url }}">{{ item.item.title }}</a>
-                    </h3>
-                    <p class="content-card-excerpt">
-                        {% if item.type == 'quote' %}
-                            {{ item.item.text|striptags|truncatechars:150 }}
-                        {% elif item.item.content %}
-                            {{ item.item.content|striptags|truncatechars:150 }}
-                        {% else %}
-                            {{ item.item.description|default:""|striptags|truncatechars:150 }}
-                        {% endif %}
-                    </p>
+    <div class="content-sections">
+        <!-- Poetry Section -->
+        <div class="section-card">
+            <h2 class="section-title">شعراکی فہرست</h2>
+            <div class="content-stats">
+                {% if content_counts.ghazal > 0 %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ content_counts.ghazal }}</div>
+                    <p class="stat-label">غزل</p>
                 </div>
-            {% endfor %}
+                {% endif %}
+                {% if content_counts.nazm > 0 %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ content_counts.nazm }}</div>
+                    <p class="stat-label">نظم</p>
+                </div>
+                {% endif %}
+                {% if content_counts.sher > 0 %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ content_counts.sher }}</div>
+                    <p class="stat-label">شعر</p>
+                </div>
+                {% endif %}
+                {% if content_counts.qita > 0 %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ content_counts.qita }}</div>
+                    <p class="stat-label">قطعہ</p>
+                </div>
+                {% endif %}
+                {% if content_counts.rubai > 0 %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ content_counts.rubai }}</div>
+                    <p class="stat-label">رباعی</p>
+                </div>
+                {% endif %}
+                {% if content_counts.ebook > 0 %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ content_counts.ebook }}</div>
+                    <p class="stat-label">ای-کتاب</p>
+                </div>
+                {% endif %}
+                {% if content_counts.top20_poetry > 0 %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ content_counts.top20_poetry }}</div>
+                    <p class="stat-label">ٹاپ ٢٠ شاعری</p>
+                </div>
+                {% endif %}
+                {% if content_counts.pictorial_poetry > 0 %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ content_counts.pictorial_poetry }}</div>
+                    <p class="stat-label">تصویری شاعری</p>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if all_content %}
+                <div class="content-list">
+                    {% for item in all_content %}
+                        {% if item.type == 'poetry' %}
+                        <div class="content-item">
+                            <a href="{{ item.item.get_absolute_url }}" class="content-title">{{ item.item.title }}</a>
+                            <div class="content-meta">{{ item.date|date:"d M Y" }}</div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-section">کوئی شاعری دستیاب نہیں</div>
+            {% endif %}
         </div>
-    {% else %}
-        <div class="empty-state">
-            <div class="empty-state-icon">📚</div>
-            <h3>کوئی مواد دستیاب نہیں</h3>
-            <p>یہ مصنف ابھی کوئی مواد شائع نہیں کیا ہے</p>
+
+        <!-- Other Content Sections -->
+        {% if content_counts.quotes > 0 or content_counts.videos > 0 or content_counts.qissa > 0 or content_counts.gallery > 0 or content_counts.blog > 0 %}
+        <div class="section-card">
+            <h2 class="section-title">دیگر مواد</h2>
+            <div class="content-stats">
+                {% if content_counts.quotes > 0 %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ content_counts.quotes }}</div>
+                    <p class="stat-label">اقوال</p>
+                </div>
+                {% endif %}
+                {% if content_counts.videos > 0 %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ content_counts.videos }}</div>
+                    <p class="stat-label">ویڈیو</p>
+                </div>
+                {% endif %}
+                {% if content_counts.qissa > 0 %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ content_counts.qissa }}</div>
+                    <p class="stat-label">قصہ</p>
+                </div>
+                {% endif %}
+                {% if content_counts.gallery > 0 %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ content_counts.gallery }}</div>
+                    <p class="stat-label">گیلری</p>
+                </div>
+                {% endif %}
+                {% if content_counts.blog > 0 %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ content_counts.blog }}</div>
+                    <p class="stat-label">بلاگ</p>
+                </div>
+                {% endif %}
+            </div>
         </div>
-    {% endif %}
-</section>
+        {% endif %}
+
+        <!-- Recent Content -->
+        {% if all_content %}
+        <div class="section-card">
+            <h2 class="section-title">تازہ ترین مواد</h2>
+            <div class="content-list">
+                {% for item in all_content|slice:":10" %}
+                <div class="content-item">
+                    <a href="{{ item.item.get_absolute_url }}" class="content-title">{{ item.item.title }}</a>
+                    <div class="content-meta">
+                        {% if item.type == 'poetry' %}شاعری{% elif item.type == 'story' %}کہانی{% elif item.type == 'novel' %}ناول{% elif item.type == 'quote' %}اقتباس{% elif item.type == 'blog' %}بلاگ{% else %}{{ item.type }}{% endif %}
+                        • {{ item.date|date:"d M Y" }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
 
 {% endblock %}

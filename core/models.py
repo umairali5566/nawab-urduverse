@@ -69,12 +69,38 @@ class Tag(models.Model):
 class Author(models.Model):
     """Author model for writers and poets"""
 
+    # Author categories
+    AUTHOR_TYPES = (
+        ('classic', 'کلاسیکی شاعر'),
+        ('female', 'شاعرات'),
+        ('young', 'نوجوان شاعر'),
+        ('audio', 'شاعروں کے آڈیو'),
+        ('other', 'دیگر'),
+    )
+
     name = models.CharField(max_length=200, verbose_name='نام')
     slug = models.SlugField(unique=True, verbose_name='سلگ')
     is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
     is_active = models.BooleanField(default=True, verbose_name='فعال')
     is_featured = models.BooleanField(default=False, verbose_name='نمایاں')
+    author_type = models.CharField(max_length=20, choices=AUTHOR_TYPES, default='other', verbose_name='مصنف کی قسم')
     bio = models.TextField(blank=True, verbose_name='تعارف')
+
+    # Content counts (managed by admin)
+    ghazal_count = models.PositiveIntegerField(default=0, verbose_name='غزل')
+    nazm_count = models.PositiveIntegerField(default=0, verbose_name='نظم')
+    sher_count = models.PositiveIntegerField(default=0, verbose_name='شعر')
+    ebook_count = models.PositiveIntegerField(default=0, verbose_name='ای-کتاب')
+    top20_poetry_count = models.PositiveIntegerField(default=0, verbose_name='ٹاپ ٢٠ شاعری')
+    pictorial_poetry_count = models.PositiveIntegerField(default=0, verbose_name='تصویری شاعری')
+    quotes_count = models.PositiveIntegerField(default=0, verbose_name='اقوال')
+    videos_count = models.PositiveIntegerField(default=0, verbose_name='ویڈیوز')
+    qita_count = models.PositiveIntegerField(default=0, verbose_name='قطعہ')
+    rubai_count = models.PositiveIntegerField(default=0, verbose_name='رباعی')
+    qissa_count = models.PositiveIntegerField(default=0, verbose_name='قصہ')
+    gallery_count = models.PositiveIntegerField(default=0, verbose_name='گیلری')
+    blog_count = models.PositiveIntegerField(default=0, verbose_name='بلاگ')
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

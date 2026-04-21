@@ -494,8 +494,26 @@ class AuthorDetailView(DetailView):
         # Sort by date descending
         all_content.sort(key=lambda x: x['date'], reverse=True)
 
+        # Content counts from model (admin-managed)
+        content_counts = {
+            'ghazal': author.ghazal_count,
+            'nazm': author.nazm_count,
+            'sher': author.sher_count,
+            'ebook': author.ebook_count,
+            'top20_poetry': author.top20_poetry_count,
+            'pictorial_poetry': author.pictorial_poetry_count,
+            'quotes': author.quotes_count,
+            'videos': author.videos_count,
+            'qita': author.qita_count,
+            'rubai': author.rubai_count,
+            'qissa': author.qissa_count,
+            'gallery': author.gallery_count,
+            'blog': author.blog_count,
+        }
+
         context['all_content'] = all_content
         context['published_total'] = len(all_content)
+        context['content_counts'] = content_counts
         context.update(
             build_seo_context(
                 self.request,
@@ -503,7 +521,7 @@ class AuthorDetailView(DetailView):
                 description=f"Browse all content by {author.name} on {settings.SITE_NAME}",
             )
         )
-        
+
         return context
 
 
