@@ -240,13 +240,15 @@
     <article class="poem-card">
         <!-- Poem Header -->
         <header class="poem-header">
-            <h1 class="poem-title">{{ poem.title }}</h1>
-            <div class="poem-meta">
-                <span class="poem-author">{{ poem.author.name }}</span>
-                {% if poem.category %}
-                <span class="poem-category">{{ poem.category.name }}</span>
-                {% endif %}
-            </div>
+             <h1 class="poem-title">{{ poem.title }}</h1>
+             <div class="poem-meta">
+                 {% if poem.author %}
+                 <span class="poem-author">{{ poem.author.name }}</span>
+                 {% endif %}
+                 {% if poem.category %}
+                 <span class="poem-category">{{ poem.category.name }}</span>
+                 {% endif %}
+             </div>
         </header>
 
         <!-- Poem Content -->
@@ -271,7 +273,7 @@
         <!-- Navigation Buttons -->
         <div class="poem-footer">
             <a href="{% url 'poetry_list' %}" class="btn btn-outline">← شاعری پر واپس</a>
-            {% if poem.author %}
+            {% if poem.author and poem.author.slug %}
             <a href="{% url 'author_detail' poem.author.slug %}" class="btn btn-outline">{{ poem.author.name }} کی مزید شاعری</a>
             {% endif %}
         </div>

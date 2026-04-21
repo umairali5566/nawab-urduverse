@@ -43,9 +43,13 @@ class PoetryDetailView(DetailView):
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
-        # Increment view count (could be moved to middleware for better performance)
-        Poetry.objects.filter(pk=obj.pk).update(views_count=obj.views_count + 1)
-        obj.views_count += 1
+        # Increment view count safely
+        try:
+            Poetry.objects.filter(pk=obj.pk).update(views_count=obj.views_count + 1)
+            obj.views_count += 1
+        except Exception:
+            # If update fails, continue without incrementing
+            pass
         return obj
 
 
