@@ -5,6 +5,7 @@ Novels Models for Nawab Urdu Academy
 from django.db import models
 from django.db.models.signals import post_delete
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.html import strip_tags
 from django.utils.text import slugify
 from django.dispatch import receiver
@@ -36,6 +37,8 @@ class Novel(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title, allow_unicode=True)
+        if self.is_published and not self.published_at:
+            self.published_at = timezone.now()
         # Strip HTML tags from content
         self.content = strip_tags(self.content)
         super().save(*args, **kwargs)

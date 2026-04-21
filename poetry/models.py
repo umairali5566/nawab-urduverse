@@ -9,6 +9,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.html import escape, strip_tags
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
@@ -39,6 +40,8 @@ class Poetry(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title, allow_unicode=True)
+        if self.is_published and not self.published_at:
+            self.published_at = timezone.now()
         # Strip HTML tags from content
         self.content = strip_tags(self.content)
         # Normalize Urdu text (simple for now, can expand)

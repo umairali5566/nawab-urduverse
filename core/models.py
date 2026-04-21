@@ -144,6 +144,8 @@ class BaseContentModel(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(getattr(self, 'title', '') or str(self), allow_unicode=True)
+        if self.is_published and not self.published_at:
+            self.published_at = timezone.now()
         super().save(*args, **kwargs)
 
 

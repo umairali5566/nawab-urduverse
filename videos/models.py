@@ -7,6 +7,7 @@ from urllib.parse import parse_qs, urlparse
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.html import strip_tags
 
@@ -55,6 +56,8 @@ class Video(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title, allow_unicode=True)
+        if self.is_published and not self.published_at:
+            self.published_at = timezone.now()
         # Strip HTML tags from content
         self.content = strip_tags(self.content)
         super().save(*args, **kwargs)
