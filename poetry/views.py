@@ -2,8 +2,12 @@
 Poetry Views for Nawab Urdu Academy
 """
 
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
+
+from core.services import toggle_content_like
 
 from .models import Poetry
 
@@ -43,3 +47,14 @@ class PoetryDetailView(DetailView):
         Poetry.objects.filter(pk=obj.pk).update(views_count=obj.views_count + 1)
         obj.views_count += 1
         return obj
+
+
+@login_required
+def like_poetry(request, slug):
+    """Like poetry"""
+    poetry = get_object_or_404(Poetry, slug=slug, is_published=True)
+
+    if request.method in {'POST', 'GET'}:
+        return JsonResponse(toggle_content_like(request.user, 'poetry', poetry.id))
+
+    return JsonResponse({'success': False, 'message': 'غلط درخواست'})

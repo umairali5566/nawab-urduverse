@@ -2,10 +2,13 @@
 Novels Views for Nawab Urdu Academy
 """
 
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, ListView
 
 from core.models import ReadingProgress
+from core.services import toggle_content_like
 from .models import Chapter, Novel
 
 
@@ -81,3 +84,14 @@ def continue_reading(request, slug):
 
     # No chapters, redirect to novel detail
     return redirect(novel.get_absolute_url())
+
+
+@login_required
+def like_novel(request, slug):
+    """Like novel"""
+    novel = get_object_or_404(Novel, slug=slug, is_published=True)
+
+    if request.method in {'POST', 'GET'}:
+        return JsonResponse(toggle_content_like(request.user, 'novel', novel.id))
+
+    return JsonResponse({'success': False, 'message': 'غلط درخواست'})

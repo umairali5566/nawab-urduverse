@@ -12,6 +12,9 @@ urlpatterns = [
     # Novel Detail
     path('<slug:slug>/', views.NovelDetailView.as_view(), name='novel_detail'),
 
+    # Like
+    path('<slug:slug>/like/', views.like_novel, name='like_novel'),
+
     # Continue Reading
     path('<slug:slug>/continue/', views.continue_reading, name='continue_reading'),
 

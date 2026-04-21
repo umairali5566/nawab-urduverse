@@ -12,4 +12,7 @@ urlpatterns = [
 
     # Poetry detail
     path("<slug:slug>/", views.PoetryDetailView.as_view(), name="poetry_detail"),
+
+    # Like
+    path("<slug:slug>/like/", views.like_poetry, name="like_poetry"),
 ]

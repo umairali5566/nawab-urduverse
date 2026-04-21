@@ -280,15 +280,31 @@
 
 <script>
     function toggleLike(btn) {
-        const isLiked = btn.classList.contains('active');
-        
-        if (isLiked) {
-            btn.classList.remove('active');
-            btn.innerHTML = '<span>♡</span><span>پسند</span>';
-        } else {
-            btn.classList.add('active');
-            btn.innerHTML = '<span>♥</span><span>پسند کیا گیا</span>';
-        }
+        fetch('{% url "like_poetry" poem.slug %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (data.liked) {
+                    btn.classList.add('active');
+                    btn.innerHTML = '<span>♥</span><span>پسند کیا گیا</span>';
+                } else {
+                    btn.classList.remove('active');
+                    btn.innerHTML = '<span>♡</span><span>پسند</span>';
+                }
+            } else {
+                alert(data.message || 'کچھ غلط ہو گیا');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('کچھ غلط ہو گیا');
+        });
     }
 
     function sharePoem() {
