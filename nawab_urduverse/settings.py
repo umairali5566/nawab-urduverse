@@ -208,7 +208,10 @@ WSGI_APPLICATION = 'nawab_urduverse.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': build_database_config()
+    'default': dj_database_url.config(
+        default='sqlite:///db.sqlite3',
+        conn_max_age=600
+    )
 }
 
 # For PostgreSQL production (uncomment when deploying)
