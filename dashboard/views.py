@@ -6,8 +6,6 @@ from functools import wraps
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.html import strip_tags
@@ -108,6 +106,43 @@ def _ensure_default_category(category_type, label):
         description=f'Auto-created default category for {label.lower()} content.',
         is_active=True,
     )
+
+
+def _create_content(request, model, template_name, redirect_url, content_type, category_label=None, success_message=None):
+    if request.method == 'POST':
+        title = strip_tags((request.POST.get('title') or '').strip())
+        author_name = strip_tags((request.POST.get('author') or '').strip())
+        content = strip_tags((request.POST.get('content') or request.POST.get('description') or '').strip())
+
+        if not title or not author_name or not content:
+            messages.error(request, f'Title, author, and {content_type} content are required.')
+            return render(request, template_name)
+
+        try:
+            author = _resolve_author(author_name)
+            obj = model(
+                title=title,
+                slug=_build_unique_slug(model, title),
+                author=author,
+                content=content,
+                excerpt=content[:280],
+                is_published=True,
+                published_at=timezone.now(),
+            )
+            obj.save()
+            if category_label:
+                category = _ensure_default_category(content_type, category_label)
+                if hasattr(obj, 'categories'):
+                    obj.categories.add(category)
+                elif hasattr(obj, 'category'):
+                    obj.category = category
+                    obj.save()
+            messages.success(request, success_message or f'{content_type.title()} has been published successfully.')
+            return redirect(redirect_url)
+        except Exception as exc:
+            messages.error(request, f'Unable to create {content_type}: {exc}')
+
+    return render(request, template_name)
 
 
 def _process_csv_row(content_type, row):
@@ -262,11 +297,9 @@ def add_novel(request):
         title = (request.POST.get('title') or '').strip()
         author_name = (request.POST.get('author') or '').strip()
         description = (request.POST.get('description') or '').strip()
-        cover_image = request.FILES.get('cover_image')
-        cover_image = request.FILES.get('cover_image')
 
-        if not title or not author_name or not description or not cover_image:
-            messages.error(request, 'Please fill all required fields and upload a cover image.')
+        if not title or not author_name or not description:
+            messages.error(request, 'Title, author, and description are required.')
             return render(request, 'dashboard/add_novel.html')
 
         try:
@@ -298,34 +331,7 @@ def story_list(request):
 
 @superuser_upload_required
 def add_story(request):
-    if request.method == 'POST':
-        title = strip_tags((request.POST.get('title') or '').strip())
-        author_name = strip_tags((request.POST.get('author') or '').strip())
-        content = strip_tags((request.POST.get('content') or request.POST.get('description') or '').strip())
-
-        if not title or not author_name or not content:
-            messages.error(request, 'Title, author, and story content are required.')
-            return render(request, 'dashboard/add_story.html')
-
-        try:
-            author = _resolve_author(author_name)
-            story = Story(
-                title=title,
-                slug=_build_unique_slug(Story, title),
-                author=author,
-                content=content,
-                excerpt=content[:280],
-                is_published=True,
-                published_at=timezone.now(),
-            )
-            story.save()
-            story.categories.add(_ensure_default_category('story', 'Story'))
-            messages.success(request, 'Story has been published successfully.')
-            return redirect('dashboard_story_list')
-        except Exception as exc:
-            messages.error(request, f'Unable to create story: {exc}')
-
-    return render(request, 'dashboard/add_story.html')
+    return _create_content(request, Story, 'dashboard/add_story.html', 'dashboard_story_list', 'story', 'Story', 'Story has been published successfully.')
 
 
 @admin_required
@@ -371,66 +377,11 @@ def blog_list(request):
     return render(request, 'dashboard/blog_list.html', {'posts': posts})
 
 
-@superuser_upload_required
-def add_novel(request):
-    if request.method == 'POST':
-        title = strip_tags((request.POST.get('title') or '').strip())
-        author_name = strip_tags((request.POST.get('author') or '').strip())
-        content = strip_tags((request.POST.get('content') or '').strip())
-
-        if not title or not author_name or not content:
-            messages.error(request, 'Title, author, and novel content are required.')
-            return render(request, 'dashboard/add_novel.html')
-
-        try:
-            author = _resolve_author(author_name)
-            novel = Novel(
-                title=title,
-                slug=_build_unique_slug(Novel, title),
-                author=author,
-                content=content,
-                category=_ensure_default_category('novel', 'Novel'),
-                is_published=True,
-                published_at=timezone.now(),
-            )
-            novel.save()
-            messages.success(request, 'Novel has been published successfully.')
-            return redirect('dashboard_novel_list')
-        except Exception as exc:
-            messages.error(request, f'Unable to create novel: {exc}')
-
-    return render(request, 'dashboard/add_novel.html')
 
 
 @superuser_upload_required
 def add_blog(request):
-    if request.method == 'POST':
-        title = strip_tags((request.POST.get('title') or '').strip())
-        author_name = strip_tags((request.POST.get('author') or '').strip())
-        content = strip_tags((request.POST.get('content') or '').strip())
-
-        if not title or not author_name or not content:
-            messages.error(request, 'Title, author, and blog content are required.')
-            return render(request, 'dashboard/add_blog.html')
-
-        try:
-            author = _resolve_author(author_name)
-            post = BlogPost(
-                title=title,
-                slug=_build_unique_slug(BlogPost, title),
-                author=author,
-                content=content,
-                excerpt=content[:280],
-                is_published=True,
-                published_at=timezone.now(),
-            )
-            post.save()
-            messages.success(request, 'Blog post has been published successfully.')
-            return redirect('dashboard_blog_list')
-        except Exception as exc:
-            messages.error(request, f'Unable to create blog post: {exc}')
-
-    return render(request, 'dashboard/add_blog.html')
+    return _create_content(request, BlogPost, 'dashboard/add_blog.html', 'dashboard_blog_list', 'blog', None, 'Blog post has been published successfully.')
 
 
 @admin_required

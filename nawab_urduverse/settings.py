@@ -6,9 +6,7 @@ A complete Urdu literature platform by Nawab
 import os
 import sqlite3
 import sys
-from importlib.util import find_spec
 from pathlib import Path
-from urllib.parse import urlparse
 
 import dj_database_url
 
@@ -498,11 +496,12 @@ LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 os.makedirs(LOGS_DIR, exist_ok=True)
 
 # Fix for Django Context.__copy__ issue in Python 3.14
-from django.template import Context
+# Temporarily disabled as it's causing issues
+# from django.template import Context
 
-def context_copy_fix(self):
-    duplicate = dict(self)
-    duplicate.dicts = self.dicts[:]
-    return duplicate
+# def context_copy_fix(self):
+#     duplicate = dict(self)
+#     duplicate.dicts = self.dicts[:]
+#     return duplicate
 
-Context.__copy__ = context_copy_fix
+# Context.__copy__ = context_copy_fix

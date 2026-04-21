@@ -5,8 +5,6 @@ Stories Models for Nawab Urdu Academy
 from django.db import models
 from django.urls import reverse
 from django.utils.html import strip_tags
-from django.utils.text import slugify
-from ckeditor_uploader.fields import RichTextUploadingField
 
 from core.models import Author, BaseContentModel, Category
 

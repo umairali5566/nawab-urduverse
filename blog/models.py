@@ -7,9 +7,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.html import strip_tags
-from ckeditor_uploader.fields import RichTextUploadingField
 
-from core.models import Author, BaseContentModel, Category
+from core.models import Author, Category
 
 
 class BlogPost(models.Model):

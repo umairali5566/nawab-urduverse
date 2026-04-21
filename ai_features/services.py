@@ -5,7 +5,6 @@ from typing import Any
 from django.conf import settings
 from django.db.models import Q
 from django.utils.html import strip_tags
-from django.utils.text import slugify
 
 from blog.models import BlogPost
 from novels.models import Novel

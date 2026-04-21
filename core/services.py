@@ -994,7 +994,7 @@ def generate_poetry_from_prompt(topic, *, mood="romantic", poetry_type="ghazal",
         f"{poetic_word_bank[2]} کی دہلیز پہ دل پھر سے ٹھہر جاتا ہے",
         f"{poetic_word_bank[3]} میں ڈوبا ہوا یہ شہر نکھر جاتا ہے",
         f"{poetic_word_bank[4]} کے سائے میں سفر اور بھی آسان لگے",
-        f"یہی احساس مری ذات کو دریا کر دے",
+        "یہی احساس مری ذات کو دریا کر دے",
     ]
 
     style_tail = {

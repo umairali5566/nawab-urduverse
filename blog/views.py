@@ -2,14 +2,14 @@
 Blog Views for Nawab Urdu Academy
 """
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.db.models import Q
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-from .models import BlogPost, BlogCategory
+from .models import BlogPost
 from core.models import Bookmark, Category, Comment, ContentLike
 from core.services import build_seo_context, get_cross_content_suggestions, toggle_content_like, track_content_view
 

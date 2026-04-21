@@ -4,7 +4,7 @@ Poetry Views for Nawab Urdu Academy
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, ListView
 
 from core.services import toggle_content_like

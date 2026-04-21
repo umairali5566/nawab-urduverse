@@ -294,3 +294,161 @@ ERROR 2026-04-21 15:53:23,605 log 13712 13608 You're accessing the development s
 ERROR 2026-04-21 15:53:23,863 log 13712 31236 You're accessing the development server over HTTPS, but it only supports HTTP.
 ERROR 2026-04-21 15:53:23,919 log 13712 17024 You're accessing the development server over HTTPS, but it only supports HTTP.
 ERROR 2026-04-21 15:53:24,177 log 13712 25736 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-21 23:49:15,000 basehttp 31648 31768 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-21 23:49:20,027 log 26900 3772 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\core\views.py", line 222, in home
+    return render(request, 'core/home.html', context)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\test\utils.py", line 113, in instrumented_test_render
+    template_rendered.send(sender=self, template=self, context=context)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\test\client.py", line 275, in store_rendered_templates
+    store["context"].append(copy(context))
+                            ~~~~^^^^^^^^^
+  File "C:\Python314\Lib\copy.py", line 82, in copy
+    return copier(x)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\nawab_urduverse\settings.py", line 502, in context_copy_fix
+    duplicate = dict(self)
+ValueError: dictionary update sequence element #0 has length 15; 2 is required
+ERROR 2026-04-21 23:49:21,762 log 26900 3772 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\core\views.py", line 222, in home
+    return render(request, 'core/home.html', context)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\test\utils.py", line 113, in instrumented_test_render
+    template_rendered.send(sender=self, template=self, context=context)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\test\client.py", line 275, in store_rendered_templates
+    store["context"].append(copy(context))
+                            ~~~~^^^^^^^^^
+  File "C:\Python314\Lib\copy.py", line 82, in copy
+    return copier(x)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\nawab_urduverse\settings.py", line 502, in context_copy_fix
+    duplicate = dict(self)
+ValueError: dictionary update sequence element #0 has length 15; 2 is required
+ERROR 2026-04-21 23:49:24,787 log 26900 3772 Internal Server Error: /novels/test-novel/chapter-2-second-chapter/
+Traceback (most recent call last):
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\test\utils.py", line 113, in instrumented_test_render
+    template_rendered.send(sender=self, template=self, context=context)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\test\client.py", line 275, in store_rendered_templates
+    store["context"].append(copy(context))
+                            ~~~~^^^^^^^^^
+  File "C:\Python314\Lib\copy.py", line 82, in copy
+    return copier(x)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\nawab_urduverse\settings.py", line 502, in context_copy_fix
+    duplicate = dict(self)
+ValueError: dictionary update sequence element #0 has length 7; 2 is required
+ERROR 2026-04-21 23:49:31,316 log 26900 3772 Internal Server Error: /novels/test-novel/chapter-2-second-chapter/
+Traceback (most recent call last):
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\test\utils.py", line 113, in instrumented_test_render
+    template_rendered.send(sender=self, template=self, context=context)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\test\client.py", line 275, in store_rendered_templates
+    store["context"].append(copy(context))
+                            ~~~~^^^^^^^^^
+  File "C:\Python314\Lib\copy.py", line 82, in copy
+    return copier(x)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\nawab_urduverse\settings.py", line 502, in context_copy_fix
+    duplicate = dict(self)
+ValueError: dictionary update sequence element #0 has length 7; 2 is required
+ERROR 2026-04-21 23:49:32,613 log 26900 3772 Internal Server Error: /novels/test-novel/
+Traceback (most recent call last):
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\test\utils.py", line 113, in instrumented_test_render
+    template_rendered.send(sender=self, template=self, context=context)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\test\client.py", line 275, in store_rendered_templates
+    store["context"].append(copy(context))
+                            ~~~~^^^^^^^^^
+  File "C:\Python314\Lib\copy.py", line 82, in copy
+    return copier(x)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\nawab_urduverse\settings.py", line 502, in context_copy_fix
+    duplicate = dict(self)
+ValueError: dictionary update sequence element #0 has length 5; 2 is required

@@ -7,7 +7,6 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
 
-from django.utils.html import strip_tags
 
 
 ENGAGEMENT_CONTENT_TYPES = (

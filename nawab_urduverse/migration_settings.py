@@ -1,4 +1,4 @@
-from .settings import *
+from .settings import DATABASES, BASE_DIR
 
 
 # Use an isolated SQLite database so makemigrations can run even if the

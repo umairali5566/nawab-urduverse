@@ -2,19 +2,14 @@
 Poetry Models for Nawab Urdu Academy
 """
 
-import re
-from html import unescape
 
-from ckeditor_uploader.fields import RichTextUploadingField
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.html import escape, strip_tags
-from django.utils.safestring import mark_safe
+from django.utils.html import strip_tags
 from django.utils.text import slugify
 
-from core.models import Author, BaseContentModel, Category
+from core.models import Author, Category
 
 
 class Poetry(models.Model):

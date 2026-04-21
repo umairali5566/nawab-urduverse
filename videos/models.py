@@ -2,9 +2,7 @@
 Videos Models for Nawab Urdu Academy
 """
 
-from urllib.parse import parse_qs, urlparse
 
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone

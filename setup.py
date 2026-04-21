@@ -11,6 +11,16 @@ import argparse
 from importlib.util import find_spec
 
 
+def _parse_env_bool(key, default=False):
+    """Parse boolean from environment variable"""
+    value = os.getenv(key, '').lower()
+    if value in ('true', '1', 'yes', 'on'):
+        return True
+    if value in ('false', '0', 'no', 'off'):
+        return False
+    return default
+
+
 def run_command(command, description=""):
     """Run a shell command"""
     if description:

@@ -6,10 +6,9 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
-from core.models import Bookmark, Comment, ContentLike, Notification, ReadingProgress, Author
+from core.models import Bookmark, Comment, ContentLike, Notification, ReadingProgress
 from core.services import build_seo_context, get_or_create_membership, rate_limit_request, resolve_content_object
 
 from .forms import (
@@ -129,7 +128,7 @@ def register(request):
                 login(request, user)
                 messages.success(request, "Your account has been created.")
                 return redirect("home")
-            except Exception as e:
+            except Exception:
                 messages.error(request, "An error occurred while creating your account. Please try again.")
                 return redirect("register")
     else:

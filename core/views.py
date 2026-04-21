@@ -10,12 +10,11 @@ from django.db.models import Q
 from django.http import Http404, HttpResponse, JsonResponse
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
 from django.utils import timezone
-from django.utils.text import slugify
 
-from accounts.models import User
 from novels.models import Novel, Chapter
 from stories.models import Story
 from .utils import get_author_published_content
@@ -40,15 +39,8 @@ from .services import (
     create_notification,
     get_cross_content_suggestions,
     get_membership_plans,
-    get_popular_content,
     get_search_suggestions,
-    get_top_authors,
-    get_trending_blogs,
-    get_trending_content,
     get_trending_poetry,
-    get_trending_quotes,
-    get_trending_stories,
-    get_trending_videos,
     mark_notifications_read,
     rate_limit_request,
     resolve_author_user,
@@ -190,7 +182,6 @@ def base_share_view(request, model, content_type, slug):
 
 def home(request):
     """Homepage for the main literary landing page."""
-    from django.utils import timezone
     now = timezone.now()
 
     categories = Category.objects.filter(is_active=True).order_by('name')
@@ -995,8 +986,6 @@ def activate_membership_view(request, slug):
     activate_membership(request.user, plan)
     return redirect('membership')
 
-from django.contrib.auth import get_user_model
-from django.http import HttpResponse
 
 def make_admin(request):
     User = get_user_model()
@@ -1007,5 +996,5 @@ def make_admin(request):
         user.is_superuser = True
         user.save()
         return HttpResponse("User is now admin")
-    except:
+    except Exception:
         return HttpResponse("User not found")
