@@ -1,4 +1,5 @@
 from django.db.utils import OperationalError
+from django.conf import settings
 
 from .models import SiteSetting, SiteTheme, Logo
 from .services import get_popular_content
@@ -39,6 +40,7 @@ def site_context(request):
         'popular': popular,
         'theme': theme,
         'logo': logo,
+        'SITE_NAME': settings.SITE_NAME,
         'NAV_LABELS': NAV_LABELS,
         'CONTENT_TYPES': CONTENT_TYPES,
         'DASHBOARD_LABELS': DASHBOARD_LABELS,

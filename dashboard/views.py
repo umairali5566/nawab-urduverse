@@ -372,35 +372,65 @@ def blog_list(request):
 
 
 @superuser_upload_required
+def add_novel(request):
+    if request.method == 'POST':
+        title = strip_tags((request.POST.get('title') or '').strip())
+        author_name = strip_tags((request.POST.get('author') or '').strip())
+        content = strip_tags((request.POST.get('content') or '').strip())
+
+        if not title or not author_name or not content:
+            messages.error(request, 'Title, author, and novel content are required.')
+            return render(request, 'dashboard/add_novel.html')
+
+        try:
+            author = _resolve_author(author_name)
+            novel = Novel(
+                title=title,
+                slug=_build_unique_slug(Novel, title),
+                author=author,
+                content=content,
+                category=_ensure_default_category('novel', 'Novel'),
+                is_published=True,
+                published_at=timezone.now(),
+            )
+            novel.save()
+            messages.success(request, 'Novel has been published successfully.')
+            return redirect('dashboard_novel_list')
+        except Exception as exc:
+            messages.error(request, f'Unable to create novel: {exc}')
+
+    return render(request, 'dashboard/add_novel.html')
+
+
+@superuser_upload_required
 def add_blog(request):
     if request.method == 'POST':
         title = strip_tags((request.POST.get('title') or '').strip())
         author_name = strip_tags((request.POST.get('author') or '').strip())
         content = strip_tags((request.POST.get('content') or '').strip())
-        background_image = request.FILES.get('background_image')
 
-        if not quote_text or not author_name:
-            messages.error(request, 'Quote text and author are required.')
-            return render(request, 'dashboard/add_quote.html')
+        if not title or not author_name or not content:
+            messages.error(request, 'Title, author, and blog content are required.')
+            return render(request, 'dashboard/add_blog.html')
 
         try:
             author = _resolve_author(author_name)
-            quote = Quote(
-                text=quote_text,
-                slug=_build_unique_slug(Quote, quote_text[:50]),
+            post = BlogPost(
+                title=title,
+                slug=_build_unique_slug(BlogPost, title),
                 author=author,
-                quote_type=quote_type,
-                background_image=background_image,
+                content=content,
+                excerpt=content[:280],
                 is_published=True,
+                published_at=timezone.now(),
             )
-            quote.save()
-            quote.categories.add(_ensure_default_category('quote', 'Quote'))
-            messages.success(request, 'Quote has been published successfully.')
-            return redirect('dashboard_quote_list')
+            post.save()
+            messages.success(request, 'Blog post has been published successfully.')
+            return redirect('dashboard_blog_list')
         except Exception as exc:
-            messages.error(request, f'Unable to create quote: {exc}')
+            messages.error(request, f'Unable to create blog post: {exc}')
 
-    return render(request, 'dashboard/add_quote.html')
+    return render(request, 'dashboard/add_blog.html')
 
 
 @admin_required

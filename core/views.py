@@ -190,13 +190,28 @@ def base_share_view(request, model, content_type, slug):
 
 def home(request):
     """Homepage for the main literary landing page."""
+    from django.utils import timezone
+    now = timezone.now()
+
     categories = Category.objects.filter(is_active=True).order_by('name')
     authors = Author.objects.filter(is_published=True).order_by('name')[:25]
     featured_authors = Author.objects.filter(is_published=True).order_by('name')[:6]
 
-    latest_poetry = Poetry.objects.filter(is_published=True).select_related('author', 'category').order_by('-created_at')[:6]
-    latest_stories = Story.objects.filter(is_published=True).select_related('author', 'category').order_by('-created_at')[:6]
-    latest_novels = Novel.objects.filter(is_published=True).select_related('author', 'category').order_by('-created_at')[:6]
+    latest_poetry = Poetry.objects.filter(
+        is_published=True
+    ).filter(
+        Q(published_at__isnull=True) | Q(published_at__lte=now)
+    ).select_related('author', 'category').order_by('-published_at', '-created_at')[:6]
+    latest_stories = Story.objects.filter(
+        is_published=True
+    ).filter(
+        Q(published_at__isnull=True) | Q(published_at__lte=now)
+    ).select_related('author', 'category').order_by('-published_at', '-created_at')[:6]
+    latest_novels = Novel.objects.filter(
+        is_published=True
+    ).filter(
+        Q(published_at__isnull=True) | Q(published_at__lte=now)
+    ).select_related('author', 'category').order_by('-published_at', '-created_at')[:6]
 
     context = {
         'categories': categories,
