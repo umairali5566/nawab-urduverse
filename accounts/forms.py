@@ -99,7 +99,7 @@ class UserLoginForm(AuthenticationForm):
 
 class UserProfileForm(forms.ModelForm):
     """User profile form"""
-    
+
     class Meta:
         model = User
         fields = [
@@ -111,8 +111,9 @@ class UserProfileForm(forms.ModelForm):
         widgets = {
             'display_name': forms.TextInput(attrs={'class': 'form-control'}),
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'avatar': forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
-            'gender': forms.Select(attrs={'class': 'form-control'}),
+            'gender': forms.Select(attrs={'class': 'form-select'}),
             'birth_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'city': forms.TextInput(attrs={'class': 'form-control'}),
             'country': forms.TextInput(attrs={'class': 'form-control'}),
@@ -123,6 +124,10 @@ class UserProfileForm(forms.ModelForm):
             'dark_mode': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'email_notifications': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['gender'].choices = [('', 'جنس منتخب کریں')] + list(User.GENDER_CHOICES)
 
 
 class CustomPasswordChangeForm(PasswordChangeForm):

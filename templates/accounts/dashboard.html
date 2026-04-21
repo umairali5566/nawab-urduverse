@@ -2,10 +2,90 @@
 {% load static %}
 
 {% block title %}Dashboard - {{ SITE_NAME }}{% endblock %}
-{% block meta_description %}Manage profile, membership, social activity, bookmarks, notifications, and reading history.{% endblock %}
+{% block meta_description %}Manage profile, membership, and recent activity.{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-page .page-header .section-subtitle {
+        display: none;
+    }
+
+    .dashboard-page .compact-stack {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .dashboard-page .profile-form-grid {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .dashboard-page .profile-field {
+        display: grid;
+        gap: 0.45rem;
+    }
+
+    .dashboard-page .profile-field .form-label {
+        margin-bottom: 0;
+        font-weight: 600;
+    }
+
+    .dashboard-page .profile-field-avatar input[type="file"] {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .dashboard-page .avatar-upload-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .dashboard-page .avatar-upload-name {
+        color: var(--text-secondary);
+        font-size: 0.92rem;
+    }
+
+    .dashboard-page .profile-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.85rem 1rem;
+        border: 1px solid var(--border-light);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.7);
+    }
+
+    .dashboard-page .profile-toggle .form-check-input {
+        width: 1.1rem;
+        height: 1.1rem;
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    .dashboard-page .activity-card .section-header {
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 991px) {
+        .dashboard-page .compact-stack {
+            margin-top: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<section class="page-header py-4">
+<section class="page-header py-4 dashboard-page">
     <div class="main-container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0">
@@ -16,7 +96,6 @@
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
             <div>
                 <h1 class="mb-1">Your Dashboard</h1>
-                <p class="section-subtitle">Profile, social activity, premium status, and reading history in one place.</p>
             </div>
             <a class="btn btn-outline-primary" href="{% url 'public_profile' username=user.username %}">
                 <i class="bi bi-arrow-up-right-circle me-1"></i> View Public Profile
@@ -25,7 +104,7 @@
     </div>
 </section>
 
-<section class="page-section">
+<section class="page-section dashboard-page">
     <div class="main-container">
         <div class="dashboard-hero-grid">
             <div class="dashboard-summary-card">
@@ -37,7 +116,7 @@
                     {% endif %}
                     <div>
                         <h3 class="mb-1">{{ user.get_full_name|default:user.username }}</h3>
-                        <p class="text-muted mb-0">@{{ user.username }} • joined {{ user.date_joined|date:"d M Y" }}</p>
+                        <p class="text-muted mb-0">@{{ user.username }} &middot; joined {{ user.date_joined|date:"d M Y" }}</p>
                     </div>
                 </div>
                 <div class="profile-stat-grid mt-4">
@@ -53,10 +132,6 @@
                         <span class="profile-stat-value">{{ comments_count }}</span>
                         <span class="profile-stat-label">Comments</span>
                     </div>
-                    <div class="profile-stat-card">
-                        <span class="profile-stat-value">{{ bookmarks_count }}</span>
-                        <span class="profile-stat-label">Bookmarks</span>
-                    </div>
                 </div>
             </div>
 
@@ -67,34 +142,58 @@
                     {% if membership.plan %}
                     {{ membership.plan.name }}{% if membership.ends_at %} until {{ membership.ends_at|date:'d M Y' }}{% endif %}
                     {% else %}
-                    Upgrade for premium content access, member-first tools, and future paywalled releases.
+                    Free plan active.
                     {% endif %}
                 </p>
                 <a class="btn btn-primary" href="{% url 'membership' %}">
-                    <i class="bi bi-gem me-1"></i> Manage Membership
+                    <i class="bi bi-gem me-1"></i> Membership
                 </a>
             </div>
         </div>
     </div>
 </section>
 
-<section class="page-section">
+<section class="page-section dashboard-page">
     <div class="main-container">
         <div class="row g-4">
-            <div class="col-lg-4">
-                <div class="card glass-card mb-4">
+            <div class="{% if notifications or bookmarks or liked_items or comments or reading_history or recent_views %}col-lg-5{% else %}col-12{% endif %}">
+                <div class="card glass-card">
                     <div class="card-body">
                         <h3 class="card-title mb-3">Edit Profile</h3>
-                        <form method="post" enctype="multipart/form-data">
+                        <form method="post" enctype="multipart/form-data" class="profile-form-grid">
                             {% csrf_token %}
                             {% for field in profile_form %}
-                            <div class="mb-3">
+                            {% if field.name == "avatar" %}
+                            <div class="profile-field profile-field-avatar">
+                                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <div class="avatar-upload-row">
+                                    <label class="btn btn-outline-primary mb-0" for="{{ field.id_for_label }}">
+                                        <i class="bi bi-upload me-1"></i> Choose Image
+                                    </label>
+                                    {{ field }}
+                                    <span class="avatar-upload-name" id="avatarFileName">{% if user.avatar %}Current image saved{% endif %}</span>
+                                </div>
+                                {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors|striptags }}</div>
+                                {% endif %}
+                            </div>
+                            {% elif field.field.widget.input_type == "checkbox" %}
+                            <div class="profile-toggle">
+                                <label class="form-label mb-0" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                            </div>
+                            {% if field.errors %}
+                            <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                            {% endif %}
+                            {% else %}
+                            <div class="profile-field">
                                 <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                                 {{ field }}
                                 {% if field.errors %}
-                                <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                                <div class="text-danger small">{{ field.errors|striptags }}</div>
                                 {% endif %}
                             </div>
+                            {% endif %}
                             {% endfor %}
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="bi bi-check2-circle me-1"></i> Save Changes
@@ -102,131 +201,144 @@
                         </form>
                     </div>
                 </div>
-
-                <div class="card glass-card">
-                    <div class="card-body">
-                        <div class="section-header">
-                            <h3 class="section-title mb-0">Notifications</h3>
-                            <a href="{% url 'notifications' %}" class="btn btn-sm btn-outline-primary">Inbox</a>
-                        </div>
-                        {% if notifications %}
-                        <div class="notification-stack compact">
-                            {% for item in notifications %}
-                            <div class="notification-card {% if not item.is_read %}notification-card-unread{% endif %}">
-                                <div class="notification-copy">
-                                    <strong class="d-block">{{ item.title }}</strong>
-                                    <small class="text-muted d-block">{{ item.message }}</small>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        {% else %}
-                        <p class="text-muted mb-0">No notifications yet.</p>
-                        {% endif %}
-                    </div>
-                </div>
             </div>
 
-            <div class="col-lg-8">
-                <div class="card glass-card mb-4">
-                    <div class="card-body">
-                        <div class="section-header">
-                            <h3 class="section-title mb-0">Bookmarked Posts</h3>
-                            <a href="{% url 'bookmarks_dashboard' %}" class="btn btn-sm btn-outline-primary">View All</a>
-                        </div>
-                        {% if bookmarks %}
-                        <div class="list-group list-group-flush">
-                            {% for item in bookmarks %}
-                            <a href="{{ item.url }}" class="list-group-item list-group-item-action px-0 d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="fw-semibold">{{ item.title|truncatechars:80 }}</div>
-                                    <small class="text-muted text-capitalize">{{ item.content_type }}</small>
-                                </div>
-                                <small class="text-muted">{{ item.created_at|date:"d M" }}</small>
-                            </a>
-                            {% endfor %}
-                        </div>
-                        {% else %}
-                        <p class="text-muted mb-0">No bookmarks yet.</p>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="card glass-card mb-4">
-                    <div class="card-body">
-                        <div class="section-header">
-                            <h3 class="section-title mb-0">Liked Content</h3>
-                        </div>
-                        {% if liked_items %}
-                        <div class="list-group list-group-flush">
-                            {% for item in liked_items %}
-                            <a href="{{ item.url }}" class="list-group-item list-group-item-action px-0 d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="fw-semibold">{{ item.title|truncatechars:80 }}</div>
-                                    <small class="text-muted text-capitalize">{{ item.content_type }}</small>
-                                </div>
-                                <small class="text-muted">{{ item.created_at|date:"d M" }}</small>
-                            </a>
-                            {% endfor %}
-                        </div>
-                        {% else %}
-                        <p class="text-muted mb-0">You have not liked anything yet.</p>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="card glass-card mb-4">
-                    <div class="card-body">
-                        <h3 class="card-title mb-3">Recent Comments</h3>
-                        {% if comments %}
-                        <div class="list-group list-group-flush">
-                            {% for comment in comments %}
-                            <div class="list-group-item px-0">
-                                <div class="d-flex justify-content-between">
-                                    <small class="text-muted text-capitalize">{{ comment.content_type }}</small>
-                                    <small class="text-muted">{{ comment.created_at|date:"d M Y" }}</small>
-                                </div>
-                                <div class="mt-1">{{ comment.text|truncatechars:160 }}</div>
+            {% if notifications or bookmarks or liked_items or comments or reading_history or recent_views %}
+            <div class="col-lg-7">
+                <div class="compact-stack">
+                    {% if notifications %}
+                    <div class="card glass-card activity-card">
+                        <div class="card-body">
+                            <div class="section-header">
+                                <h3 class="section-title mb-0">Notifications</h3>
+                                <a href="{% url 'notifications' %}" class="btn btn-sm btn-outline-primary">Inbox</a>
                             </div>
-                            {% endfor %}
-                        </div>
-                        {% else %}
-                        <p class="text-muted mb-0">No comments yet.</p>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="card glass-card">
-                    <div class="card-body">
-                        <h3 class="card-title mb-3">Reading History</h3>
-                        {% if reading_history %}
-                        <div class="list-group list-group-flush">
-                            {% for item in reading_history %}
-                            <a href="{{ item.chapter.get_absolute_url }}" class="list-group-item list-group-item-action px-0 d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="fw-semibold">{{ item.novel.title }}</div>
-                                    <small class="text-muted">Chapter {{ item.chapter.chapter_number }}: {{ item.chapter.title|truncatechars:50 }}</small>
+                            <div class="notification-stack compact">
+                                {% for item in notifications %}
+                                <div class="notification-card {% if not item.is_read %}notification-card-unread{% endif %}">
+                                    <div class="notification-copy">
+                                        <strong class="d-block">{{ item.title }}</strong>
+                                        <small class="text-muted d-block">{{ item.message }}</small>
+                                    </div>
                                 </div>
-                                <small class="text-muted">{{ item.last_read_at|date:"d M Y" }}</small>
-                            </a>
-                            {% endfor %}
-                        </div>
-                        {% elif recent_views %}
-                        <div class="list-group list-group-flush">
-                            {% for view in recent_views %}
-                            <div class="list-group-item px-0 d-flex justify-content-between">
-                                <span>{{ view.description }}</span>
-                                <small class="text-muted">{{ view.created_at|date:"d M Y" }}</small>
+                                {% endfor %}
                             </div>
-                            {% endfor %}
                         </div>
-                        {% else %}
-                        <p class="text-muted mb-0">No reading history yet.</p>
-                        {% endif %}
                     </div>
+                    {% endif %}
+
+                    {% if bookmarks %}
+                    <div class="card glass-card activity-card">
+                        <div class="card-body">
+                            <div class="section-header">
+                                <h3 class="section-title mb-0">Bookmarked Posts</h3>
+                                <a href="{% url 'bookmarks_dashboard' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                {% for item in bookmarks %}
+                                <a href="{{ item.url }}" class="list-group-item list-group-item-action px-0 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-semibold">{{ item.title|truncatechars:80 }}</div>
+                                        <small class="text-muted text-capitalize">{{ item.content_type }}</small>
+                                    </div>
+                                    <small class="text-muted">{{ item.created_at|date:"d M" }}</small>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if liked_items %}
+                    <div class="card glass-card activity-card">
+                        <div class="card-body">
+                            <div class="section-header">
+                                <h3 class="section-title mb-0">Liked Content</h3>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                {% for item in liked_items %}
+                                <a href="{{ item.url }}" class="list-group-item list-group-item-action px-0 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-semibold">{{ item.title|truncatechars:80 }}</div>
+                                        <small class="text-muted text-capitalize">{{ item.content_type }}</small>
+                                    </div>
+                                    <small class="text-muted">{{ item.created_at|date:"d M" }}</small>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if comments %}
+                    <div class="card glass-card activity-card">
+                        <div class="card-body">
+                            <h3 class="card-title mb-3">Recent Comments</h3>
+                            <div class="list-group list-group-flush">
+                                {% for comment in comments %}
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex justify-content-between">
+                                        <small class="text-muted text-capitalize">{{ comment.content_type }}</small>
+                                        <small class="text-muted">{{ comment.created_at|date:"d M Y" }}</small>
+                                    </div>
+                                    <div class="mt-1">{{ comment.text|truncatechars:160 }}</div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if reading_history or recent_views %}
+                    <div class="card glass-card activity-card">
+                        <div class="card-body">
+                            <h3 class="card-title mb-3">Reading History</h3>
+                            {% if reading_history %}
+                            <div class="list-group list-group-flush">
+                                {% for item in reading_history %}
+                                <a href="{{ item.chapter.get_absolute_url }}" class="list-group-item list-group-item-action px-0 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-semibold">{{ item.novel.title }}</div>
+                                        <small class="text-muted">Chapter {{ item.chapter.chapter_number }}: {{ item.chapter.title|truncatechars:50 }}</small>
+                                    </div>
+                                    <small class="text-muted">{{ item.last_read_at|date:"d M Y" }}</small>
+                                </a>
+                                {% endfor %}
+                            </div>
+                            {% elif recent_views %}
+                            <div class="list-group list-group-flush">
+                                {% for view in recent_views %}
+                                <div class="list-group-item px-0 d-flex justify-content-between">
+                                    <span>{{ view.description }}</span>
+                                    <small class="text-muted">{{ view.created_at|date:"d M Y" }}</small>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const avatarInput = document.getElementById('{{ profile_form.avatar.id_for_label }}');
+        const avatarName = document.getElementById('avatarFileName');
+
+        if (!avatarInput || !avatarName) {
+            return;
+        }
+
+        avatarInput.addEventListener('change', function () {
+            avatarName.textContent = this.files && this.files.length ? this.files[0].name : '';
+        });
+    });
+</script>
 {% endblock %}
