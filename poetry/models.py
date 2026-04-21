@@ -27,6 +27,8 @@ class Poetry(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='زمرہ')
     is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
     published_at = models.DateTimeField(null=True, blank=True, verbose_name='شائع ہونے کی تاریخ')
+    views_count = models.PositiveIntegerField(default=0, verbose_name='مشاہدات')
+    likes_count = models.PositiveIntegerField(default=0, verbose_name='پسندیدگی')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
