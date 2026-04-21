@@ -496,6 +496,3 @@ LOGGING = {
 # Create logs directory if it doesn't exist
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 os.makedirs(LOGS_DIR, exist_ok=True)
-
-
-AUTH_USER_MODEL = 'accounts.User'
