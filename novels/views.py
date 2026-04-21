@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, ListView
 
-from core.models import ReadingProgress
+from core.models import ContentLike, ReadingProgress
 from core.services import toggle_content_like
 from .models import Chapter, Novel
 
@@ -39,6 +39,16 @@ class NovelDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['chapters'] = self.object.chapters.filter(is_published=True).order_by('chapter_number')
         context['chapter_count'] = self.object.total_chapters
+
+        if self.request.user.is_authenticated:
+            context['is_liked'] = ContentLike.objects.filter(
+                user=self.request.user,
+                content_type='novel',
+                object_id=self.object.id,
+            ).exists()
+        else:
+            context['is_liked'] = False
+
         return context
 
 

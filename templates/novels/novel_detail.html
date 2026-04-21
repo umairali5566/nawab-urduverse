@@ -284,15 +284,22 @@
 
         <!-- Action Buttons -->
         <div class="novel-actions">
-            <button class="btn btn-outline like-btn" onclick="toggleLike(this)" title="Like this novel">
+            {% if user.is_authenticated %}
+            <button class="btn btn-outline like-btn {% if is_liked %}active{% endif %}" onclick="toggleLike(this)" type="button" aria-label="پسند">
                 <span>♡</span>
                 <span>پسند</span>
             </button>
-            <button class="btn btn-outline" onclick="shareNovel()" title="Share this novel">
+            {% else %}
+            <a class="btn btn-outline" href="{% url 'login' %}?next={{ request.path|urlencode }}" aria-label="پسند کیلئے لاگ ان کریں">
+                <span>♡</span>
+                <span>پسند کیلئے لاگ ان</span>
+            </a>
+            {% endif %}
+            <button class="btn btn-outline" onclick="shareNovel()" type="button" aria-label="شیئر کریں">
                 <span>📤</span>
                 <span>شیئر کریں</span>
             </button>
-            <button class="btn btn-outline" onclick="copyNovel()" title="Copy novel text">
+            <button class="btn btn-outline" onclick="copyNovel()" type="button" aria-label="کاپی کریں">
                 <span>📋</span>
                 <span>کاپی کریں</span>
             </button>
@@ -310,13 +317,7 @@
 
 <script>
     function toggleLike(btn) {
-        fetch('{% url "like_novel" novel.slug %}', {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                'Content-Type': 'application/json',
-            },
-        })
+        fetch('{% url "like_novel" novel.slug %}', { method: 'GET' })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -331,33 +332,41 @@
                 alert(data.message || 'کچھ غلط ہو گیا');
             }
         })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('کچھ غلط ہو گیا');
-        });
+        .catch(() => alert('کچھ غلط ہو گیا'));
     }
 
     function shareNovel() {
+        const title = '{{ novel.title|escapejs }}';
+        const url = window.location.href;
+
         if (navigator.share) {
-            navigator.share({
-                title: '{{ novel.title }}',
-                text: 'اس خوبصورت اردو ناول کو دیکھیں',
-                url: window.location.href
-            }).catch(err => console.log('Share cancelled'));
-        } else {
-            navigator.clipboard.writeText(window.location.href);
-            alert('ناول کا ربط کاپی ہو گیا!');
+            navigator.share({ title, text: 'اس خوبصورت اردو ناول کو دیکھیں', url }).catch(() => {});
+            return;
         }
+
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(() => alert('ناول کا ربط کاپی ہو گیا!'));
+            return;
+        }
+
+        window.prompt('یہ ربط کاپی کر لیں:', url);
     }
 
     function copyNovel() {
-        const content = document.getElementById('novelContent').innerText;
-        const novelText = '{{ novel.title }}\n\n{{ novel.author.name }} کا ناول\n\n' + content;
-        navigator.clipboard.writeText(novelText).then(() => {
-            alert('ناول کاپی ہو گیا!');
-        }).catch(err => {
-            alert('کاپی میں مسئلہ ہوا۔ براہ کرم دوبارہ کوشش کریں۔');
-        });
+        const title = '{{ novel.title|escapejs }}';
+        const author = '{% if novel.author %}{{ novel.author.name|escapejs }}{% endif %}';
+        const content = (document.getElementById('novelContent')?.innerText || '').trim();
+        const header = author ? `${title}\\n${author}\\n` : `${title}\\n`;
+        const text = `${header}\\n${content}`.trim();
+
+        if (!navigator.clipboard) {
+            window.prompt('یہ متن کاپی کر لیں:', text);
+            return;
+        }
+
+        navigator.clipboard.writeText(text)
+            .then(() => alert('ناول کاپی ہو گیا!'))
+            .catch(() => alert('کاپی میں مسئلہ ہوا۔ براہ کرم دوبارہ کوشش کریں۔'));
     }
 </script>
 

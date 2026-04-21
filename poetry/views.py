@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, ListView
 
+from core.models import ContentLike
 from core.services import toggle_content_like
 
 from .models import Poetry
@@ -51,6 +52,25 @@ class PoetryDetailView(DetailView):
             # If update fails, continue without incrementing
             pass
         return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        poem = context.get('poem') or getattr(self, 'object', None)
+
+        if poem is None:
+            context['is_liked'] = False
+            return context
+
+        if self.request.user.is_authenticated:
+            context['is_liked'] = ContentLike.objects.filter(
+                user=self.request.user,
+                content_type='poetry',
+                object_id=poem.id,
+            ).exists()
+        else:
+            context['is_liked'] = False
+
+        return context
 
 
 @login_required

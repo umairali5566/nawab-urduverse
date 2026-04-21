@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Premium Urdu Literature Platform - Poetry, Novels, Stories, Quotes & Blog">
+    <meta name="description" content="{{ SITE_NAME }} — اردو شاعری، ناول، کہانیاں، اقتباسات اور بلاگ">
     
     <title>{% block title %}{{ SITE_NAME }} - اردو ادب کی خوبصورت دنیا{% endblock %}</title>
     
@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <!-- Custom CSS - Premium Design System -->
     {% load static %}
@@ -48,7 +51,7 @@
             <div class="nav-auth">
                 {% if user.is_authenticated %}
                     <div class="nav-user-menu">
-                        <button class="nav-user-btn" aria-label="User menu" aria-expanded="false" aria-controls="userDropdown">
+                        <button class="nav-user-btn" aria-label="یوزر مینو" aria-expanded="false" aria-controls="userDropdown">
                             {% if user.avatar %}
                                 <img src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}" class="user-avatar-small">
                             {% else %}
@@ -63,24 +66,24 @@
                         <div class="nav-user-dropdown" id="userDropdown" role="menu">
                             {% if user.is_superuser %}
                             <a href="{% url 'dashboard_home' %}" class="dropdown-item" role="menuitem">
-                                <i class="bi bi-speedometer2"></i> Admin Dashboard
+                                <i class="bi bi-speedometer2"></i> {{ DASHBOARD_LABELS.admin_dashboard }}
                             </a>
                             {% else %}
                             <a href="{% url 'dashboard' %}" class="dropdown-item" role="menuitem">
-                                <i class="bi bi-speedometer2"></i> My Dashboard
+                                <i class="bi bi-speedometer2"></i> {{ DASHBOARD_LABELS.my_dashboard }}
                             </a>
                             {% endif %}
                             <a href="{% url 'profile' %}" class="dropdown-item" role="menuitem">
-                                <i class="bi bi-person-circle"></i> Profile
+                                <i class="bi bi-person-circle"></i> پروفائل
                             </a>
                             {% if not user.is_superuser %}
                             <a href="{% url 'my_content' %}" class="dropdown-item" role="menuitem">
-                                <i class="bi bi-file-text"></i> My Content
+                                <i class="bi bi-file-text"></i> میرا مواد
                             </a>
                             {% endif %}
                             <div class="dropdown-divider"></div>
                             <a href="{% url 'logout' %}" class="dropdown-item" role="menuitem">
-                                <i class="bi bi-box-arrow-right"></i> Logout
+                                <i class="bi bi-box-arrow-right"></i> {{ NAV_LABELS.logout }}
                             </a>
                         </div>
                     </div>
@@ -113,19 +116,19 @@
             {% if user.is_authenticated %}
                 {% if user.is_superuser %}
                 <a href="{% url 'dashboard_home' %}" class="mobile-menu-link">
-                    <i class="bi bi-speedometer2"></i> Admin Dashboard
+                    <i class="bi bi-speedometer2"></i> {{ DASHBOARD_LABELS.admin_dashboard }}
                 </a>
                 {% else %}
                 <a href="{% url 'dashboard' %}" class="mobile-menu-link">
-                    <i class="bi bi-speedometer2"></i> My Dashboard
+                    <i class="bi bi-speedometer2"></i> {{ DASHBOARD_LABELS.my_dashboard }}
                 </a>
                 {% endif %}
                 <a href="{% url 'profile' %}" class="mobile-menu-link">
-                    <i class="bi bi-person-circle"></i> Profile
+                    <i class="bi bi-person-circle"></i> پروفائل
                 </a>
                 {% if not user.is_superuser %}
                 <a href="{% url 'my_content' %}" class="mobile-menu-link">
-                    <i class="bi bi-file-text"></i> My Content
+                    <i class="bi bi-file-text"></i> میرا مواد
                 </a>
                 {% endif %}
                 <a href="{% url 'logout' %}" class="mobile-menu-link">
@@ -141,9 +144,9 @@
     <!-- MAIN CONTENT -->
     <main>
         {% if messages %}
-            <div style="max-width: 1400px; margin: 0 auto; padding: 1rem 2rem;">
+            <div class="flash-messages">
                 {% for message in messages %}
-                    <div style="background-color: #e3f2fd; border: 1px solid #90caf9; color: #1565c0; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <div class="flash-message">
                         {{ message }}
                     </div>
                 {% endfor %}

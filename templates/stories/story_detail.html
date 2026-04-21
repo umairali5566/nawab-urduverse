@@ -1,270 +1,255 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}{{ story.title }} - {{ SITE_NAME }}{% endblock %}
 
-{% block content %}
-
+{% block extra_css %}
 <style>
-    /* Story Detail Page Styles */
-    .story-container {
-        max-width: 850px;
-        margin: 4rem auto;
-        padding: 0 1.5rem;
+    .story-reader {
+        max-width: 700px;
+        margin: 3.25rem auto;
+        padding: 0 1.25rem;
         direction: rtl;
         text-align: right;
     }
 
-    .story-card {
-        background: white;
-        padding: 3.5rem;
+    .story-card,
+    .story-panel {
+        background: var(--background-base);
         border-radius: 16px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        border: 1px solid #f0f0f0;
-        margin-bottom: 2rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid rgba(226, 232, 240, 0.9);
+    }
+
+    .story-card {
+        padding: 2.75rem 2.5rem;
     }
 
     .story-header {
         text-align: center;
-        margin-bottom: 3rem;
-        padding-bottom: 2.5rem;
-        border-bottom: 1px solid #e5e7eb;
+        margin-bottom: 2.5rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(226, 232, 240, 0.9);
     }
 
     .story-title {
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 2.8rem;
+        font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaliq', serif;
+        font-size: clamp(2rem, 5vw, 2.6rem);
         font-weight: 700;
-        color: #1e293b;
-        margin: 0 0 1.5rem 0;
-        line-height: 1.3;
-        letter-spacing: -0.5px;
+        color: var(--text-primary);
+        margin: 0 0 1.25rem 0;
+        line-height: 1.35;
     }
 
     .story-meta {
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 1.5rem;
+        gap: 0.85rem;
         flex-wrap: wrap;
-        font-family: 'Noto Nastaliq Urdu', serif;
+        color: var(--text-secondary);
+        font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaliq', serif;
+        font-size: 1.05rem;
     }
 
     .story-author {
-        font-size: 1.25rem;
-        color: #64748b;
-        font-weight: 600;
+        font-weight: 700;
     }
 
     .story-category {
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        background: var(--primary-gradient);
         color: white;
-        padding: 0.4rem 1rem;
-        border-radius: 24px;
+        padding: 0.35rem 0.85rem;
+        border-radius: 9999px;
+        font-weight: 700;
         font-size: 0.95rem;
-        font-weight: 600;
-    }
-
-    .story-date {
-        font-size: 0.95rem;
-        color: #94a3b8;
     }
 
     .story-image {
-        margin: 2rem 0 3rem 0;
-        border-radius: 12px;
-        overflow: hidden;
+        margin: 1.75rem 0 2.25rem;
+        text-align: center;
     }
 
     .story-image img {
-        width: 100%;
+        max-width: 100%;
         height: auto;
-        display: block;
+        border-radius: 14px;
+        box-shadow: 0 12px 30px rgba(2, 132, 199, 0.18);
     }
 
     .story-content {
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 1.5rem;
-        line-height: 2.4;
-        color: #334155;
-        margin: 3rem 0;
+        font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaliq', serif;
+        font-size: 20px;
+        line-height: 2.2;
+        color: var(--text-primary);
+        margin: 2.25rem 0;
         direction: rtl;
         text-align: right;
-        white-space: pre-wrap;
-        word-wrap: break-word;
+        word-break: break-word;
     }
 
-    .story-content p {
-        margin-bottom: 1.5rem;
-        line-height: 2.4;
-    }
-
-    /* Action Buttons */
     .story-actions {
         display: flex;
         justify-content: center;
-        gap: 1rem;
-        margin: 3.5rem 0;
+        gap: 0.75rem;
         flex-wrap: wrap;
+        margin: 2.5rem 0 2.1rem;
     }
 
-    .btn {
-        padding: 0.7rem 1.5rem;
-        border: 2px solid #cbd5e1;
-        background: white;
-        color: #1e293b;
-        border-radius: 8px;
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        white-space: nowrap;
+    .story-actions .btn {
+        min-width: 150px;
+        border-radius: 14px;
     }
 
-    .btn:hover {
-        border-color: #0ea5e9;
-        color: #0ea5e9;
-        background: #f0f9ff;
+    .story-actions .btn.is-active {
+        filter: saturate(1.05);
+        box-shadow: 0 10px 25px rgba(14, 165, 233, 0.35);
     }
 
-    .btn-primary {
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        border: 2px solid transparent;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(14, 165, 233, 0.3);
-    }
-
-    .btn-outline {
-        border: 2px solid #cbd5e1;
-        background: white;
-        color: #1e293b;
-    }
-
-    .btn-outline:hover {
-        border-color: #0ea5e9;
-        color: #0ea5e9;
-        background: #f0f9ff;
-    }
-
-    .btn.active {
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        border-color: transparent;
-        color: white;
-    }
-
-    /* Footer Navigation */
     .story-footer {
         display: flex;
         justify-content: center;
-        gap: 1rem;
-        margin-top: 4rem;
-        padding-top: 2.5rem;
-        border-top: 1px solid #e5e7eb;
+        gap: 0.75rem;
         flex-wrap: wrap;
+        padding-top: 2rem;
+        margin-top: 2.5rem;
+        border-top: 1px solid rgba(226, 232, 240, 0.9);
     }
 
     .story-footer .btn {
-        min-width: 200px;
+        min-width: 220px;
+        border-radius: 14px;
+    }
+
+    .story-side {
+        margin-top: 1.5rem;
+        display: grid;
+        gap: 1rem;
+    }
+
+    .story-panel {
+        padding: 1.5rem 1.5rem;
+    }
+
+    .panel-title {
+        margin: 0 0 1rem 0;
+        font-size: 1.4rem;
+    }
+
+    .panel-muted {
+        color: var(--text-secondary);
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.9;
+    }
+
+    .comment-form textarea {
+        width: 100%;
+        padding: 0.9rem 1rem;
+        border-radius: 14px;
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        background: rgba(248, 250, 252, 0.85);
+        outline: none;
+        resize: vertical;
+        font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaliq', serif;
+        font-size: 1rem;
+        line-height: 2;
+    }
+
+    .comment-form textarea:focus {
+        border-color: rgba(14, 165, 233, 0.6);
+        box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.12);
+    }
+
+    .comment-actions {
+        margin-top: 0.75rem;
+        display: flex;
         justify-content: center;
     }
 
-    /* Responsive Design */
+    .comment-list {
+        margin-top: 1.25rem;
+        display: grid;
+        gap: 0.85rem;
+    }
+
+    .comment-block {
+        padding: 0.9rem 1rem;
+        border-radius: 14px;
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        background: rgba(248, 250, 252, 0.65);
+    }
+
+    .comment-block strong {
+        display: block;
+        margin-bottom: 0.4rem;
+        color: var(--text-primary);
+    }
+
+    .suggested-list {
+        display: grid;
+        gap: 0.65rem;
+    }
+
+    .suggested-list a {
+        text-decoration: none;
+        color: inherit;
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        border-radius: 14px;
+        padding: 0.9rem 1rem;
+        background: rgba(248, 250, 252, 0.65);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: block;
+    }
+
+    .suggested-list a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 30px rgba(2, 132, 199, 0.15);
+    }
+
     @media (max-width: 768px) {
-        .story-container {
+        .story-reader {
             margin: 2rem auto;
             padding: 0 1rem;
         }
 
         .story-card {
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .story-title {
-            font-size: 2rem;
-        }
-
-        .story-content {
-            font-size: 1.3rem;
-            line-height: 2.2;
-            margin: 2rem 0;
-        }
-
-        .story-header {
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-        }
-
-        .story-meta {
-            gap: 1rem;
-            flex-direction: column;
-        }
-
-        .story-author {
-            font-size: 1.1rem;
+            padding: 1.75rem 1.25rem;
         }
 
         .story-actions,
         .story-footer {
             flex-direction: column;
             align-items: stretch;
-            gap: 0.75rem;
         }
 
         .story-actions .btn,
         .story-footer .btn {
             width: 100%;
-            justify-content: center;
-            min-width: auto;
-        }
-
-        .btn {
-            padding: 0.75rem 1rem;
-            font-size: 0.95rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .story-card {
-            padding: 1.5rem;
-        }
-
-        .story-title {
-            font-size: 1.6rem;
+            min-width: unset;
         }
 
         .story-content {
-            font-size: 1.2rem;
-            line-height: 2.1;
+            font-size: 19px;
+            line-height: 2.15;
         }
 
-        .story-author {
-            font-size: 1rem;
-        }
-
-        .story-category {
-            font-size: 0.85rem;
-            padding: 0.3rem 0.75rem;
+        .story-panel {
+            padding: 1.25rem 1.1rem;
         }
     }
 </style>
+{% endblock %}
 
-<div class="story-container">
+{% block content %}
+<div class="story-reader">
     <article class="story-card">
-        <!-- Story Header -->
         <header class="story-header">
             <h1 class="story-title">{{ story.title }}</h1>
             <div class="story-meta">
+                {% if story.author %}
                 <span class="story-author">{{ story.author.name }}</span>
+                {% endif %}
                 {% if story.category %}
                 <span class="story-category">{{ story.category.name }}</span>
                 {% endif %}
@@ -272,272 +257,141 @@
             </div>
         </header>
 
-        <!-- Story Featured Image -->
         {% if story.featured_image %}
         <div class="story-image">
             <img src="{{ story.featured_image.url }}" alt="{{ story.title }}" loading="lazy">
         </div>
         {% endif %}
 
-        <!-- Story Content -->
         <div class="story-content" id="storyContent">{{ story.content|safe }}</div>
 
-        <!-- Action Buttons -->
         <div class="story-actions">
-            <button class="btn btn-outline like-btn {% if is_liked %}active{% endif %}" onclick="toggleLike(this)" title="Like this story">
-                <span>♡</span>
-                <span>پسند</span>
+            {% if user.is_authenticated %}
+            <button class="btn btn-primary {% if is_liked %}is-active{% endif %}" onclick="toggleLike(this)" type="button" aria-label="پسند">
+                <span class="story-like-icon">{% if is_liked %}♥{% else %}♡{% endif %}</span>
+                <span class="story-like-text">{% if is_liked %}پسند کیا گیا{% else %}پسند{% endif %}</span>
             </button>
-            <button class="btn btn-outline" onclick="shareStory()" title="Share this story">
-                <span>📤</span>
+            {% else %}
+            <a class="btn btn-primary" href="{% url 'login' %}?next={{ request.path|urlencode }}" aria-label="پسند کیلئے لاگ ان کریں">
+                <span>♡</span>
+                <span>پسند کیلئے لاگ ان</span>
+            </a>
+            {% endif %}
+            <button class="btn btn-primary" onclick="shareStory()" type="button" aria-label="شیئر کریں">
+                <span>↗</span>
                 <span>شیئر کریں</span>
             </button>
-            <button class="btn btn-outline" onclick="copyStory()" title="Copy story text">
-                <span>📋</span>
+            <button class="btn btn-primary" onclick="copyStory()" type="button" aria-label="کاپی کریں">
+                <span>⧉</span>
                 <span>کاپی کریں</span>
             </button>
         </div>
 
-        <!-- Navigation Buttons -->
         <div class="story-footer">
-            <a href="{% url 'story_list' %}" class="btn btn-outline">← کہانیوں پر واپس</a>
+            <a href="{% url 'story_list' %}" class="btn btn-secondary">کہانیوں پر واپس</a>
             {% if story.author %}
-            <a href="{% url 'author_detail' story.author.slug %}" class="btn btn-outline">{{ story.author.name }} کی مزید کہانیاں</a>
+            <a href="{% url 'author_detail' story.author.slug %}" class="btn btn-secondary">{{ story.author.name }} کی مزید کہانیاں</a>
             {% endif %}
         </div>
     </article>
-</div>
 
-<script>
-    function toggleLike(btn) {
-        fetch('{% url "like_story" story.slug %}', {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                if (data.liked) {
-                    btn.classList.add('active');
-                    btn.innerHTML = '<span>♥</span><span>پسند کیا گیا</span>';
-                } else {
-                    btn.classList.remove('active');
-                    btn.innerHTML = '<span>♡</span><span>پسند</span>';
-                }
-            } else {
-                alert(data.message || 'کچھ غلط ہو گیا');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('کچھ غلط ہو گیا');
-        });
-    }
+    <section class="story-side" aria-label="تفصیلات">
+        <div class="story-panel">
+            <h2 class="panel-title">تبصرے</h2>
 
-    function shareStory() {
-        if (navigator.share) {
-            navigator.share({
-                title: '{{ story.title }}',
-                text: 'اس خوبصورت اردو کہانی کو دیکھیں',
-                url: window.location.href
-            }).catch(err => console.log('Share cancelled'));
-        } else {
-            navigator.clipboard.writeText(window.location.href);
-            alert('کہانی کا ربط کاپی ہو گیا!');
-        }
-    }
-
-    function copyStory() {
-        const content = document.getElementById('storyContent').innerText;
-        const storyText = '{{ story.title }}\n\n{{ story.author.name }} کی کہانی\n\n' + content;
-        navigator.clipboard.writeText(storyText).then(() => {
-            alert('کہانی کاپی ہو گئی!');
-        }).catch(err => {
-            alert('کاپی میں مسئلہ ہوا۔ براہ کرم دوبارہ کوشش کریں۔');
-        });
-    }
-</script>
-
-{% endblock %}
-
-            <div class="col-lg-6">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title section-title-urdu">Comments</h5>
-                        {% if user.is_authenticated %}
-                        <form method="post" action="{% url 'add_comment' content_type='story' object_id=story.id %}" class="comment-form mb-4" data-comment-form>
-                            {% csrf_token %}
-                            <textarea class="form-control mb-3" name="text" rows="3" placeholder="Share your thoughts on this story"></textarea>
-                            <button class="btn btn-primary" type="submit">Post Comment</button>
-                        </form>
-                        {% else %}
-                        <button type="button" class="btn btn-outline-primary mb-4" data-auth-required data-auth-action="comment">Log in to comment</button>
-                        {% endif %}
-                        {% for comment in comments %}
-                        <div class="comment-block">
-                            <strong>{{ comment.user.username }}</strong>
-                            <p class="mb-0 small">{{ comment.text }}</p>
-                        </div>
-                        {% empty %}
-                        <p class="text-muted mb-0">No comments yet.</p>
-                        {% endfor %}
-                    </div>
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'add_comment' content_type='story' object_id=story.id %}" class="comment-form" data-comment-form>
+                {% csrf_token %}
+                <textarea name="text" rows="3" placeholder="اپنی رائے یہاں لکھیں"></textarea>
+                <div class="comment-actions">
+                    <button class="btn btn-primary" type="submit">تبصرہ بھیجیں</button>
                 </div>
+            </form>
+            {% else %}
+            <a href="{% url 'login' %}?next={{ request.path|urlencode }}" class="btn btn-secondary">تبصرہ کرنے کیلئے لاگ ان کریں</a>
+            {% endif %}
+
+            <div class="comment-list" aria-label="تبصروں کی فہرست">
+                {% for comment in comments %}
+                <div class="comment-block">
+                    <strong>{{ comment.user.username }}</strong>
+                    <p class="panel-muted">{{ comment.text }}</p>
+                </div>
+                {% empty %}
+                <p class="panel-muted">ابھی کوئی تبصرہ نہیں۔</p>
+                {% endfor %}
             </div>
         </div>
 
         {% if suggested_content %}
-        <div class="reading-area mt-3">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title section-title-urdu">You may also like</h5>
-                    {% for item in suggested_content %}
-                    {% firstof item.title item.name item.text as item_label %}
-                    <p class="mb-1"><a href="{{ item.get_absolute_url }}">{{ item_label|truncatechars:70 }}</a></p>
-                    <p class="small text-muted mb-2">{{ item.content_type_name|default:"Content" }} · {{ item.recommendation_reason|default:"matching theme" }}</p>
-                    {% endfor %}
-                </div>
+        <div class="story-panel">
+            <h2 class="panel-title">آپ کو یہ بھی پسند آ سکتا ہے</h2>
+            <div class="suggested-list">
+                {% for item in suggested_content %}
+                {% firstof item.title item.name item.text as item_label %}
+                <a href="{{ item.get_absolute_url }}">{{ item_label|truncatechars:70 }}</a>
+                {% endfor %}
             </div>
         </div>
         {% endif %}
-    </div>
-</section>
+    </section>
+</div>
 {% endblock %}
 
-{% block extra_css %}
-<style>
-.reader-container {
-    max-width: 700px;
-    margin: 4rem auto;
-    padding: 0 20px;
-}
+{% block extra_js %}
+<script>
+    function toggleLike(btn) {
+        fetch('{% url "like_story" story.slug %}', { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert(data.message || 'کچھ غلط ہو گیا');
+                    return;
+                }
 
-.story-card {
-    background: var(--card-bg);
-    padding: 3rem;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
+                const iconEl = btn.querySelector('.story-like-icon');
+                const textEl = btn.querySelector('.story-like-text');
+                const liked = Boolean(data.liked);
 
-.story-header {
-    text-align: center;
-    margin-bottom: 3rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.story-title {
-    font-size: 2.5rem;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-    line-height: 1.2;
-}
-
-.story-meta {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    color: var(--text-secondary);
-}
-
-.story-author {
-    font-weight: 600;
-    color: var(--secondary-color);
-}
-
-.story-category {
-    background: var(--secondary-color);
-    color: var(--card-bg);
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.story-date {
-    font-size: 0.9rem;
-}
-
-.story-image {
-    margin: 2rem 0;
-    text-align: center;
-}
-
-.story-image img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.story-content {
-    font-family: var(--urdu-font);
-    font-size: 18px;
-    line-height: 2;
-    text-align: right;
-    direction: rtl;
-    color: var(--text-primary);
-    margin: 2rem 0;
-}
-
-.story-actions {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin: 3rem 0 2rem;
-    flex-wrap: wrap;
-}
-
-.story-footer {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    flex-wrap: wrap;
-}
-
-.urdu-text {
-    font-family: var(--urdu-font);
-    direction: rtl;
-    text-align: right;
-}
-
-@media (max-width: 768px) {
-    .reader-container {
-        margin: 2rem auto;
-        padding: 0 15px;
+                btn.classList.toggle('is-active', liked);
+                if (iconEl) iconEl.textContent = liked ? '♥' : '♡';
+                if (textEl) textEl.textContent = liked ? 'پسند کیا گیا' : 'پسند';
+            })
+            .catch(() => alert('کچھ غلط ہو گیا'));
     }
 
-    .story-card {
-        padding: 2rem;
+    function shareStory() {
+        const title = '{{ story.title|escapejs }}';
+        const url = window.location.href;
+
+        if (navigator.share) {
+            navigator.share({ title, text: 'اس خوبصورت اردو کہانی کو دیکھیں', url }).catch(() => {});
+            return;
+        }
+
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(() => alert('کہانی کا ربط کاپی ہو گیا!'));
+            return;
+        }
+
+        window.prompt('یہ ربط کاپی کر لیں:', url);
     }
 
-    .story-title {
-        font-size: 2rem;
-    }
+    function copyStory() {
+        const title = '{{ story.title|escapejs }}';
+        const author = '{% if story.author %}{{ story.author.name|escapejs }}{% endif %}';
+        const content = (document.getElementById('storyContent')?.innerText || '').trim();
+        const header = author ? `${title}\\n${author}\\n` : `${title}\\n`;
+        const text = `${header}\\n${content}`.trim();
 
-    .story-content {
-        font-size: 16px;
-    }
+        if (!navigator.clipboard) {
+            window.prompt('یہ متن کاپی کر لیں:', text);
+            return;
+        }
 
-    .story-actions,
-    .story-footer {
-        flex-direction: column;
-        align-items: center;
+        navigator.clipboard.writeText(text)
+            .then(() => alert('کہانی کاپی ہو گئی!'))
+            .catch(() => alert('کاپی میں مسئلہ ہوا۔ براہ کرم دوبارہ کوشش کریں۔'));
     }
-
-    .story-meta {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-}
-</style>
+</script>
 {% endblock %}

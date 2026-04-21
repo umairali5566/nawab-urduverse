@@ -8,13 +8,12 @@
     <div class="main-container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'blog_list' %}">Blog</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">ہوم</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'blog_list' %}">بلاگ</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ post.title|truncatechars:45 }}</li>
             </ol>
         </nav>
         <h1 class="mt-3 mb-1 section-title-urdu">{{ post.title }}</h1>
-        <p class="section-subtitle">Modern article reading layout</p>
     </div>
 </section>
 
@@ -23,12 +22,12 @@
         <header class="blog-header">
             <h1 class="blog-title">{{ post.title }}</h1>
             <div class="blog-meta">
-                <span class="blog-author">by {{ post.author.name }}</span>
+                <span class="blog-author">تحریر: {{ post.author.name }}</span>
                 {% if post.category %}
                 <span class="blog-category">{{ post.category.name }}</span>
                 {% endif %}
                 <span class="blog-date">{{ post.published_at|date:'d M Y' }}</span>
-                <span class="blog-reading-time">{{ post.reading_time }} min read</span>
+                <span class="blog-reading-time">{{ post.reading_time }} منٹ مطالعہ</span>
             </div>
         </header>
 
@@ -45,20 +44,20 @@
         <div class="blog-actions">
             <button class="btn btn-outline like-btn {% if is_liked %}active{% endif %}"
                     data-url="{% url 'toggle_like' content_type='blog' object_id=post.id %}">
-                <i class="bi bi-heart"></i> Like ({{ post.likes_count }})
+                <i class="bi bi-heart"></i> پسند ({{ post.likes_count }})
             </button>
             <button class="btn btn-outline" onclick="shareBlog()">
-                <i class="bi bi-share"></i> Share
+                <i class="bi bi-share"></i> شیئر
             </button>
             <button class="btn btn-outline" onclick="copyBlog()">
-                <i class="bi bi-clipboard"></i> Copy
+                <i class="bi bi-clipboard"></i> کاپی
             </button>
         </div>
 
         <div class="blog-footer">
-            <a href="{% url 'blog_list' %}" class="btn btn-outline">Back to Blog</a>
+            <a href="{% url 'blog_list' %}" class="btn btn-outline">بلاگ پر واپس</a>
             {% if post.author %}
-            <a href="#" class="btn btn-outline">More by {{ post.author.name }}</a>
+            <a href="#" class="btn btn-outline">{{ post.author.name }} کی مزید تحریریں</a>
         {% endif %}
     </div>
 </section>
