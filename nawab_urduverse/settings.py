@@ -208,10 +208,7 @@ WSGI_APPLICATION = 'nawab_urduverse.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:///db.sqlite3',
-        conn_max_age=600
-    )
+    'default': build_database_config()
 }
 
 # For PostgreSQL production (uncomment when deploying)
@@ -499,3 +496,6 @@ LOGGING = {
 # Create logs directory if it doesn't exist
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 os.makedirs(LOGS_DIR, exist_ok=True)
+
+
+AUTH_USER_MODEL = 'accounts.User'
