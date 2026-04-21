@@ -6,8 +6,11 @@ from functools import wraps
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django.utils.html import strip_tags
 from django.utils.text import slugify
 
 from accounts.models import UserActivity
@@ -27,6 +30,7 @@ from poetry.models import Poetry
 from quotes.models import Quote
 from stories.models import Story
 from videos.models import Video
+from .constants import ALLOWED_EXTENSIONS, CONTENT_TYPES, MAX_FILE_SIZE, VALIDATION_MESSAGES
 
 
 def admin_required(view_func):
@@ -106,6 +110,105 @@ def _ensure_default_category(category_type, label):
     )
 
 
+def _process_csv_row(content_type, row):
+    """Process a single CSV row for the given content type."""
+    config = CONTENT_TYPES[content_type]
+
+    # Check required fields
+    for field in config['required_fields']:
+        if not row.get(field, '').strip():
+            return False
+
+    # Common processing
+    author_name = row.get('author', '').strip()
+    author = _resolve_author(author_name) if author_name else None
+
+    if content_type == 'poetry':
+        poem = Poetry(
+            title=strip_tags(row['title']),
+            slug=_build_unique_slug(Poetry, row['title']),
+            author=author,
+            content=strip_tags(row['content']),
+            category=_ensure_default_category('poetry', 'Poetry'),
+            is_published=True,
+            published_at=timezone.now(),
+        )
+        poem.save()
+        return True
+
+    elif content_type == 'quotes':
+        quote_type = row.get('quote_type', 'motivational').strip() or 'motivational'
+        quote = Quote(
+            text=strip_tags(row['text']),
+            slug=_build_unique_slug(Quote, row['text'][:50]),
+            author=author,
+            quote_type=quote_type,
+            is_published=True,
+        )
+        quote.save()
+        quote.categories.add(_ensure_default_category('quote', 'Quote'))
+        return True
+
+    elif content_type == 'stories':
+        content = strip_tags(row['content'])
+        story = Story(
+            title=strip_tags(row['title']),
+            slug=_build_unique_slug(Story, row['title']),
+            author=author,
+            content=content,
+            excerpt=content[:280],
+            is_published=True,
+            published_at=timezone.now(),
+        )
+        story.save()
+        story.categories.add(_ensure_default_category('story', 'Story'))
+        return True
+
+    elif content_type == 'blog':
+        content = strip_tags(row['content'])
+        post = BlogPost(
+            title=strip_tags(row['title']),
+            slug=_build_unique_slug(BlogPost, row['title']),
+            author=author,
+            content=content,
+            excerpt=content[:280],
+            is_published=True,
+            published_at=timezone.now(),
+        )
+        post.save()
+        return True
+
+    elif content_type == 'novels':
+        novel = Novel(
+            title=strip_tags(row['title']),
+            slug=_build_unique_slug(Novel, row['title']),
+            author=author,
+            content=strip_tags(row['content']),
+            category=_ensure_default_category('novel', 'Novel'),
+            is_published=True,
+            published_at=timezone.now(),
+        )
+        novel.save()
+        return True
+
+    elif content_type == 'videos':
+        video = Video(
+            title=strip_tags(row['title']),
+            slug=_build_unique_slug(Video, row['title']),
+            description=strip_tags(row.get('description', '')),
+            author=author,
+            category=_ensure_default_category('video', 'Video'),
+            video_type=row.get('video_type', 'other').strip() or 'other',
+            video_url=row['video_url'],
+            is_published=True,
+            published_at=timezone.now(),
+        )
+        video.save()
+        return True
+
+    return False
+
+
 @admin_required
 def dashboard_home(request):
     User = get_user_model()
@@ -160,7 +263,7 @@ def add_novel(request):
         author_name = (request.POST.get('author') or '').strip()
         description = (request.POST.get('description') or '').strip()
         cover_image = request.FILES.get('cover_image')
-        pdf_file = request.FILES.get('pdf_file')
+        cover_image = request.FILES.get('cover_image')
 
         if not title or not author_name or not description or not cover_image:
             messages.error(request, 'Please fill all required fields and upload a cover image.')
@@ -173,9 +276,7 @@ def add_novel(request):
                 title=title,
                 slug=_build_unique_slug(Novel, title),
                 author=author,
-                description=description,
-                cover_image=cover_image,
-                pdf_file=pdf_file,
+                content=description,  # Use content field instead of description
                 category=default_category,
                 is_published=True,
                 published_at=timezone.now(),
@@ -198,9 +299,9 @@ def story_list(request):
 @superuser_upload_required
 def add_story(request):
     if request.method == 'POST':
-        title = (request.POST.get('title') or '').strip()
-        author_name = (request.POST.get('author') or '').strip()
-        content = (request.POST.get('content') or request.POST.get('description') or '').strip()
+        title = strip_tags((request.POST.get('title') or '').strip())
+        author_name = strip_tags((request.POST.get('author') or '').strip())
+        content = strip_tags((request.POST.get('content') or request.POST.get('description') or '').strip())
 
         if not title or not author_name or not content:
             messages.error(request, 'Title, author, and story content are required.')
@@ -239,9 +340,6 @@ def add_poetry(request):
         title = (request.POST.get('title') or '').strip()
         author_name = (request.POST.get('author') or '').strip()
         content = (request.POST.get('content') or '').strip()
-        poetry_type = (request.POST.get('poetry_type') or 'ghazal').strip()
-        background_image = request.FILES.get('background_image')
-
         if not title or not author_name or not content:
             messages.error(request, 'Title, author, and poetry content are required.')
             return render(request, 'dashboard/add_poetry.html')
@@ -254,8 +352,6 @@ def add_poetry(request):
                 slug=_build_unique_slug(Poetry, title),
                 author=author,
                 content=content,
-                poetry_type=poetry_type,
-                background_image=background_image,
                 category=default_category,
                 is_published=True,
                 published_at=timezone.now(),
@@ -278,36 +374,33 @@ def blog_list(request):
 @superuser_upload_required
 def add_blog(request):
     if request.method == 'POST':
-        title = (request.POST.get('title') or '').strip()
-        author_name = (request.POST.get('author') or '').strip()
-        content = (request.POST.get('content') or '').strip()
-        featured_image = request.FILES.get('featured_image')
+        title = strip_tags((request.POST.get('title') or '').strip())
+        author_name = strip_tags((request.POST.get('author') or '').strip())
+        content = strip_tags((request.POST.get('content') or '').strip())
+        background_image = request.FILES.get('background_image')
 
-        if not title or not author_name or not content:
-            messages.error(request, 'Title, author, and blog content are required.')
-            return render(request, 'dashboard/add_blog.html')
+        if not quote_text or not author_name:
+            messages.error(request, 'Quote text and author are required.')
+            return render(request, 'dashboard/add_quote.html')
 
         try:
             author = _resolve_author(author_name)
-            post = BlogPost(
-                title=title,
-                slug=_build_unique_slug(BlogPost, title),
+            quote = Quote(
+                text=quote_text,
+                slug=_build_unique_slug(Quote, quote_text[:50]),
                 author=author,
-                content=content,
-                excerpt=content[:280],
-                featured_image=featured_image,
-                status='published',
+                quote_type=quote_type,
+                background_image=background_image,
                 is_published=True,
-                published_at=timezone.now(),
             )
-            post.save()
-            post.categories.add(_ensure_default_category('blog', 'Blog'))
-            messages.success(request, 'Blog post has been published successfully.')
-            return redirect('dashboard_blog_list')
+            quote.save()
+            quote.categories.add(_ensure_default_category('quote', 'Quote'))
+            messages.success(request, 'Quote has been published successfully.')
+            return redirect('dashboard_quote_list')
         except Exception as exc:
-            messages.error(request, f'Unable to create blog post: {exc}')
+            messages.error(request, f'Unable to create quote: {exc}')
 
-    return render(request, 'dashboard/add_blog.html')
+    return render(request, 'dashboard/add_quote.html')
 
 
 @admin_required
@@ -319,8 +412,8 @@ def quote_list(request):
 @superuser_upload_required
 def add_quote(request):
     if request.method == 'POST':
-        quote_text = (request.POST.get('quote') or '').strip()
-        author_name = (request.POST.get('author') or '').strip()
+        quote_text = strip_tags((request.POST.get('quote') or '').strip())
+        author_name = strip_tags((request.POST.get('author') or '').strip())
         quote_type = (request.POST.get('quote_type') or 'motivational').strip()
         background_image = request.FILES.get('background_image')
 
@@ -419,11 +512,20 @@ def bulk_upload(request):
         content_type = request.POST.get('content_type')
 
         if not csv_file or not content_type:
-            messages.error(request, 'Please select a content type and upload a CSV file.')
+            messages.error(request, VALIDATION_MESSAGES['missing_fields'])
             return render(request, 'dashboard/bulk_upload.html')
 
-        if not csv_file.name.endswith('.csv'):
-            messages.error(request, 'File must be a CSV.')
+        # Validate file type and size
+        if not any(csv_file.name.lower().endswith(ext) for ext in ALLOWED_EXTENSIONS):
+            messages.error(request, VALIDATION_MESSAGES['invalid_file_type'])
+            return render(request, 'dashboard/bulk_upload.html')
+
+        if csv_file.size > MAX_FILE_SIZE:
+            messages.error(request, VALIDATION_MESSAGES['file_too_large'])
+            return render(request, 'dashboard/bulk_upload.html')
+
+        if content_type not in CONTENT_TYPES:
+            messages.error(request, 'Invalid content type selected.')
             return render(request, 'dashboard/bulk_upload.html')
 
         try:
@@ -432,57 +534,19 @@ def bulk_upload(request):
 
             created_count = 0
             for row in csv_reader:
-                if content_type == 'poetry':
-                    title = row.get('title', '').strip()
-                    author_name = row.get('author', '').strip()
-                    content = row.get('content', '').strip()
-                    poetry_type = row.get('poetry_type', 'ghazal').strip()
+                try:
+                    if _process_csv_row(content_type, row):
+                        created_count += 1
+                except Exception as row_exc:
+                    # Log individual row errors but continue processing
+                    print(f"Error processing row: {row_exc}")
+                    continue
 
-                    if not title or not author_name or not content:
-                        continue
-
-                    author = _resolve_author(author_name)
-                    default_category = _ensure_default_category('poetry', 'Poetry')
-                    poem = Poetry(
-                        title=title,
-                        slug=_build_unique_slug(Poetry, title),
-                        author=author,
-                        content=content,
-                        poetry_type=poetry_type,
-                        category=default_category,
-                        is_published=True,
-                        published_at=timezone.now(),
-                    )
-                    poem.save()
-                    created_count += 1
-
-                elif content_type == 'quotes':
-                    text = row.get('text', '').strip()
-                    author_name = row.get('author', '').strip()
-                    quote_type = row.get('quote_type', 'motivational').strip()
-
-                    if not text or not author_name:
-                        continue
-
-                    author = _resolve_author(author_name)
-                    quote = Quote(
-                        text=text,
-                        slug=_build_unique_slug(Quote, text[:50]),
-                        author=author,
-                        quote_type=quote_type,
-                        is_published=True,
-                    )
-                    quote.save()
-                    quote.categories.add(_ensure_default_category('quote', 'Quote'))
-                    created_count += 1
-
-                # Add more content types as needed
-
-            messages.success(request, f'Successfully created {created_count} items.')
+            messages.success(request, VALIDATION_MESSAGES['success'].format(created_count))
             return redirect('dashboard_home')
 
         except Exception as exc:
-            messages.error(request, f'Error processing file: {exc}')
+            messages.error(request, VALIDATION_MESSAGES['processing_error'].format(exc))
 
     return render(request, 'dashboard/bulk_upload.html')
 

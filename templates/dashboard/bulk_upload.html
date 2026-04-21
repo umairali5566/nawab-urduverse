@@ -14,6 +14,10 @@
                         <option value="">Select type</option>
                         <option value="poetry">Poetry</option>
                         <option value="quotes">Quotes</option>
+                        <option value="stories">Stories</option>
+                        <option value="blog">Blog Posts</option>
+                        <option value="novels">Novels</option>
+                        <option value="videos">Videos</option>
                     </select>
                 </div>
                 <div class="col-md-6">
@@ -24,10 +28,14 @@
                     <div class="alert alert-info">
                         <strong>CSV Format Instructions:</strong>
                         <ul class="mb-0 mt-2">
-                            <li>For Poetry: Columns should be <code>title, author, content, poetry_type</code></li>
-                            <li>For Quotes: Columns should be <code>text, author, quote_type</code></li>
+                            <li><strong>Poetry:</strong> Columns: <code>title, author, content</code> (poetry_type optional, defaults to 'ghazal')</li>
+                            <li><strong>Quotes:</strong> Columns: <code>text, author, quote_type</code> (quote_type optional, defaults to 'motivational')</li>
+                            <li><strong>Stories:</strong> Columns: <code>title, author, content</code></li>
+                            <li><strong>Blog Posts:</strong> Columns: <code>title, author, content</code></li>
+                            <li><strong>Novels:</strong> Columns: <code>title, author, content</code></li>
+                            <li><strong>Videos:</strong> Columns: <code>title, author, video_type, video_url, description</code></li>
                             <li>First row should be headers</li>
-                            <li>All fields are required except poetry_type (defaults to 'ghazal') and quote_type (defaults to 'motivational')</li>
+                            <li>All required fields must be provided</li>
                         </ul>
                     </div>
                 </div>
