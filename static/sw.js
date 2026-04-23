@@ -1,4 +1,4 @@
-const CACHE_NAME = "nawab-urduverse-v3";
+const CACHE_NAME = "nawab-urduverse-v4";
 const OFFLINE_URL = "/static/offline.html";
 const APP_SHELL = [
     "/",
@@ -6,7 +6,7 @@ const APP_SHELL = [
     "/static/offline.html",
     "/static/css/style.css",
     "/static/js/main.js",
-    "/static/images/nawab-logo.png",
+    "/static/images/nawab-logo.jpeg",
     "/static/images/pwa-icon-192.png",
     "/static/images/pwa-icon-512.png"
 ];

@@ -25,9 +25,7 @@
         <div class="navbar-container">
             <div class="navbar-brand">
                 <a href="{% url 'home' %}" class="logo-link" aria-label="Nawab Urdu Academy home">
-                    {% if logo and logo.image %}
-                        <img src="{{ logo.image.url }}" alt="{{ logo.alt_text|default:'Nawab Urdu Academy' }}" class="logo-image">
-                    {% endif %}
+                    <img src="{% static 'images/nawab-logo.jpeg' %}" alt="Nawab Urdu Academy" class="logo-image">
                     <span class="logo-copy">
                         <span class="logo-overline">Premium Literature Platform</span>
                         <span class="logo-text">Nawab Urdu Academy</span>
@@ -102,12 +100,6 @@
                                     <span class="dropdown-item-label">Profile</span>
                                     <i class="bi bi-person-circle" aria-hidden="true"></i>
                                 </a>
-                                {% if not user.is_superuser %}
-                                    <a href="{% url 'my_content' %}" class="dropdown-item" role="menuitem">
-                                        <span class="dropdown-item-label">My Content</span>
-                                        <i class="bi bi-journal-richtext" aria-hidden="true"></i>
-                                    </a>
-                                {% endif %}
                             </div>
                             <div class="dropdown-divider"></div>
                             <a href="{% url 'logout' %}" class="dropdown-item dropdown-item-danger" role="menuitem">
@@ -153,11 +145,6 @@
                 <a href="{% url 'profile' %}" class="mobile-menu-link">
                     <i class="bi bi-person-circle"></i> Profile
                 </a>
-                {% if not user.is_superuser %}
-                    <a href="{% url 'my_content' %}" class="mobile-menu-link">
-                        <i class="bi bi-journal-richtext"></i> My Content
-                    </a>
-                {% endif %}
                 <a href="{% url 'logout' %}" class="mobile-menu-link">
                     <i class="bi bi-box-arrow-right"></i> Log out
                 </a>

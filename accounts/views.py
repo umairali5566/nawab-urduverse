@@ -270,6 +270,7 @@ def dashboard(request):
 @login_required
 def my_content(request):
     """User's own content listing - poetry, blogs, stories, novels, quotes, and videos."""
+    return redirect("dashboard")
     from blog.models import BlogPost
     from novels.models import Novel
     from poetry.models import Poetry
