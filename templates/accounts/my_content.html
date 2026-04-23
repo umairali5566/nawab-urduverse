@@ -193,13 +193,23 @@
             <div class="empty-state">
                 <i class="bi bi-inbox"></i>
                 <h3>{% trans "آپ نے ابھی تک کوئی مواد نہیں بنایا" %}</h3>
+                {% if user.is_staff or user.is_superuser %}
                 <p>{% trans "اپنا پہلا مواد بنانے کے لیے نیچے دیے گئے لنکس استعمال کریں:" %}</p>
                 <div class="d-flex flex-wrap gap-2 justify-content-center">
-                    <a href="{% url 'ai_studio' %}" class="btn btn-primary">{% trans "شاعری لکھیں" %}</a>
-                    <a href="{% url 'ai_studio' %}" class="btn btn-primary">{% trans "بلاگ لکھیں" %}</a>
-                    <a href="{% url 'ai_studio' %}" class="btn btn-primary">{% trans "کہانی لکھیں" %}</a>
-                    <a href="{% url 'ai_studio' %}" class="btn btn-primary">{% trans "ناول لکھیں" %}</a>
+                    <a href="{% url 'dashboard_add_poetry' %}" class="btn btn-primary">{% trans "شاعری لکھیں" %}</a>
+                    <a href="{% url 'dashboard_add_blog' %}" class="btn btn-primary">{% trans "بلاگ لکھیں" %}</a>
+                    <a href="{% url 'dashboard_add_story' %}" class="btn btn-primary">{% trans "کہانی لکھیں" %}</a>
+                    <a href="{% url 'dashboard_add_novel' %}" class="btn btn-primary">{% trans "ناول لکھیں" %}</a>
                 </div>
+                {% else %}
+                <p>{% trans "مطالعہ شروع کرنے کے لیے نیچے دیے گئے حصے دیکھیں:" %}</p>
+                <div class="d-flex flex-wrap gap-2 justify-content-center">
+                    <a href="{% url 'poetry_list' %}" class="btn btn-primary">{% trans "شاعری دیکھیں" %}</a>
+                    <a href="{% url 'blog_list' %}" class="btn btn-primary">{% trans "بلاگ دیکھیں" %}</a>
+                    <a href="{% url 'story_list' %}" class="btn btn-primary">{% trans "کہانیاں دیکھیں" %}</a>
+                    <a href="{% url 'novel_list' %}" class="btn btn-primary">{% trans "ناول دیکھیں" %}</a>
+                </div>
+                {% endif %}
             </div>
             {% endif %}
         </div>

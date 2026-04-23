@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.db.utils import OperationalError, ProgrammingError
 from django.shortcuts import get_object_or_404, redirect, render
 
 from core.models import Bookmark, Comment, ContentLike, Notification, ReadingProgress
@@ -276,14 +277,20 @@ def my_content(request):
     from stories.models import Story
     from videos.models import Video
     
-    # Ensure the author is filtered by the correct field
     author_name = request.user.display_name or request.user.username
-    poetry = Poetry.objects.filter(author__name=author_name).order_by("-created_at")
-    blogs = BlogPost.objects.filter(author__name=author_name).order_by("-created_at")
-    stories = Story.objects.filter(author__name=author_name).order_by("-created_at")
-    novels = Novel.objects.filter(author__name=author_name).order_by("-created_at")
-    quotes = Quote.objects.filter(author__name=author_name).order_by("-created_at")
-    videos = Video.objects.filter(author__name=author_name).order_by("-created_at")
+
+    def safe_user_queryset(model):
+        try:
+            return list(model.objects.filter(author__name=author_name).order_by("-created_at"))
+        except (OperationalError, ProgrammingError):
+            return []
+
+    poetry = safe_user_queryset(Poetry)
+    blogs = safe_user_queryset(BlogPost)
+    stories = safe_user_queryset(Story)
+    novels = safe_user_queryset(Novel)
+    quotes = safe_user_queryset(Quote)
+    videos = safe_user_queryset(Video)
     
     membership = get_or_create_membership(request.user)
     
@@ -294,12 +301,12 @@ def my_content(request):
         "novels": novels,
         "quotes": quotes,
         "videos": videos,
-        "total_poetry": poetry.count(),
-        "total_blogs": blogs.count(),
-        "total_stories": stories.count(),
-        "total_novels": novels.count(),
-        "total_quotes": quotes.count(),
-        "total_videos": videos.count(),
+        "total_poetry": len(poetry),
+        "total_blogs": len(blogs),
+        "total_stories": len(stories),
+        "total_novels": len(novels),
+        "total_quotes": len(quotes),
+        "total_videos": len(videos),
         "membership": membership,
         "has_premium_access": membership.is_active_membership,
         **build_seo_context(
