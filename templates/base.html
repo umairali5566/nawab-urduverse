@@ -219,6 +219,53 @@
     </footer>
 
     <script>
+        window.NawabUrduAcademy = window.NawabUrduAcademy || {};
+
+        NawabUrduAcademy.getCookie = function (name) {
+            const cookieValue = document.cookie
+                .split('; ')
+                .find((row) => row.startsWith(name + '='));
+            return cookieValue ? decodeURIComponent(cookieValue.split('=').slice(1).join('=')) : '';
+        };
+
+        NawabUrduAcademy.getCsrfToken = function () {
+            return NawabUrduAcademy.getCookie('csrftoken');
+        };
+
+        NawabUrduAcademy.syncCsrfTokens = function (scope) {
+            const csrfToken = NawabUrduAcademy.getCsrfToken();
+            if (!csrfToken) {
+                return;
+            }
+
+            const root = scope || document;
+            root.querySelectorAll('form').forEach((form) => {
+                const method = (form.getAttribute('method') || 'get').toLowerCase();
+                if (method !== 'post') {
+                    return;
+                }
+
+                let csrfInput = form.querySelector('input[name="csrfmiddlewaretoken"]');
+                if (!csrfInput) {
+                    csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = 'csrfmiddlewaretoken';
+                    form.prepend(csrfInput);
+                }
+                csrfInput.value = csrfToken;
+            });
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            NawabUrduAcademy.syncCsrfTokens();
+
+            document.querySelectorAll('form').forEach((form) => {
+                form.addEventListener('submit', function () {
+                    NawabUrduAcademy.syncCsrfTokens(document);
+                });
+            });
+        });
+
         const userBtn = document.querySelector('.nav-user-btn');
         const userDropdown = document.getElementById('userDropdown');
 
