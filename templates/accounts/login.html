@@ -10,29 +10,12 @@
         <aside class="page-panel dark-panel auth-card page-fade">
             <span class="page-kicker" style="color: #f1d497;">Member access</span>
             <h1 class="urdu">خوش آمدید</h1>
-            <p class="auth-lead urdu-copy">
-                اپنے اکاؤنٹ میں لاگ ان کریں اور شاعری، ناول، اقتباسات، ویڈیوز اور اپنے ذاتی مطالعہ سفر تک فوری رسائی حاصل کریں۔
-            </p>
-            <div class="auth-benefits" style="margin-top: 1.25rem;">
-                <div class="auth-benefit">
-                    <strong>Track your reading</strong>
-                    <span>Save bookmarks, continue reading, and keep your literary journey organized.</span>
-                </div>
-                <div class="auth-benefit">
-                    <strong>Premium experience</strong>
-                    <span>A calmer, cleaner interface built for readers who spend real time with literature.</span>
-                </div>
-                <div class="auth-benefit">
-                    <strong>Community-ready</strong>
-                    <span>Comment, explore, and stay connected with the academy's growing library.</span>
-                </div>
-            </div>
+            <p class="auth-lead urdu-copy">اپنے اکاؤنٹ میں لاگ اِن کریں۔</p>
         </aside>
 
         <div class="auth-card page-fade delay-1">
             <span class="page-kicker">Sign in</span>
             <h1>Welcome Back</h1>
-            <p class="auth-lead">Log in to continue exploring Nawab Urdu Academy.</p>
 
             {% if form.non_field_errors or form.errors %}
                 <div class="error-stack" style="margin-top: 1rem;">
@@ -80,7 +63,7 @@
             </form>
 
             <p class="form-note" style="margin-top: 1rem;">
-                New to the academy? <a href="{% url 'register' %}" class="auth-footer-link">Create an account</a>
+                <a href="{% url 'register' %}" class="auth-footer-link">Create an account</a>
             </p>
         </div>
     </section>

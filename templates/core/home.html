@@ -16,10 +16,7 @@
             <div class="hero-copy home-fade-up">
                 <span class="hero-kicker">Bazm-e-Adab, reimagined</span>
                 <h1 class="hero-title">Discover the Beauty of Urdu Literature</h1>
-                <p class="hero-subtitle">
-                    Poetry, Novels, Stories, and Thoughts in one place. Explore a premium reading experience crafted
-                    for students, lifelong readers, and everyone drawn to the depth of Urdu expression.
-                </p>
+                <p class="hero-subtitle">Poetry, Novels, Stories, and Thoughts in one place.</p>
 
                 <div class="hero-actions">
                     <a href="{% url 'poetry_list' %}" class="btn btn-primary hero-cta">Explore Poetry</a>
@@ -79,11 +76,7 @@
         <div class="home-section">
             <div class="home-section-heading">
                 <span class="home-section-kicker">Core categories</span>
-                <h2 class="home-section-title">An organized library for every mood of reading</h2>
-                <p class="home-section-copy">
-                    Move effortlessly from verse to fiction, reflective quotes, thoughtful essays, and visual lessons.
-                    Every section is designed to feel calm, premium, and easy to browse.
-                </p>
+                <h2 class="home-section-title">Explore the library</h2>
             </div>
 
             <div class="categories-grid">
@@ -93,7 +86,7 @@
                         <span class="category-count">{{ stats.poetry }} texts</span>
                     </div>
                     <h3 class="category-title">Poetry</h3>
-                    <p class="category-text">Ghazals, nazms, and lyrical pieces presented with clarity and breathing room.</p>
+                    <p class="category-text">Ghazals and nazms.</p>
                     <div class="category-link-row">
                         <span>Browse poetry</span>
                         <i class="bi bi-arrow-right"></i>
@@ -106,7 +99,7 @@
                         <span class="category-count">{{ stats.novels }} titles</span>
                     </div>
                     <h3 class="category-title">Novels</h3>
-                    <p class="category-text">Long-form storytelling for dedicated readers who want immersive Urdu worlds.</p>
+                    <p class="category-text">Long-form reading.</p>
                     <div class="category-link-row">
                         <span>Open novels</span>
                         <i class="bi bi-arrow-right"></i>
@@ -119,7 +112,7 @@
                         <span class="category-count">{{ stats.quotes }} sayings</span>
                     </div>
                     <h3 class="category-title">Quotes</h3>
-                    <p class="category-text">Short reflections, wisdom, and memorable lines arranged for easy discovery.</p>
+                    <p class="category-text">Short reflections.</p>
                     <div class="category-link-row">
                         <span>See quotes</span>
                         <i class="bi bi-arrow-right"></i>
@@ -132,7 +125,7 @@
                         <span class="category-count">{{ stats.stories }} entries</span>
                     </div>
                     <h3 class="category-title">Stories</h3>
-                    <p class="category-text">Readable, emotionally rich stories that suit both quick visits and long sessions.</p>
+                    <p class="category-text">Short fiction and stories.</p>
                     <div class="category-link-row">
                         <span>Read stories</span>
                         <i class="bi bi-arrow-right"></i>
@@ -145,7 +138,7 @@
                         <span class="category-count">{{ stats.blogs }} posts</span>
                     </div>
                     <h3 class="category-title">Blogs</h3>
-                    <p class="category-text">Editorial writing, literary ideas, and academy updates with a modern reading flow.</p>
+                    <p class="category-text">Articles and notes.</p>
                     <div class="category-link-row">
                         <span>Visit blog</span>
                         <i class="bi bi-arrow-right"></i>
@@ -158,7 +151,7 @@
                         <span class="category-count">{{ stats.videos }} lessons</span>
                     </div>
                     <h3 class="category-title">Videos</h3>
-                    <p class="category-text">Talks, recitations, and visual learning for readers who enjoy literature in motion.</p>
+                    <p class="category-text">Recitations and lessons.</p>
                     <div class="category-link-row">
                         <span>Watch videos</span>
                         <i class="bi bi-arrow-right"></i>
@@ -168,46 +161,11 @@
         </div>
     </section>
 
-    <section class="experience-section">
-        <div class="home-section">
-            <div class="home-section-heading">
-                <span class="home-section-kicker">Reader experience</span>
-                <h2 class="home-section-title">Built like an academy, styled like a premium journal</h2>
-                <p class="home-section-copy">
-                    The homepage brings together discovery, reading, and learning so visitors can move from inspiration
-                    to deep study without friction.
-                </p>
-            </div>
-
-            <div class="experience-grid">
-                <article class="experience-card home-fade-up">
-                    <i class="bi bi-collection"></i>
-                    <h3>Curated collections</h3>
-                    <p>Thoughtful sections guide readers into poetry, novels, and quotes with clear hierarchy and graceful spacing.</p>
-                </article>
-                <article class="experience-card home-fade-up delay-1">
-                    <i class="bi bi-mortarboard"></i>
-                    <h3>For students and readers</h3>
-                    <p>The layout works equally well for literary exploration, classroom references, and quiet personal reading.</p>
-                </article>
-                <article class="experience-card home-fade-up delay-2">
-                    <i class="bi bi-camera-reels"></i>
-                    <h3>Written and visual learning</h3>
-                    <p>Blogs and videos extend the reading experience into commentary, recitation, and literary discussion.</p>
-                </article>
-            </div>
-        </div>
-    </section>
-
     <section class="editorial-section">
         <div class="home-section">
             <div class="home-section-heading">
                 <span class="home-section-kicker">Fresh from the academy</span>
-                <h2 class="home-section-title">Recent additions across the platform</h2>
-                <p class="home-section-copy">
-                    A curated snapshot of what readers can explore right now, from poetic highlights to blogs, stories,
-                    and video sessions.
-                </p>
+                <h2 class="home-section-title">Latest content</h2>
             </div>
 
             <div class="editorial-grid">
@@ -243,7 +201,7 @@
                             </a>
                         {% empty %}
                             <div class="editorial-item">
-                                <span class="editorial-item-copy">Fresh poetry will appear here as soon as new work is published.</span>
+                                <span class="editorial-item-copy">No poetry yet.</span>
                             </div>
                         {% endfor %}
                     </div>
@@ -263,7 +221,7 @@
                             </a>
                         {% empty %}
                             <div class="editorial-item">
-                                <span class="editorial-item-copy">New novels will appear here when the academy library updates.</span>
+                                <span class="editorial-item-copy">No novels yet.</span>
                             </div>
                         {% endfor %}
                     </div>
@@ -283,7 +241,7 @@
                             </a>
                         {% empty %}
                             <div class="editorial-item">
-                                <span class="editorial-item-copy">Stories will be highlighted here for readers who prefer shorter pieces.</span>
+                                <span class="editorial-item-copy">No stories yet.</span>
                             </div>
                         {% endfor %}
                     </div>
@@ -306,7 +264,7 @@
                             </a>
                         {% empty %}
                             <div class="editorial-item">
-                                <span class="editorial-item-copy">Fresh essays and academy articles will appear here when published.</span>
+                                <span class="editorial-item-copy">No blog posts yet.</span>
                             </div>
                         {% endfor %}
                     </div>
@@ -331,7 +289,7 @@
                             </a>
                         {% empty %}
                             <div class="editorial-item">
-                                <span class="editorial-item-copy">Video sessions and recitations will be highlighted here when available.</span>
+                                <span class="editorial-item-copy">No videos yet.</span>
                             </div>
                         {% endfor %}
                     </div>
@@ -344,11 +302,7 @@
         <div class="home-section">
             <div class="cta-panel home-fade-up">
                 <div>
-                    <h2>Join a calmer, richer way to explore Urdu writing</h2>
-                    <p>
-                        Whether you are reading for pleasure, study, or inspiration, Nawab Urdu Academy brings literature,
-                        commentary, and media together in one elegant space.
-                    </p>
+                    <h2>Start exploring Urdu literature</h2>
                 </div>
                 <div class="cta-actions">
                     <a href="{% url 'register' %}" class="btn btn-primary">Create an account</a>

@@ -11,18 +11,12 @@
             <div class="page-hero-copy centered-mobile">
                 <span class="page-kicker">Poetry archive</span>
                 <h1 class="page-title">Urdu Poetry Collection</h1>
-                <p class="page-subtitle">
-                    Explore ghazals, nazms, romantic verses, and reflective poetry in a clean reading space designed
-                    for both students and devoted readers of Urdu literature.
-                </p>
                 <div class="page-stats">
                     <span class="stat-chip"><strong>{{ page_obj.paginator.count }}</strong> published poems</span>
-                    <span class="stat-chip">Search, filter, and browse by mood</span>
                 </div>
             </div>
             <aside class="page-panel dark-panel page-fade delay-1">
                 <h2 class="panel-title">Featured Poetry</h2>
-                <p class="panel-copy">A hand-picked snapshot of popular verse to help readers start somewhere meaningful.</p>
                 <div class="sidebar-list">
                     {% for poem in featured_poems %}
                         <a href="{{ poem.get_absolute_url }}">
@@ -30,7 +24,7 @@
                             <span class="panel-copy">{{ poem.author.name }}</span>
                         </a>
                     {% empty %}
-                        <span class="panel-copy">Featured poetry will appear here when the library grows.</span>
+                        <span class="panel-copy">No featured poetry.</span>
                     {% endfor %}
                 </div>
             </aside>
@@ -111,7 +105,6 @@
         <section class="empty-panel page-fade delay-2">
             <div class="empty-icon"><i class="bi bi-feather"></i></div>
             <h2 class="panel-title">No poetry matched your search</h2>
-            <p>Try a broader keyword or switch back to all poetry to continue exploring the collection.</p>
             <a href="{% url 'poetry_list' %}" class="btn btn-primary">Browse All Poetry</a>
         </section>
     {% endif %}

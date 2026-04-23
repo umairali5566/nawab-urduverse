@@ -116,7 +116,7 @@
                     {% endif %}
                     <div>
                         <h3 class="mb-1">{{ user.get_full_name|default:user.username }}</h3>
-                        <p class="text-muted mb-0">@{{ user.username }} &middot; joined {{ user.date_joined|date:"d M Y" }}</p>
+                        <p class="text-muted mb-0">@{{ user.username }}</p>
                     </div>
                 </div>
                 <div class="profile-stat-grid mt-4">
@@ -138,11 +138,11 @@
             <div class="dashboard-summary-card premium-summary-card">
                 <span class="eyebrow">Membership</span>
                 <h3 class="mb-2">{% if has_premium_access %}Premium Active{% else %}Free Tier{% endif %}</h3>
-                <p class="text-muted">
+                <p class="text-muted mb-0">
                     {% if membership.plan %}
                     {{ membership.plan.name }}{% if membership.ends_at %} until {{ membership.ends_at|date:'d M Y' }}{% endif %}
                     {% else %}
-                    Free plan active.
+                    Free plan
                     {% endif %}
                 </p>
                 <a class="btn btn-primary" href="{% url 'membership' %}">

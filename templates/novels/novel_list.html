@@ -11,18 +11,12 @@
             <div class="page-hero-copy centered-mobile">
                 <span class="page-kicker">Long-form reading</span>
                 <h1 class="page-title">Urdu Novels Library</h1>
-                <p class="page-subtitle">
-                    Discover immersive Urdu novels in a premium, distraction-light browsing experience built for serial
-                    reading, deep study, and comfortable reading on every screen.
-                </p>
                 <div class="page-stats">
                     <span class="stat-chip"><strong>{{ page_obj.paginator.count }}</strong> novels available</span>
-                    <span class="stat-chip">Mobile-first reading cards with pagination</span>
                 </div>
             </div>
             <aside class="page-panel dark-panel page-fade delay-1">
                 <h2 class="panel-title">Start with these</h2>
-                <p class="panel-copy">Recent novels surfaced in a calmer reading-first layout for quick discovery.</p>
                 <div class="sidebar-list">
                     {% for novel in featured_novels %}
                         <a href="{{ novel.get_absolute_url }}">
@@ -30,7 +24,7 @@
                             <span class="panel-copy">{{ novel.author.name }}{% if novel.total_chapters %} · {{ novel.total_chapters }} chapters{% endif %}</span>
                         </a>
                     {% empty %}
-                        <span class="panel-copy">Fresh novel recommendations will appear here once new titles are published.</span>
+                        <span class="panel-copy">No featured novels.</span>
                     {% endfor %}
                 </div>
             </aside>
@@ -108,7 +102,6 @@
         <section class="empty-panel page-fade delay-2">
             <div class="empty-icon"><i class="bi bi-book-half"></i></div>
             <h2 class="panel-title">No novels matched this view</h2>
-            <p>Try a different search phrase or clear the current sorting and search options.</p>
             <a href="{% url 'novel_list' %}" class="btn btn-primary">Browse All Novels</a>
         </section>
     {% endif %}

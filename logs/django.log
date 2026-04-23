@@ -466,3 +466,5 @@ Traceback (most recent call last):
   File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\http\request.py", line 186, in get_host
     raise DisallowedHost(msg)
 django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+ERROR 2026-04-24 04:11:15,458 views 24364 34564 Error loading video context data: no such table: videos_video
+ERROR 2026-04-24 04:11:15,466 views 24364 34564 Error loading blog context data: no such table: blog_blogpost

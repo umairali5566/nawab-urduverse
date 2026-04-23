@@ -11,26 +11,19 @@
             <div class="page-hero-copy centered-mobile">
                 <span class="page-kicker">Essays and academy notes</span>
                 <h1 class="page-title">Urdu Blog</h1>
-                <p class="page-subtitle">
-                    Read literary essays, reflections, and academy articles in an editorial layout built for clarity,
-                    scanning, and deeper reading on both mobile and desktop.
-                </p>
                 <div class="page-stats">
                     <span class="stat-chip"><strong>{{ page_obj.paginator.count }}</strong> published articles</span>
-                    <span class="stat-chip">Featured stories plus a focused sidebar</span>
                 </div>
             </div>
             <aside class="page-panel dark-panel page-fade delay-1">
                 <h2 class="panel-title">Recent topics</h2>
-                <p class="panel-copy">Editorial writing, literary commentary, and reading notes collected in one place.</p>
                 <div class="sidebar-list">
                     {% for category in categories|slice:":3" %}
                         <a href="{% url 'blog_list' %}?category={{ category.slug }}">
                             <span class="sidebar-title">{{ category.name }}</span>
-                            <span class="panel-copy">Browse this category</span>
                         </a>
                     {% empty %}
-                        <span class="panel-copy">Categories will appear here when blog taxonomy is available.</span>
+                        <span class="panel-copy">No categories.</span>
                     {% endfor %}
                 </div>
             </aside>
@@ -74,7 +67,6 @@
                     <div class="page-hero-copy">
                         <span class="page-kicker">Featured article</span>
                         <h2 class="page-title" style="font-size: clamp(2.1rem, 4vw, 3.1rem);">{{ featured.title }}</h2>
-                        <p class="page-subtitle">{{ featured.excerpt|default:featured.content|striptags|truncatechars:220 }}</p>
                         <div class="page-stats">
                             <span class="stat-chip">{{ featured.author.name }}</span>
                             <span class="stat-chip">{{ featured.published_at|default:featured.created_at|date:"M d, Y" }}</span>
@@ -137,7 +129,7 @@
                             <span class="panel-copy">{{ post.published_at|default:post.created_at|date:"M d, Y" }}</span>
                         </a>
                     {% empty %}
-                        <span class="panel-copy">Popular posts will appear here as readers engage with the blog.</span>
+                        <span class="panel-copy">No recent posts.</span>
                     {% endfor %}
                 </div>
             </aside>
@@ -160,7 +152,6 @@
         <section class="empty-panel page-fade delay-2">
             <div class="empty-icon"><i class="bi bi-journal-text"></i></div>
             <h2 class="panel-title">No blog posts matched your search</h2>
-            <p>Try a broader keyword or clear the current filters to explore the full article archive.</p>
             <a href="{% url 'blog_list' %}" class="btn btn-primary">Browse All Blog Posts</a>
         </section>
     {% endif %}

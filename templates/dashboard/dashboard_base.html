@@ -27,8 +27,7 @@
             <a class="brand-link" href="{% url 'dashboard_home' %}">
                 <span class="brand-mark">N</span>
                 <span>
-                    <strong class="brand-name">Admin Dashboard</strong>
-                    <span class="brand-subtitle">Content management</span>
+                    <strong class="brand-name">Dashboard</strong>
                     {% if request.user.is_superuser %}
                     <span class="badge rounded-pill text-bg-warning ms-2">Admin</span>
                     {% endif %}
@@ -54,7 +53,6 @@
                 <span class="brand-mark">D</span>
                 <div>
                     <p class="side-menu-title mb-0">Management</p>
-                    <span class="side-menu-note">Quick actions</span>
                 </div>
             </div>
 

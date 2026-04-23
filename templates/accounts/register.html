@@ -10,9 +10,6 @@
         <div class="auth-card page-fade">
             <span class="page-kicker">Create account</span>
             <h1>Join Nawab Urdu Academy</h1>
-            <p class="auth-lead">
-                Create your account to save favorites, follow your reading progress, and enjoy a more personal Urdu literature experience.
-            </p>
 
             {% if form.non_field_errors or form.errors %}
                 <div class="error-stack" style="margin-top: 1rem;">
@@ -35,9 +32,6 @@
                         {{ form.username }}
                         <span class="auth-input-icon"><i class="bi bi-person"></i></span>
                     </div>
-                    {% if form.username.help_text %}
-                        <span class="field-help">{{ form.username.help_text|safe }}</span>
-                    {% endif %}
                 </div>
 
                 <div class="field-group">
@@ -57,9 +51,6 @@
                             <i class="bi bi-eye"></i>
                         </button>
                     </div>
-                    {% if form.password1.help_text %}
-                        <span class="field-help">{{ form.password1.help_text|safe }}</span>
-                    {% endif %}
                 </div>
 
                 <div class="field-group">
@@ -75,37 +66,21 @@
 
                 <label style="display: inline-flex; gap: 0.6rem; align-items: flex-start; color: var(--brand-muted);">
                     <input type="checkbox" required>
-                    <span>I agree to the academy's respectful community standards and account terms.</span>
+                    <span>I agree to the terms.</span>
                 </label>
 
                 <button type="submit" class="btn auth-submit">Create Account</button>
             </form>
 
             <p class="form-note" style="margin-top: 1rem;">
-                Already have an account? <a href="{% url 'login' %}" class="auth-footer-link">Sign in here</a>
+                <a href="{% url 'login' %}" class="auth-footer-link">Already have an account?</a>
             </p>
         </div>
 
         <aside class="page-panel dark-panel auth-card page-fade delay-1">
             <span class="page-kicker" style="color: #f1d497;">Why join</span>
-            <h1 class="urdu">اپنا ادبی سفر شروع کریں</h1>
-            <p class="auth-lead urdu-copy">
-                ایک ذاتی اکاؤنٹ کے ساتھ آپ اپنی پسندیدہ تحریریں محفوظ کر سکتے ہیں، نئی دریافتوں کو منظم رکھ سکتے ہیں، اور ایک بہتر مطالعہ تجربہ حاصل کر سکتے ہیں۔
-            </p>
-            <div class="auth-benefits" style="margin-top: 1.25rem;">
-                <div class="auth-benefit">
-                    <strong>Bookmarks and history</strong>
-                    <span>Keep your favorite poetry, quotes, and novels within easy reach.</span>
-                </div>
-                <div class="auth-benefit">
-                    <strong>Reader-first design</strong>
-                    <span>Enjoy a modern, refined platform made for thoughtful literary exploration.</span>
-                </div>
-                <div class="auth-benefit">
-                    <strong>Growing academy</strong>
-                    <span>Become part of a platform that treats Urdu literature with care and polish.</span>
-                </div>
-            </div>
+            <h1 class="urdu">اپنا اکاؤنٹ بنائیں</h1>
+            <p class="auth-lead urdu-copy">مطالعہ آسان رکھیں۔</p>
         </aside>
     </section>
 </div>

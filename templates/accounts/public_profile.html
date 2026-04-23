@@ -18,7 +18,9 @@
                 <div>
                     <h1 class="mb-1">{{ profile_user.get_full_name }}</h1>
                     <p class="text-muted mb-2">@{{ profile_user.username }}</p>
-                    <p class="mb-0">{{ profile_user.bio|default:'No bio available yet.' }}</p>
+                    {% if profile_user.bio %}
+                    <p class="mb-0">{{ profile_user.bio }}</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -39,9 +41,9 @@
                         </div>
                         <hr>
                         <div class="profile-meta-list">
-                            <div><strong>City:</strong> {{ profile_user.city|default:"Not shared" }}</div>
-                            <div><strong>Country:</strong> {{ profile_user.country|default:"Not shared" }}</div>
-                            <div><strong>Website:</strong> {% if profile_user.website %}<a href="{{ profile_user.website }}" target="_blank" rel="noopener">{{ profile_user.website }}</a>{% else %}Not shared{% endif %}</div>
+                            <div><strong>City:</strong> {{ profile_user.city|default:"-" }}</div>
+                            <div><strong>Country:</strong> {{ profile_user.country|default:"-" }}</div>
+                            <div><strong>Website:</strong> {% if profile_user.website %}<a href="{{ profile_user.website }}" target="_blank" rel="noopener">{{ profile_user.website }}</a>{% else %}-{% endif %}</div>
                         </div>
                     </div>
                 </div>
@@ -51,7 +53,7 @@
                 <div class="card glass-card mb-4">
                     <div class="card-body">
                         <div class="section-header">
-                            <h3 class="section-title mb-0">Published Content</h3>
+                            <h3 class="section-title mb-0">Content</h3>
                         </div>
                         <div class="row g-3">
                             <div class="col-md-4">
@@ -60,7 +62,7 @@
                                     {% for item in novels %}
                                     <p class="mb-2"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></p>
                                     {% empty %}
-                                    <p class="text-muted mb-0">No novels published.</p>
+                                    <p class="text-muted mb-0">No novels.</p>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -70,7 +72,7 @@
                                     {% for item in stories %}
                                     <p class="mb-2"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></p>
                                     {% empty %}
-                                    <p class="text-muted mb-0">No stories published.</p>
+                                    <p class="text-muted mb-0">No stories.</p>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -80,7 +82,7 @@
                                     {% for item in poetry %}
                                     <p class="mb-2"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></p>
                                     {% empty %}
-                                    <p class="text-muted mb-0">No poetry published.</p>
+                                    <p class="text-muted mb-0">No poetry.</p>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -106,7 +108,7 @@
                             {% endfor %}
                         </div>
                         {% else %}
-                        <p class="text-muted mb-0">No public likes to show yet.</p>
+                        <p class="text-muted mb-0">No likes yet.</p>
                         {% endif %}
                     </div>
                 </div>
@@ -114,6 +116,7 @@
         </div>
     </div>
 </section>
+{% endblock %}
 
 {% block extra_js %}
 <style>

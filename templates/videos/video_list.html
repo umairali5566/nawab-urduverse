@@ -11,23 +11,16 @@
             <div class="page-hero-copy centered-mobile">
                 <span class="page-kicker">Recitations and visual learning</span>
                 <h1 class="page-title">Urdu Videos</h1>
-                <p class="page-subtitle">
-                    Watch literary videos, poetry recitations, interviews, and educational media with a cleaner grid,
-                    stronger thumbnail hierarchy, and a mobile-first filter experience.
-                </p>
                 <div class="page-stats">
                     <span class="stat-chip"><strong>{{ page_obj.paginator.count }}</strong> videos in the archive</span>
-                    <span class="stat-chip">Thumbnail-first browsing with category filters</span>
                 </div>
             </div>
             <aside class="page-panel dark-panel page-fade delay-1">
                 <h2 class="panel-title">Trending Video Types</h2>
-                <p class="panel-copy">Start with the formats readers usually explore first on the academy platform.</p>
                 <div class="sidebar-list">
                     {% for value, label in video_types|slice:":3" %}
                         <a href="{% url 'video_list' %}?type={{ value }}">
                             <span class="sidebar-title">{{ label }}</span>
-                            <span class="panel-copy">Browse {{ label|lower }} videos</span>
                         </a>
                     {% endfor %}
                 </div>
@@ -119,7 +112,6 @@
         <section class="empty-panel page-fade delay-2">
             <div class="empty-icon"><i class="bi bi-camera-video"></i></div>
             <h2 class="panel-title">No videos matched your filters</h2>
-            <p>Reset the current filters or search for a broader term to see more literary video content.</p>
             <a href="{% url 'video_list' %}" class="btn btn-primary">Browse All Videos</a>
         </section>
     {% endif %}

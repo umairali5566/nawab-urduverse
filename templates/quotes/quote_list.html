@@ -11,18 +11,12 @@
             <div class="page-hero-copy centered-mobile">
                 <span class="page-kicker">Reflections and wisdom</span>
                 <h1 class="page-title">Urdu Quotes</h1>
-                <p class="page-subtitle">
-                    Browse elegant Urdu quotes in a calm, minimal layout with category filters, cleaner typography, and
-                    quick engagement actions for readers who collect memorable lines.
-                </p>
                 <div class="page-stats">
                     <span class="stat-chip"><strong>{{ page_obj.paginator.count }}</strong> quotes published</span>
-                    <span class="stat-chip">Like and share from the list view</span>
                 </div>
             </div>
             <aside class="page-panel dark-panel page-fade delay-1">
                 <h2 class="panel-title">Featured Quotes</h2>
-                <p class="panel-copy">A compact highlight reel of the platform's strongest short-form reflections.</p>
                 <div class="sidebar-list">
                     {% for quote in featured_quotes|slice:":3" %}
                         <a href="{{ quote.get_absolute_url }}">
@@ -30,7 +24,7 @@
                             <span class="panel-copy">{{ quote.author.name }}</span>
                         </a>
                     {% empty %}
-                        <span class="panel-copy">Featured quotes will appear here once editors pin them.</span>
+                        <span class="panel-copy">No featured quotes.</span>
                     {% endfor %}
                 </div>
             </aside>
@@ -113,7 +107,6 @@
         <section class="empty-panel page-fade delay-2">
             <div class="empty-icon"><i class="bi bi-chat-quote"></i></div>
             <h2 class="panel-title">No quotes were found</h2>
-            <p>Adjust your search or filters to browse a wider set of reflections and sayings.</p>
             <a href="{% url 'quote_list' %}" class="btn btn-primary">Browse All Quotes</a>
         </section>
     {% endif %}
