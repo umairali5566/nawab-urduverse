@@ -8,6 +8,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
 from django.db.models import Q
 from django.http import Http404, HttpResponse, JsonResponse
+from django.db.utils import OperationalError, ProgrammingError
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.decorators import login_required
@@ -183,26 +184,77 @@ def base_share_view(request, model, content_type, slug):
 def home(request):
     """Homepage for the main literary landing page."""
     now = timezone.now()
+    try:
+        categories = Category.objects.filter(is_active=True).order_by('name')
+        authors = Author.objects.filter(is_published=True).order_by('name')[:25]
+        featured_authors = Author.objects.filter(is_published=True).order_by('name')[:6]
 
-    categories = Category.objects.filter(is_active=True).order_by('name')
-    authors = Author.objects.filter(is_published=True).order_by('name')[:25]
-    featured_authors = Author.objects.filter(is_published=True).order_by('name')[:6]
+        latest_poetry = Poetry.objects.filter(
+            is_published=True
+        ).filter(
+            Q(published_at__isnull=True) | Q(published_at__lte=now)
+        ).select_related('author', 'category').order_by('-published_at', '-created_at')[:6]
+        latest_stories = Story.objects.filter(
+            is_published=True
+        ).filter(
+            Q(published_at__isnull=True) | Q(published_at__lte=now)
+        ).select_related('author', 'category').order_by('-published_at', '-created_at')[:6]
+        latest_novels = Novel.objects.filter(
+            is_published=True
+        ).filter(
+            Q(published_at__isnull=True) | Q(published_at__lte=now)
+        ).select_related('author', 'category').order_by('-published_at', '-created_at')[:6]
+        latest_quotes = Quote.objects.filter(
+            is_published=True
+        ).filter(
+            Q(published_at__isnull=True) | Q(published_at__lte=now)
+        ).select_related('author', 'category').order_by('-views_count', '-published_at', '-created_at')[:4]
+        latest_blog_posts = BlogPost.objects.filter(
+            is_published=True
+        ).filter(
+            Q(published_at__isnull=True) | Q(published_at__lte=now)
+        ).select_related('author', 'category').order_by('-published_at', '-created_at')[:4]
+        latest_videos = Video.objects.filter(
+            is_published=True
+        ).filter(
+            Q(published_at__isnull=True) | Q(published_at__lte=now)
+        ).select_related('author', 'category').order_by('-published_at', '-created_at')[:4]
 
-    latest_poetry = Poetry.objects.filter(
-        is_published=True
-    ).filter(
-        Q(published_at__isnull=True) | Q(published_at__lte=now)
-    ).select_related('author', 'category').order_by('-published_at', '-created_at')[:6]
-    latest_stories = Story.objects.filter(
-        is_published=True
-    ).filter(
-        Q(published_at__isnull=True) | Q(published_at__lte=now)
-    ).select_related('author', 'category').order_by('-published_at', '-created_at')[:6]
-    latest_novels = Novel.objects.filter(
-        is_published=True
-    ).filter(
-        Q(published_at__isnull=True) | Q(published_at__lte=now)
-    ).select_related('author', 'category').order_by('-published_at', '-created_at')[:6]
+        stats = {
+            'poetry': Poetry.objects.filter(is_published=True).count(),
+            'novels': Novel.objects.filter(is_published=True).count(),
+            'quotes': Quote.objects.filter(is_published=True).count(),
+            'stories': Story.objects.filter(is_published=True).count(),
+            'blogs': BlogPost.objects.filter(is_published=True).count(),
+            'videos': Video.objects.filter(is_published=True).count(),
+            'authors': Author.objects.filter(is_published=True).count(),
+        }
+
+        featured_quote = Quote.objects.filter(
+            is_published=True
+        ).filter(
+            Q(published_at__isnull=True) | Q(published_at__lte=now)
+        ).select_related('author').order_by('-views_count', '-created_at').first()
+    except (OperationalError, ProgrammingError):
+        categories = Category.objects.none()
+        authors = Author.objects.none()
+        featured_authors = Author.objects.none()
+        latest_poetry = Poetry.objects.none()
+        latest_stories = Story.objects.none()
+        latest_novels = Novel.objects.none()
+        latest_quotes = Quote.objects.none()
+        latest_blog_posts = BlogPost.objects.none()
+        latest_videos = Video.objects.none()
+        featured_quote = None
+        stats = {
+            'poetry': 0,
+            'novels': 0,
+            'quotes': 0,
+            'stories': 0,
+            'blogs': 0,
+            'videos': 0,
+            'authors': 0,
+        }
 
     context = {
         'categories': categories,
@@ -211,6 +263,11 @@ def home(request):
         'latest_poetry': latest_poetry,
         'latest_stories': latest_stories,
         'latest_novels': latest_novels,
+        'latest_quotes': latest_quotes,
+        'latest_blog_posts': latest_blog_posts,
+        'latest_videos': latest_videos,
+        'featured_quote': featured_quote,
+        'stats': stats,
         **build_seo_context(
             request,
             title=f"{settings.SITE_NAME} | A premium home for Urdu literature",

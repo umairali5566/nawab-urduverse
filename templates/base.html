@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ SITE_NAME }} — اردو شاعری، ناول، کہانیاں، اقتباسات اور بلاگ">
-
-    <title>{% block title %}{{ SITE_NAME }} - اردو ادب کی خوبصورت دنیا{% endblock %}</title>
+    <meta name="description" content="{{ SITE_NAME }} brings Urdu poetry, novels, quotes, blogs, and videos into one refined reading experience.">
+    <title>{% block title %}{{ SITE_NAME }} | Premium Urdu Literature{% endblock %}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -18,27 +17,29 @@
 
     {% block extra_css %}{% endblock %}
 </head>
-<body>
-
+<body class="{% block body_class %}{% endblock %}">
     <nav class="navbar">
         <div class="navbar-container">
             <div class="navbar-brand">
-                <a href="{% url 'home' %}" class="logo-link">
+                <a href="{% url 'home' %}" class="logo-link" aria-label="Urdu Academy home">
                     {% if logo and logo.image %}
-                        <img src="{{ logo.image.url }}" alt="{{ logo.alt_text }}" class="logo-image">
-                    {% else %}
-                        <div class="logo-text">{{ SITE_NAME }}</div>
+                        <img src="{{ logo.image.url }}" alt="{{ logo.alt_text|default:'Urdu Academy' }}" class="logo-image">
                     {% endif %}
+                    <span class="logo-copy">
+                        <span class="logo-overline">Premium Literature Platform</span>
+                        <span class="logo-text">Urdu Academy</span>
+                    </span>
                 </a>
             </div>
 
             <div class="nav-menu">
-                <a href="{% url 'home' %}" class="nav-link">{{ NAV_LABELS.home }}</a>
-                <a href="{% url 'poetry_list' %}" class="nav-link">{{ NAV_LABELS.poetry }}</a>
-                <a href="{% url 'novel_list' %}" class="nav-link">{{ NAV_LABELS.novel }}</a>
-                <a href="{% url 'story_list' %}" class="nav-link">{{ NAV_LABELS.story }}</a>
-                <a href="{% url 'quote_list' %}" class="nav-link">{{ NAV_LABELS.quote }}</a>
-                <a href="{% url 'blog_list' %}" class="nav-link">{{ NAV_LABELS.blog }}</a>
+                <a href="{% url 'home' %}" class="nav-link{% if request.resolver_match.url_name == 'home' %} is-active{% endif %}">Home</a>
+                <a href="{% url 'poetry_list' %}" class="nav-link{% if request.resolver_match.url_name == 'poetry_list' %} is-active{% endif %}">Poetry</a>
+                <a href="{% url 'novel_list' %}" class="nav-link{% if request.resolver_match.url_name == 'novel_list' %} is-active{% endif %}">Novels</a>
+                <a href="{% url 'quote_list' %}" class="nav-link{% if request.resolver_match.url_name == 'quote_list' %} is-active{% endif %}">Quotes</a>
+                <a href="{% url 'video_list' %}" class="nav-link{% if request.resolver_match.url_name == 'video_list' %} is-active{% endif %}">Videos</a>
+                <a href="{% url 'blog_list' %}" class="nav-link{% if request.resolver_match.url_name == 'blog_list' %} is-active{% endif %}">Blog</a>
+                <a href="{% url 'contact' %}" class="nav-link{% if request.resolver_match.url_name == 'contact' %} is-active{% endif %}">Contact</a>
             </div>
 
             <div class="nav-auth">
@@ -47,20 +48,20 @@
                         <button
                             class="nav-user-btn"
                             type="button"
-                            aria-label="یوزر مینو"
+                            aria-label="Open account menu"
                             aria-expanded="false"
                             aria-controls="userDropdown"
                         >
                             {% if user.avatar %}
-                                <img src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}" class="user-avatar-small">
+                                <img src="{{ user.avatar.url }}" alt="{{ user.get_full_name|default:user.username }}" class="user-avatar-small">
                             {% else %}
-                                <div class="user-avatar-small">
+                                <span class="user-avatar-small">
                                     <i class="bi bi-person"></i>
-                                </div>
+                                </span>
                             {% endif %}
                             <span class="nav-user-btn-copy">
                                 <span class="user-meta">
-                                    <span class="user-meta-label">اکاؤنٹ</span>
+                                    <span class="user-meta-label">Account</span>
                                     <span class="user-name">{{ user.get_full_name|default:user.username }}</span>
                                 </span>
                                 <i class="bi bi-chevron-down nav-user-chevron" aria-hidden="true"></i>
@@ -70,11 +71,11 @@
                         <div class="nav-user-dropdown" id="userDropdown" role="menu" aria-hidden="true">
                             <div class="nav-user-dropdown-header">
                                 {% if user.avatar %}
-                                    <img src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}" class="user-avatar-large">
+                                    <img src="{{ user.avatar.url }}" alt="{{ user.get_full_name|default:user.username }}" class="user-avatar-large">
                                 {% else %}
-                                    <div class="user-avatar-large">
+                                    <span class="user-avatar-large">
                                         <i class="bi bi-person"></i>
-                                    </div>
+                                    </span>
                                 {% endif %}
                                 <div class="nav-user-dropdown-copy">
                                     <strong>{{ user.get_full_name|default:user.username }}</strong>
@@ -84,41 +85,41 @@
                             <div class="dropdown-divider"></div>
                             <div class="nav-user-dropdown-group">
                                 {% if user.is_superuser %}
-                                <a href="{% url 'dashboard_home' %}" class="dropdown-item" role="menuitem">
-                                    <span class="dropdown-item-label">ڈیش بورڈ</span>
-                                    <i class="bi bi-speedometer2" aria-hidden="true"></i>
-                                </a>
+                                    <a href="{% url 'dashboard_home' %}" class="dropdown-item" role="menuitem">
+                                        <span class="dropdown-item-label">Dashboard</span>
+                                        <i class="bi bi-speedometer2" aria-hidden="true"></i>
+                                    </a>
                                 {% else %}
-                                <a href="{% url 'dashboard' %}" class="dropdown-item" role="menuitem">
-                                    <span class="dropdown-item-label">ڈیش بورڈ</span>
-                                    <i class="bi bi-speedometer2" aria-hidden="true"></i>
-                                </a>
+                                    <a href="{% url 'dashboard' %}" class="dropdown-item" role="menuitem">
+                                        <span class="dropdown-item-label">Dashboard</span>
+                                        <i class="bi bi-speedometer2" aria-hidden="true"></i>
+                                    </a>
                                 {% endif %}
                                 <a href="{% url 'profile' %}" class="dropdown-item" role="menuitem">
-                                    <span class="dropdown-item-label">پروفائل</span>
+                                    <span class="dropdown-item-label">Profile</span>
                                     <i class="bi bi-person-circle" aria-hidden="true"></i>
                                 </a>
                                 {% if not user.is_superuser %}
-                                <a href="{% url 'my_content' %}" class="dropdown-item" role="menuitem">
-                                    <span class="dropdown-item-label">میرا مواد</span>
-                                    <i class="bi bi-journal-richtext" aria-hidden="true"></i>
-                                </a>
+                                    <a href="{% url 'my_content' %}" class="dropdown-item" role="menuitem">
+                                        <span class="dropdown-item-label">My Content</span>
+                                        <i class="bi bi-journal-richtext" aria-hidden="true"></i>
+                                    </a>
                                 {% endif %}
                             </div>
                             <div class="dropdown-divider"></div>
                             <a href="{% url 'logout' %}" class="dropdown-item dropdown-item-danger" role="menuitem">
-                                <span class="dropdown-item-label">لاگ آؤٹ</span>
+                                <span class="dropdown-item-label">Log out</span>
                                 <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
                             </a>
                         </div>
                     </div>
                 {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-secondary">{{ NAV_LABELS.login }}</a>
-                    <a href="{% url 'register' %}" class="btn btn-primary">{{ NAV_LABELS.register }}</a>
+                    <a href="{% url 'login' %}" class="btn btn-secondary">Log in</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
                 {% endif %}
             </div>
 
-            <button id="menu-toggle" class="menu-toggle" aria-label="مینو کھولیں">
+            <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -128,37 +129,39 @@
         <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
 
         <div id="mobile-menu" class="mobile-menu">
-            <a href="{% url 'home' %}" class="mobile-menu-link">{{ NAV_LABELS.home }}</a>
-            <a href="{% url 'poetry_list' %}" class="mobile-menu-link">{{ NAV_LABELS.poetry }}</a>
-            <a href="{% url 'novel_list' %}" class="mobile-menu-link">{{ NAV_LABELS.novel }}</a>
-            <a href="{% url 'story_list' %}" class="mobile-menu-link">{{ NAV_LABELS.story }}</a>
-            <a href="{% url 'quote_list' %}" class="mobile-menu-link">{{ NAV_LABELS.quote }}</a>
-            <a href="{% url 'blog_list' %}" class="mobile-menu-link">{{ NAV_LABELS.blog }}</a>
+            <a href="{% url 'home' %}" class="mobile-menu-link">Home</a>
+            <a href="{% url 'poetry_list' %}" class="mobile-menu-link">Poetry</a>
+            <a href="{% url 'novel_list' %}" class="mobile-menu-link">Novels</a>
+            <a href="{% url 'quote_list' %}" class="mobile-menu-link">Quotes</a>
+            <a href="{% url 'story_list' %}" class="mobile-menu-link">Stories</a>
+            <a href="{% url 'video_list' %}" class="mobile-menu-link">Videos</a>
+            <a href="{% url 'blog_list' %}" class="mobile-menu-link">Blog</a>
+            <a href="{% url 'contact' %}" class="mobile-menu-link">Contact</a>
             <div class="mobile-menu-divider"></div>
             {% if user.is_authenticated %}
                 {% if user.is_superuser %}
-                <a href="{% url 'dashboard_home' %}" class="mobile-menu-link">
-                    <i class="bi bi-speedometer2"></i> ڈیش بورڈ
-                </a>
+                    <a href="{% url 'dashboard_home' %}" class="mobile-menu-link">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
                 {% else %}
-                <a href="{% url 'dashboard' %}" class="mobile-menu-link">
-                    <i class="bi bi-speedometer2"></i> ڈیش بورڈ
-                </a>
+                    <a href="{% url 'dashboard' %}" class="mobile-menu-link">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
                 {% endif %}
                 <a href="{% url 'profile' %}" class="mobile-menu-link">
-                    <i class="bi bi-person-circle"></i> پروفائل
+                    <i class="bi bi-person-circle"></i> Profile
                 </a>
                 {% if not user.is_superuser %}
-                <a href="{% url 'my_content' %}" class="mobile-menu-link">
-                    <i class="bi bi-journal-richtext"></i> میرا مواد
-                </a>
+                    <a href="{% url 'my_content' %}" class="mobile-menu-link">
+                        <i class="bi bi-journal-richtext"></i> My Content
+                    </a>
                 {% endif %}
                 <a href="{% url 'logout' %}" class="mobile-menu-link">
-                    <i class="bi bi-box-arrow-right"></i> لاگ آؤٹ
+                    <i class="bi bi-box-arrow-right"></i> Log out
                 </a>
             {% else %}
-                <a href="{% url 'login' %}" class="mobile-menu-link">{{ NAV_LABELS.login }}</a>
-                <a href="{% url 'register' %}" class="mobile-menu-link">{{ NAV_LABELS.register }}</a>
+                <a href="{% url 'login' %}" class="mobile-menu-link">Log in</a>
+                <a href="{% url 'register' %}" class="mobile-menu-link">Register</a>
             {% endif %}
         </div>
     </nav>
@@ -179,28 +182,37 @@
     <footer>
         <div class="footer-container">
             <div class="footer-section">
-                <h4>مفید لنکس</h4>
-                <a href="{% url 'poetry_list' %}">شاعری</a>
-                <a href="{% url 'novel_list' %}">ناول</a>
-                <a href="{% url 'blog_list' %}">بلاگ</a>
+                <h4>Urdu Academy</h4>
+                <p>A refined home for Urdu poetry, novels, reflective writing, and literary learning.</p>
             </div>
 
             <div class="footer-section">
-                <h4>سوشل میڈیا</h4>
-                <a href="#">فیس بک</a>
-                <a href="#">ٹوئٹر</a>
-                <a href="#">انسٹاگرام</a>
+                <h4>Explore</h4>
+                <a href="{% url 'poetry_list' %}">Poetry</a>
+                <a href="{% url 'novel_list' %}">Novels</a>
+                <a href="{% url 'quote_list' %}">Quotes</a>
+                <a href="{% url 'video_list' %}">Videos</a>
             </div>
 
             <div class="footer-section">
-                <h4>شرائط</h4>
-                <a href="#">نجی پالیسی</a>
-                <a href="#">خدمات کی شرائط</a>
+                <h4>Resources</h4>
+                <a href="{% url 'blog_list' %}">Blog</a>
+                <a href="{% url 'all_categories' %}">Categories</a>
+                <a href="{% url 'author_list' %}">Authors</a>
+                <a href="{% url 'search' %}">Search</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="{% url 'contact' %}">Contact</a>
+                <a href="{% url 'about' %}">About</a>
+                <a href="{% url 'privacy_policy' %}">Privacy Policy</a>
+                <a href="{% url 'terms_of_service' %}">Terms of Service</a>
             </div>
         </div>
 
         <div class="footer-bottom">
-            <p>&copy; {% now "Y" %} {{ SITE_NAME }} — تمام حقوق محفوظ ہیں</p>
+            <p>&copy; {% now "Y" %} Urdu Academy. All rights reserved.</p>
         </div>
     </footer>
 
@@ -223,8 +235,8 @@
                 userDropdown.setAttribute('aria-hidden', 'false');
             };
 
-            userBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
+            userBtn.addEventListener('click', function (event) {
+                event.stopPropagation();
                 if (userDropdown.classList.contains('active')) {
                     closeUserDropdown();
                 } else {
@@ -233,19 +245,17 @@
             });
 
             userDropdown.querySelectorAll('a').forEach((item) => {
-                item.addEventListener('click', function () {
-                    closeUserDropdown();
-                });
+                item.addEventListener('click', closeUserDropdown);
             });
 
-            document.addEventListener('click', function (e) {
-                if (!e.target.closest('.nav-user-menu') && userDropdown.classList.contains('active')) {
+            document.addEventListener('click', function (event) {
+                if (!event.target.closest('.nav-user-menu') && userDropdown.classList.contains('active')) {
                     closeUserDropdown();
                 }
             });
 
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape' && userDropdown.classList.contains('active')) {
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape' && userDropdown.classList.contains('active')) {
                     closeUserDropdown();
                 }
             });
@@ -255,37 +265,52 @@
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
 
-        if (menuToggle && mobileMenu) {
-            menuToggle.addEventListener('click', function (e) {
-                e.stopPropagation();
-                mobileMenu.classList.toggle('active');
-                mobileMenuOverlay.classList.toggle('active');
-            });
-        }
-
-        if (mobileMenu) {
-            const mobileLinks = mobileMenu.querySelectorAll('a');
-            mobileLinks.forEach((link) => {
-                link.addEventListener('click', function () {
-                    mobileMenu.classList.remove('active');
-                    mobileMenuOverlay.classList.remove('active');
-                });
-            });
-        }
-
-        if (mobileMenuOverlay) {
-            mobileMenuOverlay.addEventListener('click', function () {
-                mobileMenu.classList.remove('active');
-                mobileMenuOverlay.classList.remove('active');
-            });
-        }
-
-        document.addEventListener('click', function (e) {
-            if (mobileMenu && !e.target.closest('.navbar') && mobileMenu.classList.contains('active')) {
-                mobileMenu.classList.remove('active');
-                mobileMenuOverlay.classList.remove('active');
+        const closeMobileMenu = () => {
+            if (!mobileMenu || !mobileMenuOverlay || !menuToggle) {
+                return;
             }
-        });
+            mobileMenu.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+            menuToggle.setAttribute('aria-expanded', 'false');
+        };
+
+        const openMobileMenu = () => {
+            if (!mobileMenu || !mobileMenuOverlay || !menuToggle) {
+                return;
+            }
+            mobileMenu.classList.add('active');
+            mobileMenuOverlay.classList.add('active');
+            menuToggle.setAttribute('aria-expanded', 'true');
+        };
+
+        if (menuToggle && mobileMenu && mobileMenuOverlay) {
+            menuToggle.addEventListener('click', function (event) {
+                event.stopPropagation();
+                if (mobileMenu.classList.contains('active')) {
+                    closeMobileMenu();
+                } else {
+                    openMobileMenu();
+                }
+            });
+
+            mobileMenu.querySelectorAll('a').forEach((link) => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+
+            mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    closeMobileMenu();
+                }
+            });
+
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 768) {
+                    closeMobileMenu();
+                }
+            });
+        }
     </script>
 
     {% block extra_js %}{% endblock %}

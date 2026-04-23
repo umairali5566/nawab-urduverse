@@ -452,3 +452,5 @@ Traceback (most recent call last):
   File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\nawab_urduverse\settings.py", line 502, in context_copy_fix
     duplicate = dict(self)
 ValueError: dictionary update sequence element #0 has length 5; 2 is required
+ERROR 2026-04-24 03:15:21,401 basehttp 34204 21856 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-04-24 03:15:21,408 basehttp 34204 17616 You're accessing the development server over HTTPS, but it only supports HTTP.

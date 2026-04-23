@@ -42,7 +42,7 @@ html {
 }
 
 body {
-    font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 25%, #cffafe 50%, #a5f3fc 75%, #7dd3fc 100%);
     background-attachment: fixed;
     color: var(--text-primary);
@@ -142,12 +142,13 @@ a:hover {
     align-items: center;
     justify-content: space-between;
     gap: 2rem;
+    direction: ltr;
 }
 
 /* Logo */
 .navbar-brand {
     flex: 0 0 auto;
-    order: 3;
+    order: 0;
 }
 
 .logo-link {
@@ -155,6 +156,23 @@ a:hover {
     align-items: center;
     gap: 0.75rem;
     text-decoration: none;
+}
+
+.logo-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1rem;
+}
+
+.logo-overline {
+    font-size: 0.72rem;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    font-weight: 700;
+    font-family: 'Manrope', sans-serif;
 }
 
 .logo-image {
@@ -170,7 +188,8 @@ a:hover {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    font-family: 'Noto Nastaliq Urdu', serif;
+    font-family: 'Cormorant Garamond', 'Noto Nastaliq Urdu', serif;
+    line-height: 1;
 }
 
 /* Nav Menu */
@@ -179,18 +198,18 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 3rem;
-    order: 2;
+    gap: 1.6rem;
+    order: 0;
 }
 
 .nav-link {
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 700;
     color: var(--text-primary);
     transition: all 0.3s ease;
     position: relative;
     padding: 0.5rem 0;
-    font-family: 'Noto Nastaliq Urdu', serif;
+    font-family: 'Manrope', sans-serif;
 }
 
 .nav-link::after {
@@ -212,12 +231,20 @@ a:hover {
     width: 100%;
 }
 
+.nav-link.is-active {
+    color: var(--primary-color);
+}
+
+.nav-link.is-active::after {
+    width: 100%;
+}
+
 /* Auth Buttons */
 .nav-auth {
     display: flex;
     align-items: center;
     gap: 1rem;
-    order: 1;
+    order: 0;
     flex: 0 0 auto;
 }
 
@@ -229,7 +256,7 @@ a:hover {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-family: 'Noto Nastaliq Urdu', serif;
+    font-family: 'Manrope', sans-serif;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -294,7 +321,7 @@ a:hover {
     font-weight: 600;
     color: var(--text-primary);
     transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-    font-family: 'Noto Nastaliq Urdu', serif;
+    font-family: 'Manrope', sans-serif;
     box-shadow: 0 10px 30px rgba(14, 165, 233, 0.12);
     backdrop-filter: blur(18px);
 }
@@ -329,11 +356,11 @@ a:hover {
     flex-direction: column;
     align-items: flex-start;
     min-width: 0;
-    text-align: right;
+    text-align: left;
 }
 
 .user-meta-label {
-    font-family: 'Inter', 'Poppins', sans-serif;
+    font-family: 'Manrope', sans-serif;
     font-size: 0.72rem;
     line-height: 1;
     color: var(--text-tertiary);
@@ -458,7 +485,7 @@ a:hover {
 }
 
 .nav-user-dropdown-copy span {
-    font-family: 'Inter', 'Poppins', sans-serif;
+    font-family: 'Manrope', sans-serif;
     font-size: 0.82rem;
     color: var(--text-secondary);
     direction: ltr;
@@ -621,7 +648,7 @@ a:hover {
     color: var(--text-primary);
     border-radius: 8px;
     transition: all 0.3s ease;
-    font-family: 'Noto Nastaliq Urdu', serif;
+    font-family: 'Manrope', sans-serif;
 }
 
 .mobile-menu-link:hover {
@@ -1067,7 +1094,13 @@ footer {
     margin-bottom: 1rem;
     font-size: 1rem;
     font-weight: 700;
-    font-family: 'Noto Nastaliq Urdu', serif;
+    font-family: 'Cormorant Garamond', 'Noto Nastaliq Urdu', serif;
+}
+
+.footer-section p {
+    color: rgba(255, 255, 255, 0.72);
+    max-width: 22rem;
+    margin: 0 auto;
 }
 
 .footer-section a {
@@ -1253,86 +1286,25 @@ footer {
 
 @media (max-width: 768px) {
     .navbar-container {
-        flex-wrap: wrap;
+        gap: 0.75rem;
     }
 
     .navbar-brand {
-        order: 1;
+        order: 0;
     }
 
     .nav-menu {
-        order: 3;
-        width: 100%;
-        flex-direction: column;
-        gap: 0.5rem;
         display: none;
-        padding: 1rem 0;
-        border-top: 1px solid var(--border-color);
-    }
-
-    .navbar.mobile-open .nav-menu {
-        display: flex;
     }
 
     .nav-auth {
-        order: 2;
-        width: 100%;
-        gap: 0.5rem;
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .nav-user-menu {
-        width: 100%;
-    }
-
-    .nav-user-btn {
-        width: 100%;
-        justify-content: space-between;
-        border-radius: 16px;
-        padding: 0.7rem 0.8rem 0.7rem 1rem;
-    }
-
-    .nav-user-btn-copy {
-        flex: 1;
-        justify-content: space-between;
-    }
-
-    .user-name {
-        max-width: none;
-        font-size: 1rem;
-    }
-
-    .user-meta-label {
-        font-size: 0.76rem;
-    }
-
-    .nav-user-dropdown {
-        right: auto;
-        left: 50%;
-        width: min(90vw, 360px);
-        transform: translateX(-50%) scale(0.96);
-        transform-origin: top center;
-    }
-
-    .nav-user-dropdown.active {
-        transform: translateX(-50%) scale(1);
-    }
-
-    .dropdown-item {
-        min-height: 54px;
-        font-size: 1rem;
-        padding: 0.95rem 1rem;
-    }
-
-    .dropdown-item i {
-        width: 2.5rem;
-        height: 2.5rem;
+        display: none;
     }
 
     .menu-toggle {
         display: flex !important;
-        order: 1;
+        order: 0;
+        margin-left: auto;
     }
 
     .nav-link::after {
@@ -1420,6 +1392,10 @@ footer {
         font-size: 1.2rem;
     }
 
+    .logo-overline {
+        font-size: 0.62rem;
+    }
+
     .nav-menu {
         gap: 0;
     }
@@ -1427,44 +1403,6 @@ footer {
     .nav-link {
         padding: 0.75rem 0;
         font-size: 0.95rem;
-    }
-
-    .nav-user-btn {
-        min-height: 52px;
-        padding: 0.65rem 0.75rem 0.65rem 0.9rem;
-    }
-
-    .user-avatar-small {
-        width: 38px;
-        height: 38px;
-    }
-
-    .user-meta-label {
-        display: none;
-    }
-
-    .nav-user-dropdown {
-        width: min(92vw, 340px);
-        top: calc(100% + 0.7rem);
-        padding: 0.7rem;
-    }
-
-    .nav-user-dropdown.active {
-        transform: translateX(-50%) scale(1);
-    }
-
-    .nav-user-dropdown-header {
-        gap: 0.75rem;
-    }
-
-    .user-avatar-large {
-        width: 48px;
-        height: 48px;
-    }
-
-    .dropdown-item {
-        font-size: 0.98rem;
-        padding: 0.88rem 0.95rem;
     }
 
     .btn {
