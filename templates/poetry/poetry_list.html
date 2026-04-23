@@ -1,278 +1,119 @@
 {% extends 'base.html' %}
-{% load static %}
 
-{% block title %}شاعری - {{ SITE_NAME }}{% endblock %}
+{% block title %}Urdu Poetry Collection | {{ SITE_NAME }}{% endblock %}
 
-{% block extra_css %}
-<style>
-    .page-header {
-        padding: 3rem 1.5rem;
-        text-align: center;
-        background: linear-gradient(135deg, #f0f9ff 0%, #ecf9ff 100%);
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    .page-header h1 {
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 2.5rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin: 0;
-    }
-
-    .content-container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 2rem 1.5rem;
-    }
-
-    .listing-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 2rem;
-        margin-bottom: 2rem;
-    }
-
-    .listing-card {
-        background: white;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        border: 1px solid #f1f5f9;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .listing-card:hover {
-        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.15);
-        transform: translateY(-4px);
-    }
-
-    .listing-media {
-        display: block;
-        height: 200px;
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 3rem;
-        transition: transform 0.3s ease;
-    }
-
-    .listing-card:hover .listing-media {
-        transform: scale(1.05);
-    }
-
-    .listing-body {
-        padding: 1.5rem;
-    }
-
-    .listing-title {
-        margin: 0 0 0.75rem 0;
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 1.3rem;
-        font-weight: 700;
-        line-height: 1.4;
-        direction: rtl;
-        text-align: right;
-    }
-
-    .listing-title a {
-        color: #1e293b;
-        text-decoration: none;
-        transition: color 0.3s;
-    }
-
-    .listing-title a:hover {
-        color: #0ea5e9;
-    }
-
-    .listing-excerpt {
-        margin: 0 0 1rem 0;
-        color: #64748b;
-        font-size: 0.95rem;
-        direction: rtl;
-        text-align: right;
-    }
-
-    .btn-outline {
-        display: inline-block;
-        padding: 0.65rem 1.5rem;
-        border: 2px solid #0ea5e9;
-        color: #0ea5e9;
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: 600;
-        transition: all 0.3s;
-        background: transparent;
-        cursor: pointer;
-    }
-
-    .btn-outline:hover {
-        background: #0ea5e9;
-        color: white;
-    }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-        margin-top: 3rem;
-    }
-
-    .pagination a {
-        padding: 0.75rem 1.5rem;
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        color: white;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s;
-    }
-
-    .pagination a:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.4);
-    }
-
-    .pagination-info {
-        color: #64748b;
-        font-weight: 600;
-        padding: 0.5rem 1rem;
-        background: #f1f5f9;
-        border-radius: 8px;
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 4rem 2rem;
-        background: white;
-        border-radius: 12px;
-        border: 1px solid #f1f5f9;
-    }
-
-    .empty-state-icon {
-        font-size: 4rem;
-        margin-bottom: 1rem;
-    }
-
-    .empty-state h3 {
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #1e293b;
-        margin: 1rem 0;
-    }
-
-    .empty-state p {
-        color: #64748b;
-        font-size: 1.1rem;
-        margin: 0.5rem 0 1.5rem 0;
-    }
-
-    @media (max-width: 768px) {
-        .page-header {
-            padding: 2rem 1rem;
-        }
-
-        .page-header h1 {
-            font-size: 1.8rem;
-        }
-
-        .content-container {
-            padding: 1.5rem 1rem;
-        }
-
-        .listing-grid {
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .listing-body {
-            padding: 1.25rem;
-        }
-
-        .listing-title {
-            font-size: 1.1rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .page-header h1 {
-            font-size: 1.5rem;
-        }
-
-        .listing-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .listing-media {
-            height: 150px;
-            font-size: 2rem;
-        }
-
-        .pagination {
-            gap: 0.5rem;
-        }
-
-        .pagination a,
-        .pagination-info {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-    }
-</style>
-{% endblock %}
+{% block body_class %}content-page poetry-page{% endblock %}
 
 {% block content %}
-
-<section class="page-header">
-    <h1>شاعری</h1>
-</section>
-
-<section class="content-container">
-    {% if poems %}
-    <div class="listing-grid">
-        {% for poem in poems %}
-        <article class="listing-card">
-            <a href="{% url 'poetry_detail' poem.slug %}" class="listing-media">✍️</a>
-            <div class="listing-body">
-                <h2 class="listing-title"><a href="{% url 'poetry_detail' poem.slug %}">{{ poem.title }}</a></h2>
-                {% if poem.author %}
-                <p class="listing-excerpt">{{ poem.author.name }}</p>
-                {% endif %}
-                <a href="{% url 'poetry_detail' poem.slug %}" class="btn-outline">پڑھیں</a>
+<div class="page-shell">
+    <section class="page-hero page-fade">
+        <div class="page-hero-grid">
+            <div class="page-hero-copy centered-mobile">
+                <span class="page-kicker">Poetry archive</span>
+                <h1 class="page-title">Urdu Poetry Collection</h1>
+                <p class="page-subtitle">
+                    Explore ghazals, nazms, romantic verses, and reflective poetry in a clean reading space designed
+                    for both students and devoted readers of Urdu literature.
+                </p>
+                <div class="page-stats">
+                    <span class="stat-chip"><strong>{{ page_obj.paginator.count }}</strong> published poems</span>
+                    <span class="stat-chip">Search, filter, and browse by mood</span>
+                </div>
             </div>
-        </article>
+            <aside class="page-panel dark-panel page-fade delay-1">
+                <h2 class="panel-title">Featured Poetry</h2>
+                <p class="panel-copy">A hand-picked snapshot of popular verse to help readers start somewhere meaningful.</p>
+                <div class="sidebar-list">
+                    {% for poem in featured_poems %}
+                        <a href="{{ poem.get_absolute_url }}">
+                            <span class="sidebar-title urdu-copy">{{ poem.title }}</span>
+                            <span class="panel-copy">{{ poem.author.name }}</span>
+                        </a>
+                    {% empty %}
+                        <span class="panel-copy">Featured poetry will appear here when the library grows.</span>
+                    {% endfor %}
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <section class="filter-toolbar page-fade delay-1">
+        <form method="get" class="filter-grid compact">
+            <div class="field-group">
+                <label for="poetry-search">Search poetry</label>
+                <input id="poetry-search" type="search" name="search" value="{{ search_query }}" placeholder="Search title, verse, or author">
+            </div>
+            <div class="field-group">
+                <label for="poetry-sort-note">Current filter</label>
+                <input id="poetry-sort-note" type="text" value="{{ active_genre|default:'all'|title }}" disabled>
+            </div>
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-primary">Search Poetry</button>
+                <a href="{% url 'poetry_list' %}" class="btn btn-secondary">Reset</a>
+            </div>
+        </form>
+    </section>
+
+    <nav class="tab-row page-fade delay-1" aria-label="Poetry filters">
+        {% for tab in genre_tabs %}
+            <a
+                href="{% url 'poetry_list' %}?genre={{ tab.value }}{% if search_query %}&search={{ search_query|urlencode }}{% endif %}"
+                class="tab-pill{% if active_genre == tab.value or not active_genre and not tab.value %} is-active{% endif %}"
+            >
+                {{ tab.label }}
+            </a>
         {% endfor %}
-    </div>
+    </nav>
 
-    {% if is_paginated %}
-    <div class="pagination">
-        {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}">← پچھلا</a>
-        {% endif %}
-        
-        <span class="pagination-info">صفحہ {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
-        
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">اگلا →</a>
-        {% endif %}
-    </div>
-    {% endif %}
+    {% if poems %}
+        <section class="content-grid columns-3 page-fade delay-2">
+            {% for poem in poems %}
+                <article class="literary-card">
+                    <a href="{{ poem.get_absolute_url }}" class="literary-card-media" aria-label="Read {{ poem.title }}">
+                        <span class="media-glyph"><i class="bi bi-stars"></i></span>
+                    </a>
+                    <div class="literary-card-body">
+                        <div class="literary-badges">
+                            {% if poem.category %}
+                                <span class="literary-badge">{{ poem.category.name }}</span>
+                            {% endif %}
+                            <span class="meta-pill">{{ poem.created_at|date:"M d, Y" }}</span>
+                        </div>
+                        <h2 class="literary-title urdu">{{ poem.title }}</h2>
+                        <div class="meta-row">
+                            <span>{{ poem.author.name }}</span>
+                            <span>{{ poem.views_count }} views</span>
+                        </div>
+                        <p class="literary-copy urdu-copy">{{ poem.content|truncatechars:130 }}</p>
+                        <div class="action-row">
+                            <a href="{{ poem.get_absolute_url }}" class="btn btn-primary">Read More</a>
+                            <span class="aside-tag">{{ poem.likes_count }} likes</span>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </section>
 
+        {% if is_paginated %}
+            <div class="pagination-shell">
+                <div class="pagination-nav">
+                    {% if page_obj.has_previous %}
+                        <a class="page-link-pill" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query|urlencode }}{% endif %}{% if active_genre %}&genre={{ active_genre }}{% endif %}">Previous</a>
+                    {% endif %}
+                    <span class="page-link-pill current">{{ page_obj.number }}</span>
+                    {% if page_obj.has_next %}
+                        <a class="page-link-pill" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query|urlencode }}{% endif %}{% if active_genre %}&genre={{ active_genre }}{% endif %}">Next</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
     {% else %}
-    <div class="empty-state">
-        <div class="empty-state-icon">📚</div>
-        <h3>کوئی شاعری نہیں ملی</h3>
-        <p>براہ کرم بعد میں دوبارہ کوشش کریں</p>
-    </div>
+        <section class="empty-panel page-fade delay-2">
+            <div class="empty-icon"><i class="bi bi-feather"></i></div>
+            <h2 class="panel-title">No poetry matched your search</h2>
+            <p>Try a broader keyword or switch back to all poetry to continue exploring the collection.</p>
+            <a href="{% url 'poetry_list' %}" class="btn btn-primary">Browse All Poetry</a>
+        </section>
     {% endif %}
-</section>
-
+</div>
 {% endblock %}

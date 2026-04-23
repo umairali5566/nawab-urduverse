@@ -4,6 +4,7 @@ Novels Views for Nawab Urdu Academy
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, ListView
 
@@ -21,7 +22,36 @@ class NovelListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Novel.objects.filter(is_published=True).select_related('author', 'category')
+        queryset = Novel.objects.filter(is_published=True).select_related('author', 'category').annotate(
+            published_chapters=Count('chapters', filter=Q(chapters__is_published=True))
+        )
+
+        search = self.request.GET.get('search', '').strip()
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search) |
+                Q(content__icontains=search) |
+                Q(author__name__icontains=search)
+            )
+
+        sort = self.request.GET.get('sort', 'latest').strip().lower()
+        if sort == 'title':
+            queryset = queryset.order_by('title')
+        elif sort == 'chapters':
+            queryset = queryset.order_by('-published_chapters', '-created_at')
+        else:
+            queryset = queryset.order_by('-published_at', '-created_at')
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('search', '').strip()
+        context['sort_value'] = self.request.GET.get('sort', 'latest').strip().lower() or 'latest'
+        context['featured_novels'] = Novel.objects.filter(
+            is_published=True
+        ).select_related('author', 'category').order_by('-created_at')[:3]
+        return context
 
 
 class NovelDetailView(DetailView):

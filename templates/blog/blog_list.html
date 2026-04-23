@@ -1,394 +1,168 @@
 {% extends 'base.html' %}
-{% load static %}
 
-{% block title %}بلاگ - {{ SITE_NAME }}{% endblock %}
+{% block title %}Urdu Blog | {{ SITE_NAME }}{% endblock %}
+
+{% block body_class %}content-page blog-page{% endblock %}
 
 {% block content %}
+<div class="page-shell">
+    <section class="page-hero page-fade">
+        <div class="page-hero-grid">
+            <div class="page-hero-copy centered-mobile">
+                <span class="page-kicker">Essays and academy notes</span>
+                <h1 class="page-title">Urdu Blog</h1>
+                <p class="page-subtitle">
+                    Read literary essays, reflections, and academy articles in an editorial layout built for clarity,
+                    scanning, and deeper reading on both mobile and desktop.
+                </p>
+                <div class="page-stats">
+                    <span class="stat-chip"><strong>{{ page_obj.paginator.count }}</strong> published articles</span>
+                    <span class="stat-chip">Featured stories plus a focused sidebar</span>
+                </div>
+            </div>
+            <aside class="page-panel dark-panel page-fade delay-1">
+                <h2 class="panel-title">Recent topics</h2>
+                <p class="panel-copy">Editorial writing, literary commentary, and reading notes collected in one place.</p>
+                <div class="sidebar-list">
+                    {% for category in categories|slice:":3" %}
+                        <a href="{% url 'blog_list' %}?category={{ category.slug }}">
+                            <span class="sidebar-title">{{ category.name }}</span>
+                            <span class="panel-copy">Browse this category</span>
+                        </a>
+                    {% empty %}
+                        <span class="panel-copy">Categories will appear here when blog taxonomy is available.</span>
+                    {% endfor %}
+                </div>
+            </aside>
+        </div>
+    </section>
 
-<style>
-    .page-header {
-        padding: 3rem 1.5rem;
-        text-align: center;
-        background: linear-gradient(135deg, #f0f9ff 0%, #ecf9ff 100%);
-        border-bottom: 1px solid #e5e7eb;
-    }
+    <section class="filter-toolbar page-fade delay-1">
+        <form method="get" class="filter-grid">
+            <div class="field-group">
+                <label for="blog-search">Search articles</label>
+                <input id="blog-search" type="search" name="search" value="{{ request.GET.search }}" placeholder="Search title, topic, or author">
+            </div>
+            <div class="field-group">
+                <label for="blog-category">Category</label>
+                <select id="blog-category" name="category">
+                    <option value="">All categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.slug }}" {% if request.GET.category == category.slug %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="field-group">
+                <label for="blog-sort">Sort</label>
+                <select id="blog-sort" name="sort">
+                    <option value="latest" {% if request.GET.sort == 'latest' or not request.GET.sort %}selected{% endif %}>Latest</option>
+                    <option value="popular" {% if request.GET.sort == 'popular' %}selected{% endif %}>Popular</option>
+                    <option value="alphabetical" {% if request.GET.sort == 'alphabetical' %}selected{% endif %}>A-Z</option>
+                </select>
+            </div>
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-primary">Apply</button>
+                <a href="{% url 'blog_list' %}" class="btn btn-secondary">Reset</a>
+            </div>
+        </form>
+    </section>
 
-    .page-header h1 {
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 2.5rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin: 0;
-    }
-
-    .content-container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 2rem 1.5rem;
-    }
-
-    .search-filter {
-        margin-bottom: 2rem;
-        display: grid;
-        grid-template-columns: 1fr auto auto;
-        gap: 1rem;
-        padding: 1.5rem;
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(10px);
-        border-radius: 12px;
-        border: 1px solid rgba(14, 165, 233, 0.1);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-    }
-
-    .search-filter input,
-    .search-filter select {
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        padding: 0.75rem 1rem;
-        font-size: 1rem;
-        direction: rtl;
-        text-align: right;
-    }
-
-    .search-filter button {
-        border-radius: 8px;
-        padding: 0.75rem 1.5rem;
-        font-weight: 600;
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        color: white;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .search-filter button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 12px rgba(6, 182, 212, 0.3);
-    }
-
-    .listing-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-        gap: 2rem;
-        margin-bottom: 2rem;
-    }
-
-    .listing-card {
-        background: white;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        border: 1px solid #f1f5f9;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .listing-card:hover {
-        box-shadow: 0 12px 24px rgba(6, 182, 212, 0.15);
-        transform: translateY(-4px);
-    }
-
-    .listing-media {
-        display: block;
-        height: 200px;
-        overflow: hidden;
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 3rem;
-        transition: transform 0.3s ease;
-    }
-
-    .listing-media img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .listing-card:hover .listing-media {
-        transform: scale(1.05);
-    }
-
-    .listing-body {
-        padding: 1.5rem;
-    }
-
-    .listing-kicker {
-        display: flex;
-        gap: 0.75rem;
-        margin-bottom: 1rem;
-        flex-wrap: wrap;
-    }
-
-    .badge-soft {
-        display: inline-block;
-        padding: 0.35rem 0.75rem;
-        background: #f0f9ff;
-        color: #0ea5e9;
-        border-radius: 6px;
-        font-size: 0.85rem;
-        font-weight: 600;
-    }
-
-    .badge-date {
-        display: inline-block;
-        padding: 0.35rem 0.75rem;
-        background: #f1f5f9;
-        color: #64748b;
-        border-radius: 6px;
-        font-size: 0.85rem;
-        font-weight: 600;
-    }
-
-    .listing-title {
-        margin: 0 0 0.75rem 0;
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 1.25rem;
-        font-weight: 700;
-        line-height: 1.4;
-        direction: rtl;
-        text-align: right;
-    }
-
-    .listing-title a {
-        color: #1e293b;
-        text-decoration: none;
-        transition: color 0.3s;
-    }
-
-    .listing-title a:hover {
-        color: #0ea5e9;
-    }
-
-    .listing-excerpt {
-        margin: 0 0 1rem 0;
-        color: #64748b;
-        font-size: 0.95rem;
-        line-height: 1.6;
-        direction: rtl;
-        text-align: right;
-    }
-
-    .btn-outline {
-        display: inline-block;
-        padding: 0.65rem 1.5rem;
-        border: 2px solid #0ea5e9;
-        color: #0ea5e9;
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: 600;
-        transition: all 0.3s;
-        background: transparent;
-        cursor: pointer;
-    }
-
-    .btn-outline:hover {
-        background: #0ea5e9;
-        color: white;
-    }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-        margin-top: 3rem;
-    }
-
-    .pagination a {
-        padding: 0.75rem 1.5rem;
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        color: white;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s;
-    }
-
-    .pagination a:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.4);
-    }
-
-    .pagination-info {
-        color: #64748b;
-        font-weight: 600;
-        padding: 0.5rem 1rem;
-        background: #f1f5f9;
-        border-radius: 8px;
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 4rem 2rem;
-        background: white;
-        border-radius: 12px;
-        border: 1px solid #f1f5f9;
-    }
-
-    .empty-state-icon {
-        font-size: 4rem;
-        margin-bottom: 1rem;
-    }
-
-    .empty-state h3 {
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #1e293b;
-        margin: 1rem 0;
-    }
-
-    .empty-state p {
-        color: #64748b;
-        font-size: 1.1rem;
-        margin: 0.5rem 0 1.5rem 0;
-    }
-
-    .btn-primary {
-        display: inline-block;
-        padding: 0.75rem 2rem;
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        color: white;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s;
-        border: none;
-        cursor: pointer;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.4);
-    }
-
-    @media (max-width: 768px) {
-        .page-header {
-            padding: 2rem 1rem;
-        }
-
-        .page-header h1 {
-            font-size: 1.8rem;
-        }
-
-        .content-container {
-            padding: 1.5rem 1rem;
-        }
-
-        .search-filter {
-            grid-template-columns: 1fr;
-        }
-
-        .listing-grid {
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .listing-body {
-            padding: 1.25rem;
-        }
-
-        .listing-title {
-            font-size: 1.1rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .page-header h1 {
-            font-size: 1.5rem;
-        }
-
-        .listing-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .listing-media {
-            height: 150px;
-            font-size: 2rem;
-        }
-
-        .pagination {
-            gap: 0.5rem;
-        }
-
-        .pagination a,
-        .pagination-info {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-    }
-</style>
-
-<section class="page-header">
-    <h1>ادبی بلاگز</h1>
-</section>
-
-<section class="content-container">
-    <form method="get" class="search-filter">
-        <input type="search" name="search" value="{{ request.GET.search }}" placeholder="بلاگ یا ٹاپک کی تلاش...">
-        <select name="category">
-            <option value="">تمام زمرے</option>
-            {% for category in categories %}
-            <option value="{{ category.slug }}" {% if request.GET.category == category.slug %}selected{% endif %}>{{ category.name }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">🔍 تلاش</button>
-    </form>
+    {% if featured_posts %}
+        {% with featured=featured_posts.0 %}
+            <section class="content-panel page-fade delay-1" style="margin-bottom: 1.2rem;">
+                <div class="page-hero-grid">
+                    <div class="page-hero-copy">
+                        <span class="page-kicker">Featured article</span>
+                        <h2 class="page-title" style="font-size: clamp(2.1rem, 4vw, 3.1rem);">{{ featured.title }}</h2>
+                        <p class="page-subtitle">{{ featured.excerpt|default:featured.content|striptags|truncatechars:220 }}</p>
+                        <div class="page-stats">
+                            <span class="stat-chip">{{ featured.author.name }}</span>
+                            <span class="stat-chip">{{ featured.published_at|default:featured.created_at|date:"M d, Y" }}</span>
+                        </div>
+                        <div class="page-actions">
+                            <a href="{{ featured.get_absolute_url }}" class="btn btn-primary">Read Featured Post</a>
+                        </div>
+                    </div>
+                    <a href="{{ featured.get_absolute_url }}" class="literary-card-media" style="border-radius: 28px; min-height: 17rem;">
+                        {% if featured.featured_image %}
+                            <img src="{{ featured.featured_image.url }}" alt="{{ featured.title }}" loading="lazy">
+                        {% else %}
+                            <span class="media-glyph"><i class="bi bi-journal-richtext"></i></span>
+                        {% endif %}
+                    </a>
+                </div>
+            </section>
+        {% endwith %}
+    {% endif %}
 
     {% if posts %}
-    <div class="listing-grid">
-        {% for post in posts %}
-        <article class="listing-card">
-            <a href="{{ post.get_absolute_url }}" class="listing-media">
-                {% if post.featured_image %}
-                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" loading="lazy">
-                {% else %}
-                <span>📝</span>
-                {% endif %}
-            </a>
-            <div class="listing-body">
-                <div class="listing-kicker">
-                    <span class="badge-soft">⏱️ {{ post.reading_time|default:"5" }} منٹ</span>
-                    <span class="badge-date">📅 {{ post.published_at|default:post.created_at|date:"d M Y" }}</span>
-                </div>
-                <h2 class="listing-title">
-                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
-                </h2>
-                <p class="listing-excerpt">{{ post.excerpt|default:post.content|striptags|truncatechars:150 }}</p>
-                <a href="{{ post.get_absolute_url }}" class="btn-outline">پڑھیں →</a>
+        <section class="sidebar-layout page-fade delay-2">
+            <div class="content-grid columns-2">
+                {% for post in posts %}
+                    <article class="literary-card">
+                        <a href="{{ post.get_absolute_url }}" class="literary-card-media" aria-label="Read {{ post.title }}">
+                            {% if post.featured_image %}
+                                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" loading="lazy">
+                            {% else %}
+                                <span class="media-glyph"><i class="bi bi-pencil-square"></i></span>
+                            {% endif %}
+                        </a>
+                        <div class="literary-card-body">
+                            <div class="literary-badges">
+                                {% if post.category %}
+                                    <span class="literary-badge">{{ post.category.name }}</span>
+                                {% endif %}
+                                <span class="meta-pill">{{ post.published_at|default:post.created_at|date:"M d, Y" }}</span>
+                            </div>
+                            <h2 class="literary-title">{{ post.title }}</h2>
+                            <div class="meta-row">
+                                <span>{{ post.author.name }}</span>
+                                <span>{{ post.views_count }} reads</span>
+                            </div>
+                            <p class="literary-copy">{{ post.excerpt|default:post.content|striptags|truncatechars:160 }}</p>
+                            <div class="action-row">
+                                <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read More</a>
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
             </div>
-        </article>
-        {% endfor %}
-    </div>
 
-    {% if is_paginated %}
-    <div class="pagination">
-        {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">← پچھلا</a>
-        {% endif %}
-        
-        <span class="pagination-info">صفحہ {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
-        
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">اگلا →</a>
-        {% endif %}
-    </div>
-    {% endif %}
+            <aside class="sidebar-panel">
+                <h2 class="panel-title">Recent Posts</h2>
+                <div class="sidebar-list" style="margin-top: 1rem;">
+                    {% for post in popular_posts %}
+                        <a href="{{ post.get_absolute_url }}">
+                            <span class="sidebar-title">{{ post.title }}</span>
+                            <span class="panel-copy">{{ post.published_at|default:post.created_at|date:"M d, Y" }}</span>
+                        </a>
+                    {% empty %}
+                        <span class="panel-copy">Popular posts will appear here as readers engage with the blog.</span>
+                    {% endfor %}
+                </div>
+            </aside>
+        </section>
 
+        {% if is_paginated %}
+            <div class="pagination-shell">
+                <div class="pagination-nav">
+                    {% if page_obj.has_previous %}
+                        <a class="page-link-pill" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search|urlencode }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">Previous</a>
+                    {% endif %}
+                    <span class="page-link-pill current">{{ page_obj.number }}</span>
+                    {% if page_obj.has_next %}
+                        <a class="page-link-pill" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search|urlencode }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">Next</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
     {% else %}
-    <div class="empty-state">
-        <div class="empty-state-icon">📝</div>
-        <h3>کوئی بلاگ پوسٹ نہیں ملا</h3>
-        <p>براہ کرم دوبارہ تلاش کریں یا ہماری دیگر بلاگ پوسٹس دیکھیں</p>
-        <a href="/blog/" class="btn-primary">تمام بلاگز دیکھیں</a>
-    </div>
+        <section class="empty-panel page-fade delay-2">
+            <div class="empty-icon"><i class="bi bi-journal-text"></i></div>
+            <h2 class="panel-title">No blog posts matched your search</h2>
+            <p>Try a broader keyword or clear the current filters to explore the full article archive.</p>
+            <a href="{% url 'blog_list' %}" class="btn btn-primary">Browse All Blog Posts</a>
+        </section>
     {% endif %}
-</section>
-
+</div>
 {% endblock %}

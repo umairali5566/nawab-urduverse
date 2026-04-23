@@ -1,286 +1,150 @@
 {% extends 'base.html' %}
 
-{% block title %}اقتباسات - {{ SITE_NAME }}{% endblock %}
+{% block title %}Urdu Quotes | {{ SITE_NAME }}{% endblock %}
+
+{% block body_class %}content-page quotes-page{% endblock %}
 
 {% block content %}
+<div class="page-shell">
+    <section class="page-hero page-fade">
+        <div class="page-hero-grid">
+            <div class="page-hero-copy centered-mobile">
+                <span class="page-kicker">Reflections and wisdom</span>
+                <h1 class="page-title">Urdu Quotes</h1>
+                <p class="page-subtitle">
+                    Browse elegant Urdu quotes in a calm, minimal layout with category filters, cleaner typography, and
+                    quick engagement actions for readers who collect memorable lines.
+                </p>
+                <div class="page-stats">
+                    <span class="stat-chip"><strong>{{ page_obj.paginator.count }}</strong> quotes published</span>
+                    <span class="stat-chip">Like and share from the list view</span>
+                </div>
+            </div>
+            <aside class="page-panel dark-panel page-fade delay-1">
+                <h2 class="panel-title">Featured Quotes</h2>
+                <p class="panel-copy">A compact highlight reel of the platform's strongest short-form reflections.</p>
+                <div class="sidebar-list">
+                    {% for quote in featured_quotes|slice:":3" %}
+                        <a href="{{ quote.get_absolute_url }}">
+                            <span class="sidebar-title urdu-copy">{{ quote.text|truncatechars:90 }}</span>
+                            <span class="panel-copy">{{ quote.author.name }}</span>
+                        </a>
+                    {% empty %}
+                        <span class="panel-copy">Featured quotes will appear here once editors pin them.</span>
+                    {% endfor %}
+                </div>
+            </aside>
+        </div>
+    </section>
 
-<style>
-    .page-header {
-        padding: 3rem 1.5rem;
-        text-align: center;
-        background: linear-gradient(135deg, #f0f9ff 0%, #ecf9ff 100%);
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    .page-header h1 {
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 2.5rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin: 0;
-    }
-
-    .content-container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 2rem 1.5rem;
-    }
-
-    .search-filter {
-        margin-bottom: 2rem;
-        display: grid;
-        grid-template-columns: 1fr auto auto;
-        gap: 1rem;
-        padding: 1.5rem;
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(10px);
-        border-radius: 12px;
-        border: 1px solid rgba(14, 165, 233, 0.1);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-    }
-
-    .search-filter input,
-    .search-filter select {
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        padding: 0.75rem 1rem;
-        font-size: 1rem;
-        direction: rtl;
-        text-align: right;
-    }
-
-    .search-filter button {
-        border-radius: 8px;
-        padding: 0.75rem 1.5rem;
-        font-weight: 600;
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        color: white;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .search-filter button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 12px rgba(6, 182, 212, 0.3);
-    }
-
-    .quotes-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 2rem;
-        margin-bottom: 2rem;
-    }
-
-    .quote-card {
-        background: white;
-        border-radius: 12px;
-        padding: 2rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        border: 1px solid #f1f5f9;
-        border-right: 4px solid #0ea5e9;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .quote-card:hover {
-        box-shadow: 0 12px 24px rgba(6, 182, 212, 0.15);
-        transform: translateY(-4px);
-    }
-
-    .quote-text {
-        margin: 0 0 1.5rem 0;
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 1.1rem;
-        color: #1e293b;
-        line-height: 1.7;
-        font-style: italic;
-        font-weight: 500;
-        direction: rtl;
-        text-align: right;
-    }
-
-    .quote-author {
-        margin: 0;
-        color: #64748b;
-        font-size: 0.95rem;
-        text-align: right;
-        direction: rtl;
-    }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-        margin-top: 3rem;
-    }
-
-    .pagination a {
-        padding: 0.75rem 1.5rem;
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        color: white;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s;
-    }
-
-    .pagination a:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.4);
-    }
-
-    .pagination-info {
-        color: #64748b;
-        font-weight: 600;
-        padding: 0.5rem 1rem;
-        background: #f1f5f9;
-        border-radius: 8px;
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 4rem 2rem;
-        background: white;
-        border-radius: 12px;
-        border: 1px solid #f1f5f9;
-    }
-
-    .empty-state-icon {
-        font-size: 4rem;
-        margin-bottom: 1rem;
-    }
-
-    .empty-state h3 {
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #1e293b;
-        margin: 1rem 0;
-    }
-
-    .empty-state p {
-        color: #64748b;
-        font-size: 1.1rem;
-        margin: 0.5rem 0 1.5rem 0;
-    }
-
-    .btn-primary {
-        display: inline-block;
-        padding: 0.75rem 2rem;
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        color: white;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s;
-        border: none;
-        cursor: pointer;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(6, 182, 212, 0.4);
-    }
-
-    @media (max-width: 768px) {
-        .page-header {
-            padding: 2rem 1rem;
-        }
-
-        .page-header h1 {
-            font-size: 1.8rem;
-        }
-
-        .content-container {
-            padding: 1.5rem 1rem;
-        }
-
-        .search-filter {
-            grid-template-columns: 1fr;
-        }
-
-        .quotes-grid {
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .page-header h1 {
-            font-size: 1.5rem;
-        }
-
-        .quotes-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .quote-text {
-            font-size: 1rem;
-        }
-
-        .pagination {
-            gap: 0.5rem;
-        }
-
-        .pagination a,
-        .pagination-info {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-    }
-</style>
-
-<section class="page-header">
-    <h1>مقبول اقتباسات</h1>
-</section>
-
-<section class="content-container">
-    <form method="get" class="search-filter">
-        <input type="search" name="search" value="{{ request.GET.search }}" placeholder="اقتباس یا مصنف کی تلاش...">
-        <select name="type">
-            <option value="">تمام اقسام</option>
-            {% for value, label in quote_types %}
-            <option value="{{ value }}" {% if request.GET.type == value %}selected{% endif %}>{{ label }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">🔍 تلاش</button>
-    </form>
+    <section class="filter-toolbar page-fade delay-1">
+        <form method="get" class="filter-grid">
+            <div class="field-group">
+                <label for="quote-search">Search quotes</label>
+                <input id="quote-search" type="search" name="search" value="{{ request.GET.search }}" placeholder="Search quote text or author">
+            </div>
+            <div class="field-group">
+                <label for="quote-type">Type</label>
+                <select id="quote-type" name="type">
+                    <option value="">All types</option>
+                    {% for value, label in quote_types %}
+                        <option value="{{ value }}" {% if request.GET.type == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="field-group">
+                <label for="quote-sort">Sort</label>
+                <select id="quote-sort" name="sort">
+                    <option value="latest" {% if request.GET.sort == 'latest' or not request.GET.sort %}selected{% endif %}>Latest</option>
+                    <option value="popular" {% if request.GET.sort == 'popular' %}selected{% endif %}>Popular</option>
+                    <option value="likes" {% if request.GET.sort == 'likes' %}selected{% endif %}>Most liked</option>
+                </select>
+            </div>
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-primary">Apply Filters</button>
+                <a href="{% url 'quote_list' %}" class="btn btn-secondary">Reset</a>
+            </div>
+        </form>
+    </section>
 
     {% if quotes %}
-    <div class="quotes-grid">
-        {% for quote in quotes %}
-        <div class="quote-card">
-            <p class="quote-text">{{ quote.text }}</p>
-            <p class="quote-author">— {{ quote.author|default:"نامعلوم" }}</p>
-        </div>
-        {% endfor %}
-    </div>
+        <section class="quote-grid columns-3 page-fade delay-2">
+            {% for quote in quotes %}
+                <article class="quote-card">
+                    <div class="literary-badges">
+                        <span class="literary-badge">{{ quote.get_quote_type_display }}</span>
+                        {% if quote.category %}
+                            <span class="meta-pill">{{ quote.category.name }}</span>
+                        {% endif %}
+                    </div>
+                    <p class="quote-text urdu">{{ quote.text }}</p>
+                    <div class="quote-meta">- {{ quote.author|default:"Unknown" }}</div>
+                    <div class="quote-actions">
+                        <div class="action-row">
+                            <button type="button" class="icon-button js-quote-action" data-url="{% url 'like_quote' quote.slug %}" data-target="likes-{{ quote.id }}">
+                                <i class="bi bi-heart"></i>
+                                <span id="likes-{{ quote.id }}">{{ quote.likes_count }}</span>
+                            </button>
+                            <button type="button" class="icon-button js-quote-action" data-url="{% url 'share_quote' quote.slug %}" data-target="shares-{{ quote.id }}" data-field="shares_count">
+                                <i class="bi bi-share"></i>
+                                <span id="shares-{{ quote.id }}">{{ quote.shares_count }}</span>
+                            </button>
+                        </div>
+                        <a href="{{ quote.get_absolute_url }}" class="btn btn-secondary">Read Detail</a>
+                    </div>
+                </article>
+            {% endfor %}
+        </section>
 
-    {% if is_paginated %}
-    <div class="pagination">
-        {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">← پچھلا</a>
+        {% if is_paginated %}
+            <div class="pagination-shell">
+                <div class="pagination-nav">
+                    {% if page_obj.has_previous %}
+                        <a class="page-link-pill" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search|urlencode }}{% endif %}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">Previous</a>
+                    {% endif %}
+                    <span class="page-link-pill current">{{ page_obj.number }}</span>
+                    {% if page_obj.has_next %}
+                        <a class="page-link-pill" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search|urlencode }}{% endif %}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">Next</a>
+                    {% endif %}
+                </div>
+            </div>
         {% endif %}
-        <span class="pagination-info">صفحہ {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">اگلا →</a>
-        {% endif %}
-    </div>
-    {% endif %}
-
     {% else %}
-    <div class="empty-state">
-        <div class="empty-state-icon">💬</div>
-        <h3>کوئی اقتباس نہیں ملا</h3>
-        <p>براہ کرم دوبارہ تلاش کریں یا ہماری دیگر اقتباسات دیکھیں</p>
-        <a href="/quotes/" class="btn-primary">تمام اقتباسات دیکھیں</a>
-    </div>
+        <section class="empty-panel page-fade delay-2">
+            <div class="empty-icon"><i class="bi bi-chat-quote"></i></div>
+            <h2 class="panel-title">No quotes were found</h2>
+            <p>Adjust your search or filters to browse a wider set of reflections and sayings.</p>
+            <a href="{% url 'quote_list' %}" class="btn btn-primary">Browse All Quotes</a>
+        </section>
     {% endif %}
-</section>
+</div>
+{% endblock %}
 
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.js-quote-action').forEach((button) => {
+        button.addEventListener('click', async function () {
+            const url = this.dataset.url;
+            const targetId = this.dataset.target;
+            const field = this.dataset.field || 'likes_count';
+            try {
+                const response = await fetch(url, { method: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                const payload = await response.json();
+                const target = document.getElementById(targetId);
+                if (!target || !payload.success) {
+                    return;
+                }
+                if (field === 'shares_count') {
+                    target.textContent = payload.shares_count;
+                } else {
+                    target.textContent = payload.likes_count;
+                }
+            } catch (error) {
+                console.error('Quote action failed', error);
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

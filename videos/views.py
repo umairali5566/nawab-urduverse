@@ -5,6 +5,7 @@ Videos Views for Nawab Urdu Academy
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from django.db.models import Q
+from django.db.utils import OperationalError, ProgrammingError
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -22,7 +23,10 @@ class VideoListView(ListView):
     paginate_by = 12
     
     def get_queryset(self):
-        queryset = Video.objects.filter(is_published=True).select_related('author')
+        try:
+            queryset = Video.objects.filter(is_published=True).select_related('author', 'category')
+        except (OperationalError, ProgrammingError):
+            return Video.objects.none()
         
         # Filter by type
         video_type = self.request.GET.get('type')
@@ -51,16 +55,21 @@ class VideoListView(ListView):
         elif sort == 'popular':
             queryset = queryset.order_by('-views_count')
         
-        return queryset.distinct()
+        try:
+            queryset = queryset.distinct()
+            queryset.exists()
+            return queryset
+        except (OperationalError, ProgrammingError):
+            return Video.objects.none()
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
             context['video_types'] = Video.VIDEO_TYPES
             context['categories'] = Category.objects.filter(category_type='video', is_active=True)
-            context['featured_videos'] = Video.objects.filter(is_featured=True, is_published=True).select_related('author')[:4]
-            context['poetry_videos'] = Video.objects.filter(video_type='poetry', is_published=True).select_related('author')[:6]
-            context['story_videos'] = Video.objects.filter(video_type='story', is_published=True).select_related('author')[:6]
+            context['featured_videos'] = list(Video.objects.filter(is_featured=True, is_published=True).select_related('author')[:4])
+            context['poetry_videos'] = list(Video.objects.filter(video_type='poetry', is_published=True).select_related('author')[:6])
+            context['story_videos'] = list(Video.objects.filter(video_type='story', is_published=True).select_related('author')[:6])
         except Exception as e:
             # Log error in production but don't crash
             import logging

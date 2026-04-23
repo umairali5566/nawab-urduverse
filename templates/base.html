@@ -14,6 +14,9 @@
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/premium.css' %}">
+    <style>
+        {% include 'core/global_brand_overrides.html' %}
+    </style>
 
     {% block extra_css %}{% endblock %}
 </head>
@@ -21,13 +24,13 @@
     <nav class="navbar">
         <div class="navbar-container">
             <div class="navbar-brand">
-                <a href="{% url 'home' %}" class="logo-link" aria-label="Urdu Academy home">
+                <a href="{% url 'home' %}" class="logo-link" aria-label="Nawab Urdu Academy home">
                     {% if logo and logo.image %}
-                        <img src="{{ logo.image.url }}" alt="{{ logo.alt_text|default:'Urdu Academy' }}" class="logo-image">
+                        <img src="{{ logo.image.url }}" alt="{{ logo.alt_text|default:'Nawab Urdu Academy' }}" class="logo-image">
                     {% endif %}
                     <span class="logo-copy">
                         <span class="logo-overline">Premium Literature Platform</span>
-                        <span class="logo-text">Urdu Academy</span>
+                        <span class="logo-text">Nawab Urdu Academy</span>
                     </span>
                 </a>
             </div>
@@ -133,7 +136,6 @@
             <a href="{% url 'poetry_list' %}" class="mobile-menu-link">Poetry</a>
             <a href="{% url 'novel_list' %}" class="mobile-menu-link">Novels</a>
             <a href="{% url 'quote_list' %}" class="mobile-menu-link">Quotes</a>
-            <a href="{% url 'story_list' %}" class="mobile-menu-link">Stories</a>
             <a href="{% url 'video_list' %}" class="mobile-menu-link">Videos</a>
             <a href="{% url 'blog_list' %}" class="mobile-menu-link">Blog</a>
             <a href="{% url 'contact' %}" class="mobile-menu-link">Contact</a>
@@ -182,7 +184,7 @@
     <footer>
         <div class="footer-container">
             <div class="footer-section">
-                <h4>Urdu Academy</h4>
+                <h4>Nawab Urdu Academy</h4>
                 <p>A refined home for Urdu poetry, novels, reflective writing, and literary learning.</p>
             </div>
 
@@ -212,7 +214,7 @@
         </div>
 
         <div class="footer-bottom">
-            <p>&copy; {% now "Y" %} Urdu Academy. All rights reserved.</p>
+            <p>&copy; {% now "Y" %} Nawab Urdu Academy. All rights reserved.</p>
         </div>
     </footer>
 

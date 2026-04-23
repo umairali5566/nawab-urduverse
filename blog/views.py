@@ -5,6 +5,7 @@ Blog Views for Nawab Urdu Academy
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.db.models import Q
+from django.db.utils import OperationalError, ProgrammingError
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -22,7 +23,10 @@ class BlogListView(ListView):
     paginate_by = 12
     
     def get_queryset(self):
-        queryset = BlogPost.objects.filter(is_published=True).select_related('author')
+        try:
+            queryset = BlogPost.objects.filter(is_published=True).select_related('author', 'category')
+        except (OperationalError, ProgrammingError):
+            return BlogPost.objects.none()
         
         # Filter by category
         category = self.request.GET.get('category')
@@ -47,14 +51,19 @@ class BlogListView(ListView):
         elif sort == 'alphabetical':
             queryset = queryset.order_by('title')
         
-        return queryset.distinct()
+        try:
+            queryset = queryset.distinct()
+            queryset.exists()
+            return queryset
+        except (OperationalError, ProgrammingError):
+            return BlogPost.objects.none()
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
             context['categories'] = Category.objects.filter(category_type='blog', is_active=True)
-            context['featured_posts'] = BlogPost.objects.filter(is_featured=True, is_published=True).select_related('author')[:4]
-            context['popular_posts'] = BlogPost.objects.filter(is_published=True).select_related('author').order_by('-views_count')[:6]
+            context['featured_posts'] = list(BlogPost.objects.filter(is_featured=True, is_published=True).select_related('author')[:4])
+            context['popular_posts'] = list(BlogPost.objects.filter(is_published=True).select_related('author').order_by('-views_count')[:6])
         except Exception as e:
             # Log error in production but don't crash
             import logging

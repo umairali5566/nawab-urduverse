@@ -5,6 +5,7 @@ Quotes Views for Nawab Urdu Academy
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from django.db.models import Q
+from django.db.utils import OperationalError, ProgrammingError
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -22,7 +23,10 @@ class QuoteListView(ListView):
     paginate_by = 20
     
     def get_queryset(self):
-        queryset = Quote.objects.filter(is_published=True).select_related('author').prefetch_related('categories')
+        try:
+            queryset = Quote.objects.filter(is_published=True).select_related('author', 'category').prefetch_related('categories')
+        except (OperationalError, ProgrammingError):
+            return Quote.objects.none()
         
         # Filter by type
         quote_type = self.request.GET.get('type')
@@ -51,15 +55,26 @@ class QuoteListView(ListView):
         elif sort == 'likes':
             queryset = queryset.order_by('-likes_count')
         
-        return queryset.distinct()
+        try:
+            queryset = queryset.distinct()
+            queryset.exists()
+            return queryset
+        except (OperationalError, ProgrammingError):
+            return Quote.objects.none()
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['quote_types'] = Quote.QUOTE_TYPES
-        context['categories'] = Category.objects.filter(category_type='quote', is_active=True)
-        context['featured_quotes'] = Quote.objects.filter(is_featured=True, is_published=True).select_related('author')[:6]
-        context['islamic_quotes'] = Quote.objects.filter(quote_type='islamic', is_published=True).select_related('author')[:6]
-        context['motivational_quotes'] = Quote.objects.filter(quote_type='motivational', is_published=True).select_related('author')[:6]
+        try:
+            context['categories'] = Category.objects.filter(category_type='quote', is_active=True)
+            context['featured_quotes'] = list(Quote.objects.filter(is_featured=True, is_published=True).select_related('author')[:6])
+            context['islamic_quotes'] = list(Quote.objects.filter(quote_type='islamic', is_published=True).select_related('author')[:6])
+            context['motivational_quotes'] = list(Quote.objects.filter(quote_type='motivational', is_published=True).select_related('author')[:6])
+        except (OperationalError, ProgrammingError):
+            context['categories'] = Category.objects.none()
+            context['featured_quotes'] = []
+            context['islamic_quotes'] = []
+            context['motivational_quotes'] = []
         context.update(
             build_seo_context(
                 self.request,
