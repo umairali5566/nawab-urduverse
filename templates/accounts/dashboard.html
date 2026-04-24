@@ -81,6 +81,25 @@
             margin-top: 1.5rem;
         }
     }
+
+    @media (max-width: 767px) {
+        .dashboard-page .page-header .d-flex,
+        .dashboard-page .section-header,
+        .dashboard-page .list-group-item {
+            flex-direction: column;
+            align-items: stretch !important;
+        }
+
+        .dashboard-page .section-header .btn,
+        .dashboard-page .page-header .btn {
+            width: 100%;
+        }
+
+        .dashboard-page .dashboard-summary-card,
+        .dashboard-page .card.glass-card {
+            padding: 1rem;
+        }
+    }
 </style>
 {% endblock %}
 

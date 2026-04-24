@@ -22,7 +22,9 @@
         <header class="blog-header">
             <h1 class="blog-title">{{ post.title }}</h1>
             <div class="blog-meta">
+                {% if post.author %}
                 <span class="blog-author">تحریر: {{ post.author.name }}</span>
+                {% endif %}
                 {% if post.category %}
                 <span class="blog-category">{{ post.category.name }}</span>
                 {% endif %}
@@ -58,9 +60,10 @@
             <a href="{% url 'blog_list' %}" class="btn btn-outline">بلاگ پر واپس</a>
             {% if post.author %}
             <a href="#" class="btn btn-outline">{{ post.author.name }} کی مزید تحریریں</a>
-        {% endif %}
-    </div>
-</section>
+            {% endif %}
+        </div>
+    </article>
+</div>
 {% endblock %}
 
 {% block extra_css %}
@@ -139,6 +142,7 @@
     line-height: 1.8;
     color: var(--text-primary);
     margin: 2rem 0;
+    word-break: break-word;
 }
 
 .blog-actions {
@@ -186,6 +190,52 @@
     .blog-meta {
         flex-direction: column;
         gap: 0.5rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .reader-container {
+        margin: 2.75rem auto;
+        padding: 0 16px;
+    }
+
+    .blog-card {
+        padding: 2.25rem 2rem;
+    }
+
+    .blog-title {
+        font-size: 2.15rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .reader-container {
+        padding: 0 10px;
+    }
+
+    .blog-card {
+        padding: 1.2rem 1rem;
+        border-radius: 14px;
+    }
+
+    .blog-header {
+        margin-bottom: 1.75rem;
+        padding-bottom: 1.4rem;
+    }
+
+    .blog-title {
+        font-size: 1.55rem;
+        line-height: 1.35;
+    }
+
+    .blog-content {
+        font-size: 15px;
+        line-height: 1.75;
+    }
+
+    .blog-actions .btn,
+    .blog-footer .btn {
+        width: 100%;
     }
 }
 </style>

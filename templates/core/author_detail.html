@@ -9,9 +9,9 @@
     .author-profile {
         direction: rtl;
         text-align: right;
-        max-width: 1200px;
+        width: min(1180px, calc(100% - 2rem));
         margin: 0 auto;
-        padding: 2rem 1rem;
+        padding: 2rem 0;
     }
 
     .author-header {
@@ -111,6 +111,7 @@
         padding: 1rem 0;
         border-bottom: 1px solid #f1f5f9;
         transition: background-color 0.2s ease;
+        overflow-wrap: anywhere;
     }
 
     .content-item:hover {
@@ -147,9 +148,25 @@
         font-style: italic;
     }
 
+    @media (max-width: 992px) {
+        .author-header {
+            padding: 2.4rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .author-name {
+            font-size: 2.4rem;
+        }
+
+        .section-card {
+            padding: 1.6rem;
+        }
+    }
+
     @media (max-width: 768px) {
         .author-profile {
-            padding: 1rem 0.5rem;
+            width: min(100% - 1.1rem, 1180px);
+            padding: 1rem 0;
         }
 
         .author-header {
@@ -187,8 +204,26 @@
     }
 
     @media (max-width: 480px) {
+        .author-profile {
+            width: min(100% - 0.8rem, 1180px);
+        }
+
+        .author-header {
+            padding: 1.35rem 0.9rem;
+            border-radius: 14px;
+        }
+
+        .author-name {
+            font-size: 1.6rem;
+        }
+
+        .section-card {
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
         .content-stats {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr;
         }
 
         .stat-item {

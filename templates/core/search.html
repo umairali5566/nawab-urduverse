@@ -28,9 +28,9 @@
     }
 
     .search-container {
-        max-width: 800px;
+        width: min(800px, calc(100% - 2rem));
         margin: 0 auto;
-        padding: 2rem 1.5rem;
+        padding: 2rem 0;
     }
 
     .search-shell-page {
@@ -248,13 +248,28 @@
     }
 
     .section-panel {
-        padding: 2rem 1.5rem;
-        max-width: 1400px;
+        width: min(1180px, calc(100% - 2rem));
+        padding: 2rem 0;
         margin: 0 auto;
     }
 
     .section-panel-header {
         margin-bottom: 2rem;
+    }
+
+    @media (max-width: 992px) {
+        .search-header {
+            padding: 2.5rem 1.25rem;
+        }
+
+        .section-panel,
+        .search-container {
+            width: min(100% - 1.2rem, 1180px);
+        }
+
+        .search-shell-page {
+            padding: 1.25rem;
+        }
     }
 
     @media (max-width: 768px) {
@@ -272,6 +287,51 @@
 
         .filter-chip-row {
             justify-content: flex-start;
+        }
+
+        .search-container,
+        .section-panel {
+            padding: 1.4rem 0;
+        }
+
+        .empty-state-card,
+        .quote-card,
+        .search-card {
+            padding: 1.25rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .search-container,
+        .section-panel {
+            width: min(100% - 0.8rem, 1180px);
+        }
+
+        .search-header {
+            padding: 2rem 0.9rem;
+        }
+
+        .search-header h1,
+        .results-header h2 {
+            font-size: 1.35rem;
+        }
+
+        .search-shell-page {
+            padding: 1rem 0.85rem;
+            border-radius: 10px;
+        }
+
+        .filter-chip {
+            width: 100%;
+        }
+
+        .filter-chip span {
+            width: 100%;
+            text-align: center;
+        }
+
+        .quote-card-text {
+            font-size: 1rem;
         }
     }
 </style>
