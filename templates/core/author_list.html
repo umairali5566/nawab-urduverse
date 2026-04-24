@@ -12,6 +12,36 @@
 {% block twitter_description %}Browse all authors and poets on {{ SITE_NAME }}. Read their biographies and works.{% endblock %}
 {% block twitter_image %}{% endblock %}
 
+{% block body_class %}author-list-page{% endblock %}
+
+{% block extra_css %}
+<style>
+    .author-list-page .img-avatar {
+        width: 112px;
+        height: 112px;
+        object-fit: cover;
+    }
+
+    .author-list-page .card .card-body {
+        padding-top: 1rem;
+    }
+
+    @media (max-width: 991px) {
+        .author-list-page .img-avatar {
+            width: 96px;
+            height: 96px;
+        }
+    }
+
+    @media (max-width: 575px) {
+        .author-list-page .img-avatar {
+            width: 80px;
+            height: 80px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <section class="page-header py-4 bg-light">
     <div class="container">

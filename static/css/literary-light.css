@@ -865,6 +865,7 @@ body.novel-categories-page .card {
 .detail-main-card,
 .detail-side-card {
     overflow: hidden;
+    min-width: 0;
 }
 
 .detail-main-card {
@@ -961,6 +962,7 @@ body.novel-categories-page .card {
     flex-wrap: wrap;
     gap: 0.65rem;
     align-items: center;
+    min-width: 0;
 }
 
 .reader-tool-btn,
@@ -1039,6 +1041,7 @@ body.novel-categories-page .card {
     font-size: clamp(1.3rem, 2vw, 1.62rem);
     line-height: 2.35;
     text-align: center;
+    overflow-wrap: anywhere;
 }
 
 .novel-reader .reader-content,
@@ -1158,11 +1161,73 @@ body.novel-categories-page .footer-section a {
     color: rgba(31, 41, 55, 0.75);
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1100px) {
+    body.poetry-page .navbar-container,
+    body.novels-page .navbar-container,
+    body.quotes-page .navbar-container,
+    body.author-poetry-page .navbar-container,
+    body.novel-chapter-page .navbar-container,
+    body.poetry-taxonomy-page .navbar-container,
+    body.quote-type-page .navbar-container,
+    body.poetry-collection-page .navbar-container,
+    body.quote-collection-page .navbar-container,
+    body.novel-categories-page .navbar-container {
+        gap: 0.75rem;
+    }
+
+    body.poetry-page .nav-menu,
+    body.novels-page .nav-menu,
+    body.quotes-page .nav-menu,
+    body.author-poetry-page .nav-menu,
+    body.novel-chapter-page .nav-menu,
+    body.poetry-taxonomy-page .nav-menu,
+    body.quote-type-page .nav-menu,
+    body.poetry-collection-page .nav-menu,
+    body.quote-collection-page .nav-menu,
+    body.novel-categories-page .nav-menu,
+    body.poetry-page .nav-auth,
+    body.novels-page .nav-auth,
+    body.quotes-page .nav-auth,
+    body.author-poetry-page .nav-auth,
+    body.novel-chapter-page .nav-auth,
+    body.poetry-taxonomy-page .nav-auth,
+    body.quote-type-page .nav-auth,
+    body.poetry-collection-page .nav-auth,
+    body.quote-collection-page .nav-auth,
+    body.novel-categories-page .nav-auth {
+        display: none;
+    }
+
+    body.poetry-page .menu-toggle,
+    body.novels-page .menu-toggle,
+    body.quotes-page .menu-toggle,
+    body.author-poetry-page .menu-toggle,
+    body.novel-chapter-page .menu-toggle,
+    body.poetry-taxonomy-page .menu-toggle,
+    body.quote-type-page .menu-toggle,
+    body.poetry-collection-page .menu-toggle,
+    body.quote-collection-page .menu-toggle,
+    body.novel-categories-page .menu-toggle {
+        display: flex !important;
+        margin-left: auto;
+    }
+
+    body.poetry-page .logo-overline,
+    body.novels-page .logo-overline,
+    body.quotes-page .logo-overline,
+    body.author-poetry-page .logo-overline,
+    body.novel-chapter-page .logo-overline,
+    body.poetry-taxonomy-page .logo-overline,
+    body.quote-type-page .logo-overline,
+    body.poetry-collection-page .logo-overline,
+    body.quote-collection-page .logo-overline,
+    body.novel-categories-page .logo-overline {
+        display: none;
+    }
+
     .page-hero-grid,
     .detail-hero-grid,
-    .detail-layout,
-    .detail-layout .detail-grid,
+    .detail-grid,
     .collection-hero-grid,
     .author-hero-grid {
         grid-template-columns: 1fr;
@@ -1177,16 +1242,54 @@ body.novel-categories-page .footer-section a {
 
     .filter-grid,
     .filter-grid.compact {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .detail-side-card {
         position: static;
         top: auto;
     }
+}
+
+@media (max-width: 991px) {
+    .page-hero,
+    .author-hero,
+    .page-header-soft,
+    .collection-hero,
+    .detail-hero-card,
+    .detail-main-card,
+    .detail-side-card,
+    .page-panel,
+    .section-panel,
+    .filter-toolbar,
+    .empty-panel {
+        border-radius: 24px;
+    }
 
     .detail-highlight-grid {
         grid-template-columns: 1fr 1fr;
+    }
+
+    .reader-toolbar,
+    .detail-reader-toolbar {
+        align-items: stretch;
+    }
+
+    .reader-toolset {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .reader-tool-btn,
+    .font-control {
+        max-width: 100%;
+    }
+
+    .reader-content,
+    .quote-reader-text,
+    .detail-urdu-copy {
+        font-size: 1.25rem;
+        line-height: 2.2;
     }
 }
 
@@ -1194,6 +1297,45 @@ body.novel-categories-page .footer-section a {
     .page-shell,
     .detail-layout {
         width: min(100% - 20px, 1180px);
+    }
+
+    body.poetry-page .navbar-container,
+    body.novels-page .navbar-container,
+    body.quotes-page .navbar-container,
+    body.author-poetry-page .navbar-container,
+    body.novel-chapter-page .navbar-container,
+    body.poetry-taxonomy-page .navbar-container,
+    body.quote-type-page .navbar-container,
+    body.poetry-collection-page .navbar-container,
+    body.quote-collection-page .navbar-container,
+    body.novel-categories-page .navbar-container {
+        padding-block: 0.75rem;
+    }
+
+    body.poetry-page .logo-text,
+    body.novels-page .logo-text,
+    body.quotes-page .logo-text,
+    body.author-poetry-page .logo-text,
+    body.novel-chapter-page .logo-text,
+    body.poetry-taxonomy-page .logo-text,
+    body.quote-type-page .logo-text,
+    body.poetry-collection-page .logo-text,
+    body.quote-collection-page .logo-text,
+    body.novel-categories-page .logo-text {
+        font-size: 1.15rem;
+    }
+
+    body.poetry-page .logo-image,
+    body.novels-page .logo-image,
+    body.quotes-page .logo-image,
+    body.author-poetry-page .logo-image,
+    body.novel-chapter-page .logo-image,
+    body.poetry-taxonomy-page .logo-image,
+    body.quote-type-page .logo-image,
+    body.poetry-collection-page .logo-image,
+    body.quote-collection-page .logo-image,
+    body.novel-categories-page .logo-image {
+        height: 34px;
     }
 
     .content-grid.columns-3,
@@ -1211,6 +1353,26 @@ body.novel-categories-page .footer-section a {
         font-size: 2.2rem;
     }
 
+    .page-hero,
+    .author-hero,
+    .page-header-soft,
+    .collection-hero,
+    .detail-hero-card,
+    .page-panel,
+    .section-panel,
+    .filter-toolbar,
+    .empty-panel,
+    .empty-state-card {
+        padding: 1rem;
+        border-radius: 20px;
+    }
+
+    .detail-main-card,
+    .detail-side-card {
+        padding: 1rem;
+        border-radius: 20px;
+    }
+
     .reader-toolbar,
     .detail-reader-toolbar,
     .page-stats,
@@ -1225,6 +1387,18 @@ body.novel-categories-page .footer-section a {
     .tab-row,
     .tab-nav {
         justify-content: stretch;
+    }
+
+    .page-kicker,
+    .eyebrow,
+    .detail-kicker,
+    .stat-chip,
+    .badge-soft,
+    .meta-pill,
+    .detail-meta-pill {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
     }
 
     .reader-tool-btn,
@@ -1252,5 +1426,49 @@ body.novel-categories-page .footer-section a {
 
     .detail-highlight-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .page-shell,
+    .detail-layout,
+    .section-stack {
+        width: min(100% - 16px, 1180px);
+    }
+
+    .page-title,
+    .detail-title,
+    .section-title-urdu,
+    .author-hero-title {
+        font-size: 1.85rem;
+        line-height: 1.25;
+    }
+
+    .quote-text,
+    .quote-reader-text,
+    .reader-content,
+    .detail-urdu-copy {
+        font-size: 1.05rem;
+        line-height: 2.05;
+    }
+
+    .literary-card-body,
+    .quote-card,
+    .soft-card-body,
+    .listing-body,
+    .reader-card {
+        padding: 1rem;
+    }
+
+    .literary-card-media,
+    .collection-cover,
+    .soft-card-media {
+        min-height: 136px;
+    }
+
+    .media-glyph {
+        width: 62px;
+        height: 62px;
+        font-size: 1.5rem;
     }
 }
