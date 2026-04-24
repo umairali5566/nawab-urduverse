@@ -9,8 +9,8 @@
             <form method="post" enctype="multipart/form-data" class="row g-3">
                 {% csrf_token %}
                 <div class="col-md-6">
-                    <label class="form-label">Author *</label>
-                    <input type="text" name="author" class="form-control" required>
+                    <label class="form-label">Author (optional)</label>
+                    <input type="text" name="author" class="form-control">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Quote Type</label>

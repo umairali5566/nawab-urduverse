@@ -2,13 +2,26 @@
 Blog Admin Configuration for Nawab Urdu Academy
 """
 
+from django import forms
 from django.contrib import admin
 
 from .models import BlogCategory, BlogPost
 
 
+class BlogPostAdminForm(forms.ModelForm):
+    class Meta:
+        model = BlogPost
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['author'].required = False
+        self.fields['category'].required = False
+
+
 @admin.register(BlogPost)
 class BlogPostAdmin(admin.ModelAdmin):
+    form = BlogPostAdminForm
     list_display = ['title', 'author', 'category', 'is_published', 'is_featured', 'views_count', 'created_at']
     list_filter = ['is_published', 'is_featured', 'category', 'created_at']
     search_fields = ['title', 'content', 'author__name']

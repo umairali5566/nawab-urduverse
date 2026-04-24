@@ -2,13 +2,25 @@
 Quotes Admin Configuration for Nawab Urdu Academy
 """
 
+from django import forms
 from django.contrib import admin
 
 from .models import Quote, QuoteCollection
 
 
+class QuoteAdminForm(forms.ModelForm):
+    class Meta:
+        model = Quote
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['author'].required = False
+
+
 @admin.register(Quote)
 class QuoteAdmin(admin.ModelAdmin):
+    form = QuoteAdminForm
     list_display = ['title', 'author', 'category', 'quote_type', 'is_featured', 'is_published', 'created_at']
     list_filter = ['is_published', 'category', 'quote_type', 'is_featured', 'created_at']
     search_fields = ['title', 'text', 'author__name']

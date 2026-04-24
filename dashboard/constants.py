@@ -6,13 +6,13 @@ Dashboard Constants and Utilities
 CONTENT_TYPES = {
     'poetry': {
         'model': 'poetry.Poetry',
-        'required_fields': ['title', 'author', 'content'],
-        'optional_fields': [],
+        'required_fields': ['title', 'content'],
+        'optional_fields': ['author'],
     },
     'quotes': {
         'model': 'quotes.Quote',
-        'required_fields': ['text', 'author'],
-        'optional_fields': ['quote_type'],
+        'required_fields': ['text'],
+        'optional_fields': ['author', 'quote_type'],
     },
     'stories': {
         'model': 'stories.Story',
@@ -21,13 +21,13 @@ CONTENT_TYPES = {
     },
     'blog': {
         'model': 'blog.BlogPost',
-        'required_fields': ['title', 'author', 'content'],
-        'optional_fields': [],
+        'required_fields': ['title', 'content'],
+        'optional_fields': ['author'],
     },
     'novels': {
         'model': 'novels.Novel',
-        'required_fields': ['title', 'author', 'content'],
-        'optional_fields': [],
+        'required_fields': ['title', 'content'],
+        'optional_fields': ['author'],
     },
     'videos': {
         'model': 'videos.Video',

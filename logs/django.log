@@ -623,3 +623,15 @@ Traceback (most recent call last):
     ...<2 lines>...
     )
 django.core.exceptions.FieldError: Cannot resolve keyword 'is_premium' into field. Choices are: author, author_id, category, category_id, chapters, content, created_at, id, is_published, published_at, readingprogress, reviews, slug, title, total_chapters
+ERROR 2026-04-24 17:40:11,597 exception 13492 22372 Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\utils\deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\middleware\security.py", line 28, in process_request
+    host = self.redirect_host or request.get_host()
+                                 ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\USER\AppData\Roaming\Python\Python314\site-packages\django\http\request.py", line 186, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.

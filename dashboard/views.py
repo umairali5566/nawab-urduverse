@@ -100,10 +100,8 @@ def _ensure_default_category(category_type, label):
 
     return Category.objects.create(
         name=f'{label} General',
-        name_english=f'{label} General',
         slug=slug,
         category_type=category_type,
-        description=f'Auto-created default category for {label.lower()} content.',
         is_active=True,
     )
 
@@ -114,12 +112,12 @@ def _create_content(request, model, template_name, redirect_url, content_type, c
         author_name = strip_tags((request.POST.get('author') or '').strip())
         content = strip_tags((request.POST.get('content') or request.POST.get('description') or '').strip())
 
-        if not title or not author_name or not content:
-            messages.error(request, f'Title, author, and {content_type} content are required.')
+        if not title or not content:
+            messages.error(request, f'Title and {content_type} content are required.')
             return render(request, template_name)
 
         try:
-            author = _resolve_author(author_name)
+            author = _resolve_author(author_name) if author_name else None
             obj = model(
                 title=title,
                 slug=_build_unique_slug(model, title),
@@ -173,9 +171,11 @@ def _process_csv_row(content_type, row):
 
     elif content_type == 'quotes':
         quote_type = row.get('quote_type', 'motivational').strip() or 'motivational'
+        quote_text = strip_tags(row['text'])
         quote = Quote(
-            text=strip_tags(row['text']),
-            slug=_build_unique_slug(Quote, row['text'][:50]),
+            title=quote_text[:100],
+            text=quote_text,
+            slug=_build_unique_slug(Quote, quote_text[:50]),
             author=author,
             quote_type=quote_type,
             is_published=True,
@@ -227,14 +227,15 @@ def _process_csv_row(content_type, row):
         return True
 
     elif content_type == 'videos':
+        video_url = strip_tags(row['video_url'])
         video = Video(
             title=strip_tags(row['title']),
             slug=_build_unique_slug(Video, row['title']),
+            content=video_url,
             description=strip_tags(row.get('description', '')),
             author=author,
             category=_ensure_default_category('video', 'Video'),
             video_type=row.get('video_type', 'other').strip() or 'other',
-            video_url=row['video_url'],
             is_published=True,
             published_at=timezone.now(),
         )
@@ -298,12 +299,12 @@ def add_novel(request):
         author_name = (request.POST.get('author') or '').strip()
         description = (request.POST.get('description') or '').strip()
 
-        if not title or not author_name or not description:
-            messages.error(request, 'Title, author, and description are required.')
+        if not title or not description:
+            messages.error(request, 'Title and description are required.')
             return render(request, 'dashboard/add_novel.html')
 
         try:
-            author = _resolve_author(author_name)
+            author = _resolve_author(author_name) if author_name else None
             default_category = _ensure_default_category('novel', 'Novel')
             novel = Novel(
                 title=title,
@@ -346,12 +347,12 @@ def add_poetry(request):
         title = (request.POST.get('title') or '').strip()
         author_name = (request.POST.get('author') or '').strip()
         content = (request.POST.get('content') or '').strip()
-        if not title or not author_name or not content:
-            messages.error(request, 'Title, author, and poetry content are required.')
+        if not title or not content:
+            messages.error(request, 'Title and poetry content are required.')
             return render(request, 'dashboard/add_poetry.html')
 
         try:
-            author = _resolve_author(author_name)
+            author = _resolve_author(author_name) if author_name else None
             default_category = _ensure_default_category('poetry', 'Poetry')
             poem = Poetry(
                 title=title,
@@ -398,13 +399,14 @@ def add_quote(request):
         quote_type = (request.POST.get('quote_type') or 'motivational').strip()
         background_image = request.FILES.get('background_image')
 
-        if not quote_text or not author_name:
-            messages.error(request, 'Quote text and author are required.')
+        if not quote_text:
+            messages.error(request, 'Quote text is required.')
             return render(request, 'dashboard/add_quote.html')
 
         try:
-            author = _resolve_author(author_name)
+            author = _resolve_author(author_name) if author_name else None
             quote = Quote(
+                title=quote_text[:100],
                 text=quote_text,
                 slug=_build_unique_slug(Quote, quote_text[:50]),
                 author=author,
@@ -434,12 +436,10 @@ def add_video(request):
         title = (request.POST.get('title') or '').strip()
         author_name = (request.POST.get('author') or '').strip()
         video_type = (request.POST.get('video_type') or 'poetry').strip()
-        platform = (request.POST.get('platform') or 'youtube').strip()
         video_id = (request.POST.get('video_id') or '').strip()
         video_url = (request.POST.get('video_url') or '').strip()
         youtube_link = (request.POST.get('youtube_link') or '').strip()
         description = (request.POST.get('description') or '').strip()
-        thumbnail = request.FILES.get('thumbnail')
         video_file = request.FILES.get('video_file')
 
         if not title:
@@ -452,24 +452,20 @@ def add_video(request):
 
         try:
             author = _resolve_author(author_name) if author_name else None
-            resolved_video_id = video_id or slugify(title, allow_unicode=True)[:100] or 'video-item'
+            default_category = _ensure_default_category('video', 'Video')
             video = Video(
                 title=title,
                 slug=_build_unique_slug(Video, title),
+                content=video_url or youtube_link or video_id or description or title,
                 description=description,
                 video_type=video_type,
-                platform=platform,
-                video_id=resolved_video_id,
-                video_url=video_url,
-                youtube_link=youtube_link,
-                video_file=video_file,
-                thumbnail=thumbnail,
                 author=author,
+                category=default_category,
+                thumbnail_url='',
                 is_published=True,
                 published_at=timezone.now(),
             )
             video.save()
-            video.categories.add(_ensure_default_category('video', 'Video'))
             messages.success(request, 'Video has been published successfully.')
             return redirect('dashboard_video_list')
         except Exception as exc:
@@ -564,4 +560,3 @@ def user_dashboard(request):
     }
     
     return render(request, 'dashboard/user_dashboard.html', context)
-

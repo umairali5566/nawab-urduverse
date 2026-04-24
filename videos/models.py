@@ -28,7 +28,14 @@ class Video(models.Model):
     slug = models.SlugField(unique=True, verbose_name='سلگ')
     content = models.TextField(verbose_name='مواد')  # Description
     description = models.TextField(blank=True, verbose_name='تفصیل')
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='videos', verbose_name='مصنف')
+    author = models.ForeignKey(
+        Author,
+        on_delete=models.CASCADE,
+        related_name='videos',
+        null=True,
+        blank=True,
+        verbose_name='مصنف',
+    )
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='زمرہ')
     video_type = models.CharField(max_length=20, choices=VIDEO_TYPES, default='other', verbose_name='قسم')
     is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')

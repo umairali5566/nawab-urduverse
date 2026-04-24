@@ -2,14 +2,27 @@
 Poetry Admin Configuration for Nawab Urdu Academy
 """
 
+from django import forms
 from django.contrib import admin
 from django.forms import Textarea
 
 from .models import Poetry
 
 
+class PoetryAdminForm(forms.ModelForm):
+    class Meta:
+        model = Poetry
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['author'].required = False
+        self.fields['category'].required = False
+
+
 @admin.register(Poetry)
 class PoetryAdmin(admin.ModelAdmin):
+    form = PoetryAdminForm
     list_display = ['title', 'author', 'category', 'is_published', 'created_at']
     list_filter = ['category', 'is_published', 'created_at']
     search_fields = ['title', 'author__name', 'content']

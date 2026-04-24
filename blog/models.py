@@ -19,7 +19,14 @@ class BlogPost(models.Model):
     content = models.TextField(verbose_name='مواد')
     excerpt = models.CharField(max_length=500, blank=True, verbose_name='خلاصہ')
     featured_image = models.ImageField(upload_to='blog/featured/', blank=True, null=True, verbose_name='نمایاں تصویر')
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='blog_posts', verbose_name='مصنف')
+    author = models.ForeignKey(
+        Author,
+        on_delete=models.CASCADE,
+        related_name='blog_posts',
+        null=True,
+        blank=True,
+        verbose_name='مصنف',
+    )
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='زمرہ')
     is_published = models.BooleanField(default=True, verbose_name='شائع شدہ')
     is_featured = models.BooleanField(default=False, verbose_name='نمایاں')

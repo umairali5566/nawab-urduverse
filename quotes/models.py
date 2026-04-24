@@ -31,7 +31,14 @@ class Quote(models.Model):
     title = models.CharField(max_length=300, verbose_name='عنوان')
     slug = models.SlugField(unique=True, verbose_name='سلگ')
     text = models.TextField(verbose_name='مواد')
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='quotes', verbose_name='مصنف')
+    author = models.ForeignKey(
+        Author,
+        on_delete=models.CASCADE,
+        related_name='quotes',
+        null=True,
+        blank=True,
+        verbose_name='مصنف',
+    )
     
     # Many-to-many relationship with categories
     categories = models.ManyToManyField(
