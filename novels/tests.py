@@ -1,14 +1,17 @@
+from django.contrib import admin
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import RequestFactory, TestCase
 from django.urls import resolve, reverse
 
 from core.models import Author, Category, ReadingProgress
 from novels import views
+from novels.admin import NovelAdmin
 from novels.models import Chapter, Novel
 
 
 class NovelChapterFlowTests(TestCase):
     def setUp(self):
+        self.factory = RequestFactory()
         self.author = Author.objects.create(name="Test Author", slug="test-author")
         self.category = Category.objects.create(
             name="Test Novel Category",
@@ -114,3 +117,26 @@ class NovelChapterFlowTests(TestCase):
         response = self.client.get(reverse("admin:novels_novel_add"))
 
         self.assertEqual(response.status_code, 200)
+
+    def test_novel_can_be_created_without_author_or_category(self):
+        novel = Novel.objects.create(
+            title="Authorless Novel",
+            slug="authorless-novel",
+            content="A novel without author or category.",
+            is_published=False,
+        )
+
+        self.assertIsNone(novel.author)
+        self.assertIsNone(novel.category)
+
+    def test_admin_form_does_not_require_author_or_category(self):
+        request = self.factory.get(reverse("admin:novels_novel_add"))
+        request.user = get_user_model().objects.create_superuser(
+            username="admin2",
+            email="admin2@example.com",
+            password="safe-password-123",
+        )
+        admin_form = NovelAdmin(Novel, admin.site).get_form(request)()
+
+        self.assertFalse(admin_form.fields["author"].required)
+        self.assertFalse(admin_form.fields["category"].required)

@@ -10,7 +10,6 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('novels', '__first__'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -234,22 +233,6 @@ class Migration(migrations.Migration):
                 'verbose_name': 'نوٹیفکیشن',
                 'verbose_name_plural': 'نوٹیفکیشنز',
                 'ordering': ['-created_at'],
-            },
-        ),
-        migrations.CreateModel(
-            name='ReadingProgress',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('progress_percent', models.PositiveIntegerField(default=0, verbose_name='پیش رفت فیصد')),
-                ('last_read_at', models.DateTimeField(auto_now=True, verbose_name='آخری مطالعہ')),
-                ('chapter', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='novels.chapter', verbose_name='باب')),
-                ('novel', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='novels.novel', verbose_name='ناول')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='صارف')),
-            ],
-            options={
-                'verbose_name': 'مطالعہ کی پیش رفت',
-                'verbose_name_plural': 'مطالعہ کی پیش رفت',
-                'ordering': ['-last_read_at'],
             },
         ),
         migrations.CreateModel(

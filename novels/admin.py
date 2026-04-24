@@ -3,12 +3,25 @@ Novels Admin Configuration for Nawab Urdu Academy
 """
 
 from django.contrib import admin
+from django import forms
 
 from .models import Chapter, Novel, NovelReview
 
 
+class NovelAdminForm(forms.ModelForm):
+    class Meta:
+        model = Novel
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['author'].required = False
+        self.fields['category'].required = False
+
+
 @admin.register(Novel)
 class NovelAdmin(admin.ModelAdmin):
+    form = NovelAdminForm
     list_display = ['title', 'author', 'category', 'total_chapters', 'is_published', 'created_at']
     list_filter = ['category', 'is_published', 'created_at']
     search_fields = ['title', 'author__name', 'content']
