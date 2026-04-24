@@ -104,6 +104,7 @@ class Chapter(models.Model):
     def get_absolute_url(self):
         return reverse('chapter_detail', kwargs={
             'novel_slug': self.novel.slug,
+            'chapter_number': self.chapter_number,
             'chapter_slug': self.slug
         })
     

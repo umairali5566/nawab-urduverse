@@ -3,7 +3,7 @@ Novels Views for Nawab Urdu Academy
 """
 
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import HttpResponsePermanentRedirect, JsonResponse
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, ListView
@@ -94,9 +94,21 @@ class ChapterDetailView(DetailView):
 
     def get_object(self):
         novel_slug = self.kwargs['novel_slug']
-        chapter_slug = self.kwargs['chapter_slug']
+        chapter_number = self.kwargs['chapter_number']
         novel = get_object_or_404(Novel, slug=novel_slug, is_published=True)
-        return get_object_or_404(Chapter, novel=novel, slug=chapter_slug, is_published=True)
+        return get_object_or_404(
+            Chapter,
+            novel=novel,
+            chapter_number=chapter_number,
+            is_published=True,
+        )
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if kwargs.get('chapter_slug') != self.object.slug:
+            return HttpResponsePermanentRedirect(self.object.get_absolute_url())
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -106,6 +118,18 @@ class ChapterDetailView(DetailView):
         context['next_chapter'] = chapter.get_next_chapter()
         context['chapter_count'] = chapter.novel.total_chapters
         return context
+
+
+def legacy_chapter_redirect(request, novel_slug, chapter_slug):
+    """Redirect legacy chapter URLs to the canonical chapter route."""
+    novel = get_object_or_404(Novel, slug=novel_slug, is_published=True)
+    chapter = get_object_or_404(
+        Chapter,
+        novel=novel,
+        slug=chapter_slug,
+        is_published=True,
+    )
+    return redirect(chapter.get_absolute_url(), permanent=True)
 
 
 def continue_reading(request, slug):
