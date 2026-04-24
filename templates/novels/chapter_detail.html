@@ -15,7 +15,6 @@
             <div class="detail-hero-copy">
                 <span class="detail-kicker"><i class="bi bi-book"></i> Chapter Reader</span>
                 <h1 class="detail-title urdu">باب {{ chapter.chapter_number }}: {{ chapter.title }}</h1>
-                <p class="detail-summary">A lighter chapter-reading interface with stronger spacing, cleaner alignment, and responsive controls for long Urdu text.</p>
                 <div class="detail-stats">
                     <span class="detail-meta-pill"><i class="bi bi-journal-bookmark"></i> {{ chapter.novel.title }}</span>
                     <span class="detail-meta-pill"><i class="bi bi-list-ol"></i> باب {{ chapter.chapter_number }} از {{ chapter_count }}</span>
@@ -24,7 +23,7 @@
             </div>
 
             <aside class="page-panel dark-panel page-fade delay-1">
-                <h2 class="panel-title">Reading Snapshot</h2>
+                <h2 class="panel-title">Stats</h2>
                 <div class="detail-highlight-grid">
                     <div class="detail-highlight">
                         <strong>{{ chapter.reading_time }}</strong>

@@ -10,15 +10,18 @@
             <div class="page-hero-copy centered-mobile">
                 <span class="page-kicker">Quote anthology</span>
                 <h1 class="page-title urdu">{{ collection.title }}</h1>
-                <p>{{ collection.description|default:"A curated collection of memorable Urdu quotes presented in a cleaner reading format." }}</p>
+                {% if collection.description %}
+                <p>{{ collection.description }}</p>
+                {% endif %}
                 <div class="page-stats">
                     <span class="stat-chip"><strong>{{ quotes|length }}</strong> quotes</span>
                 </div>
             </div>
             <aside class="page-panel dark-panel page-fade delay-1">
-                <h2 class="panel-title">Collection Notes</h2>
-                <div class="sidebar-list">
-                    <span class="panel-copy">Explore reflections, wisdom, and short-form literary thoughts with better spacing and softer visual hierarchy.</span>
+                <h2 class="panel-title">Stats</h2>
+                <div class="detail-highlight">
+                    <strong>{{ quotes|length }}</strong>
+                    <span>Quotes</span>
                 </div>
             </aside>
         </div>
@@ -43,7 +46,6 @@
     <section class="empty-panel page-fade delay-2">
         <div class="empty-icon"><i class="bi bi-quote"></i></div>
         <h2 class="panel-title">No quotes in this collection</h2>
-        <p>This collection exists, but no quotes are published inside it yet.</p>
     </section>
     {% endif %}
 </div>

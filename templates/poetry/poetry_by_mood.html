@@ -19,15 +19,15 @@
             <div class="page-hero-copy centered-mobile">
                 <span class="page-kicker">Emotional archive</span>
                 <h1 class="page-title">Poetry by Mood</h1>
-                <p>Find poems grouped by feeling and atmosphere with calmer spacing and a cleaner card rhythm.</p>
                 <div class="page-stats">
                     <span class="stat-chip"><strong>{{ poetry_list|length }}</strong> poems in this mood</span>
                 </div>
             </div>
             <aside class="page-panel dark-panel page-fade delay-1">
-                <h2 class="panel-title">Reading Direction</h2>
-                <div class="sidebar-list">
-                    <span class="panel-copy">A softer, brighter layout built for reflective browsing and more comfortable Urdu reading.</span>
+                <h2 class="panel-title">Stats</h2>
+                <div class="detail-highlight">
+                    <strong>{{ poetry_list|length }}</strong>
+                    <span>Poems</span>
                 </div>
             </aside>
         </div>
@@ -56,7 +56,6 @@
     <section class="empty-panel page-fade delay-2">
         <div class="empty-icon"><i class="bi bi-brilliance"></i></div>
         <h2 class="panel-title">No poetry found for this mood</h2>
-        <p>There is no published poetry in this mood yet.</p>
     </section>
     {% endif %}
 </div>

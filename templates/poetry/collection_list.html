@@ -11,15 +11,15 @@
             <div class="page-hero-copy centered-mobile">
                 <span class="page-kicker">Curated reading sets</span>
                 <h1 class="page-title">Poetry Collections</h1>
-                <p>Browse curated diwans and carefully grouped poetry selections in a cleaner editorial layout.</p>
                 <div class="page-stats">
                     <span class="stat-chip"><strong>{{ collections|length }}</strong> collections</span>
                 </div>
             </div>
             <aside class="page-panel dark-panel page-fade delay-1">
-                <h2 class="panel-title">Collection Notes</h2>
-                <div class="sidebar-list">
-                    <span class="panel-copy">Designed for immersive browsing with lighter cards, calmer spacing, and improved Urdu readability.</span>
+                <h2 class="panel-title">Collections</h2>
+                <div class="detail-highlight">
+                    <strong>{{ collections|length }}</strong>
+                    <span>Total</span>
                 </div>
             </aside>
         </div>
@@ -46,7 +46,9 @@
                     <span>{{ collection.author.name|default:"Unknown Author" }}</span>
                     <span>{{ collection.created_at|date:"M d, Y" }}</span>
                 </div>
-                <p class="literary-copy">{{ collection.description|default:"A curated poetry set prepared for focused reading."|truncatechars:140 }}</p>
+                {% if collection.description %}
+                <p class="literary-copy">{{ collection.description|truncatechars:140 }}</p>
+                {% endif %}
                 <div class="action-row">
                     <a href="{{ collection.get_absolute_url }}" class="btn btn-primary">View Collection</a>
                 </div>
@@ -72,7 +74,6 @@
     <section class="empty-panel page-fade delay-2">
         <div class="empty-icon"><i class="bi bi-collection"></i></div>
         <h2 class="panel-title">No poetry collections found</h2>
-        <p>Collections will appear here once curated sets are published.</p>
     </section>
     {% endif %}
 </div>

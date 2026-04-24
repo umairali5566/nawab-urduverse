@@ -10,16 +10,19 @@
             <div class="page-hero-copy centered-mobile">
                 <span class="page-kicker">Poetry collection</span>
                 <h1 class="page-title urdu">{{ collection.title }}</h1>
-                <p>{{ collection.description|default:"A curated sequence of poetry gathered into one refined reading set." }}</p>
+                {% if collection.description %}
+                <p>{{ collection.description }}</p>
+                {% endif %}
                 <div class="page-stats">
                     <span class="stat-chip"><strong>{{ poems|length }}</strong> poems</span>
                     <span class="stat-chip"><strong>{{ collection.author.name|default:"Unknown" }}</strong> compiler</span>
                 </div>
             </div>
             <aside class="page-panel dark-panel page-fade delay-1">
-                <h2 class="panel-title">Collection Focus</h2>
-                <div class="sidebar-list">
-                    <span class="panel-copy">A cleaner sequence for readers who want to stay with one poetic mood, voice, or editorial selection.</span>
+                <h2 class="panel-title">Stats</h2>
+                <div class="detail-highlight">
+                    <strong>{{ poems|length }}</strong>
+                    <span>Poems</span>
                 </div>
             </aside>
         </div>
@@ -48,7 +51,6 @@
     <section class="empty-panel page-fade delay-2">
         <div class="empty-icon"><i class="bi bi-journal-text"></i></div>
         <h2 class="panel-title">No poems in this collection</h2>
-        <p>This collection has been created, but no poems are published in it yet.</p>
     </section>
     {% endif %}
 </div>

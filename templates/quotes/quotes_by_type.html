@@ -10,15 +10,15 @@
             <div class="page-hero-copy centered-mobile">
                 <span class="page-kicker">Quote archive</span>
                 <h1 class="page-title">{{ quote_type_display }} Quotes</h1>
-                <p>Explore a focused collection of quotes in a brighter, cleaner, and more readable interface.</p>
                 <div class="page-stats">
                     <span class="stat-chip"><strong>{{ quotes|length }}</strong> quotes</span>
                 </div>
             </div>
             <aside class="page-panel dark-panel page-fade delay-1">
-                <h2 class="panel-title">Reading Flow</h2>
-                <div class="sidebar-list">
-                    <span class="panel-copy">Short-form literature deserves breathing room. This layout keeps the text centered and easy to scan.</span>
+                <h2 class="panel-title">Stats</h2>
+                <div class="detail-highlight">
+                    <strong>{{ quotes|length }}</strong>
+                    <span>Quotes</span>
                 </div>
             </aside>
         </div>
@@ -43,7 +43,6 @@
     <section class="empty-panel page-fade delay-2">
         <div class="empty-icon"><i class="bi bi-chat-quote"></i></div>
         <h2 class="panel-title">No quotes found for this type</h2>
-        <p>Try another quote type or return to the full quotes archive.</p>
     </section>
     {% endif %}
 </div>

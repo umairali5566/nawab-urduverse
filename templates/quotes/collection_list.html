@@ -11,15 +11,15 @@
             <div class="page-hero-copy centered-mobile">
                 <span class="page-kicker">Curated quote sets</span>
                 <h1 class="page-title">Quote Collections</h1>
-                <p>Browse themed quote collections presented in a lighter, more editorial card layout.</p>
                 <div class="page-stats">
                     <span class="stat-chip"><strong>{{ collections|length }}</strong> collections</span>
                 </div>
             </div>
             <aside class="page-panel dark-panel page-fade delay-1">
-                <h2 class="panel-title">Collection Style</h2>
-                <div class="sidebar-list">
-                    <span class="panel-copy">Grouped reflections and sayings arranged for focused, distraction-free browsing.</span>
+                <h2 class="panel-title">Collections</h2>
+                <div class="detail-highlight">
+                    <strong>{{ collections|length }}</strong>
+                    <span>Total</span>
                 </div>
             </aside>
         </div>
@@ -42,7 +42,9 @@
                     <span class="meta-pill">{{ collection.quotes.count }} quotes</span>
                 </div>
                 <h2 class="literary-title urdu">{{ collection.title }}</h2>
-                <p class="literary-copy">{{ collection.description|default:"A selected set of Urdu quotes and reflections."|truncatechars:135 }}</p>
+                {% if collection.description %}
+                <p class="literary-copy">{{ collection.description|truncatechars:135 }}</p>
+                {% endif %}
                 <div class="action-row">
                     <a href="{{ collection.get_absolute_url }}" class="btn btn-primary">Open Collection</a>
                 </div>
@@ -54,7 +56,6 @@
     <section class="empty-panel page-fade delay-2">
         <div class="empty-icon"><i class="bi bi-chat-square-quote"></i></div>
         <h2 class="panel-title">No quote collections found</h2>
-        <p>Collections will appear here when themed sets are published.</p>
     </section>
     {% endif %}
 </div>

@@ -11,15 +11,15 @@
             <div class="page-hero-copy centered-mobile">
                 <span class="page-kicker">Genre library</span>
                 <h1 class="page-title">Novel Categories</h1>
-                <p>Browse Urdu novel genres through a cleaner card-based archive with lighter spacing and improved alignment.</p>
                 <div class="page-stats">
                     <span class="stat-chip"><strong>{{ categories|length }}</strong> categories</span>
                 </div>
             </div>
             <aside class="page-panel dark-panel page-fade delay-1">
-                <h2 class="panel-title">Browse Better</h2>
-                <div class="sidebar-list">
-                    <span class="panel-copy">A lighter visual system helps the titles and genre labels stay readable on both mobile and desktop.</span>
+                <h2 class="panel-title">Stats</h2>
+                <div class="detail-highlight">
+                    <strong>{{ categories|length }}</strong>
+                    <span>Categories</span>
                 </div>
             </aside>
         </div>
@@ -34,7 +34,6 @@
                     <span class="literary-badge">Category</span>
                 </div>
                 <h2 class="soft-card-title urdu">{{ category.name }}</h2>
-                <p class="literary-copy">Explore novels filed under this category in a calmer and more structured reading layout.</p>
                 <div class="action-row">
                     <a href="{% url 'category_detail' category.slug %}" class="btn btn-primary">Open Category</a>
                 </div>
@@ -46,7 +45,6 @@
     <section class="empty-panel page-fade delay-2">
         <div class="empty-icon"><i class="bi bi-grid"></i></div>
         <h2 class="panel-title">No categories found</h2>
-        <p>Novel categories will appear here when they are available.</p>
     </section>
     {% endif %}
 </div>

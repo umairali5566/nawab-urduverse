@@ -19,15 +19,15 @@
             <div class="page-hero-copy centered-mobile">
                 <span class="page-kicker">Format explorer</span>
                 <h1 class="page-title">Poetry by Type</h1>
-                <p>Explore Urdu poetry by literary form in a lighter, easier-to-scan archive.</p>
                 <div class="page-stats">
                     <span class="stat-chip"><strong>{{ poetry_list|length }}</strong> poems in this view</span>
                 </div>
             </div>
             <aside class="page-panel dark-panel page-fade delay-1">
-                <h2 class="panel-title">Browse Forms</h2>
-                <div class="sidebar-list">
-                    <span class="panel-copy">Move through ghazal, nazm, and other forms with consistent cards and centered reading emphasis.</span>
+                <h2 class="panel-title">Stats</h2>
+                <div class="detail-highlight">
+                    <strong>{{ poetry_list|length }}</strong>
+                    <span>Poems</span>
                 </div>
             </aside>
         </div>
@@ -56,7 +56,6 @@
     <section class="empty-panel page-fade delay-2">
         <div class="empty-icon"><i class="bi bi-feather"></i></div>
         <h2 class="panel-title">No poetry found for this type</h2>
-        <p>Try another category or return to the complete poetry archive.</p>
     </section>
     {% endif %}
 </div>

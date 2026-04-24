@@ -11,7 +11,6 @@
             <div class="detail-hero-copy">
                 <span class="detail-kicker"><i class="bi bi-journal-richtext"></i> Novel Showcase</span>
                 <h1 class="detail-title urdu">{{ novel.title }}</h1>
-                <p class="detail-summary">A modern novel landing page with stronger hierarchy, lighter surfaces, and a book-inspired reading rhythm for long-form Urdu fiction.</p>
                 <div class="detail-stats">
                     <span class="detail-meta-pill"><i class="bi bi-person"></i> {% if novel.author %}{{ novel.author.name }}{% else %}Unknown Author{% endif %}</span>
                     {% if novel.category %}
@@ -22,7 +21,7 @@
             </div>
 
             <aside class="page-panel dark-panel page-fade delay-1">
-                <h2 class="panel-title">At a Glance</h2>
+                <h2 class="panel-title">Stats</h2>
                 <div class="detail-highlight-grid">
                     <div class="detail-highlight">
                         <strong>{{ chapter_count }}</strong>
@@ -32,9 +31,6 @@
                         <strong>{% if novel.is_published %}Live{% else %}Draft{% endif %}</strong>
                         <span>Status</span>
                     </div>
-                </div>
-                <div class="detail-note">
-                    Browse the overview here, then move into the chapter reader from the navigation panel on the right.
                 </div>
             </aside>
         </div>
@@ -74,24 +70,12 @@
 
             <article class="reader-card novel-reader">
                 <h2 class="reader-title">Novel Overview</h2>
-                <div class="reader-meta">
-                    <span><i class="bi bi-journal-text"></i> Urdu novel presentation</span>
-                    <span><i class="bi bi-columns-gap"></i> Spacious reading layout</span>
-                </div>
                 <div class="reader-content" id="novelContent">{{ novel.content|linebreaks }}</div>
             </article>
         </section>
 
         <aside class="detail-side-card">
             <div class="detail-stack">
-                <div class="detail-note">
-                    {% if chapter_count %}
-                    This novel currently includes {{ chapter_count }} chapter{{ chapter_count|pluralize }}. Use the quick navigator below to jump into the story.
-                    {% else %}
-                    Chapters have not been published yet, so this page currently works as the introduction and presentation view.
-                    {% endif %}
-                </div>
-
                 <div class="detail-side-list">
                     {% with first_chapter=chapters|first %}
                     {% if first_chapter %}
@@ -115,7 +99,7 @@
 
                 {% if chapters %}
                 <div class="detail-stack">
-                    <h3 class="panel-title mb-0">Reading Navigator</h3>
+                    <h3 class="panel-title mb-0">Chapters</h3>
                     <div class="detail-side-list">
                         {% for chapter in chapters|slice:":6" %}
                         <a href="{{ chapter.get_absolute_url }}">

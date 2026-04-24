@@ -10,7 +10,6 @@
             <div class="detail-hero-copy">
                 <span class="detail-kicker"><i class="bi bi-chat-quote"></i> Quote Detail</span>
                 <h1 class="detail-title">مقبول اقتباس</h1>
-                <p class="detail-summary">Short-form wisdom deserves the same polished reading treatment, with centered Urdu text and clean editorial spacing.</p>
                 <div class="detail-stats">
                     <span class="detail-meta-pill"><i class="bi bi-person"></i> {{ quote.author.name|default:"نامعلوم" }}</span>
                     <span class="detail-meta-pill"><i class="bi bi-bookmark-heart"></i> {{ quote.get_quote_type_display }}</span>
@@ -19,7 +18,7 @@
             </div>
 
             <aside class="page-panel dark-panel page-fade delay-1">
-                <h2 class="panel-title">Quote Snapshot</h2>
+                <h2 class="panel-title">Stats</h2>
                 <div class="detail-highlight-grid">
                     <div class="detail-highlight">
                         <strong>{{ quote.likes_count }}</strong>
@@ -96,9 +95,6 @@
 
         <aside class="detail-side-card">
             <div class="detail-stack">
-                <div class="detail-note">
-                    This quote is presented as a focused reading card with generous spacing and a lighter surface to keep Urdu text easy on the eyes.
-                </div>
                 <div class="detail-side-list">
                     <a href="{% url 'quote_list' %}">
                         <span>Browse More Quotes</span>
@@ -117,7 +113,6 @@
     <section class="section-panel page-fade delay-2">
         <div class="section-panel-header">
             <div>
-                <span class="eyebrow section-kicker">Continue Reading</span>
                 <h2 class="section-heading">Related Quotes</h2>
             </div>
         </div>

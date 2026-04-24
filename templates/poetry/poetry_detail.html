@@ -11,7 +11,6 @@
             <div class="detail-hero-copy">
                 <span class="detail-kicker"><i class="bi bi-feather"></i> Poetry Reading</span>
                 <h1 class="detail-title urdu">{{ poem.title }}</h1>
-                <p class="detail-summary">A calmer reading page with centered Urdu presentation, soft contrast, and cleaner spacing for every verse.</p>
                 <div class="detail-stats">
                     {% if poem.author %}
                     <span class="detail-meta-pill"><i class="bi bi-person"></i> {{ poem.author.name }}</span>
@@ -24,20 +23,15 @@
             </div>
 
             <aside class="page-panel dark-panel page-fade delay-1">
-                <h2 class="panel-title">Reading Notes</h2>
-                <div class="detail-stack">
-                    <div class="detail-summary-block">
-                        This page uses a lighter book-inspired layout so Urdu poetry stays readable on both phone and desktop screens.
+                <h2 class="panel-title">Stats</h2>
+                <div class="detail-highlight-grid">
+                    <div class="detail-highlight">
+                        <strong>{{ poem.likes_count }}</strong>
+                        <span>Likes</span>
                     </div>
-                    <div class="detail-highlight-grid">
-                        <div class="detail-highlight">
-                            <strong>{{ poem.likes_count }}</strong>
-                            <span>Likes</span>
-                        </div>
-                        <div class="detail-highlight">
-                            <strong>{{ poem.views_count }}</strong>
-                            <span>Views</span>
-                        </div>
+                    <div class="detail-highlight">
+                        <strong>{{ poem.views_count }}</strong>
+                        <span>Views</span>
                     </div>
                 </div>
             </aside>
@@ -75,14 +69,6 @@
 
         <aside class="detail-side-card">
             <div class="detail-stack">
-                <div class="detail-note">
-                    {% if poem.author %}
-                    <strong>{{ poem.author.name }}</strong> کی اس تخلیق کو ایک صاف اور متوازن مطالعہ تجربے کے ساتھ پیش کیا گیا ہے۔
-                    {% else %}
-                    اس شاعری کو ایک صاف اور متوازن مطالعہ تجربے کے ساتھ پیش کیا گیا ہے۔
-                    {% endif %}
-                </div>
-
                 <div class="detail-action-stack">
                     <a href="{% url 'poetry_list' %}" class="btn btn-secondary">شاعری پر واپس جائیں</a>
                     {% if poem.author and poem.author.slug %}
