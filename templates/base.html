@@ -14,11 +14,13 @@
 
     {% load static %}
     <link rel="manifest" href="{% static 'manifest.json' %}">
+    {% block theme_css %}
     <link rel="stylesheet" href="{% static 'css/premium.css' %}">
     <link rel="stylesheet" href="{% static 'css/literary-light.css' %}">
     <style>
         {% include 'core/global_brand_overrides.html' %}
     </style>
+    {% endblock %}
 
     {% block extra_css %}{% endblock %}
 </head>

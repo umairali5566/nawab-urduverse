@@ -158,6 +158,20 @@ body:not(.home-page) canvas {
     height: auto;
 }
 
+body:not(.home-page) .logo-image {
+    width: auto;
+    height: 40px;
+    max-width: none;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+body:not(.home-page) .user-avatar-small,
+body:not(.home-page) .user-avatar-large {
+    max-width: none;
+    object-fit: cover;
+}
+
 body:not(.home-page) iframe {
     max-width: 100%;
 }
