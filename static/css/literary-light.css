@@ -1,0 +1,1256 @@
+body.poetry-page,
+body.novels-page,
+body.quotes-page,
+body.author-poetry-page,
+body.novel-chapter-page,
+body.poetry-taxonomy-page,
+body.quote-type-page,
+body.poetry-collection-page,
+body.quote-collection-page,
+body.novel-categories-page {
+    --literary-bg: #f6f1e8;
+    --literary-bg-alt: #fbf8f2;
+    --literary-surface: rgba(255, 255, 255, 0.94);
+    --literary-surface-strong: #ffffff;
+    --literary-border: rgba(95, 66, 40, 0.12);
+    --literary-ink: #1f2937;
+    --literary-muted: #6b7280;
+    --literary-accent: #8b5e34;
+    --literary-accent-strong: #6e4726;
+    --literary-accent-soft: rgba(139, 94, 52, 0.12);
+    --literary-shadow: 0 20px 48px rgba(31, 41, 55, 0.09);
+    --literary-shadow-hover: 0 26px 56px rgba(31, 41, 55, 0.13);
+    background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.86), transparent 28%),
+        linear-gradient(180deg, #fbf9f4 0%, var(--literary-bg) 100%);
+    color: var(--literary-ink);
+}
+
+body.poetry-page main,
+body.novels-page main,
+body.quotes-page main,
+body.author-poetry-page main,
+body.novel-chapter-page main,
+body.poetry-taxonomy-page main,
+body.quote-type-page main,
+body.poetry-collection-page main,
+body.quote-collection-page main,
+body.novel-categories-page main {
+    padding-top: clamp(1rem, 2vw, 1.5rem);
+}
+
+body.poetry-page .main-container,
+body.novels-page .main-container,
+body.quotes-page .main-container,
+body.author-poetry-page .main-container,
+body.novel-chapter-page .main-container,
+body.poetry-taxonomy-page .main-container,
+body.quote-type-page .main-container,
+body.poetry-collection-page .main-container,
+body.quote-collection-page .main-container,
+body.novel-categories-page .main-container {
+    width: min(1180px, calc(100% - 32px));
+}
+
+body.poetry-page .navbar,
+body.novels-page .navbar,
+body.quotes-page .navbar,
+body.author-poetry-page .navbar,
+body.novel-chapter-page .navbar,
+body.poetry-taxonomy-page .navbar,
+body.quote-type-page .navbar,
+body.poetry-collection-page .navbar,
+body.quote-collection-page .navbar,
+body.novel-categories-page .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    backdrop-filter: blur(18px);
+    background: rgba(255, 253, 249, 0.88);
+    border-bottom: 1px solid rgba(95, 66, 40, 0.1);
+    box-shadow: 0 12px 32px rgba(31, 41, 55, 0.06);
+}
+
+body.poetry-page .navbar-container,
+body.novels-page .navbar-container,
+body.quotes-page .navbar-container,
+body.author-poetry-page .navbar-container,
+body.novel-chapter-page .navbar-container,
+body.poetry-taxonomy-page .navbar-container,
+body.quote-type-page .navbar-container,
+body.poetry-collection-page .navbar-container,
+body.quote-collection-page .navbar-container,
+body.novel-categories-page .navbar-container {
+    max-width: 1180px;
+    gap: 1rem;
+    padding-block: 0.9rem;
+}
+
+body.poetry-page .logo-link,
+body.novels-page .logo-link,
+body.quotes-page .logo-link,
+body.author-poetry-page .logo-link,
+body.novel-chapter-page .logo-link,
+body.poetry-taxonomy-page .logo-link,
+body.quote-type-page .logo-link,
+body.poetry-collection-page .logo-link,
+body.quote-collection-page .logo-link,
+body.novel-categories-page .logo-link {
+    padding: 0.2rem 0.35rem;
+    border-radius: 18px;
+}
+
+body.poetry-page .logo-overline,
+body.novels-page .logo-overline,
+body.quotes-page .logo-overline,
+body.author-poetry-page .logo-overline,
+body.novel-chapter-page .logo-overline,
+body.poetry-taxonomy-page .logo-overline,
+body.quote-type-page .logo-overline,
+body.poetry-collection-page .logo-overline,
+body.quote-collection-page .logo-overline,
+body.novel-categories-page .logo-overline {
+    color: var(--literary-muted);
+}
+
+body.poetry-page .logo-text,
+body.novels-page .logo-text,
+body.quotes-page .logo-text,
+body.author-poetry-page .logo-text,
+body.novel-chapter-page .logo-text,
+body.poetry-taxonomy-page .logo-text,
+body.quote-type-page .logo-text,
+body.poetry-collection-page .logo-text,
+body.quote-collection-page .logo-text,
+body.novel-categories-page .logo-text,
+body.poetry-page .nav-link,
+body.novels-page .nav-link,
+body.quotes-page .nav-link,
+body.author-poetry-page .nav-link,
+body.novel-chapter-page .nav-link,
+body.poetry-taxonomy-page .nav-link,
+body.quote-type-page .nav-link,
+body.poetry-collection-page .nav-link,
+body.quote-collection-page .nav-link,
+body.novel-categories-page .nav-link {
+    color: var(--literary-ink);
+}
+
+body.poetry-page .nav-link:hover,
+body.novels-page .nav-link:hover,
+body.quotes-page .nav-link:hover,
+body.author-poetry-page .nav-link:hover,
+body.novel-chapter-page .nav-link:hover,
+body.poetry-taxonomy-page .nav-link:hover,
+body.quote-type-page .nav-link:hover,
+body.poetry-collection-page .nav-link:hover,
+body.quote-collection-page .nav-link:hover,
+body.novel-categories-page .nav-link:hover,
+body.poetry-page .nav-link.is-active,
+body.novels-page .nav-link.is-active,
+body.quotes-page .nav-link.is-active,
+body.author-poetry-page .nav-link.is-active,
+body.novel-chapter-page .nav-link.is-active,
+body.poetry-taxonomy-page .nav-link.is-active,
+body.quote-type-page .nav-link.is-active,
+body.poetry-collection-page .nav-link.is-active,
+body.quote-collection-page .nav-link.is-active,
+body.novel-categories-page .nav-link.is-active {
+    color: var(--literary-accent-strong);
+}
+
+body.poetry-page .nav-auth .btn,
+body.novels-page .nav-auth .btn,
+body.quotes-page .nav-auth .btn,
+body.author-poetry-page .nav-auth .btn,
+body.novel-chapter-page .nav-auth .btn,
+body.poetry-taxonomy-page .nav-auth .btn,
+body.quote-type-page .nav-auth .btn,
+body.poetry-collection-page .nav-auth .btn,
+body.quote-collection-page .nav-auth .btn,
+body.novel-categories-page .nav-auth .btn {
+    min-height: 46px;
+    border-radius: 14px;
+}
+
+body.poetry-page .mobile-menu,
+body.novels-page .mobile-menu,
+body.quotes-page .mobile-menu,
+body.author-poetry-page .mobile-menu,
+body.novel-chapter-page .mobile-menu,
+body.poetry-taxonomy-page .mobile-menu,
+body.quote-type-page .mobile-menu,
+body.poetry-collection-page .mobile-menu,
+body.quote-collection-page .mobile-menu,
+body.novel-categories-page .mobile-menu {
+    background: rgba(255, 252, 246, 0.98);
+    border-left: 1px solid rgba(95, 66, 40, 0.1);
+    box-shadow: -18px 0 36px rgba(31, 41, 55, 0.1);
+}
+
+body.poetry-page .mobile-menu-link,
+body.novels-page .mobile-menu-link,
+body.quotes-page .mobile-menu-link,
+body.author-poetry-page .mobile-menu-link,
+body.novel-chapter-page .mobile-menu-link,
+body.poetry-taxonomy-page .mobile-menu-link,
+body.quote-type-page .mobile-menu-link,
+body.poetry-collection-page .mobile-menu-link,
+body.quote-collection-page .mobile-menu-link,
+body.novel-categories-page .mobile-menu-link {
+    color: var(--literary-ink);
+    border-radius: 14px;
+}
+
+body.poetry-page .mobile-menu-link:hover,
+body.novels-page .mobile-menu-link:hover,
+body.quotes-page .mobile-menu-link:hover,
+body.author-poetry-page .mobile-menu-link:hover,
+body.novel-chapter-page .mobile-menu-link:hover,
+body.poetry-taxonomy-page .mobile-menu-link:hover,
+body.quote-type-page .mobile-menu-link:hover,
+body.poetry-collection-page .mobile-menu-link:hover,
+body.quote-collection-page .mobile-menu-link:hover,
+body.novel-categories-page .mobile-menu-link:hover {
+    background: rgba(139, 94, 52, 0.08);
+    color: var(--literary-accent-strong);
+}
+
+body.poetry-page .mobile-menu-overlay.active,
+body.novels-page .mobile-menu-overlay.active,
+body.quotes-page .mobile-menu-overlay.active,
+body.author-poetry-page .mobile-menu-overlay.active,
+body.novel-chapter-page .mobile-menu-overlay.active,
+body.poetry-taxonomy-page .mobile-menu-overlay.active,
+body.quote-type-page .mobile-menu-overlay.active,
+body.poetry-collection-page .mobile-menu-overlay.active,
+body.quote-collection-page .mobile-menu-overlay.active,
+body.novel-categories-page .mobile-menu-overlay.active {
+    background: rgba(31, 41, 55, 0.18);
+}
+
+body.poetry-page .btn-primary,
+body.novels-page .btn-primary,
+body.quotes-page .btn-primary,
+body.author-poetry-page .btn-primary,
+body.novel-chapter-page .btn-primary,
+body.poetry-taxonomy-page .btn-primary,
+body.quote-type-page .btn-primary,
+body.poetry-collection-page .btn-primary,
+body.quote-collection-page .btn-primary,
+body.novel-categories-page .btn-primary {
+    background: linear-gradient(135deg, #8b5e34, #b07a42);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 14px 28px rgba(139, 94, 52, 0.16);
+}
+
+body.poetry-page .btn-primary:hover,
+body.novels-page .btn-primary:hover,
+body.quotes-page .btn-primary:hover,
+body.author-poetry-page .btn-primary:hover,
+body.novel-chapter-page .btn-primary:hover,
+body.poetry-taxonomy-page .btn-primary:hover,
+body.quote-type-page .btn-primary:hover,
+body.poetry-collection-page .btn-primary:hover,
+body.quote-collection-page .btn-primary:hover,
+body.novel-categories-page .btn-primary:hover {
+    color: #fff;
+}
+
+body.poetry-page .btn-secondary,
+body.poetry-page .btn-outline,
+body.poetry-page .btn-outline-primary,
+body.novels-page .btn-secondary,
+body.novels-page .btn-outline,
+body.novels-page .btn-outline-primary,
+body.quotes-page .btn-secondary,
+body.quotes-page .btn-outline,
+body.quotes-page .btn-outline-primary,
+body.author-poetry-page .btn-secondary,
+body.author-poetry-page .btn-outline-primary,
+body.novel-chapter-page .btn-secondary,
+body.novel-chapter-page .btn-outline-primary,
+body.poetry-taxonomy-page .btn-secondary,
+body.quote-type-page .btn-secondary,
+body.poetry-collection-page .btn-secondary,
+body.quote-collection-page .btn-secondary,
+body.novel-categories-page .btn-secondary {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--literary-ink);
+    border: 1px solid rgba(95, 66, 40, 0.14);
+    box-shadow: none;
+}
+
+.page-shell {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    padding-block: clamp(1rem, 2vw, 1.5rem) clamp(3rem, 5vw, 4rem);
+}
+
+body.poetry-page .page-header,
+body.novels-page .page-header,
+body.quotes-page .page-header,
+body.author-poetry-page .page-header,
+body.novel-chapter-page .page-header,
+body.poetry-taxonomy-page .page-header,
+body.quote-type-page .page-header,
+body.poetry-collection-page .page-header,
+body.quote-collection-page .page-header,
+body.novel-categories-page .page-header {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto 1.25rem;
+    padding: clamp(1.35rem, 3vw, 2rem) 0;
+    border-radius: 28px;
+    border: 1px solid var(--literary-border);
+    background:
+        radial-gradient(circle at top right, rgba(139, 94, 52, 0.1), transparent 25%),
+        linear-gradient(135deg, #fffdf9 0%, #f5eddf 100%);
+    box-shadow: var(--literary-shadow);
+}
+
+body.poetry-page .page-header.bg-light,
+body.novels-page .page-header.bg-light,
+body.quotes-page .page-header.bg-light,
+body.poetry-taxonomy-page .page-header.bg-light,
+body.novel-categories-page .page-header.bg-light {
+    background:
+        radial-gradient(circle at top right, rgba(139, 94, 52, 0.1), transparent 25%),
+        linear-gradient(135deg, #fffdf9 0%, #f5eddf 100%);
+}
+
+body.poetry-page .card,
+body.novels-page .card,
+body.quotes-page .card,
+body.author-poetry-page .card,
+body.novel-chapter-page .card,
+body.poetry-taxonomy-page .card,
+body.quote-type-page .card,
+body.poetry-collection-page .card,
+body.quote-collection-page .card,
+body.novel-categories-page .card {
+    background: var(--literary-surface-strong);
+    border: 1px solid var(--literary-border);
+    border-radius: 24px;
+    box-shadow: var(--literary-shadow);
+}
+
+.page-hero,
+.section-panel,
+.filter-toolbar,
+.empty-panel,
+.author-hero,
+.page-header-soft,
+.collection-hero,
+.detail-hero-card,
+.detail-main-card,
+.detail-side-card {
+    background: var(--literary-surface);
+    border: 1px solid var(--literary-border);
+    box-shadow: var(--literary-shadow);
+}
+
+.page-hero,
+.author-hero,
+.page-header-soft,
+.collection-hero,
+.detail-hero-card {
+    border-radius: 30px;
+    padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.page-hero {
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 1.25rem;
+    background:
+        radial-gradient(circle at top right, rgba(139, 94, 52, 0.12), transparent 28%),
+        linear-gradient(135deg, #fffdf9 0%, #f6efe2 100%);
+}
+
+.page-hero-grid,
+.detail-hero-grid,
+.detail-grid,
+.collection-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
+    gap: 1.25rem;
+    align-items: stretch;
+}
+
+.page-hero-copy,
+.detail-hero-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.page-kicker,
+.eyebrow,
+.detail-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    align-self: flex-start;
+    padding: 0.48rem 0.92rem;
+    border-radius: 999px;
+    background: var(--literary-accent-soft);
+    color: var(--literary-accent-strong);
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.page-title,
+.detail-title,
+.section-heading,
+.section-title-urdu,
+.panel-title {
+    color: var(--literary-ink);
+    margin: 0 0 0.8rem;
+    letter-spacing: -0.03em;
+}
+
+.page-title,
+.detail-title,
+.section-title-urdu {
+    font-family: "Cormorant Garamond", "Noto Nastaliq Urdu", serif;
+    font-size: clamp(2.35rem, 5vw, 4rem);
+    line-height: 1.2;
+}
+
+.urdu,
+.urdu-copy,
+.quote-text,
+.quote-reader-text,
+.reader-urdu-content,
+.detail-urdu-copy,
+.listing-title-urdu,
+.literary-title.urdu {
+    font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", serif;
+}
+
+.page-hero-copy p,
+.panel-copy,
+.section-subtitle,
+.detail-summary,
+.listing-excerpt,
+.literary-copy,
+.empty-panel p {
+    color: var(--literary-muted);
+    line-height: 1.85;
+}
+
+.page-stats,
+.detail-stats,
+.author-stat-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+.stat-chip,
+.badge-soft,
+.meta-pill,
+.detail-meta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.7rem 0.95rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(95, 66, 40, 0.12);
+    color: var(--literary-ink);
+    font-weight: 700;
+}
+
+.page-panel,
+.section-panel,
+.filter-toolbar,
+.empty-panel,
+.detail-main-card,
+.detail-side-card {
+    border-radius: 26px;
+}
+
+.page-panel,
+.detail-side-card {
+    padding: 1.35rem;
+}
+
+.page-panel.dark-panel,
+.dark-panel {
+    background: linear-gradient(180deg, #fffefb 0%, #f8f2e7 100%);
+    color: var(--literary-ink);
+}
+
+.sidebar-list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.sidebar-list a {
+    display: block;
+    text-decoration: none;
+    padding: 0.95rem 1rem;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(95, 66, 40, 0.1);
+    transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+}
+
+.sidebar-list a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 26px rgba(31, 41, 55, 0.08);
+    border-color: rgba(139, 94, 52, 0.22);
+}
+
+.sidebar-title {
+    display: block;
+    color: var(--literary-ink);
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+}
+
+.filter-toolbar,
+.section-panel {
+    margin-bottom: 1.15rem;
+    padding: 1.25rem;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    align-items: end;
+}
+
+.filter-grid.compact {
+    grid-template-columns: 1.5fr 1fr auto;
+}
+
+.field-group {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.field-group label {
+    color: var(--literary-muted);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.filter-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.filter-toolbar input,
+.filter-toolbar select,
+.section-panel input,
+.section-panel select {
+    width: 100%;
+    min-height: 52px;
+    border-radius: 16px;
+    border: 1px solid rgba(95, 66, 40, 0.14);
+    background: #fffdf9;
+    color: var(--literary-ink);
+    padding: 0.85rem 1rem;
+}
+
+.tab-row,
+.tab-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-bottom: 1.2rem;
+}
+
+.tab-pill,
+.tab-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.74);
+    border: 1px solid rgba(95, 66, 40, 0.12);
+    color: var(--literary-ink);
+    text-decoration: none;
+    font-weight: 700;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.tab-pill:hover,
+.tab-link:hover,
+.tab-pill.is-active,
+.tab-link.active {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(31, 41, 55, 0.08);
+    border-color: rgba(139, 94, 52, 0.28);
+    color: var(--literary-accent-strong);
+}
+
+.content-grid.columns-3,
+.quote-grid.columns-3,
+.listing-grid,
+.category-card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.2rem;
+}
+
+.literary-card,
+.quote-card,
+.listing-card,
+.collection-card,
+.soft-card,
+.category-soft-card {
+    background: var(--literary-surface-strong);
+    border: 1px solid var(--literary-border);
+    border-radius: 24px;
+    box-shadow: var(--literary-shadow);
+    transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.literary-card:hover,
+.quote-card:hover,
+.listing-card:hover,
+.collection-card:hover,
+.soft-card:hover,
+.category-soft-card:hover {
+    transform: translateY(-7px);
+    box-shadow: var(--literary-shadow-hover);
+    border-color: rgba(139, 94, 52, 0.24);
+}
+
+.literary-card-media,
+.collection-cover,
+.soft-card-media {
+    min-height: 168px;
+    border-radius: 24px 24px 0 0;
+    background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.55), transparent 20%),
+        linear-gradient(135deg, #ead9bf, #f7efe0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--literary-accent);
+    text-decoration: none;
+}
+
+.media-glyph {
+    width: 78px;
+    height: 78px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.8);
+    font-size: 2rem;
+    box-shadow: 0 14px 28px rgba(31, 41, 55, 0.08);
+}
+
+.literary-card-body,
+.quote-card,
+.soft-card-body {
+    padding: 1.35rem;
+}
+
+.listing-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: 1.35rem;
+}
+
+.literary-badges,
+.meta-row,
+.action-row,
+.quote-actions,
+.listing-kicker,
+.listing-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    align-items: center;
+}
+
+.literary-title,
+.listing-title,
+.collection-card-title,
+.soft-card-title {
+    margin: 0.25rem 0 0.5rem;
+    color: var(--literary-ink);
+    line-height: 1.4;
+}
+
+.meta-row,
+.quote-meta {
+    color: var(--literary-muted);
+    font-size: 0.92rem;
+}
+
+.literary-copy,
+.listing-excerpt {
+    margin: 0.45rem 0 0.8rem;
+}
+
+.aside-tag {
+    color: var(--literary-accent-strong);
+    font-weight: 700;
+}
+
+.quote-card {
+    padding: 1.45rem;
+    text-align: center;
+}
+
+.quote-text {
+    color: var(--literary-ink);
+    font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+    line-height: 2.2;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.icon-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 42px;
+    padding: 0.65rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid rgba(95, 66, 40, 0.14);
+    background: rgba(255, 255, 255, 0.86);
+    color: var(--literary-ink);
+}
+
+.pagination-shell {
+    margin-top: 1.7rem;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7rem;
+}
+
+.page-link-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    min-height: 46px;
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    text-decoration: none;
+    color: var(--literary-ink);
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(95, 66, 40, 0.14);
+}
+
+.page-link-pill.current {
+    background: linear-gradient(135deg, #8b5e34, #b07a42);
+    border-color: transparent;
+    color: #fff;
+}
+
+.empty-panel {
+    padding: 2.4rem;
+    text-align: center;
+}
+
+.empty-state-card {
+    padding: 2.4rem;
+    text-align: center;
+    background: var(--literary-surface);
+    border: 1px solid var(--literary-border);
+    border-radius: 28px;
+    box-shadow: var(--literary-shadow);
+}
+
+.empty-state-card i {
+    color: var(--literary-accent-strong);
+}
+
+.empty-icon {
+    width: 74px;
+    height: 74px;
+    margin: 0 auto 1rem;
+    border-radius: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--literary-accent-soft);
+    color: var(--literary-accent-strong);
+    font-size: 1.8rem;
+}
+
+.author-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(240px, 0.7fr);
+    gap: 1.2rem;
+    align-items: center;
+}
+
+.section-stack {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    padding-block: 1.25rem 4rem;
+}
+
+.section-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.author-hero-title {
+    margin: 0 0 0.8rem;
+    color: var(--literary-ink);
+    font-family: "Cormorant Garamond", "Noto Nastaliq Urdu", serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.2;
+}
+
+.author-hero-panel {
+    background: linear-gradient(135deg, #fcfaf4, #f1e4cd);
+    border: 1px solid var(--literary-border);
+    border-radius: 26px;
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.author-portrait img {
+    width: min(220px, 100%);
+    height: auto;
+    display: block;
+}
+
+.author-stat {
+    min-width: 110px;
+    padding: 1rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(95, 66, 40, 0.1);
+    text-align: center;
+}
+
+.author-stat strong {
+    display: block;
+    font-size: 1.5rem;
+    color: var(--literary-accent-strong);
+}
+
+.detail-layout,
+.chapter-layout {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    padding-block: 1.25rem 4rem;
+}
+
+.detail-main-card,
+.detail-side-card {
+    overflow: hidden;
+}
+
+.detail-main-card {
+    padding: 1.4rem;
+}
+
+.detail-side-card {
+    padding: 1.2rem;
+    position: sticky;
+    top: 110px;
+}
+
+.detail-stack,
+.detail-side-list,
+.detail-action-stack,
+.detail-highlight-grid {
+    display: grid;
+    gap: 0.9rem;
+}
+
+.detail-side-list a,
+.detail-side-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    padding: 0.95rem 1rem;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(95, 66, 40, 0.12);
+    text-decoration: none;
+    color: var(--literary-ink);
+    transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+}
+
+.detail-side-list a:hover,
+.detail-side-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 26px rgba(31, 41, 55, 0.08);
+    border-color: rgba(139, 94, 52, 0.24);
+    color: var(--literary-accent-strong);
+}
+
+.detail-note,
+.detail-summary-block,
+.premium-alert {
+    padding: 1rem 1.1rem;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(95, 66, 40, 0.12);
+    color: var(--literary-muted);
+    line-height: 1.8;
+}
+
+.detail-summary-block strong,
+.detail-note strong,
+.premium-alert strong {
+    color: var(--literary-ink);
+}
+
+.detail-highlight-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.detail-highlight {
+    padding: 1rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.84);
+    border: 1px solid rgba(95, 66, 40, 0.1);
+}
+
+.detail-highlight strong {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--literary-accent-strong);
+    font-size: 1.2rem;
+}
+
+.detail-reader-toolbar,
+.reader-toolbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    padding: 0.9rem;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.84);
+    border: 1px solid rgba(95, 66, 40, 0.1);
+}
+
+.reader-toolset {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    align-items: center;
+}
+
+.reader-tool-btn,
+.font-control-btn {
+    min-height: 42px;
+    padding: 0.65rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid rgba(95, 66, 40, 0.14);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--literary-ink);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.font-control {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.84);
+    border: 1px solid rgba(95, 66, 40, 0.1);
+}
+
+.font-control-label {
+    font-size: 0.82rem;
+    color: var(--literary-muted);
+}
+
+.reader-card {
+    background: linear-gradient(180deg, #fffefb 0%, #f9f3e7 100%);
+    border: 1px solid rgba(95, 66, 40, 0.12);
+    border-radius: 24px;
+    padding: clamp(1.5rem, 3vw, 2.3rem);
+    box-shadow: none;
+}
+
+.reader-shell {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+.collection-cover img,
+.soft-card-media img,
+.card-img-top.img-cover-220 {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.reader-title {
+    font-family: "Cormorant Garamond", "Noto Nastaliq Urdu", serif;
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    text-align: center;
+    margin: 0 0 1rem;
+}
+
+.reader-meta,
+.card-meta {
+    color: var(--literary-muted);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.reader-content,
+.quote-reader-text,
+.detail-urdu-copy {
+    color: var(--literary-ink);
+    font-size: clamp(1.3rem, 2vw, 1.62rem);
+    line-height: 2.35;
+    text-align: center;
+}
+
+.novel-reader .reader-content,
+.story-reader .reader-content,
+.poetry-page .poem-content,
+.poetry-page .detail-urdu-copy {
+    text-align: right;
+}
+
+.quote-reader-card {
+    text-align: center;
+}
+
+.quote-reader-meta {
+    color: var(--literary-muted);
+    text-align: center;
+    margin: 0.8rem 0 0;
+}
+
+.comments-section,
+.related-section,
+.related-block,
+.card,
+.glass-card {
+    background: transparent;
+}
+
+.reading-area {
+    display: grid;
+    gap: 1rem;
+}
+
+.reading-progress {
+    width: 100%;
+    height: 8px;
+    margin-bottom: 1rem;
+    border-radius: 999px;
+    background: rgba(95, 66, 40, 0.08);
+    overflow: hidden;
+}
+
+.reading-progress-bar {
+    width: 22%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(135deg, #8b5e34, #b07a42);
+}
+
+.list-group {
+    display: grid;
+    gap: 0.7rem;
+}
+
+.list-group-item,
+.list-group-item-action {
+    border: 1px solid rgba(95, 66, 40, 0.12);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.82);
+    color: var(--literary-ink);
+}
+
+.list-group-item-action.active {
+    background: linear-gradient(135deg, #8b5e34, #b07a42);
+    border-color: transparent;
+    color: #fff;
+}
+
+body.poetry-page footer,
+body.novels-page footer,
+body.quotes-page footer,
+body.author-poetry-page footer,
+body.novel-chapter-page footer,
+body.poetry-taxonomy-page footer,
+body.quote-type-page footer,
+body.poetry-collection-page footer,
+body.quote-collection-page footer,
+body.novel-categories-page footer {
+    background: linear-gradient(180deg, #f4ebdc 0%, #eadfcf 100%);
+    color: var(--literary-ink);
+    border-top: 1px solid rgba(95, 66, 40, 0.1);
+    box-shadow: none;
+}
+
+body.poetry-page .footer-section h4,
+body.novels-page .footer-section h4,
+body.quotes-page .footer-section h4,
+body.author-poetry-page .footer-section h4,
+body.novel-chapter-page .footer-section h4,
+body.poetry-taxonomy-page .footer-section h4,
+body.quote-type-page .footer-section h4,
+body.poetry-collection-page .footer-section h4,
+body.quote-collection-page .footer-section h4,
+body.novel-categories-page .footer-section h4 {
+    color: var(--literary-accent-strong);
+}
+
+body.poetry-page .footer-section p,
+body.poetry-page .footer-section a,
+body.novels-page .footer-section p,
+body.novels-page .footer-section a,
+body.quotes-page .footer-section p,
+body.quotes-page .footer-section a,
+body.author-poetry-page .footer-section p,
+body.author-poetry-page .footer-section a,
+body.novel-chapter-page .footer-section p,
+body.novel-chapter-page .footer-section a,
+body.poetry-taxonomy-page .footer-section p,
+body.poetry-taxonomy-page .footer-section a,
+body.quote-type-page .footer-section p,
+body.quote-type-page .footer-section a,
+body.poetry-collection-page .footer-section p,
+body.poetry-collection-page .footer-section a,
+body.quote-collection-page .footer-section p,
+body.quote-collection-page .footer-section a,
+body.novel-categories-page .footer-section p,
+body.novel-categories-page .footer-section a {
+    color: rgba(31, 41, 55, 0.75);
+}
+
+@media (max-width: 991px) {
+    .page-hero-grid,
+    .detail-hero-grid,
+    .detail-layout,
+    .detail-layout .detail-grid,
+    .collection-hero-grid,
+    .author-hero-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .content-grid.columns-3,
+    .quote-grid.columns-3,
+    .listing-grid,
+    .category-card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .filter-grid,
+    .filter-grid.compact {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .detail-side-card {
+        position: static;
+        top: auto;
+    }
+
+    .detail-highlight-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 767px) {
+    .page-shell,
+    .detail-layout {
+        width: min(100% - 20px, 1180px);
+    }
+
+    .content-grid.columns-3,
+    .quote-grid.columns-3,
+    .listing-grid,
+    .category-card-grid,
+    .filter-grid,
+    .filter-grid.compact {
+        grid-template-columns: 1fr;
+    }
+
+    .page-title,
+    .detail-title,
+    .section-title-urdu {
+        font-size: 2.2rem;
+    }
+
+    .reader-toolbar,
+    .detail-reader-toolbar,
+    .page-stats,
+    .detail-stats,
+    .author-stat-grid,
+    .filter-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .reader-toolset,
+    .tab-row,
+    .tab-nav {
+        justify-content: stretch;
+    }
+
+    .reader-tool-btn,
+    .tab-pill,
+    .tab-link,
+    .filter-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .quote-text,
+    .quote-reader-text,
+    .reader-content {
+        font-size: 1.2rem;
+    }
+
+    .section-stack {
+        width: min(100% - 20px, 1180px);
+    }
+
+    .section-panel-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .detail-highlight-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,36 +1,61 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}Quote Collections - {{ SITE_NAME }}{% endblock %}
+{% block body_class %}content-page quotes-page quote-collection-page{% endblock %}
 
 {% block content %}
-<section class="page-header py-4">
-    <div class="main-container">
-        <h1 class="mb-1">Quote Collections</h1>
-    </div>
-</section>
-
-<section class="py-3">
-    <div class="main-container">
-        <div class="row g-3">
-            {% for collection in collections %}
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100">
-                    {% if collection.cover_image %}
-                    <img src="{{ collection.cover_image.url }}" class="card-img-top img-cover-220" alt="{{ collection.title }}">
-                    {% else %}
-                    <img src="{% static 'images/placeholder-cover.svg' %}" class="card-img-top img-cover-220" alt="{{ collection.title }}">
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="{{ collection.get_absolute_url }}">{{ collection.title }}</a></h5>
-                        <p class="text-muted small mb-0">{{ collection.description|default:'No description available.'|truncatechars:120 }}</p>
-                    </div>
+<div class="page-shell">
+    <section class="page-hero page-fade">
+        <div class="page-hero-grid">
+            <div class="page-hero-copy centered-mobile">
+                <span class="page-kicker">Curated quote sets</span>
+                <h1 class="page-title">Quote Collections</h1>
+                <p>Browse themed quote collections presented in a lighter, more editorial card layout.</p>
+                <div class="page-stats">
+                    <span class="stat-chip"><strong>{{ collections|length }}</strong> collections</span>
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center py-4"><p class="text-muted mb-0">No quote collections found.</p></div>
-            {% endfor %}
+            <aside class="page-panel dark-panel page-fade delay-1">
+                <h2 class="panel-title">Collection Style</h2>
+                <div class="sidebar-list">
+                    <span class="panel-copy">Grouped reflections and sayings arranged for focused, distraction-free browsing.</span>
+                </div>
+            </aside>
         </div>
-    </div>
-</section>
+    </section>
+
+    {% if collections %}
+    <section class="content-grid columns-3 page-fade delay-2">
+        {% for collection in collections %}
+        <article class="literary-card collection-card">
+            <a href="{{ collection.get_absolute_url }}" class="literary-card-media collection-cover" aria-label="Open {{ collection.title }}">
+                {% if collection.cover_image %}
+                <img src="{{ collection.cover_image.url }}" alt="{{ collection.title }}" loading="lazy">
+                {% else %}
+                <img src="{% static 'images/placeholder-cover.svg' %}" alt="{{ collection.title }}" loading="lazy">
+                {% endif %}
+            </a>
+            <div class="literary-card-body">
+                <div class="literary-badges">
+                    <span class="literary-badge">Collection</span>
+                    <span class="meta-pill">{{ collection.quotes.count }} quotes</span>
+                </div>
+                <h2 class="literary-title urdu">{{ collection.title }}</h2>
+                <p class="literary-copy">{{ collection.description|default:"A selected set of Urdu quotes and reflections."|truncatechars:135 }}</p>
+                <div class="action-row">
+                    <a href="{{ collection.get_absolute_url }}" class="btn btn-primary">Open Collection</a>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </section>
+    {% else %}
+    <section class="empty-panel page-fade delay-2">
+        <div class="empty-icon"><i class="bi bi-chat-square-quote"></i></div>
+        <h2 class="panel-title">No quote collections found</h2>
+        <p>Collections will appear here when themed sets are published.</p>
+    </section>
+    {% endif %}
+</div>
 {% endblock %}

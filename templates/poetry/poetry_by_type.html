@@ -10,44 +10,54 @@
 {% block twitter_title %}Poetry Type - {{ SITE_NAME }}{% endblock %}
 {% block twitter_description %}Browse Urdu poetry by type (Ghazal, Nazm, etc.) on {{ SITE_NAME }}.{% endblock %}
 {% block twitter_image %}{% endblock %}
+{% block body_class %}content-page poetry-page poetry-taxonomy-page{% endblock %}
 
 {% block content %}
-<section class="page-header py-4 bg-light">
-    <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'poetry_list' %}">Poetry</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Poetry by Type</li>
-            </ol>
-        </nav>
-        <h1 class="display-6 mt-2 mb-0">Poetry by Type</h1>
-        <p class="lead text-muted">Explore Urdu poetry by type.</p>
-    </div>
-</section>
-<section class="py-4">
-    <div class="container">
-        <div class="row g-4">
-            {% for poem in poetry_list %}
-            <div class="col-lg-4 col-md-6 col-12">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title mb-2">
-                            <a href="{{ poem.get_absolute_url }}" class="text-decoration-none text-dark">{{ poem.title }}</a>
-                        </h5>
-                        <p class="card-text small text-muted">{{ poem.excerpt|truncatechars:100 }}</p>
-                        <p class="card-text small text-muted mb-0">
-                            <i class="bi bi-person"></i> {{ poem.author.name }}
-                        </p>
-                    </div>
+<div class="page-shell">
+    <section class="page-hero page-fade">
+        <div class="page-hero-grid">
+            <div class="page-hero-copy centered-mobile">
+                <span class="page-kicker">Format explorer</span>
+                <h1 class="page-title">Poetry by Type</h1>
+                <p>Explore Urdu poetry by literary form in a lighter, easier-to-scan archive.</p>
+                <div class="page-stats">
+                    <span class="stat-chip"><strong>{{ poetry_list|length }}</strong> poems in this view</span>
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center py-5">
-                <p class="text-muted">No poetry found for this type.</p>
-            </div>
-            {% endfor %}
+            <aside class="page-panel dark-panel page-fade delay-1">
+                <h2 class="panel-title">Browse Forms</h2>
+                <div class="sidebar-list">
+                    <span class="panel-copy">Move through ghazal, nazm, and other forms with consistent cards and centered reading emphasis.</span>
+                </div>
+            </aside>
         </div>
-    </div>
-</section>
+    </section>
+
+    {% if poetry_list %}
+    <section class="listing-grid page-fade delay-2">
+        {% for poem in poetry_list %}
+        <article class="listing-card">
+            <div class="listing-body">
+                <div class="listing-kicker">
+                    <span class="badge-soft">{{ poem.category.name|default:"Poetry" }}</span>
+                    <span>{{ poem.created_at|date:"M d, Y" }}</span>
+                </div>
+                <h2 class="listing-title listing-title-urdu"><a href="{{ poem.get_absolute_url }}">{{ poem.title }}</a></h2>
+                <p class="listing-excerpt urdu-copy">{{ poem.content|striptags|truncatechars:160 }}</p>
+                <div class="listing-footer">
+                    <span class="badge-soft">{{ poem.author.name|default:"Unknown Author" }}</span>
+                    <a href="{{ poem.get_absolute_url }}" class="btn btn-secondary">Read Poem</a>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </section>
+    {% else %}
+    <section class="empty-panel page-fade delay-2">
+        <div class="empty-icon"><i class="bi bi-feather"></i></div>
+        <h2 class="panel-title">No poetry found for this type</h2>
+        <p>Try another category or return to the complete poetry archive.</p>
+    </section>
+    {% endif %}
+</div>
 {% endblock %}

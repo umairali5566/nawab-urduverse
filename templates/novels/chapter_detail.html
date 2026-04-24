@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}{{ chapter.novel.title }} - باب {{ chapter.chapter_number }}: {{ chapter.title }} | {{ SITE_NAME }}{% endblock %}
@@ -6,30 +6,45 @@
 {% block og_title %}{{ chapter.meta_title|default:chapter.title }}{% endblock %}
 {% block og_description %}{{ chapter.meta_description|default:chapter.novel.description|striptags|truncatechars:160 }}{% endblock %}
 {% block og_image %}{% if chapter.novel.cover_image %}{{ chapter.novel.cover_image.url }}{% endif %}{% endblock %}
+{% block body_class %}content-page novels-page novel-chapter-page{% endblock %}
 
 {% block content %}
-<section class="page-header py-4">
-    <div class="main-container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="{% url 'home' %}">صفحہ اول</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'novel_list' %}">ناولز</a></li>
-                <li class="breadcrumb-item"><a href="{{ chapter.novel.get_absolute_url }}">{{ chapter.novel.title }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">باب {{ chapter.chapter_number }}</li>
-            </ol>
-        </nav>
-        <h1 class="mt-3 mb-1 section-title-urdu">باب {{ chapter.chapter_number }}: {{ chapter.title }}</h1>
-        <p class="section-subtitle">Book-style chapter reading experience</p>
-    </div>
-</section>
+<div class="page-shell chapter-layout">
+    <section class="page-hero page-fade">
+        <div class="detail-hero-grid">
+            <div class="detail-hero-copy">
+                <span class="detail-kicker"><i class="bi bi-book"></i> Chapter Reader</span>
+                <h1 class="detail-title urdu">باب {{ chapter.chapter_number }}: {{ chapter.title }}</h1>
+                <p class="detail-summary">A lighter chapter-reading interface with stronger spacing, cleaner alignment, and responsive controls for long Urdu text.</p>
+                <div class="detail-stats">
+                    <span class="detail-meta-pill"><i class="bi bi-journal-bookmark"></i> {{ chapter.novel.title }}</span>
+                    <span class="detail-meta-pill"><i class="bi bi-list-ol"></i> باب {{ chapter.chapter_number }} از {{ chapter_count }}</span>
+                    <span class="detail-meta-pill"><i class="bi bi-eye"></i> {{ chapter.views_count }}</span>
+                </div>
+            </div>
 
-<section class="py-3">
-    <div class="main-container">
-        <div class="reading-progress" aria-hidden="true">
-            <div class="reading-progress-bar"></div>
+            <aside class="page-panel dark-panel page-fade delay-1">
+                <h2 class="panel-title">Reading Snapshot</h2>
+                <div class="detail-highlight-grid">
+                    <div class="detail-highlight">
+                        <strong>{{ chapter.reading_time }}</strong>
+                        <span>Minutes</span>
+                    </div>
+                    <div class="detail-highlight">
+                        <strong>{{ chapter.created_at|date:"d M Y" }}</strong>
+                        <span>Published</span>
+                    </div>
+                </div>
+            </aside>
         </div>
+    </section>
 
-        <div class="reading-area">
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar"></div>
+    </div>
+
+    <div class="detail-grid page-fade delay-1">
+        <section class="detail-main-card">
             <div
                 class="reader-shell content-protected-shell"
                 data-protected-content
@@ -68,9 +83,6 @@
                             <button type="button" class="font-control-btn" data-font-action="decrease" data-reader-target="#chapterReaderContent">A-</button>
                             <button type="button" class="font-control-btn" data-font-action="increase" data-reader-target="#chapterReaderContent">A+</button>
                         </div>
-                        <button type="button" class="reader-tool-btn" data-reader-dark-target="#chapterReaderCard" aria-pressed="false">
-                            <i class="bi bi-moon-stars"></i> Night
-                        </button>
                     </div>
                 </div>
 
@@ -78,9 +90,7 @@
                     <h2 class="reader-title">{{ chapter.title }}</h2>
                     <div class="reader-meta">
                         <span><i class="bi bi-book"></i> {{ chapter.novel.title }}</span>
-                        <span><i class="bi bi-list-ol"></i> باب {{ chapter.chapter_number }} از {{ chapter_count }}</span>
                         <span><i class="bi bi-clock"></i> {{ chapter.reading_time }} min</span>
-                        <span><i class="bi bi-eye"></i> {{ chapter.views_count }}</span>
                         <span><i class="bi bi-calendar"></i> {{ chapter.created_at|date:'d M, Y' }}</span>
                     </div>
 
@@ -117,28 +127,25 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="row g-3 mt-3">
-            <div class="col-lg-8">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title section-title-urdu">تمام ابواب</h5>
-                        <div class="list-group">
-                            {% for ch in all_chapters %}
-                            <a href="{{ ch.get_absolute_url }}" class="list-group-item list-group-item-action {% if ch.id == chapter.id %}active{% endif %}">
-                                <span class="badge bg-light text-dark ms-2">{{ ch.chapter_number }}</span>
-                                {{ ch.title|truncatechars:70 }}
-                            </a>
-                            {% endfor %}
-                        </div>
-                    </div>
+        <aside class="detail-side-card">
+            <div class="detail-stack">
+                <h3 class="panel-title mb-0">تمام ابواب</h3>
+                <div class="list-group">
+                    {% for ch in all_chapters %}
+                    <a href="{{ ch.get_absolute_url }}" class="list-group-item list-group-item-action {% if ch.id == chapter.id %}active{% endif %}">
+                        <span class="badge bg-light text-dark ms-2">{{ ch.chapter_number }}</span>
+                        {{ ch.title|truncatechars:70 }}
+                    </a>
+                    {% endfor %}
                 </div>
             </div>
-            <div class="col-lg-4">
-                {% include 'includes/trending_sidebar.html' %}
-            </div>
-        </div>
+        </aside>
     </div>
-</section>
+
+    <section class="section-panel page-fade delay-2">
+        {% include 'includes/trending_sidebar.html' %}
+    </section>
+</div>
 {% endblock %}

@@ -1,47 +1,79 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}Poetry Collections - {{ SITE_NAME }}{% endblock %}
+{% block body_class %}content-page poetry-page poetry-collection-page{% endblock %}
 
 {% block content %}
-<section class="page-header py-4">
-    <div class="main-container">
-        <h1 class="mb-1">Poetry Collections</h1>
-        <p class="text-muted mb-0">Curated poetry sets and diwans.</p>
-    </div>
-</section>
-
-<section class="py-3">
-    <div class="main-container">
-        <div class="row g-3">
-            {% for collection in collections %}
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100">
-                    {% if collection.cover_image %}
-                    <img src="{{ collection.cover_image.url }}" class="card-img-top img-cover-220" alt="{{ collection.title }}">
-                    {% else %}
-                    <img src="{% static 'images/placeholder-cover.svg' %}" class="card-img-top img-cover-220" alt="{{ collection.title }}">
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="{{ collection.get_absolute_url }}">{{ collection.title }}</a></h5>
-                        <p class="text-muted small mb-0">{{ collection.author.name }}</p>
-                    </div>
+<div class="page-shell">
+    <section class="page-hero page-fade">
+        <div class="page-hero-grid">
+            <div class="page-hero-copy centered-mobile">
+                <span class="page-kicker">Curated reading sets</span>
+                <h1 class="page-title">Poetry Collections</h1>
+                <p>Browse curated diwans and carefully grouped poetry selections in a cleaner editorial layout.</p>
+                <div class="page-stats">
+                    <span class="stat-chip"><strong>{{ collections|length }}</strong> collections</span>
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center py-4"><p class="text-muted mb-0">No collections found.</p></div>
-            {% endfor %}
+            <aside class="page-panel dark-panel page-fade delay-1">
+                <h2 class="panel-title">Collection Notes</h2>
+                <div class="sidebar-list">
+                    <span class="panel-copy">Designed for immersive browsing with lighter cards, calmer spacing, and improved Urdu readability.</span>
+                </div>
+            </aside>
         </div>
+    </section>
 
-        {% if is_paginated %}
-        <nav class="mt-4" aria-label="Collection pagination">
-            <ul class="pagination justify-content-center">
-                {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>{% endif %}
-                {% for num in paginator.page_range %}<li class="page-item {% if page_obj.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>{% endfor %}
-                {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>{% endif %}
-            </ul>
-        </nav>
-        {% endif %}
+    {% if collections %}
+    <section class="content-grid columns-3 page-fade delay-2">
+        {% for collection in collections %}
+        <article class="literary-card collection-card">
+            <a href="{{ collection.get_absolute_url }}" class="literary-card-media collection-cover" aria-label="Open {{ collection.title }}">
+                {% if collection.cover_image %}
+                <img src="{{ collection.cover_image.url }}" alt="{{ collection.title }}" loading="lazy">
+                {% else %}
+                <img src="{% static 'images/placeholder-cover.svg' %}" alt="{{ collection.title }}" loading="lazy">
+                {% endif %}
+            </a>
+            <div class="literary-card-body">
+                <div class="literary-badges">
+                    <span class="literary-badge">Collection</span>
+                    <span class="meta-pill">{{ collection.poems.count }} poems</span>
+                </div>
+                <h2 class="literary-title urdu">{{ collection.title }}</h2>
+                <div class="meta-row">
+                    <span>{{ collection.author.name|default:"Unknown Author" }}</span>
+                    <span>{{ collection.created_at|date:"M d, Y" }}</span>
+                </div>
+                <p class="literary-copy">{{ collection.description|default:"A curated poetry set prepared for focused reading."|truncatechars:140 }}</p>
+                <div class="action-row">
+                    <a href="{{ collection.get_absolute_url }}" class="btn btn-primary">View Collection</a>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </section>
+
+    {% if is_paginated %}
+    <div class="pagination-shell">
+        <div class="pagination-nav">
+            {% if page_obj.has_previous %}
+            <a class="page-link-pill" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+            <span class="page-link-pill current">{{ page_obj.number }}</span>
+            {% if page_obj.has_next %}
+            <a class="page-link-pill" href="?page={{ page_obj.next_page_number }}">Next</a>
+            {% endif %}
+        </div>
     </div>
-</section>
+    {% endif %}
+    {% else %}
+    <section class="empty-panel page-fade delay-2">
+        <div class="empty-icon"><i class="bi bi-collection"></i></div>
+        <h2 class="panel-title">No poetry collections found</h2>
+        <p>Collections will appear here once curated sets are published.</p>
+    </section>
+    {% endif %}
+</div>
 {% endblock %}

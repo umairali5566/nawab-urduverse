@@ -2,197 +2,97 @@
 {% load static %}
 
 {% block title %}{{ poem.title }} - {{ SITE_NAME }}{% endblock %}
-
-{% block extra_css %}
-<style>
-    .poetry-reader {
-        max-width: 700px;
-        margin: 3.25rem auto;
-        padding: 0 1.25rem;
-        direction: rtl;
-        text-align: right;
-    }
-
-    .poem-card {
-        background: var(--background-base);
-        border-radius: 16px;
-        box-shadow: var(--shadow-md);
-        border: 1px solid rgba(226, 232, 240, 0.9);
-        padding: 2.75rem 2.5rem;
-    }
-
-    .poem-header {
-        text-align: center;
-        margin-bottom: 2.5rem;
-        padding-bottom: 2rem;
-        border-bottom: 1px solid rgba(226, 232, 240, 0.9);
-    }
-
-    .poem-title {
-        font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaliq', serif;
-        font-size: clamp(2rem, 5vw, 2.75rem);
-        font-weight: 700;
-        color: var(--text-primary);
-        margin: 0 0 1.25rem 0;
-        line-height: 1.35;
-    }
-
-    .poem-meta {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.85rem;
-        flex-wrap: wrap;
-        color: var(--text-secondary);
-        font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaliq', serif;
-        font-size: 1.05rem;
-    }
-
-    .poem-author {
-        font-weight: 700;
-        color: var(--text-secondary);
-    }
-
-    .poem-category {
-        background: var(--primary-gradient);
-        color: white;
-        padding: 0.35rem 0.85rem;
-        border-radius: 9999px;
-        font-weight: 700;
-        font-size: 0.95rem;
-    }
-
-    .poem-content {
-        font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaliq', serif;
-        font-size: 22px;
-        line-height: 2.2;
-        color: var(--text-primary);
-        margin: 2.5rem 0;
-        direction: rtl;
-        text-align: right;
-        word-break: break-word;
-        white-space: pre-wrap;
-    }
-
-    .poem-actions {
-        display: flex;
-        justify-content: center;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-        margin: 2.75rem 0 2.25rem;
-    }
-
-    .poem-actions .btn {
-        min-width: 150px;
-        border-radius: 14px;
-    }
-
-    .poem-actions .btn.btn-primary {
-        gap: 0.65rem;
-    }
-
-    .poem-actions .btn.is-active {
-        filter: saturate(1.05);
-        box-shadow: 0 10px 25px rgba(14, 165, 233, 0.35);
-    }
-
-    .poem-footer {
-        display: flex;
-        justify-content: center;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-        padding-top: 2rem;
-        margin-top: 2.75rem;
-        border-top: 1px solid rgba(226, 232, 240, 0.9);
-    }
-
-    .poem-footer .btn {
-        min-width: 220px;
-        border-radius: 14px;
-    }
-
-    @media (max-width: 768px) {
-        .poetry-reader {
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .poem-card {
-            padding: 1.75rem 1.25rem;
-        }
-
-        .poem-actions,
-        .poem-footer {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .poem-actions .btn,
-        .poem-footer .btn {
-            width: 100%;
-            min-width: unset;
-        }
-
-        .poem-content {
-            font-size: 20px;
-            line-height: 2.15;
-        }
-    }
-</style>
-{% endblock %}
+{% block body_class %}content-page poetry-page poetry-detail-page{% endblock %}
 
 {% block content %}
-<div class="poetry-reader">
-    <article class="poem-card">
-        <!-- Poem Header -->
-        <header class="poem-header">
-             <h1 class="poem-title">{{ poem.title }}</h1>
-             <div class="poem-meta">
-                 {% if poem.author %}
-                 <span class="poem-author">{{ poem.author.name }}</span>
-                 {% endif %}
-                 {% if poem.category %}
-                 <span class="poem-category">{{ poem.category.name }}</span>
-                 {% endif %}
-             </div>
-        </header>
+<div class="page-shell">
+    <section class="page-hero page-fade">
+        <div class="detail-hero-grid">
+            <div class="detail-hero-copy">
+                <span class="detail-kicker"><i class="bi bi-feather"></i> Poetry Reading</span>
+                <h1 class="detail-title urdu">{{ poem.title }}</h1>
+                <p class="detail-summary">A calmer reading page with centered Urdu presentation, soft contrast, and cleaner spacing for every verse.</p>
+                <div class="detail-stats">
+                    {% if poem.author %}
+                    <span class="detail-meta-pill"><i class="bi bi-person"></i> {{ poem.author.name }}</span>
+                    {% endif %}
+                    {% if poem.category %}
+                    <span class="detail-meta-pill"><i class="bi bi-bookmark-star"></i> {{ poem.category.name }}</span>
+                    {% endif %}
+                    <span class="detail-meta-pill"><i class="bi bi-calendar3"></i> {{ poem.created_at|date:"d M Y" }}</span>
+                </div>
+            </div>
 
-        <!-- Poem Content -->
-        <div class="poem-content" id="poemContent">{{ poem.content|linebreaksbr }}</div>
-
-        <!-- Action Buttons -->
-        <div class="poem-actions">
-            {% if user.is_authenticated %}
-            <button class="btn btn-primary {% if is_liked %}is-active{% endif %}" onclick="toggleLike(this)" type="button" aria-label="پسند">
-                <span class="poem-like-icon">{% if is_liked %}♥{% else %}♡{% endif %}</span>
-                <span class="poem-like-text">{% if is_liked %}پسند کیا گیا{% else %}پسند{% endif %}</span>
-            </button>
-            {% else %}
-            <a class="btn btn-primary" href="{% url 'login' %}?next={{ request.path|urlencode }}" aria-label="پسند کیلئے لاگ ان کریں">
-                <span>♡</span>
-                <span>پسند کیلئے لاگ ان</span>
-            </a>
-            {% endif %}
-            <button class="btn btn-primary" onclick="sharePoem()" type="button" aria-label="شیئر کریں">
-                <span>↗</span>
-                <span>شیئر کریں</span>
-            </button>
-            <button class="btn btn-primary" onclick="copyToClipboard()" type="button" aria-label="کاپی کریں">
-                <span>⧉</span>
-                <span>کاپی کریں</span>
-            </button>
+            <aside class="page-panel dark-panel page-fade delay-1">
+                <h2 class="panel-title">Reading Notes</h2>
+                <div class="detail-stack">
+                    <div class="detail-summary-block">
+                        This page uses a lighter book-inspired layout so Urdu poetry stays readable on both phone and desktop screens.
+                    </div>
+                    <div class="detail-highlight-grid">
+                        <div class="detail-highlight">
+                            <strong>{{ poem.likes_count }}</strong>
+                            <span>Likes</span>
+                        </div>
+                        <div class="detail-highlight">
+                            <strong>{{ poem.views_count }}</strong>
+                            <span>Views</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
         </div>
+    </section>
 
-        <!-- Navigation Buttons -->
-        <div class="poem-footer">
-            <a href="{% url 'poetry_list' %}" class="btn btn-secondary">شاعری پر واپس</a>
-            {% if poem.author and poem.author.slug %}
-            <a href="{% url 'author_detail' poem.author.slug %}" class="btn btn-secondary">{{ poem.author.name }} کی مزید شاعری</a>
-            {% endif %}
-        </div>
-    </article>
+    <div class="detail-grid page-fade delay-1">
+        <section class="detail-main-card">
+            <div class="reader-toolbar">
+                <div class="reader-toolset">
+                    {% if user.is_authenticated %}
+                    <button class="reader-tool-btn like-btn {% if is_liked %}active{% endif %}" onclick="toggleLike(this)" type="button" aria-label="پسند">
+                        <span class="poem-like-icon">{% if is_liked %}♥{% else %}♡{% endif %}</span>
+                        <span class="poem-like-text">{% if is_liked %}پسند کیا گیا{% else %}پسند{% endif %}</span>
+                    </button>
+                    {% else %}
+                    <a class="reader-tool-btn" href="{% url 'login' %}?next={{ request.path|urlencode }}" aria-label="پسند کے لیے لاگ ان کریں">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        <span>پسند کے لیے لاگ ان</span>
+                    </a>
+                    {% endif %}
+                    <button class="reader-tool-btn" onclick="sharePoem()" type="button" aria-label="شیئر کریں">
+                        <i class="bi bi-share"></i> شیئر کریں
+                    </button>
+                    <button class="reader-tool-btn" onclick="copyToClipboard()" type="button" aria-label="کاپی کریں">
+                        <i class="bi bi-clipboard"></i> کاپی کریں
+                    </button>
+                </div>
+            </div>
+
+            <article class="reader-card quote-reader-card">
+                <div class="detail-urdu-copy" id="poemContent">{{ poem.content|linebreaksbr }}</div>
+            </article>
+        </section>
+
+        <aside class="detail-side-card">
+            <div class="detail-stack">
+                <div class="detail-note">
+                    {% if poem.author %}
+                    <strong>{{ poem.author.name }}</strong> کی اس تخلیق کو ایک صاف اور متوازن مطالعہ تجربے کے ساتھ پیش کیا گیا ہے۔
+                    {% else %}
+                    اس شاعری کو ایک صاف اور متوازن مطالعہ تجربے کے ساتھ پیش کیا گیا ہے۔
+                    {% endif %}
+                </div>
+
+                <div class="detail-action-stack">
+                    <a href="{% url 'poetry_list' %}" class="btn btn-secondary">شاعری پر واپس جائیں</a>
+                    {% if poem.author and poem.author.slug %}
+                    <a href="{% url 'author_detail' poem.author.slug %}" class="btn btn-primary">{{ poem.author.name }} کی مزید شاعری</a>
+                    {% endif %}
+                </div>
+            </div>
+        </aside>
+    </div>
 </div>
-
 {% endblock %}
 
 {% block extra_js %}
@@ -210,7 +110,7 @@
                 const textEl = btn.querySelector('.poem-like-text');
                 const liked = Boolean(data.liked);
 
-                btn.classList.toggle('is-active', liked);
+                btn.classList.toggle('active', liked);
                 if (iconEl) iconEl.textContent = liked ? '♥' : '♡';
                 if (textEl) textEl.textContent = liked ? 'پسند کیا گیا' : 'پسند';
             })
@@ -238,8 +138,8 @@
         const title = '{{ poem.title|escapejs }}';
         const author = '{% if poem.author %}{{ poem.author.name|escapejs }}{% endif %}';
         const content = (document.getElementById('poemContent')?.innerText || '').trim();
-        const header = author ? `${title}\\n${author}\\n` : `${title}\\n`;
-        const text = `${header}\\n${content}`.trim();
+        const header = author ? `${title}\n${author}\n` : `${title}\n`;
+        const text = `${header}\n${content}`.trim();
 
         if (!navigator.clipboard) {
             window.prompt('یہ متن کاپی کر لیں:', text);

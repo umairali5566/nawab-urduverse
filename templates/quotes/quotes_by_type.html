@@ -1,30 +1,50 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}{{ quote_type_display }} Quotes - {{ SITE_NAME }}{% endblock %}
+{% block body_class %}content-page quotes-page quote-type-page{% endblock %}
 
 {% block content %}
-<section class="page-header py-4">
-    <div class="main-container">
-        <h1 class="mb-1">{{ quote_type_display }} Quotes</h1>
-    </div>
-</section>
-
-<section class="py-3">
-    <div class="main-container">
-        <div class="row g-3">
-            {% for quote in quotes %}
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <blockquote class="mb-2">{{ quote.text|truncatechars:220 }}</blockquote>
-                        <p class="text-muted small mb-0">{{ quote.author.name }}</p>
-                    </div>
+<div class="page-shell">
+    <section class="page-hero page-fade">
+        <div class="page-hero-grid">
+            <div class="page-hero-copy centered-mobile">
+                <span class="page-kicker">Quote archive</span>
+                <h1 class="page-title">{{ quote_type_display }} Quotes</h1>
+                <p>Explore a focused collection of quotes in a brighter, cleaner, and more readable interface.</p>
+                <div class="page-stats">
+                    <span class="stat-chip"><strong>{{ quotes|length }}</strong> quotes</span>
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center py-4"><p class="text-muted mb-0">No quotes found for this type.</p></div>
-            {% endfor %}
+            <aside class="page-panel dark-panel page-fade delay-1">
+                <h2 class="panel-title">Reading Flow</h2>
+                <div class="sidebar-list">
+                    <span class="panel-copy">Short-form literature deserves breathing room. This layout keeps the text centered and easy to scan.</span>
+                </div>
+            </aside>
         </div>
-    </div>
-</section>
+    </section>
+
+    {% if quotes %}
+    <section class="quote-grid columns-3 page-fade delay-2">
+        {% for quote in quotes %}
+        <article class="quote-card">
+            <div class="literary-badges">
+                <span class="literary-badge">{{ quote.get_quote_type_display }}</span>
+                <span class="meta-pill">{{ quote.author.name|default:"Unknown" }}</span>
+            </div>
+            <p class="quote-text urdu">{{ quote.text|truncatechars:220 }}</p>
+            <div class="quote-actions">
+                <a href="{{ quote.get_absolute_url }}" class="btn btn-secondary">Read Detail</a>
+            </div>
+        </article>
+        {% endfor %}
+    </section>
+    {% else %}
+    <section class="empty-panel page-fade delay-2">
+        <div class="empty-icon"><i class="bi bi-chat-quote"></i></div>
+        <h2 class="panel-title">No quotes found for this type</h2>
+        <p>Try another quote type or return to the full quotes archive.</p>
+    </section>
+    {% endif %}
+</div>
 {% endblock %}

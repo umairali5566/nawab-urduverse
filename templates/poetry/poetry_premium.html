@@ -3,6 +3,7 @@
 
 {% block title %}{{ poem.title }} - {{ SITE_NAME }}{% endblock %}
 {% block meta_description %}{{ poem.meta_description|default:poem.plain_text_content|truncatechars:160 }}{% endblock %}
+{% block body_class %}content-page poetry-page poetry-premium-page{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">

@@ -1,36 +1,50 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}{{ collection.title }} - {{ SITE_NAME }}{% endblock %}
+{% block body_class %}content-page quotes-page quote-collection-page{% endblock %}
 
 {% block content %}
-<section class="page-header py-4">
-    <div class="main-container">
-        <h1 class="mb-1">{{ collection.title }}</h1>
-    </div>
-</section>
-
-<section class="py-3">
-    <div class="main-container">
-        <div class="card mb-3">
-            <div class="card-body">
-                <p class="mb-0">{{ collection.description|default:'No description available.' }}</p>
-            </div>
-        </div>
-
-        <div class="row g-3">
-            {% for item in quotes %}
-            <div class="col-md-6">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <blockquote class="mb-2">{{ item.text|truncatechars:180 }}</blockquote>
-                        <p class="text-muted small mb-0">{{ item.author.name }}</p>
-                    </div>
+<div class="page-shell">
+    <section class="page-hero page-fade">
+        <div class="page-hero-grid">
+            <div class="page-hero-copy centered-mobile">
+                <span class="page-kicker">Quote anthology</span>
+                <h1 class="page-title urdu">{{ collection.title }}</h1>
+                <p>{{ collection.description|default:"A curated collection of memorable Urdu quotes presented in a cleaner reading format." }}</p>
+                <div class="page-stats">
+                    <span class="stat-chip"><strong>{{ quotes|length }}</strong> quotes</span>
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center py-4"><p class="text-muted mb-0">No quotes in this collection.</p></div>
-            {% endfor %}
+            <aside class="page-panel dark-panel page-fade delay-1">
+                <h2 class="panel-title">Collection Notes</h2>
+                <div class="sidebar-list">
+                    <span class="panel-copy">Explore reflections, wisdom, and short-form literary thoughts with better spacing and softer visual hierarchy.</span>
+                </div>
+            </aside>
         </div>
-    </div>
-</section>
+    </section>
+
+    {% if quotes %}
+    <section class="quote-grid columns-3 page-fade delay-2">
+        {% for item in quotes %}
+        <article class="quote-card">
+            <div class="literary-badges">
+                <span class="literary-badge">{{ item.get_quote_type_display }}</span>
+                <span class="meta-pill">{{ item.author.name|default:"Unknown" }}</span>
+            </div>
+            <p class="quote-text urdu">{{ item.text|truncatechars:220 }}</p>
+            <div class="quote-actions">
+                <a href="{{ item.get_absolute_url }}" class="btn btn-secondary">Read Detail</a>
+            </div>
+        </article>
+        {% endfor %}
+    </section>
+    {% else %}
+    <section class="empty-panel page-fade delay-2">
+        <div class="empty-icon"><i class="bi bi-quote"></i></div>
+        <h2 class="panel-title">No quotes in this collection</h2>
+        <p>This collection exists, but no quotes are published inside it yet.</p>
+    </section>
+    {% endif %}
+</div>
 {% endblock %}
