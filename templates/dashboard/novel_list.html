@@ -22,7 +22,7 @@
                             <th>Title</th>
                             <th>Author</th>
                             <th>Status</th>
-                            <th>Views</th>
+                            <th>Chapters</th>
                             <th>Created</th>
                             <th class="text-end">Actions</th>
                         </tr>
@@ -32,8 +32,14 @@
                         <tr>
                             <td>{{ novel.title|truncatechars:46 }}</td>
                             <td>{{ novel.author.name }}</td>
-                            <td><span class="badge bg-secondary">{{ novel.get_status_display }}</span></td>
-                            <td>{{ novel.views_count }}</td>
+                            <td>
+                                {% if novel.is_published %}
+                                <span class="badge bg-success">Published</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Draft</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ novel.total_chapters }}</td>
                             <td>{{ novel.created_at|date:'d M Y' }}</td>
                             <td class="text-end">
                                 <span class="table-actions">

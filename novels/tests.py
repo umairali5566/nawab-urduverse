@@ -102,3 +102,15 @@ class NovelChapterFlowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         chapter_numbers = [chapter.chapter_number for chapter in response.context["chapters"]]
         self.assertEqual(chapter_numbers, [1, 2, 3])
+
+    def test_admin_add_novel_page_loads(self):
+        admin_user = get_user_model().objects.create_superuser(
+            username="admin",
+            email="admin@example.com",
+            password="safe-password-123",
+        )
+        self.client.force_login(admin_user)
+
+        response = self.client.get(reverse("admin:novels_novel_add"))
+
+        self.assertEqual(response.status_code, 200)

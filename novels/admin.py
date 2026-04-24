@@ -30,7 +30,7 @@ class NovelAdmin(admin.ModelAdmin):
             'fields': ('is_published', 'published_at')
         }),
         ('Statistics', {
-            'fields': ('total_chapters', 'views_count', 'created_at', 'updated_at'),
+            'fields': ('total_chapters', 'created_at'),
             'classes': ('collapse',)
         }),
     )
