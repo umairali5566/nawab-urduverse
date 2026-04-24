@@ -2,337 +2,726 @@
 {% load static %}
 
 {% block title %}{{ novel.title }} - {{ SITE_NAME }}{% endblock %}
+{% block body_class %}content-page novels-page{% endblock %}
 
 {% block content %}
-
 <style>
-    /* Novel Detail Page Styles */
-    .novel-container {
-        max-width: 850px;
-        margin: 4rem auto;
-        padding: 0 1.5rem;
+    .novel-detail-shell {
+        --novel-ink: #172033;
+        --novel-muted: #6b7280;
+        --novel-line: rgba(23, 32, 51, 0.12);
+        --novel-paper: linear-gradient(180deg, #fffdf7 0%, #f8f2e8 100%);
+        --novel-accent: #8a5a2b;
+        --novel-accent-strong: #5f3b1b;
+        --novel-accent-soft: rgba(138, 90, 43, 0.12);
+        --novel-shadow: 0 28px 70px rgba(23, 32, 51, 0.12);
         direction: rtl;
-        text-align: right;
     }
 
-    .novel-card {
-        background: white;
-        padding: 3.5rem;
-        border-radius: 16px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        border: 1px solid #f0f0f0;
-        margin-bottom: 2rem;
+    .novel-detail-shell .main-container {
+        width: min(1180px, calc(100% - 32px));
     }
 
-    .novel-header {
-        text-align: center;
-        margin-bottom: 3rem;
-        padding-bottom: 2.5rem;
-        border-bottom: 1px solid #e5e7eb;
+    .novel-hero-card {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(2rem, 4vw, 3.6rem);
+        border-radius: 32px;
+        background:
+            radial-gradient(circle at top right, rgba(138, 90, 43, 0.16), transparent 28%),
+            radial-gradient(circle at bottom left, rgba(84, 110, 122, 0.12), transparent 24%),
+            linear-gradient(135deg, #fffdfa 0%, #f4ecde 55%, #efe3d1 100%);
+        border: 1px solid rgba(138, 90, 43, 0.16);
+        box-shadow: var(--novel-shadow);
     }
 
-    .novel-title {
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 2.8rem;
-        font-weight: 700;
-        color: #1e293b;
-        margin: 0 0 1.5rem 0;
-        line-height: 1.3;
-        letter-spacing: -0.5px;
+    .novel-hero-card::before,
+    .novel-hero-card::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
     }
 
-    .novel-meta {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .novel-hero-card::before {
+        width: 240px;
+        height: 240px;
+        top: -100px;
+        left: -90px;
+        background: rgba(255, 255, 255, 0.65);
+    }
+
+    .novel-hero-card::after {
+        width: 180px;
+        height: 180px;
+        bottom: -80px;
+        right: -50px;
+        background: rgba(138, 90, 43, 0.08);
+    }
+
+    .novel-hero-grid {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.9fr);
         gap: 1.5rem;
-        flex-wrap: wrap;
+        align-items: stretch;
+    }
+
+    .novel-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.5rem 0.95rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.76);
+        border: 1px solid rgba(138, 90, 43, 0.15);
+        color: var(--novel-accent-strong);
+        font-size: 0.88rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+    }
+
+    .novel-display-title {
         font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: clamp(2.2rem, 4vw, 3.9rem);
+        line-height: 1.25;
+        color: var(--novel-ink);
+        margin: 0 0 1rem;
+        text-wrap: balance;
     }
 
-    .novel-author {
-        font-size: 1.25rem;
-        color: #64748b;
+    .novel-subtitle {
+        margin: 0 0 1.4rem;
+        max-width: 54rem;
+        color: rgba(23, 32, 51, 0.76);
+        font-size: 1.04rem;
+        line-height: 1.9;
+    }
+
+    .novel-meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem;
+        margin-bottom: 1.3rem;
+    }
+
+    .novel-meta-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.72rem 1rem;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(23, 32, 51, 0.08);
+        color: var(--novel-ink);
         font-weight: 600;
     }
 
-    .novel-category {
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        color: white;
-        padding: 0.4rem 1rem;
-        border-radius: 24px;
-        font-size: 0.95rem;
-        font-weight: 600;
+    .novel-meta-pill i {
+        color: var(--novel-accent);
     }
 
-    .novel-date {
-        font-size: 0.95rem;
-        color: #94a3b8;
+    .novel-hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem;
+        margin-top: 1.25rem;
     }
 
-    .novel-featured-image {
-        margin: 2rem 0 3rem 0;
-        border-radius: 12px;
+    .novel-action-btn {
+        min-height: 50px;
+        padding: 0.8rem 1.2rem;
+        border-radius: 16px;
+        border: 1px solid rgba(23, 32, 51, 0.12);
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--novel-ink);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        text-decoration: none;
+        font-weight: 700;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    }
+
+    .novel-action-btn:hover {
+        transform: translateY(-2px);
+        color: var(--novel-ink);
+        border-color: rgba(138, 90, 43, 0.35);
+        box-shadow: 0 14px 30px rgba(23, 32, 51, 0.08);
+    }
+
+    .novel-action-btn.primary {
+        background: linear-gradient(135deg, #7a4d27, #a66c36);
+        border-color: transparent;
+        color: #fff;
+        box-shadow: 0 18px 36px rgba(122, 77, 39, 0.22);
+    }
+
+    .novel-action-btn.primary:hover {
+        color: #fff;
+        box-shadow: 0 20px 40px rgba(122, 77, 39, 0.28);
+    }
+
+    .novel-action-btn.active {
+        background: linear-gradient(135deg, #18253d, #2a3e5d);
+        border-color: transparent;
+        color: #fff;
+    }
+
+    .novel-summary-card {
+        height: 100%;
+        padding: 1.35rem;
+        border-radius: 26px;
+        background: rgba(17, 24, 39, 0.95);
+        color: #f8fafc;
+        box-shadow: 0 24px 55px rgba(17, 24, 39, 0.22);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
         overflow: hidden;
     }
 
-    .novel-featured-image img {
-        width: 100%;
-        height: auto;
+    .novel-summary-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 45%),
+            radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 32%);
+        pointer-events: none;
+    }
+
+    .novel-summary-card > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .novel-summary-card h2 {
+        margin: 0 0 0.7rem;
+        font-size: 1.15rem;
+        color: #fff;
+    }
+
+    .novel-summary-card p {
+        margin: 0;
+        color: rgba(248, 250, 252, 0.78);
+        line-height: 1.9;
+    }
+
+    .novel-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.9rem;
+        margin-top: 1.25rem;
+    }
+
+    .novel-stat-card {
+        padding: 1rem;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .novel-stat-label {
         display: block;
+        font-size: 0.78rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: rgba(248, 250, 252, 0.58);
+        margin-bottom: 0.45rem;
     }
 
-    .novel-content {
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 1.5rem;
-        line-height: 2.4;
-        color: #334155;
-        margin: 3rem 0;
-        direction: rtl;
-        text-align: right;
-        white-space: pre-wrap;
-        word-wrap: break-word;
+    .novel-stat-value {
+        display: block;
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #fff;
     }
 
-    .novel-content p {
-        margin-bottom: 1.5rem;
-        line-height: 2.4;
+    .novel-detail-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.72fr);
+        gap: 1.4rem;
+        align-items: start;
+        margin-top: 1.5rem;
     }
 
-    /* Action Buttons */
-    .novel-actions {
+    .novel-reader-panel,
+    .novel-sidebar-panel {
+        border-radius: 28px;
+        background: var(--novel-paper);
+        border: 1px solid var(--novel-line);
+        box-shadow: 0 18px 50px rgba(23, 32, 51, 0.08);
+        overflow: hidden;
+    }
+
+    .novel-panel-header {
         display: flex;
-        justify-content: center;
+        align-items: center;
+        justify-content: space-between;
         gap: 1rem;
-        margin: 3.5rem 0;
-        flex-wrap: wrap;
+        padding: 1.35rem 1.5rem 1rem;
+        border-bottom: 1px solid var(--novel-line);
     }
 
-    .btn {
-        padding: 0.7rem 1.5rem;
-        border: 2px solid #cbd5e1;
-        background: white;
-        color: #1e293b;
-        border-radius: 8px;
-        font-family: 'Noto Nastaliq Urdu', serif;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
+    .novel-panel-header h2,
+    .novel-panel-header h3 {
+        margin: 0;
+        color: var(--novel-ink);
+        font-size: 1.1rem;
+        font-weight: 800;
+    }
+
+    .novel-panel-badge {
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
-        white-space: nowrap;
+        gap: 0.45rem;
+        padding: 0.45rem 0.85rem;
+        border-radius: 999px;
+        background: var(--novel-accent-soft);
+        color: var(--novel-accent-strong);
+        font-size: 0.82rem;
+        font-weight: 700;
     }
 
-    .btn:hover {
-        border-color: #0ea5e9;
-        color: #0ea5e9;
-        background: #f0f9ff;
+    .novel-reader-body {
+        padding: clamp(1.5rem, 3vw, 2.2rem);
     }
 
-    .btn-primary {
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        border: 2px solid transparent;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(14, 165, 233, 0.3);
-    }
-
-    .btn-outline {
-        border: 2px solid #cbd5e1;
-        background: white;
-        color: #1e293b;
-    }
-
-    .btn-outline:hover {
-        border-color: #0ea5e9;
-        color: #0ea5e9;
-        background: #f0f9ff;
-    }
-
-    .btn.active {
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        border-color: transparent;
-        color: white;
-    }
-
-    /* Footer Navigation */
-    .novel-footer {
+    .novel-reader-intro {
         display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin-top: 4rem;
-        padding-top: 2.5rem;
-        border-top: 1px solid #e5e7eb;
         flex-wrap: wrap;
+        gap: 0.8rem;
+        margin-bottom: 1.2rem;
     }
 
-    .novel-footer .btn {
-        min-width: 200px;
+    .novel-reader-intro span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        color: var(--novel-muted);
+        font-size: 0.92rem;
+    }
+
+    .novel-reader-copy {
+        color: #273449;
+        font-family: 'Noto Nastaliq Urdu', serif;
+        font-size: clamp(1.35rem, 2vw, 1.65rem);
+        line-height: 2.45;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .novel-reader-copy p {
+        margin-bottom: 1.25rem;
+    }
+
+    .novel-reader-note {
+        margin-top: 1.6rem;
+        padding: 1rem 1.1rem;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px dashed rgba(138, 90, 43, 0.25);
+        color: var(--novel-muted);
+        line-height: 1.8;
+    }
+
+    .novel-sidebar-panel {
+        position: sticky;
+        top: 110px;
+        background: linear-gradient(180deg, #ffffff 0%, #fbf6ed 100%);
+    }
+
+    .novel-sidebar-body {
+        padding: 1.2rem;
+    }
+
+    .novel-sidebar-cta {
+        padding: 1.1rem;
+        border-radius: 22px;
+        background: linear-gradient(135deg, #19243a, #27344d);
+        color: #fff;
+        margin-bottom: 1rem;
+    }
+
+    .novel-sidebar-cta h3 {
+        margin: 0 0 0.55rem;
+        color: #fff;
+        font-size: 1.08rem;
+    }
+
+    .novel-sidebar-cta p {
+        margin: 0 0 1rem;
+        color: rgba(255, 255, 255, 0.78);
+        line-height: 1.75;
+        font-size: 0.94rem;
+    }
+
+    .novel-sidebar-cta .novel-action-btn {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.94);
+        border-color: transparent;
+    }
+
+    .novel-chapter-list {
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .novel-chapter-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+        padding: 0.95rem 1rem;
+        border-radius: 18px;
+        border: 1px solid rgba(23, 32, 51, 0.08);
+        background: rgba(255, 255, 255, 0.86);
+        text-decoration: none;
+        transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .novel-chapter-link:hover {
+        transform: translateY(-2px);
+        border-color: rgba(138, 90, 43, 0.3);
+        box-shadow: 0 14px 26px rgba(23, 32, 51, 0.08);
+    }
+
+    .novel-chapter-copy {
+        min-width: 0;
+    }
+
+    .novel-chapter-copy strong {
+        display: block;
+        color: var(--novel-ink);
+        font-size: 0.98rem;
+        margin-bottom: 0.18rem;
+    }
+
+    .novel-chapter-copy span {
+        color: var(--novel-muted);
+        font-size: 0.86rem;
+    }
+
+    .novel-chapter-number {
+        flex: 0 0 auto;
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: inline-flex;
+        align-items: center;
         justify-content: center;
+        background: var(--novel-accent-soft);
+        color: var(--novel-accent-strong);
+        font-weight: 800;
     }
 
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .novel-container {
-            margin: 2rem auto;
-            padding: 0 1rem;
+    .novel-empty-state {
+        padding: 1rem;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px dashed rgba(23, 32, 51, 0.16);
+        color: var(--novel-muted);
+        line-height: 1.8;
+    }
+
+    .novel-secondary-links {
+        display: grid;
+        gap: 0.7rem;
+        margin-top: 1rem;
+    }
+
+    .novel-secondary-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+        color: var(--novel-ink);
+        text-decoration: none;
+        padding: 0.9rem 1rem;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(23, 32, 51, 0.08);
+    }
+
+    .novel-secondary-links a:hover {
+        border-color: rgba(138, 90, 43, 0.3);
+    }
+
+    @media (max-width: 991px) {
+        .novel-hero-grid,
+        .novel-detail-grid {
+            grid-template-columns: 1fr;
         }
 
-        .novel-card {
-            padding: 2rem;
-            margin-bottom: 1.5rem;
+        .novel-sidebar-panel {
+            position: static;
+            top: auto;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .novel-detail-shell .main-container {
+            width: min(100% - 20px, 1180px);
         }
 
-        .novel-title {
+        .novel-hero-card,
+        .novel-reader-panel,
+        .novel-sidebar-panel {
+            border-radius: 24px;
+        }
+
+        .novel-panel-header,
+        .novel-reader-body,
+        .novel-sidebar-body {
+            padding-inline: 1rem;
+        }
+
+        .novel-panel-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .novel-meta-row,
+        .novel-hero-actions {
+            flex-direction: column;
+        }
+
+        .novel-action-btn {
+            width: 100%;
+        }
+
+        .novel-stats-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 520px) {
+        .novel-stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .novel-display-title {
             font-size: 2rem;
         }
 
-        .novel-content {
-            font-size: 1.3rem;
-            line-height: 2.2;
-            margin: 2rem 0;
-        }
-
-        .novel-header {
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-        }
-
-        .novel-meta {
-            gap: 1rem;
-            flex-direction: column;
-        }
-
-        .novel-author {
-            font-size: 1.1rem;
-        }
-
-        .novel-actions,
-        .novel-footer {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 0.75rem;
-        }
-
-        .novel-actions .btn,
-        .novel-footer .btn {
-            width: 100%;
-            justify-content: center;
-            min-width: auto;
-        }
-
-        .btn {
-            padding: 0.75rem 1rem;
-            font-size: 0.95rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .novel-card {
-            padding: 1.5rem;
-        }
-
-        .novel-title {
-            font-size: 1.6rem;
-        }
-
-        .novel-content {
+        .novel-reader-copy {
             font-size: 1.2rem;
-            line-height: 2.1;
-        }
-
-        .novel-author {
-            font-size: 1rem;
-        }
-
-        .novel-category {
-            font-size: 0.85rem;
-            padding: 0.3rem 0.75rem;
+            line-height: 2.2;
         }
     }
 </style>
 
-<div class="novel-container">
-    <article class="novel-card">
-        <!-- Novel Header -->
-        <header class="novel-header">
-            <h1 class="novel-title">{{ novel.title }}</h1>
-            <div class="novel-meta">
-                <span class="novel-author">{{ novel.author.name }}</span>
-                {% if novel.category %}
-                <span class="novel-category">{{ novel.category.name }}</span>
-                {% endif %}
-                <span class="novel-date">{{ novel.created_at|date:'d M Y' }}</span>
+<section class="page-section novel-detail-shell">
+    <div class="main-container">
+        <article class="novel-hero-card">
+            <div class="novel-hero-grid">
+                <div>
+                    <div class="novel-kicker">
+                        <i class="bi bi-journal-richtext"></i>
+                        <span>Novel Showcase</span>
+                    </div>
+
+                    <h1 class="novel-display-title">{{ novel.title }}</h1>
+
+                    <p class="novel-subtitle">
+                        A refined reading page for long-form Urdu fiction, designed like a modern book jacket with a calm reader-friendly layout.
+                    </p>
+
+                    <div class="novel-meta-row">
+                        <span class="novel-meta-pill">
+                            <i class="bi bi-person-circle"></i>
+                            {% if novel.author %}{{ novel.author.name }}{% else %}Unknown Author{% endif %}
+                        </span>
+                        {% if novel.category %}
+                        <span class="novel-meta-pill">
+                            <i class="bi bi-bookmark-star"></i>
+                            {{ novel.category.name }}
+                        </span>
+                        {% endif %}
+                        <span class="novel-meta-pill">
+                            <i class="bi bi-calendar3"></i>
+                            {{ novel.created_at|date:'d M Y' }}
+                        </span>
+                    </div>
+
+                    <div class="novel-hero-actions">
+                        {% with first_chapter=chapters|first %}
+                        {% if first_chapter %}
+                        <a href="{{ first_chapter.get_absolute_url }}" class="novel-action-btn primary">
+                            <i class="bi bi-book-half"></i>
+                            <span>Start Reading</span>
+                        </a>
+                        {% endif %}
+                        {% endwith %}
+
+                        {% if user.is_authenticated %}
+                        <button class="novel-action-btn like-btn {% if is_liked %}active{% endif %}" onclick="toggleLike(this)" type="button">
+                            <i class="bi bi-heart{% if is_liked %}-fill{% endif %}"></i>
+                            <span>{% if is_liked %}Liked{% else %}Like Novel{% endif %}</span>
+                        </button>
+                        {% else %}
+                        <a class="novel-action-btn" href="{% url 'login' %}?next={{ request.path|urlencode }}">
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            <span>Login to Like</span>
+                        </a>
+                        {% endif %}
+
+                        <button class="novel-action-btn" onclick="shareNovel()" type="button">
+                            <i class="bi bi-share"></i>
+                            <span>Share</span>
+                        </button>
+
+                        <button class="novel-action-btn" onclick="copyNovel()" type="button">
+                            <i class="bi bi-clipboard"></i>
+                            <span>Copy Text</span>
+                        </button>
+                    </div>
+                </div>
+
+                <aside class="novel-summary-card">
+                    <div>
+                        <h2>At a Glance</h2>
+                        <p>
+                            Explore the novel overview, browse available chapters, and jump straight into the reading experience with a cleaner editorial layout.
+                        </p>
+                    </div>
+
+                    <div class="novel-stats-grid">
+                        <div class="novel-stat-card">
+                            <span class="novel-stat-label">Chapters</span>
+                            <span class="novel-stat-value">{{ chapter_count }}</span>
+                        </div>
+                        <div class="novel-stat-card">
+                            <span class="novel-stat-label">Status</span>
+                            <span class="novel-stat-value">{% if novel.is_published %}Live{% else %}Draft{% endif %}</span>
+                        </div>
+                        <div class="novel-stat-card">
+                            <span class="novel-stat-label">Category</span>
+                            <span class="novel-stat-value">{% if novel.category %}{{ novel.category.name|truncatechars:14 }}{% else %}General{% endif %}</span>
+                        </div>
+                        <div class="novel-stat-card">
+                            <span class="novel-stat-label">Format</span>
+                            <span class="novel-stat-value">Urdu Novel</span>
+                        </div>
+                    </div>
+                </aside>
             </div>
-        </header>
+        </article>
 
-        <!-- Novel Featured Image -->
-        {% if novel.featured_image %}
-        <div class="novel-featured-image">
-            <img src="{{ novel.featured_image.url }}" alt="{{ novel.title }}" loading="lazy">
+        <div class="novel-detail-grid">
+            <section class="novel-reader-panel">
+                <div class="novel-panel-header">
+                    <div>
+                        <h2>Novel Overview</h2>
+                    </div>
+                    <span class="novel-panel-badge">
+                        <i class="bi bi-feather"></i>
+                        Reader Edition
+                    </span>
+                </div>
+
+                <div class="novel-reader-body">
+                    <div class="novel-reader-intro">
+                        <span><i class="bi bi-journal-text"></i> Literary presentation</span>
+                        <span><i class="bi bi-columns-gap"></i> Spacious reading rhythm</span>
+                        <span><i class="bi bi-stars"></i> Premium novel styling</span>
+                    </div>
+
+                    <div class="novel-reader-copy" id="novelContent">{{ novel.content|linebreaks }}</div>
+
+                    <div class="novel-reader-note">
+                        {% if chapter_count %}
+                        This novel currently includes {{ chapter_count }} chapter{{ chapter_count|pluralize }}. Use the chapter navigator to move into the full reading flow.
+                        {% else %}
+                        Chapters have not been published yet. This page currently works as the novel introduction and presentation page.
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+
+            <aside class="novel-sidebar-panel">
+                <div class="novel-panel-header">
+                    <h3>Reading Navigator</h3>
+                    <span class="novel-panel-badge">{{ chapter_count }} chapters</span>
+                </div>
+
+                <div class="novel-sidebar-body">
+                    <div class="novel-sidebar-cta">
+                        <h3>Continue Into the Story</h3>
+                        <p>Open the first available chapter and move through the novel in a cleaner chapter-reading interface.</p>
+                        {% with first_chapter=chapters|first %}
+                        {% if first_chapter %}
+                        <a href="{{ first_chapter.get_absolute_url }}" class="novel-action-btn">
+                            <i class="bi bi-play-circle"></i>
+                            <span>Open First Chapter</span>
+                        </a>
+                        {% else %}
+                        <a href="{% url 'novel_list' %}" class="novel-action-btn">
+                            <i class="bi bi-arrow-right-circle"></i>
+                            <span>Browse More Novels</span>
+                        </a>
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+
+                    {% if chapters %}
+                    <div class="novel-chapter-list">
+                        {% for chapter in chapters|slice:":6" %}
+                        <a href="{{ chapter.get_absolute_url }}" class="novel-chapter-link">
+                            <span class="novel-chapter-copy">
+                                <strong>{{ chapter.title|truncatechars:42 }}</strong>
+                                <span>Chapter {{ chapter.chapter_number }}</span>
+                            </span>
+                            <span class="novel-chapter-number">{{ chapter.chapter_number }}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="novel-empty-state">
+                        No chapters are published yet. Once chapters are added, this sidebar will become the quick-access reading navigator.
+                    </div>
+                    {% endif %}
+
+                    <div class="novel-secondary-links">
+                        <a href="{% url 'novel_list' %}">
+                            <span><i class="bi bi-arrow-right"></i> Back to Novels</span>
+                            <i class="bi bi-grid"></i>
+                        </a>
+                        {% if novel.author %}
+                        <a href="{% url 'author_detail' novel.author.slug %}">
+                            <span><i class="bi bi-person-lines-fill"></i> More from {{ novel.author.name }}</span>
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </aside>
         </div>
-        {% endif %}
-
-        <!-- Novel Content -->
-        <div class="novel-content" id="novelContent">{{ novel.content|linebreaks }}</div>
-
-        <!-- Action Buttons -->
-        <div class="novel-actions">
-            {% if user.is_authenticated %}
-            <button class="btn btn-outline like-btn {% if is_liked %}active{% endif %}" onclick="toggleLike(this)" type="button" aria-label="پسند">
-                <span>♡</span>
-                <span>پسند</span>
-            </button>
-            {% else %}
-            <a class="btn btn-outline" href="{% url 'login' %}?next={{ request.path|urlencode }}" aria-label="پسند کیلئے لاگ ان کریں">
-                <span>♡</span>
-                <span>پسند کیلئے لاگ ان</span>
-            </a>
-            {% endif %}
-            <button class="btn btn-outline" onclick="shareNovel()" type="button" aria-label="شیئر کریں">
-                <span>📤</span>
-                <span>شیئر کریں</span>
-            </button>
-            <button class="btn btn-outline" onclick="copyNovel()" type="button" aria-label="کاپی کریں">
-                <span>📋</span>
-                <span>کاپی کریں</span>
-            </button>
-        </div>
-
-        <!-- Navigation Buttons -->
-        <div class="novel-footer">
-            <a href="{% url 'novel_list' %}" class="btn btn-outline">← ناولوں پر واپس</a>
-            {% if novel.author %}
-            <a href="{% url 'author_detail' novel.author.slug %}" class="btn btn-outline">{{ novel.author.name }} کے مزید ناول</a>
-            {% endif %}
-        </div>
-    </article>
-</div>
+    </div>
+</section>
 
 <script>
     function toggleLike(btn) {
         fetch('{% url "like_novel" novel.slug %}', { method: 'GET' })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                if (data.liked) {
-                    btn.classList.add('active');
-                    btn.innerHTML = '<span>♥</span><span>پسند کیا گیا</span>';
-                } else {
-                    btn.classList.remove('active');
-                    btn.innerHTML = '<span>♡</span><span>پسند</span>';
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert(data.message || 'Something went wrong.');
+                    return;
                 }
-            } else {
-                alert(data.message || 'کچھ غلط ہو گیا');
-            }
-        })
-        .catch(() => alert('کچھ غلط ہو گیا'));
+
+                const icon = data.liked ? 'bi-heart-fill' : 'bi-heart';
+                const label = data.liked ? 'Liked' : 'Like Novel';
+                btn.classList.toggle('active', data.liked);
+                btn.innerHTML = `<i class="bi ${icon}"></i><span>${label}</span>`;
+            })
+            .catch(() => alert('Something went wrong.'));
     }
 
     function shareNovel() {
@@ -340,34 +729,39 @@
         const url = window.location.href;
 
         if (navigator.share) {
-            navigator.share({ title, text: 'اس خوبصورت اردو ناول کو دیکھیں', url }).catch(() => {});
+            navigator.share({
+                title,
+                text: 'Read this novel on Nawab Urdu Academy.',
+                url
+            }).catch(() => {});
             return;
         }
 
         if (navigator.clipboard) {
-            navigator.clipboard.writeText(url).then(() => alert('ناول کا ربط کاپی ہو گیا!'));
+            navigator.clipboard.writeText(url)
+                .then(() => alert('Novel link copied.'))
+                .catch(() => window.prompt('Copy this link:', url));
             return;
         }
 
-        window.prompt('یہ ربط کاپی کر لیں:', url);
+        window.prompt('Copy this link:', url);
     }
 
     function copyNovel() {
         const title = '{{ novel.title|escapejs }}';
         const author = '{% if novel.author %}{{ novel.author.name|escapejs }}{% endif %}';
         const content = (document.getElementById('novelContent')?.innerText || '').trim();
-        const header = author ? `${title}\\n${author}\\n` : `${title}\\n`;
-        const text = `${header}\\n${content}`.trim();
+        const heading = author ? `${title}\n${author}\n` : `${title}\n`;
+        const text = `${heading}\n${content}`.trim();
 
         if (!navigator.clipboard) {
-            window.prompt('یہ متن کاپی کر لیں:', text);
+            window.prompt('Copy the novel text:', text);
             return;
         }
 
         navigator.clipboard.writeText(text)
-            .then(() => alert('ناول کاپی ہو گیا!'))
-            .catch(() => alert('کاپی میں مسئلہ ہوا۔ براہ کرم دوبارہ کوشش کریں۔'));
+            .then(() => alert('Novel text copied.'))
+            .catch(() => alert('Copy failed. Please try again.'));
     }
 </script>
-
 {% endblock %}
