@@ -124,11 +124,8 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 TESTING = 'test' in sys.argv
 
-ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.environ.get('ALLOWED_HOSTS', '').split(',')
-    if host.strip()
-]
+ALLOWED_HOSTS = ['*']
+
 if not ALLOWED_HOSTS:
     ALLOWED_HOSTS = ['*'] if IS_RENDER else ['127.0.0.1', 'localhost']
 
