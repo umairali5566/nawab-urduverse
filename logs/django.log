@@ -746,3 +746,70 @@ ERROR 2026-06-14 15:31:55,777 basehttp 20192 17012 You're accessing the developm
 ERROR 2026-06-14 15:31:55,779 basehttp 20192 17860 You're accessing the development server over HTTPS, but it only supports HTTP.
 ERROR 2026-06-14 15:32:20,242 basehttp 20192 16328 You're accessing the development server over HTTPS, but it only supports HTTP.
 ERROR 2026-06-14 15:32:20,245 basehttp 20192 17828 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-14 20:43:35,092 basehttp 22020 6456 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-14 20:43:35,097 basehttp 22020 2824 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-14 20:43:42,186 basehttp 22020 7488 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-14 20:43:42,188 basehttp 22020 14356 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-14 20:53:44,087 log 11716 18844 Internal Server Error: /poetry/
+Traceback (most recent call last):
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\templatetags\static.py", line 116, in render
+    url = self.url(context)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\templatetags\static.py", line 113, in url
+    return self.handle_simple(path)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\templatetags\static.py", line 129, in handle_simple
+    return staticfiles_storage.url(path)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\contrib\staticfiles\storage.py", line 204, in url
+    return self._url(self.stored_name, name, force)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\contrib\staticfiles\storage.py", line 183, in _url
+    hashed_name = hashed_name_func(*args)
+  File "C:\Users\USER\OneDrive\Desktop\nawab_urduverse\.venv\lib\site-packages\django\contrib\staticfiles\storage.py", line 518, in stored_name
+    raise ValueError(
+ValueError: Missing staticfiles manifest entry for 'css/brand-overrides.css'
