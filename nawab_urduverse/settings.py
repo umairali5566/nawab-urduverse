@@ -176,6 +176,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # Custom UTF-8 encoding middleware
     'nawab_urduverse.middleware.utf8_encoding_middleware',
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'nawab_urduverse.urls'
