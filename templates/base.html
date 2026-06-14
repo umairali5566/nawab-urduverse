@@ -3,9 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ SITE_NAME }} brings Urdu poetry, novels, quotes, blogs, and videos into one refined reading experience.">
+    <meta name="description" content="{{ meta_description|default:SITE_DESCRIPTION|default:'Nawab Urdu Academy brings Urdu poetry, novels, quotes, blogs, and videos into one refined literary experience.' }}">
+    <meta name="keywords" content="{{ meta_keywords|default:SITE_KEYWORDS }}">
+    <meta name="robots" content="{{ robots_content|default:'index, follow' }}">
     <meta name="google-site-verification" content="yQ1XtVQEcn5npYpHMkkBdlV5hexSn_WrqCyZKXh79tY">
-    <title>{% block title %}{{ SITE_NAME }} | Premium Urdu Literature{% endblock %}</title>
+    <link rel="canonical" href="{{ canonical_url|default:request.build_absolute_uri }}">
+    <title>{% block title %}{{ meta_title|default:SITE_NAME }}{% endblock %}</title>
+
+    <meta property="og:site_name" content="{{ SITE_NAME }}">
+    <meta property="og:title" content="{% block og_title %}{{ meta_title|default:SITE_NAME }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ meta_description|default:SITE_DESCRIPTION }}{% endblock %}">
+    <meta property="og:type" content="{% block og_type %}{{ og_type|default:'website' }}{% endblock %}">
+    <meta property="og:url" content="{{ canonical_url|default:request.build_absolute_uri }}">
+    <meta property="og:image" content="{% block og_image %}{{ og_image|default:'/static/images/nawab-logo.jpeg' }}{% endblock %}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ meta_title|default:SITE_NAME }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ meta_description|default:SITE_DESCRIPTION }}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ og_image|default:'/static/images/nawab-logo.jpeg' }}{% endblock %}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -352,6 +366,7 @@
         }
     </script>
 
+    {% block structured_data %}{% endblock %}
     {% block extra_js %}{% endblock %}
 </body>
 </html>

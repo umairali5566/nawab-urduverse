@@ -13,8 +13,8 @@ urlpatterns = [
     path('categories/', views.story_categories, name='story_categories'),
     
     # Story Detail
-    path('<slug:slug>/', views.StoryDetailView.as_view(), name='story_detail'),
-    
+    path('<str:slug>/', views.StoryDetailView.as_view(), name='story_detail'),
+
     # Like
-    path('<slug:slug>/like/', views.like_story, name='like_story'),
+    path('<str:slug>/like/', views.like_story, name='like_story'),
 ]

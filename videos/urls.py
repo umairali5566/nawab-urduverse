@@ -14,12 +14,12 @@ urlpatterns = [
     
     # Playlists
     path('playlists/', views.PlaylistListView.as_view(), name='playlist_list'),
-    path('playlists/<slug:slug>/', views.PlaylistDetailView.as_view(), name='playlist_detail'),
+    path('playlists/<str:slug>/', views.PlaylistDetailView.as_view(), name='playlist_detail'),
     
     # Video Detail
-    path('<slug:slug>/', views.VideoDetailView.as_view(), name='video_detail'),
+    path('<str:slug>/', views.VideoDetailView.as_view(), name='video_detail'),
     
     # Like
-    path('<slug:slug>/like/', views.like_video, name='like_video'),
+    path('<str:slug>/like/', views.like_video, name='like_video'),
 ]
 

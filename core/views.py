@@ -470,12 +470,17 @@ def terms_of_service(request):
 
 
 def robots_txt(request):
-    """Serve robots.txt with sitemap location."""
+    """Serve a production-safe robots.txt with crawl budget controls."""
     sitemap_url = request.build_absolute_uri(
         reverse('django.contrib.sitemaps.views.sitemap')
     )
     lines = [
         "User-agent: *",
+        "Disallow: /admin/",
+        "Disallow: /accounts/profile/",
+        "Disallow: /accounts/dashboard/",
+        "Disallow: /search/api/",
+        "Disallow: /make-admin/",
         "Allow: /",
         "",
         f"Sitemap: {sitemap_url}",

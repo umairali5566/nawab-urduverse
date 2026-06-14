@@ -18,7 +18,7 @@ urlpatterns = [
     
     # Authors
     path('authors/', views.AuthorListView.as_view(), name='author_list'),
-    path('authors/<slug:slug>/', views.AuthorDetailView.as_view(), name='author_detail'),
+    path('authors/<str:slug>/', views.AuthorDetailView.as_view(), name='author_detail'),
     
     # Search
     path('search/', views.search, name='search'),
@@ -33,8 +33,8 @@ urlpatterns = [
     
     # Categories
     path('categories/', views.all_categories, name='all_categories'),
-    path('categories/<slug:slug>/', views.category_detail, name='category_detail'),
-    path('category/<slug:slug>/', views.category_detail, name='legacy_category_detail'),
+    path('categories/<str:slug>/', views.category_detail, name='category_detail'),
+    path('category/<str:slug>/', views.category_detail, name='legacy_category_detail'),
     
     # Newsletter
     path('newsletter/subscribe/', views.newsletter_subscribe, name='newsletter_subscribe'),
@@ -47,7 +47,7 @@ urlpatterns = [
     path('notifications/', views.notifications_view, name='notifications'),
     path('notifications/mark-read/', views.notifications_mark_read, name='notifications_mark_read'),
     path('membership/', views.membership_view, name='membership'),
-    path('membership/activate/<slug:slug>/', views.activate_membership_view, name='activate_membership'),
+    path('membership/activate/<str:slug>/', views.activate_membership_view, name='activate_membership'),
     
     # Bookmarks
     path('bookmark/<str:content_type>/<int:object_id>/', views.add_bookmark, name='add_bookmark'),

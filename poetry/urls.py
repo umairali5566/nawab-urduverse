@@ -11,8 +11,8 @@ urlpatterns = [
     path("", views.PoetryListView.as_view(), name="poetry_list"),
 
     # Poetry detail
-    path("<slug:slug>/", views.PoetryDetailView.as_view(), name="poetry_detail"),
+    path("<str:slug>/", views.PoetryDetailView.as_view(), name="poetry_detail"),
 
     # Like
-    path("<slug:slug>/like/", views.like_poetry, name="like_poetry"),
+    path("<str:slug>/like/", views.like_poetry, name="like_poetry"),
 ]

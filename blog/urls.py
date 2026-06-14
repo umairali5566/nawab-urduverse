@@ -10,8 +10,8 @@ urlpatterns = [
     path('', views.BlogListView.as_view(), name='blog_list'),
     
     # Blog Detail
-    path('<slug:slug>/', views.BlogDetailView.as_view(), name='blog_detail'),
-    
+    path('<str:slug>/', views.BlogDetailView.as_view(), name='blog_detail'),
+
     # Like
-    path('<slug:slug>/like/', views.like_post, name='like_post'),
+    path('<str:slug>/like/', views.like_post, name='like_post'),
 ]
