@@ -1,0 +1,199 @@
+:root {
+    --brand-maroon: #6b1e2e;
+    --brand-maroon-deep: #4d1020;
+    --brand-gold: #d4af37;
+    --brand-gold-soft: #f1df9d;
+    --brand-cream: #fbf6ef;
+    --brand-cream-strong: #f5ede0;
+    --brand-surface: rgba(255, 255, 255, 0.82);
+    --brand-text: #2e1b1f;
+    --brand-muted: #7e6769;
+    --brand-border: rgba(107, 30, 46, 0.12);
+    --brand-shadow-sm: 0 14px 30px rgba(76, 20, 33, 0.08);
+    --brand-shadow-md: 0 22px 54px rgba(76, 20, 33, 0.12);
+    --brand-shadow-lg: 0 34px 88px rgba(76, 20, 33, 0.18);
+}
+
+body:not(.home-page) {
+    background:
+        radial-gradient(circle at top left, rgba(107, 30, 46, 0.1), transparent 28%),
+        radial-gradient(circle at top right, rgba(212, 175, 55, 0.14), transparent 24%),
+        linear-gradient(180deg, #fdfaf5 0%, #f8f1e7 100%);
+    color: var(--brand-text);
+    overflow-x: hidden;
+}
+
+body:not(.home-page) p,
+body:not(.home-page) a,
+body:not(.home-page) button,
+body:not(.home-page) input,
+body:not(.home-page) select,
+body:not(.home-page) textarea,
+body:not(.home-page) label,
+body:not(.home-page) li,
+body:not(.home-page) span {
+    font-family: 'Manrope', 'Inter', sans-serif;
+}
+
+body:not(.home-page) .navbar {
+    background: rgba(253, 250, 245, 0.86);
+    border-bottom: 1px solid var(--brand-border);
+    box-shadow: 0 18px 40px rgba(76, 20, 33, 0.08);
+    backdrop-filter: blur(18px);
+}
+
+body:not(.home-page) .logo-overline {
+    color: rgba(107, 30, 46, 0.56);
+}
+
+body:not(.home-page) .logo-text {
+    background: linear-gradient(135deg, var(--brand-maroon), var(--brand-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+body:not(.home-page) .nav-link {
+    color: #44262d;
+}
+
+body:not(.home-page) .nav-link:hover,
+body:not(.home-page) .nav-link.is-active {
+    color: var(--brand-maroon);
+}
+
+body:not(.home-page) .nav-link::after {
+    background: linear-gradient(90deg, var(--brand-maroon), var(--brand-gold));
+}
+
+body:not(.home-page) .btn-primary,
+body:not(.home-page) .btn-outline-primary,
+body:not(.home-page) .auth-submit {
+    background: linear-gradient(135deg, var(--brand-maroon), var(--brand-maroon-deep));
+    color: #fff7ef;
+    box-shadow: 0 14px 28px rgba(107, 30, 46, 0.22);
+}
+
+body:not(.home-page) .btn-primary:hover,
+body:not(.home-page) .btn-outline-primary:hover,
+body:not(.home-page) .auth-submit:hover {
+    color: #fffdf9;
+    box-shadow: 0 18px 34px rgba(107, 30, 46, 0.28);
+}
+
+body:not(.home-page) .btn-secondary,
+body:not(.home-page) .btn-outline,
+body:not(.home-page) .ghost-button {
+    border-color: rgba(107, 30, 46, 0.18);
+    color: var(--brand-maroon);
+    background: rgba(255, 255, 255, 0.7);
+}
+
+body:not(.home-page) .btn-secondary:hover,
+body:not(.home-page) .btn-outline:hover,
+body:not(.home-page) .ghost-button:hover {
+    border-color: rgba(107, 30, 46, 0.34);
+    color: var(--brand-maroon);
+    background: rgba(107, 30, 46, 0.06);
+}
+
+body:not(.home-page) .nav-user-btn {
+    background: linear-gradient(135deg, rgba(255, 251, 246, 0.94), rgba(247, 236, 221, 0.94));
+    border-color: rgba(107, 30, 46, 0.14);
+    box-shadow: 0 14px 28px rgba(107, 30, 46, 0.1);
+}
+
+body:not(.home-page) .nav-user-btn:hover,
+body:not(.home-page) .nav-user-btn.is-open {
+    border-color: rgba(107, 30, 46, 0.26);
+    box-shadow: 0 18px 34px rgba(107, 30, 46, 0.14);
+}
+
+body:not(.home-page) .nav-user-chevron,
+body:not(.home-page) .dropdown-item i {
+    color: var(--brand-maroon);
+}
+
+body:not(.home-page) .dropdown-item:hover {
+    color: var(--brand-maroon);
+    background: rgba(107, 30, 46, 0.07);
+}
+
+body:not(.home-page) .dropdown-item:hover i {
+    background: linear-gradient(135deg, var(--brand-maroon), var(--brand-gold));
+}
+
+body:not(.home-page) .mobile-menu {
+    background: rgba(253, 250, 245, 0.97);
+    border-top: 1px solid rgba(107, 30, 46, 0.12);
+}
+
+body:not(.home-page) .mobile-menu-link {
+    color: #45262d;
+    font-weight: 700;
+}
+
+body:not(.home-page) .mobile-menu-link:hover {
+    color: var(--brand-maroon);
+    background: rgba(107, 30, 46, 0.08);
+}
+
+body:not(.home-page) footer {
+    background:
+        linear-gradient(135deg, rgba(53, 18, 28, 0.98), rgba(18, 8, 12, 0.98)),
+        radial-gradient(circle at top center, rgba(212, 175, 55, 0.14), transparent 36%);
+}
+
+body:not(.home-page) .container,
+body:not(.home-page) .main-container {
+    width: min(1180px, calc(100% - 2rem));
+    margin-inline: auto;
+}
+
+body:not(.home-page) img,
+body:not(.home-page) svg,
+body:not(.home-page) video,
+body:not(.home-page) canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+body:not(.home-page) .logo-image {
+    width: auto;
+    height: 40px;
+    max-width: none;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+body:not(.home-page) .user-avatar-small,
+body:not(.home-page) .user-avatar-large {
+    max-width: none;
+    object-fit: cover;
+}
+
+body:not(.home-page) iframe {
+    max-width: 100%;
+}
+
+body:not(.home-page) .table-responsive,
+body:not(.home-page) .responsive-table {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+body:not(.home-page) table {
+    width: 100%;
+}
+
+body:not(.home-page) .row {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+body:not(.home-page) .row.g-2 {
+    gap: 0.75rem;
+}

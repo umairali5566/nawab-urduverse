@@ -13,13 +13,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     {% load static %}
-    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <link rel="manifest" href="{% get_static_prefix %}manifest.json">
     {% block theme_css %}
     <link rel="stylesheet" href="{% static 'css/premium.css' %}">
     <link rel="stylesheet" href="{% static 'css/literary-light.css' %}">
-    <style>
-        {% include 'core/global_brand_overrides.html' %}
-    </style>
+    <link rel="stylesheet" href="{% static 'css/brand-overrides.css' %}">
     {% endblock %}
 
     {% block extra_css %}{% endblock %}
