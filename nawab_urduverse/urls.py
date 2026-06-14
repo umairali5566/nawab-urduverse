@@ -7,6 +7,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
+from django.views.generic import TemplateView
 from core import views as core_views
 from core.sitemaps import (
     NovelSitemap, ChapterSitemap, StorySitemap, PoetrySitemap,
@@ -29,6 +30,7 @@ sitemaps = {
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('google6146d87d2ddfc127.html', TemplateView.as_view(template_name='google6146d87d2ddfc127.html', content_type='text/plain'), name='google_site_verification'),
     path('static/sw.js', core_views.service_worker, name='service_worker'),
     path('', include('core.urls')),
     path('home/', views.home, name='home_redirect'),
