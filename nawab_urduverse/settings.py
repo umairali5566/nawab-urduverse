@@ -205,7 +205,7 @@ WSGI_APPLICATION = 'nawab_urduverse.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': build_database_config()
+    'default': build_database_config(),
 }
 
 # For PostgreSQL production (uncomment when deploying)
