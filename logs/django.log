@@ -718,3 +718,21 @@ Traceback (most recent call last):
     return super().execute(query, params)
            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
 django.db.utils.OperationalError: no such table: stories_story
+ERROR 2026-06-03 22:11:55,697 basehttp 2952 15148 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:11:55,701 basehttp 2952 4552 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:12:02,069 basehttp 2952 12608 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:12:02,085 basehttp 2952 8520 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:12:02,156 basehttp 2952 10952 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:12:02,172 basehttp 2952 8240 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:12:02,376 basehttp 2952 7876 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:12:02,380 basehttp 2952 6252 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:12:02,433 basehttp 2952 2124 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:12:02,436 basehttp 2952 9288 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:13:04,922 basehttp 2952 17316 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:13:04,925 basehttp 2952 16248 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:13:04,957 basehttp 2952 4944 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:13:04,960 basehttp 2952 18076 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:13:04,979 basehttp 2952 5676 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:13:04,980 basehttp 2952 7104 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:13:04,984 basehttp 2952 16740 You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-06-03 22:13:04,986 basehttp 2952 14244 You're accessing the development server over HTTPS, but it only supports HTTP.
