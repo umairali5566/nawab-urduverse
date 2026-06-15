@@ -95,6 +95,16 @@ class UserRegistrationForm(UserCreationForm):
 class UserLoginForm(AuthenticationForm):
     """User login form."""
 
+    def clean_username(self):
+        username = self.cleaned_data.get("username", "").strip()
+        if "@" in username:
+            try:
+                user = User.objects.get(email__iexact=username)
+                return user.username
+            except User.DoesNotExist:
+                return username
+        return username
+
     username = forms.CharField(
         widget=forms.TextInput(
             attrs={

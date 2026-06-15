@@ -108,47 +108,11 @@ def _resolve_user_likes(user, limit=12):
 
 
 def register(request):
-    """User registration view."""
+    """Redirect the legacy registration page to the standalone login screen."""
     if request.user.is_authenticated:
         return redirect("home")
 
-    if request.method == "POST":
-        limited, retry_after = rate_limit_request(request, "register", limit=4, window=300)
-        if limited:
-            messages.error(request, f"Please wait {retry_after} seconds before creating another account.")
-            return redirect("register")
-
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            try:
-                user = User.objects.create_user(
-                    username=form.cleaned_data['username'],
-                    email=form.cleaned_data['email'],
-                    password=form.cleaned_data['password1']
-                )
-                login(request, user)
-                messages.success(request, "Your account has been created.")
-                return redirect("home")
-            except Exception:
-                messages.error(request, "An error occurred while creating your account. Please try again.")
-                return redirect("register")
-    else:
-        form = UserRegistrationForm()
-
-    return render(
-        request,
-        "accounts/register.html",
-        {
-            "form": form,
-            **build_seo_context(
-                request,
-                title=f"Register | {settings.SITE_NAME}",
-                description=f"Create your {settings.SITE_NAME} account to bookmark, comment, and track reading history.",
-                keywords=settings.SITE_KEYWORDS,
-                og_type="website",
-            ),
-        },
-    )
+    return redirect("login")
 
 
 def user_login(request):
